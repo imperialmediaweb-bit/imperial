@@ -43,9 +43,9 @@ const items: Testimonial[] = [
     photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/testimonial-img3.jpg",
   },
   {
-    name: "Marcu Liviu",
-    role: "Counting Botosani",
-    initials: "ML",
+    name: "Hașcu Liviu",
+    role: "Counting Botoșani",
+    initials: "HL",
     grad: "from-brand-orange to-amber-500",
     text: "Îi recomand. Oameni serioși, mereu la curent cu ultima tehnologie. Recomand cu drag echipa Imperial Media!",
     photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/testimonial-img4.jpg",
