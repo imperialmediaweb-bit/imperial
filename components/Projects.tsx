@@ -5,20 +5,23 @@ import { useState } from "react";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { importedProjects, type ImportedProject } from "@/lib/projects-data";
 
-// Chain de fallback pentru imagini — 100% INDEPENDENT de WordPress.
-// Folosește site-urile CLIENȚILOR (dreamcleaning.ro, etc), NU imperial-media.ro.
-// WordPress-ul poate dispărea — nu afectează cu nimic.
-// 1. thum.io screenshot live (free, fără key, rapid)
-// 2. mShots WordPress.com (free, fără key, cache agresiv)
-// 3. Gradient + inițiale
+// Chain de fallback pentru imagini:
+// 1. wpImages (pe imperial-media.ro) — BROWSER-UL le încarcă direct, nu e blocat
+// 2. thum.io — fallback automat când WP dispare
+// 3. mShots — fallback final
+// 4. Gradient + inițiale dacă nimic nu merge
 function buildImageChain(p: ImportedProject, w = 1200, h = 750): string[] {
   const chain: string[] = [];
+  // 1. WP images (funcționează din browser, nu din server)
+  if (p.wpImages?.length) {
+    chain.push(...p.wpImages);
+  }
   if (p.externalUrl) {
-    // 1. thum.io — real screenshot, rapid
+    // 2. thum.io — real screenshot live
     chain.push(
       `https://image.thum.io/get/width/${w}/crop/${h}/noanimate/${p.externalUrl}`
     );
-    // 2. mShots — fallback cu cache agresiv
+    // 3. mShots — fallback cu cache
     chain.push(
       `https://s.wordpress.com/mshots/v1/${encodeURIComponent(
         p.externalUrl
