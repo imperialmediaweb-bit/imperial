@@ -15,38 +15,38 @@ type Testimonial = {
 
 // Pentru a adăuga pozele reale: urcă fișierele în public/testimonials/<nume>.jpg
 // și setează câmpul `photo` de mai jos. Fallback automat la inițiale colorate.
-// Poze + nume reale preluate direct din secțiunea testimoniale pe imperial-media.ro
+// Poze + nume + roluri + texte REALE, extrase din HTML-ul homepage WP.
 const items: Testimonial[] = [
   {
     name: "Ionela Ivan Tudose",
-    role: "TudoSa.ro",
+    role: "Fondator Asociația H.A.P.P.Y",
     initials: "IT",
     grad: "from-brand-orange to-pink-500",
-    text: "Mulțumim Imperial Media, toate funcțiile dorite au fost implementate. Suntem foarte mulțumiți de site-ul realizat.",
+    text: "Mulțumim Imperial Media pentru toate lucrurile grozave pe care le-ați făcut pe partea de IT a Asociației Happy și Casa Nicolae! Programul de rezervare și plata online a meselor calde, website, harta online!",
     photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_32.webp",
   },
   {
     name: "Ionuț-Bogdan Cărăușu",
-    role: "Affari business solutions",
+    role: "Fondator Scut Botoșănean",
     initials: "IC",
     grad: "from-brand-purple to-indigo-600",
-    text: "Constructiv în lucru, profesionist, raportare bună, ascultător și înțelegere. Răspunzător la o comunicare bună. Recomand!",
+    text: "Constructor de site-uri profesionist, caracterizat prin seriozitate și profesionalism. Răspunde cu promptitudine la solicitări și efectuează lucrări de calitate. Recomand!",
     photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/b.webp",
   },
   {
     name: "Botosaneanul.ro",
-    role: "Publicație online",
+    role: "Fondator",
     initials: "BO",
     grad: "from-pink-500 to-brand-purple",
-    text: "Pentru clienții Botoșeneanul.ro, Imperial Media a realizat în timp record o pagină nouă de știri ce a contribuit la creșterea audienței.",
+    text: "Pentru ziarul Botosaneanul și pentru postul Botoșăneanul TV, Imperial Media a rezolvat în timp record o problemă cu care ne confruntam de multă vreme. Astfel ne-a ajutat să creștem consistent eficiența întregii noastre activități. Calde și sincere mulțumiri.",
     photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_6-150x150-1.webp",
   },
   {
     name: "Hascu Liviu",
-    role: "Counting Botoșani",
+    role: "Administrator Dream Cleaning Botoșani",
     initials: "HL",
     grad: "from-brand-orange to-amber-500",
-    text: "Îi recomand. Oameni serioși, mereu la curent cu ultima tehnologie. Recomand cu drag echipa Imperial Media!",
+    text: "Îi recomand. Cei de la Imperial Media au înțeles ce vreau și mi-au creat un site foarte frumos. M-au ajutat cu marketingul, Google Business, pagină Facebook. Acum datorită metodelor de promovare am foarte mulți clienți.",
     photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_31.webp",
   },
 ];
