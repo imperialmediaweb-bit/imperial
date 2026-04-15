@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #0e0617;
+  color: #f5f0fa;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selecție text cu accent brand */
+::selection {
+  background-color: #ff6b1a;
+  color: #0e0617;
+}
+
+/* Scrollbar customizat */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0e0617;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d1f4e;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7b2ff7;
+}
+
+@layer components {
+  .container-app {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-7 py-3.5 font-semibold text-white shadow-glow-orange transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_45px_rgba(255,107,26,0.55)] focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 focus:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-bg-border bg-white/5 px-6 py-3 font-medium text-text backdrop-blur transition-all duration-300 hover:border-brand-orange hover:bg-white/10;
+  }
+
+  .card {
+    @apply rounded-2xl border border-bg-border bg-bg-card bg-card-gradient p-6 shadow-card backdrop-blur;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-bg-border bg-bg-soft/60 px-4 py-3 text-text placeholder:text-text-subtle outline-none transition-all focus:border-brand-orange focus:bg-bg-soft focus:ring-2 focus:ring-brand-orange/30;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-text-muted;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-bg-border bg-white/5 px-3 py-1 text-xs font-medium text-text-muted;
+  }
+
+  .section {
+    @apply py-20 sm:py-24 lg:py-32;
+  }
+
+  .section-title {
+    @apply font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl lg:text-5xl;
+  }
+
+  .section-subtitle {
+    @apply mt-4 max-w-2xl text-base text-text-muted sm:text-lg;
+  }
+}
+
+/* Text gradient pentru titluri */
+.text-gradient {
+  background: linear-gradient(135deg, #ff6b1a 0%, #ff8a42 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animație background hero — gradient mișcător */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 30%, rgba(123, 47, 247, 0.35) 0%, transparent 45%),
+    radial-gradient(circle at 85% 70%, rgba(255, 107, 26, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.2) 0%, transparent 50%);
+  filter: blur(40px);
+  animation: hero-pulse 12s ease-in-out infinite;
+}
+
+@keyframes hero-pulse {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+/* Grid pattern subtil background */
+.bg-grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
