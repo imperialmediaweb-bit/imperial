@@ -32,7 +32,7 @@ const FALLBACK_GRADIENTS = [
 ];
 
 export function Projects() {
-  const items = importedProjects.slice(0, 10); // primele 10 pe homepage
+  const items = importedProjects; // toate cele 18 proiecte
 
   return (
     <section id="proiecte" className="section relative">
