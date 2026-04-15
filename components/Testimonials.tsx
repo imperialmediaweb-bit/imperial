@@ -15,39 +15,39 @@ type Testimonial = {
 
 // Pentru a adăuga pozele reale: urcă fișierele în public/testimonials/<nume>.jpg
 // și setează câmpul `photo` de mai jos. Fallback automat la inițiale colorate.
-// Poze preluate direct de pe imperial-media.ro (WP uploads).
+// Poze + nume reale preluate direct din secțiunea testimoniale pe imperial-media.ro
 const items: Testimonial[] = [
   {
-    name: "Ionela Ivan",
+    name: "Ionela Ivan Tudose",
     role: "TudoSa.ro",
-    initials: "II",
+    initials: "IT",
     grad: "from-brand-orange to-pink-500",
     text: "Mulțumim Imperial Media, toate funcțiile dorite au fost implementate. Suntem foarte mulțumiți de site-ul realizat.",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/testimonial-img1.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_32.webp",
   },
   {
-    name: "Ionuț-Bogdan Cărăuș",
+    name: "Ionuț-Bogdan Cărăușu",
     role: "Affari business solutions",
-    initials: "IB",
+    initials: "IC",
     grad: "from-brand-purple to-indigo-600",
     text: "Constructiv în lucru, profesionist, raportare bună, ascultător și înțelegere. Răspunzător la o comunicare bună. Recomand!",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/testimonial-img2.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/b.webp",
   },
   {
-    name: "Botoșeneanul.ro",
+    name: "Botosaneanul.ro",
     role: "Publicație online",
     initials: "BO",
     grad: "from-pink-500 to-brand-purple",
     text: "Pentru clienții Botoșeneanul.ro, Imperial Media a realizat în timp record o pagină nouă de știri ce a contribuit la creșterea audienței.",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/testimonial-img3.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_6-150x150-1.webp",
   },
   {
-    name: "Hașcu Liviu",
+    name: "Hascu Liviu",
     role: "Counting Botoșani",
     initials: "HL",
     grad: "from-brand-orange to-amber-500",
     text: "Îi recomand. Oameni serioși, mereu la curent cu ultima tehnologie. Recomand cu drag echipa Imperial Media!",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/testimonial-img4.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_31.webp",
   },
 ];
 
