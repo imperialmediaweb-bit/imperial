@@ -139,8 +139,8 @@ export function Footer() {
 
           {/* Brand */}
           <div>
-            <Logo />
-            <p className="mt-5 text-sm leading-relaxed text-text-muted">
+            <Logo size="lg" />
+            <p className="mt-6 text-sm leading-relaxed text-text-muted">
               Promovăm afaceri prin idei și soluții digitale moderne.
               Urmărește-ne și rămâi conectat!
             </p>
