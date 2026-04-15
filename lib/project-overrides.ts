@@ -7,6 +7,26 @@ export type ProjectOverride = {
   solution?: string; // Ce am livrat concret
   highlights?: string[]; // Badge-uri / features cheie ("Sistem rezervări", "Plăți online")
   results?: Array<{ label: string; value: string }>; // Stats rezultate
+  // Meta proiect — info scurte pt. bara sub hero
+  client?: string; // Nume client / industrie
+  industry?: string; // Industria (ex: Medical, Non-profit, eCommerce)
+  year?: string; // Anul livrării
+  duration?: string; // Durata proiectului (ex: "6 săptămâni")
+  teamSize?: string; // Mărimea echipei (ex: "4 specialiști")
+  // Obiective — ce își dorea clientul la început
+  objectives?: string[];
+  // Proces — etapele prin care am trecut
+  process?: Array<{ title: string; description: string }>;
+  // Tehnologii folosite
+  technologies?: string[];
+  // Testimonial client
+  testimonial?: {
+    quote: string;
+    author: string;
+    role?: string;
+  };
+  // Servicii livrate (pt. bara de meta)
+  services?: string[];
 };
 
 export const projectOverrides: Record<string, ProjectOverride> = {
@@ -29,6 +49,46 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       { label: "Automatizare", value: "24/7" },
       { label: "Satisfacție", value: "5/5" },
     ],
+    client: "Asociația H.A.P.PY",
+    industry: "Non-profit",
+    duration: "6 săptămâni",
+    teamSize: "4 specialiști",
+    objectives: [
+      "Automatizarea completă a procesului de rezervări evenimente",
+      "Eliminarea răspunsurilor manuale pe email/telefon",
+      "Vizibilitate crescută pentru workshopuri și programe",
+      "Un admin panel pe care echipa să-l folosească fără training tehnic",
+    ],
+    process: [
+      {
+        title: "Discovery & research",
+        description:
+          "Interviuri cu echipa asociației, analiza competitorilor non-profit și definirea userflow-ului pentru rezervări.",
+      },
+      {
+        title: "UX & design emoțional",
+        description:
+          "Wireframing, design system cu paletă caldă și prototipuri interactive validate cu echipa H.A.P.PY.",
+      },
+      {
+        title: "Dezvoltare & integrări",
+        description:
+          "Implementare WordPress custom, sistem rezervări proprietar, email notifications, integrare calendar dinamic.",
+      },
+      {
+        title: "Testare & lansare",
+        description:
+          "QA pe mobile/desktop, training pentru administratori și go-live cu suport dedicat prima lună.",
+      },
+    ],
+    technologies: ["WordPress", "PHP", "Tailwind", "Custom booking", "Google Calendar API"],
+    testimonial: {
+      quote:
+        "Echipa Imperial Media a înțeles imediat ce ne doream. Sistemul de rezervări ne-a salvat zeci de ore pe săptămână.",
+      author: "Echipa H.A.P.PY",
+      role: "Asociația H.A.P.PY",
+    },
+    services: ["Web development", "UI/UX design", "Branding", "Mentenanță"],
   },
   "dream-cleaning": {
     tagline:
@@ -49,6 +109,46 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       { label: "Lead-uri", value: "+180%" },
       { label: "Conversii", value: "+140%" },
     ],
+    client: "Dream Cleaning",
+    industry: "Servicii curățenie & DDD",
+    duration: "5 săptămâni",
+    teamSize: "3 specialiști",
+    objectives: [
+      "Prezență online profesionistă de la zero",
+      "Captare lead-uri 24/7 prin formular de ofertă",
+      "Top 3 Google pentru termeni locali de curățenie",
+      "Identitate vizuală coerentă cu brand-ul firmei",
+    ],
+    process: [
+      {
+        title: "Brand discovery",
+        description:
+          "Workshop cu fondatorii, audit competiție locală și definirea tonului de comunicare.",
+      },
+      {
+        title: "Branding & logo",
+        description:
+          "Moodboard, logo în 3 variante, ghid de stil și paletă cromatică aplicată pe toate asset-urile.",
+      },
+      {
+        title: "Dezvoltare website",
+        description:
+          "10+ pagini custom cu design personalizat, formular ofertă inteligent, optimizare Core Web Vitals.",
+      },
+      {
+        title: "SEO & PPC",
+        description:
+          "Keyword research local, on-page SEO complet, lansare campanii Google Ads cu tracking conversii.",
+      },
+    ],
+    technologies: ["WordPress", "Elementor Pro", "Google Ads", "Search Console", "Meta Ads"],
+    testimonial: {
+      quote:
+        "Au reușit să transforme o afacere necunoscută online într-un brand pe care clienții îl caută pe nume. Merită fiecare leu.",
+      author: "Dream Cleaning",
+      role: "Echipa Dream Cleaning",
+    },
+    services: ["Web development", "Branding", "SEO", "Google Ads", "Mentenanță"],
   },
   "ionut-bogdan-carausu": {
     tagline:
@@ -222,6 +322,24 @@ export function getDefaultCaseStudy(
   const hasMaintenance = categories.some((c) =>
     /mentenanț|admin/i.test(c)
   );
+  const hasBranding = categories.some((c) => /brand/i.test(c));
+
+  // Industrie inferată din categorii / titlu
+  const industry = /asocia[țt]ia|fundraising/i.test(title)
+    ? "Non-profit"
+    : hasEcommerce
+      ? "eCommerce"
+      : /clinic|medical|doctor/i.test(title)
+        ? "Medical"
+        : /expres|news|ziar|botosanean/i.test(title)
+          ? "Media & Publicații"
+          : "Business local";
+
+  const services: string[] = ["Web development"];
+  if (hasBranding) services.push("Branding");
+  if (hasMarketing) services.push("SEO", "PR & Marketing");
+  if (hasEcommerce) services.push("eCommerce setup");
+  if (hasMaintenance) services.push("Mentenanță");
 
   return {
     tagline: hasEcommerce
@@ -230,5 +348,51 @@ export function getDefaultCaseStudy(
     challenge: `${title} avea nevoie de o prezență online care să reflecte profesionalismul afacerii și să atragă clienți noi.`,
     solution: `Am livrat un site modern, optimizat pentru toate dispozitivele, cu design personalizat și toate funcționalitățile necesare.${hasMarketing ? " Am adăugat și o strategie de promovare pentru vizibilitate crescută." : ""}${hasMaintenance ? " Oferim mentenanță continuă pentru funcționare impecabilă." : ""}`,
     highlights: categories.slice(0, 5),
+    industry,
+    duration: hasEcommerce ? "8 săptămâni" : "4 săptămâni",
+    teamSize: "3 specialiști",
+    objectives: [
+      "Prezență online profesionistă, diferențiată de competiție",
+      "Experiență de utilizare rapidă și clară pe mobile & desktop",
+      hasMarketing
+        ? "Vizibilitate crescută în motoarele de căutare locale"
+        : "Comunicare clară a valorii business-ului",
+      hasEcommerce
+        ? "Flux de comandă simplu, cu mai multe metode de plată"
+        : "Formular de contact optimizat pentru conversii",
+    ],
+    process: [
+      {
+        title: "Discovery & research",
+        description:
+          "Am analizat business-ul, competiția și publicul țintă pentru a defini strategia de comunicare.",
+      },
+      {
+        title: "Design & prototip",
+        description:
+          "Wireframing, moodboard și mockup-uri în high-fidelity, aprobate împreună cu clientul înainte de dev.",
+      },
+      {
+        title: "Dezvoltare",
+        description:
+          "Implementare pixel-perfect, optimizări performanță, SEO tehnic și integrări cu serviciile clientului.",
+      },
+      {
+        title: "Lansare & suport",
+        description:
+          "Testare pe dispozitive reale, setup analytics, training admin și suport post-lansare.",
+      },
+    ],
+    technologies: hasEcommerce
+      ? ["WordPress", "WooCommerce", "Stripe", "Tailwind", "Google Analytics"]
+      : ["WordPress", "Elementor", "Tailwind", "Google Analytics", "Search Console"],
+    services,
   };
+}
+
+// Extrage anul din URL-ul imaginilor WP: .../wp-content/uploads/YYYY/MM/...
+export function extractYearFromImages(images?: string[]): string | null {
+  if (!images || images.length === 0) return null;
+  const match = images[0].match(/\/uploads\/(\d{4})\//);
+  return match ? match[1] : null;
 }

@@ -14,6 +14,15 @@ import {
   Target,
   Award,
   Layers,
+  Calendar,
+  Clock,
+  Users,
+  Briefcase,
+  Building2,
+  ListChecks,
+  Workflow,
+  Cpu,
+  Quote,
 } from "lucide-react";
 import { Aurora } from "@/components/effects/Aurora";
 import { Meteors } from "@/components/effects/Meteors";
@@ -21,6 +30,7 @@ import { importedProjects } from "@/lib/projects-data";
 import {
   projectOverrides,
   getDefaultCaseStudy,
+  extractYearFromImages,
 } from "@/lib/project-overrides";
 
 export function generateStaticParams() {
@@ -75,6 +85,15 @@ export default function ProjectDetailPage({
     .filter((x) => x.slug !== p.slug)
     .filter((x) => x.categories.some((c) => p.categories.includes(c)))
     .slice(0, 3);
+
+  const year = study.year ?? extractYearFromImages(p.wpImages) ?? undefined;
+
+  const metaItems: Array<{ icon: typeof Calendar; label: string; value: string }> = [];
+  if (study.client) metaItems.push({ icon: Building2, label: "Client", value: study.client });
+  if (study.industry) metaItems.push({ icon: Briefcase, label: "Industrie", value: study.industry });
+  if (year) metaItems.push({ icon: Calendar, label: "An", value: year });
+  if (study.duration) metaItems.push({ icon: Clock, label: "Durată", value: study.duration });
+  if (study.teamSize) metaItems.push({ icon: Users, label: "Echipă", value: study.teamSize });
 
   return (
     <>
@@ -176,6 +195,32 @@ export default function ProjectDetailPage({
         </div>
       </section>
 
+      {/* META PROIECT — bara cu info rapide */}
+      {metaItems.length > 0 && (
+        <section className="relative border-y border-bg-border/60 bg-bg-soft/40 py-6">
+          <div className="container-app max-w-6xl">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+              {metaItems.map(({ icon: Icon, label, value }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-3 rounded-2xl border border-bg-border bg-bg-card/60 px-4 py-3 backdrop-blur"
+                >
+                  <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[10px] uppercase tracking-wider text-text-subtle">
+                      {label}
+                    </p>
+                    <p className="truncate text-sm font-bold text-text">{value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CASE STUDY — Provocare + Soluție cards */}
       <section className="relative py-20">
         <div className="container-app max-w-6xl">
@@ -270,6 +315,169 @@ export default function ProjectDetailPage({
           )}
         </div>
       </section>
+
+      {/* OBIECTIVE — ce și-a dorit clientul */}
+      {study.objectives && study.objectives.length > 0 && (
+        <section className="relative py-16">
+          <div className="container-app max-w-6xl">
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <span className="chip">Obiective</span>
+                <h2 className="section-title mt-4">
+                  Ce ne-am propus <span className="text-gradient">împreună</span>
+                </h2>
+              </div>
+            </div>
+            <div className="mt-10 grid gap-4 md:grid-cols-2">
+              {study.objectives.map((objective, i) => (
+                <div
+                  key={objective}
+                  className="group flex items-start gap-4 rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-6 transition hover:border-brand-orange/50"
+                >
+                  <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand-orange to-pink-500 text-white shadow-glow-orange">
+                    <ListChecks className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-text-subtle">
+                      Obiectiv {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <p className="mt-1 text-base font-medium leading-relaxed text-text">
+                      {objective}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* PROCES — etapele proiectului */}
+      {study.process && study.process.length > 0 && (
+        <section className="relative py-16">
+          <div className="container-app max-w-6xl">
+            <div className="text-center">
+              <span className="chip">Proces de lucru</span>
+              <h2 className="section-title mt-4 mx-auto">
+                Cum am <span className="text-shimmer">construit proiectul</span>
+              </h2>
+              <p className="section-subtitle mx-auto">
+                Un flux clar, cu check-in-uri la fiecare pas, astfel încât să nu existe surprize.
+              </p>
+            </div>
+            <div className="relative mt-12">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-0 right-0 top-10 hidden h-px bg-gradient-to-r from-transparent via-brand-orange/40 to-transparent md:block"
+              />
+              <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {study.process.map((step, i) => (
+                  <li
+                    key={step.title}
+                    className="group relative rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-6 transition hover:-translate-y-1 hover:border-brand-orange/50"
+                  >
+                    <span className="absolute -top-5 left-6 grid h-10 w-10 place-items-center rounded-full border border-bg-border bg-bg text-sm font-bold text-brand-orange shadow-glow-orange">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-purple to-indigo-600 text-white shadow-glow-purple">
+                      <Workflow className="h-5 w-5" />
+                    </span>
+                    <h3 className="mt-4 font-display text-lg font-extrabold text-text">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                      {step.description}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* TEHNOLOGII */}
+      {study.technologies && study.technologies.length > 0 && (
+        <section className="relative py-16">
+          <div className="container-app max-w-6xl">
+            <div className="rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-8">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                  <Cpu className="h-5 w-5" />
+                </span>
+                <div>
+                  <h2 className="font-display text-2xl font-extrabold text-text">
+                    Stack & tehnologii
+                  </h2>
+                  <p className="mt-1 text-sm text-text-muted">
+                    Uneltele alese pentru ca proiectul să fie rapid, scalabil și ușor de întreținut.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {study.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-brand-orange/30 bg-bg-soft/60 px-3 py-1.5 text-sm font-medium text-text transition hover:border-brand-orange hover:bg-brand-orange/10"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              {study.services && study.services.length > 0 && (
+                <div className="mt-6 border-t border-bg-border/60 pt-6">
+                  <p className="text-[10px] uppercase tracking-wider text-text-subtle">
+                    Servicii livrate
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {study.services.map((service) => (
+                      <span
+                        key={service}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-bg-border bg-bg-card px-3 py-1 text-xs font-medium text-text-muted"
+                      >
+                        <CheckCircle2 className="h-3 w-3 text-brand-orange" />
+                        {service}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* TESTIMONIAL */}
+      {study.testimonial && (
+        <section className="relative py-16">
+          <div className="container-app max-w-4xl">
+            <div className="relative overflow-hidden rounded-3xl border border-brand-orange/40 bg-brand-orange/5 p-10 shadow-glow-orange sm:p-14">
+              <div className="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-brand-orange/20 blur-3xl" />
+              <div className="absolute -right-8 -bottom-8 h-32 w-32 rounded-full bg-brand-purple/20 blur-3xl" />
+              <span className="relative inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-gradient text-white shadow-glow-orange">
+                <Quote className="h-5 w-5" />
+              </span>
+              <blockquote className="relative mt-6 font-display text-xl font-semibold leading-relaxed text-text sm:text-2xl">
+                “{study.testimonial.quote}”
+              </blockquote>
+              <footer className="relative mt-6 flex items-center gap-3">
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-brand-purple to-indigo-600 text-sm font-bold text-white">
+                  {study.testimonial.author.slice(0, 1)}
+                </span>
+                <div>
+                  <p className="text-sm font-bold text-text">
+                    {study.testimonial.author}
+                  </p>
+                  {study.testimonial.role && (
+                    <p className="text-xs text-text-muted">{study.testimonial.role}</p>
+                  )}
+                </div>
+              </footer>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* GALERIE — fără duplicate hero image */}
       {galleryImages.length > 0 && (
