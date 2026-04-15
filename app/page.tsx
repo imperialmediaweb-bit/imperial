@@ -6,6 +6,7 @@ import { Marquee } from "@/components/Marquee";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PricingCards } from "@/components/PricingCards";
 import { BriefForm } from "@/components/BriefForm";
+import { ContactSection } from "@/components/ContactSection";
 import { Testimonials } from "@/components/Testimonials";
 import { BlogPreview } from "@/components/BlogPreview";
 import { FAQ } from "@/components/FAQ";
@@ -21,6 +22,7 @@ export default function HomePage() {
       <HowItWorks />
       <PricingCards />
       <BriefForm />
+      <ContactSection />
       <Testimonials />
       <BlogPreview />
       <FAQ />
