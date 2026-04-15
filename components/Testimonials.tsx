@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 import { useState } from "react";
-import Image from "next/image";
 
 type Testimonial = {
   name: string;
@@ -63,15 +62,15 @@ function TestimonialAvatar({ t }: { t: Testimonial }) {
       <span className="absolute inset-0 grid place-items-center font-display text-sm font-bold text-white">
         {t.initials}
       </span>
-      {/* Poză reală — object-cover center, nu deformează */}
+      {/* Poză reală — plain <img> pentru a ocoli optimizer-ul server-side */}
       {showPhoto && (
-        <Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={t.photo!}
           alt={t.name}
-          fill
-          sizes="48px"
-          className="object-cover object-center"
+          loading="lazy"
           onError={() => setFailed(true)}
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
       )}
     </span>

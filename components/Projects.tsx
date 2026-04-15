@@ -55,13 +55,15 @@ function ProjectImage({
   );
 }
 
-// Bento cycle: primul mare, restul mici (tiling fără goluri)
+// Bento cycle de 5 carduri care tilează PERFECT un grid 3×12 (36 celule):
+//  big(8×2=16) + small(4×1) + small(4×1) + wide(6×1) + wide(6×1) = 36 celule.
+// Fără goluri la /proiecte, indiferent câte carduri.
 const SPAN_CYCLE = [
   { col: "lg:col-span-8", row: "lg:row-span-2", big: true },
   { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
   { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
-  { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
-  { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
+  { col: "lg:col-span-6", row: "lg:row-span-1", big: false },
+  { col: "lg:col-span-6", row: "lg:row-span-1", big: false },
 ];
 
 const FALLBACK_GRADIENTS = [
@@ -181,6 +183,27 @@ export function ProjectsGrid({
   );
 }
 
+// Layout dedicat homepage: 4 carduri uniform pe rând (1×4 desktop, 2×2 tablet,
+// 1 coloană mobile). Fără bento cycle aici — bento e doar pe /proiecte.
+function HomepageProjectsGrid({ items }: { items: ImportedProject[] }) {
+  return (
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((p, idx) => {
+        const grad = FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length];
+        return (
+          <ProjectCard
+            key={p.key + idx}
+            p={p}
+            idx={idx}
+            span={{ col: "", row: "aspect-[4/5]", big: false }}
+            grad={grad}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export function Projects() {
   // Pe homepage: cele mai recente 4 proiecte (sortate după an descrescător)
   const latest = sortProjectsNewestFirst(importedProjects).slice(0, 4);
@@ -205,7 +228,7 @@ export function Projects() {
         </div>
 
         <div className="mt-12">
-          <ProjectsGrid items={latest} />
+          <HomepageProjectsGrid items={latest} />
         </div>
       </div>
     </section>

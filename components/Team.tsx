@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Linkedin } from "lucide-react";
 import { useState } from "react";
-import Image from "next/image";
 
 type Member = {
   initials: string;
@@ -64,16 +63,16 @@ function Avatar({ m }: { m: Member }) {
           {m.initials}
         </span>
       </div>
-      {/* Fotografia reală — object-cover object-top ca să se vadă capul/umerii
-          fără să fie deformată; aspect containter 3:4 potrivit pentru portrete */}
+      {/* Fotografia reală — plain <img> ca să ocolim optimizer-ul Next.js
+          (imperial-media.ro are hotlink protection anti-server-side-fetch) */}
       {showPhoto && (
-        <Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={m.photo!}
           alt={m.name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
           onError={() => setFailed(true)}
+          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
         />
       )}
       {/* Overlay fade spre card — mai scurt să nu acopere fața */}

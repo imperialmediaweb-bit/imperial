@@ -9,12 +9,14 @@ import { sortProjectsNewestFirst } from "@/lib/project-overrides";
 
 const sortedProjects = sortProjectsNewestFirst(importedProjects);
 
+// Pattern care tilează perfect un grid 3×12 (fără goluri):
+// big(8×2) + small(4×1) + small(4×1) + wide(6×1) + wide(6×1) = 36 celule.
 const SPAN_CYCLE = [
   { col: "lg:col-span-8", row: "lg:row-span-2", big: true },
   { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
   { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
-  { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
-  { col: "lg:col-span-4", row: "lg:row-span-1", big: false },
+  { col: "lg:col-span-6", row: "lg:row-span-1", big: false },
+  { col: "lg:col-span-6", row: "lg:row-span-1", big: false },
 ];
 
 const FALLBACK_GRADIENTS = [
