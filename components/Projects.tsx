@@ -84,7 +84,7 @@ export function ProjectCard({
   grad: string;
 }) {
   const cat = p.categories[0] ?? "Web Design";
-  const href = p.externalUrl ?? "#";
+  const href = `/proiecte/${p.slug}`; // Link internal la pagina detaliu
   const hasUrl = !!p.externalUrl;
   const initials = p.title
     .split(" ")
@@ -96,8 +96,6 @@ export function ProjectCard({
   return (
     <motion.a
       href={href}
-      target={hasUrl ? "_blank" : undefined}
-      rel={hasUrl ? "noopener noreferrer" : undefined}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}

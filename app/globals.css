@@ -250,3 +250,105 @@ html {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+/* ───── Project content (HTML importat din WordPress) ───── */
+.project-content {
+  color: #a89dbe;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.project-content > * + * {
+  margin-top: 1.2em;
+}
+.project-content h2,
+.project-content h3 {
+  color: #f5f0fa;
+  font-family: Manrope, Inter, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-top: 2em;
+}
+.project-content h2 {
+  font-size: 1.75rem;
+}
+.project-content h3 {
+  font-size: 1.35rem;
+  position: relative;
+  padding-left: 1rem;
+}
+.project-content h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  bottom: 0.25em;
+  width: 3px;
+  background: linear-gradient(180deg, #FF6B1A, #7B2FF7);
+  border-radius: 2px;
+}
+.project-content p {
+  margin-top: 1em;
+  color: #a89dbe;
+}
+.project-content strong {
+  color: #f5f0fa;
+  font-weight: 700;
+}
+.project-content a {
+  color: #FF6B1A;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 107, 26, 0.4);
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+.project-content a:hover {
+  color: #FF8A42;
+  text-decoration-color: #FF8A42;
+}
+.project-content ul,
+.project-content ol {
+  margin: 1em 0;
+  padding-left: 1.4rem;
+}
+.project-content ul > li,
+.project-content ol > li {
+  margin-top: 0.5em;
+  padding-left: 0.3rem;
+}
+.project-content ul > li {
+  list-style: none;
+  position: relative;
+  padding-left: 1.5rem;
+}
+.project-content ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B1A, #FFB020);
+  box-shadow: 0 0 10px rgba(255, 107, 26, 0.5);
+}
+.project-content ol > li {
+  list-style-type: decimal;
+  color: #FF6B1A;
+  font-weight: 600;
+}
+.project-content ol > li > p {
+  color: #a89dbe;
+  font-weight: 400;
+}
+.project-content img {
+  border-radius: 1rem;
+  border: 1px solid #2D1F4E;
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.8);
+  margin: 2em auto;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.project-content svg {
+  display: none; /* hide inline SVG social icons from import */
+}

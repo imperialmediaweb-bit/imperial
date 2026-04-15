@@ -102,6 +102,8 @@ type Project = {
   image: string | null; // local path like "/projects/foo.jpg"
   wpImages: string[]; // original WP image URLs (browser can load them directly)
   externalUrl?: string;
+  excerpt?: string; // prima frază din conținut
+  content?: string; // HTML complet al proiectului
 };
 
 async function main() {
@@ -189,6 +191,24 @@ async function main() {
       }
     }
 
+    // Extract excerpt: first <p> text (strip HTML)
+    const firstPara = content.match(/<p>([\s\S]*?)<\/p>/);
+    const excerpt = firstPara
+      ? decodeEntities(firstPara[1].replace(/<[^>]+>/g, "")).trim().slice(0, 200)
+      : undefined;
+
+    // Clean content: remove CDATA + empty anchor tags (social icons without href)
+    let cleanContent = content.trim();
+    // Elimină CDATA wrapper dacă a rămas
+    cleanContent = cleanContent.replace(/^<!\[CDATA\[/, "").replace(/\]\]>$/, "");
+    // Elimină <a target=blank fără href (butoanele sociale din Elementor export)
+    cleanContent = cleanContent.replace(
+      /<a\s+target="_blank"[^>]*rel="noopener"[^>]*>[\s\S]*?<\/a>/g,
+      ""
+    );
+    // Normalizează whitespace excessiv
+    cleanContent = cleanContent.replace(/\n\s+\n/g, "\n").replace(/\t+/g, " ").trim();
+
     projects.push({
       key: slug,
       title,
@@ -199,6 +219,8 @@ async function main() {
         ? imgs.filter((u) => !/-\d+x\d+\.(png|jpe?g|webp)$/i.test(u))
         : imgs,
       externalUrl,
+      excerpt,
+      content: cleanContent,
     });
   }
 
@@ -218,6 +240,8 @@ export type ImportedProject = {
   image: string | null;
   wpImages: string[];
   externalUrl?: string;
+  excerpt?: string;
+  content?: string;
 };
 
 export const importedProjects: ImportedProject[] = ${JSON.stringify(projects, null, 2)};
