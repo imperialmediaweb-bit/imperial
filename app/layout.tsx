@@ -3,6 +3,9 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { CustomCursor } from "@/components/effects/CustomCursor";
+import { NoiseOverlay } from "@/components/effects/NoiseOverlay";
+import { ScrollProgress } from "@/components/effects/ScrollProgress";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -39,6 +42,11 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body className="min-h-screen bg-bg text-text antialiased">
+        {/* Global premium effects */}
+        <NoiseOverlay />
+        <ScrollProgress />
+        <CustomCursor />
+
         <Header />
         <main>{children}</main>
         <Footer />

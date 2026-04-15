@@ -7,6 +7,7 @@ import { Meteors } from "./effects/Meteors";
 import { Spotlight } from "./effects/Spotlight";
 import { Aurora } from "./effects/Aurora";
 import { InteractiveGrid } from "./effects/InteractiveGrid";
+import { Magnetic } from "./effects/MagneticButton";
 import { HeroVisual } from "./HeroVisual";
 
 export function Hero() {
@@ -66,15 +67,17 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.55 }}
             className="mt-9 flex flex-wrap items-center gap-3"
           >
-            <a
-              href="#brief"
-              className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-orange-gradient px-7 py-3.5 text-base font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,107,26,0.7)]"
-            >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              <Zap className="h-4 w-4" />
-              Începe proiectul
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            <Magnetic strength={0.45}>
+              <a
+                href="#brief"
+                className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-orange-gradient px-7 py-3.5 text-base font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,107,26,0.7)]"
+              >
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <Zap className="h-4 w-4" />
+                Începe proiectul
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            </Magnetic>
             <button
               type="button"
               className="group inline-flex items-center gap-3 rounded-full border border-bg-border bg-bg-card/40 px-4 py-3 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange hover:bg-bg-card/80"
