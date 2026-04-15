@@ -2,7 +2,6 @@ import { Hero } from "@/components/Hero";
 import { Services } from "@/components/Services";
 import { Skills } from "@/components/Skills";
 import { Projects } from "@/components/Projects";
-import { Team } from "@/components/Team";
 import { Marquee } from "@/components/Marquee";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PricingCards } from "@/components/PricingCards";
@@ -19,7 +18,6 @@ export default function HomePage() {
       <Services />
       <Skills />
       <Projects />
-      <Team />
       <Marquee />
       <HowItWorks />
       <PricingCards />
