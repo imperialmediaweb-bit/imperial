@@ -19,8 +19,8 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-bg-border/60 bg-bg/85 backdrop-blur-xl">
-      <div className="container-app flex h-16 items-center justify-between sm:h-20">
-        <Logo />
+      <div className="container-app flex h-24 items-center justify-between sm:h-28 md:h-32 lg:h-36">
+        <Logo size="lg" />
 
         <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((l) => (
