@@ -1,23 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, Calculator, Rocket } from "lucide-react";
+import {
+  MessageCircle,
+  Pencil,
+  Code2,
+  Rocket,
+} from "lucide-react";
 
 const steps = [
   {
-    icon: FileText,
-    title: "Completezi briefingul",
-    text: "Ne spui ce vrei: tip site, culori preferate, funcționalități, pagini. Dura ~2 minute.",
+    icon: MessageCircle,
+    title: "Consultanță inițială",
+    text: "Identificăm nevoile afacerii tale și propunem soluția digitală potrivită.",
   },
   {
-    icon: Calculator,
-    title: "Calculăm prețul",
-    text: "Analizăm cererea ta și pregătim oferta personalizată potrivită bugetului tău.",
+    icon: Pencil,
+    title: "Modele și design",
+    text: "Îți prezentăm modele și creăm împreună design-ul ideal, personalizat pentru brand-ul tău.",
+  },
+  {
+    icon: Code2,
+    title: "Dezvoltare",
+    text: "Implementăm proiectul și efectuăm teste pentru a garanta performanța optimă.",
   },
   {
     icon: Rocket,
-    title: "Primești oferta în 24h",
-    text: "Te contactăm pe email și telefon cu propunerea completă: preț, termen, ce include.",
+    title: "Lansare și suport",
+    text: "Lansăm site-ul și oferim mentenanță pentru funcționarea fără probleme.",
   },
 ];
 
@@ -26,37 +36,46 @@ export function HowItWorks() {
     <section id="cum-functioneaza" className="section relative">
       <div className="container-app">
         <div className="text-center">
-          <span className="chip">Procesul nostru</span>
+          <span className="chip">Cum procedăm?</span>
           <h2 className="section-title mt-4 mx-auto">
-            Cum <span className="text-gradient">funcționează</span>
+            Pașii noștri de <span className="text-gradient">lucru</span>
           </h2>
           <p className="section-subtitle mx-auto">
-            Trei pași simpli — de la primul click până la oferta pe email.
+            Descoperă procesul nostru pas cu pas pentru a aduce proiectul tău
+            la viață, de la consultanța inițială la lansare și mentenanță.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, idx) => (
             <motion.div
               key={step.title}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="card relative"
+              className="group relative overflow-hidden rounded-2xl border border-bg-border bg-bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50"
             >
-              <span className="absolute -top-4 -left-2 grid h-10 w-10 place-items-center rounded-full bg-orange-gradient text-sm font-bold text-white shadow-glow-orange">
-                {idx + 1}
+              {/* number bg */}
+              <span className="absolute -right-4 -top-4 font-display text-7xl font-extrabold text-white/[0.04]">
+                0{idx + 1}
               </span>
-              <div className="mb-4 grid h-12 w-12 place-items-center rounded-xl border border-bg-border bg-bg-soft text-brand-orange">
-                <step.icon className="h-6 w-6" />
+
+              <div className="relative">
+                <div className="grid h-14 w-14 place-items-center rounded-2xl border border-bg-border bg-bg-soft shadow-card transition-all group-hover:border-brand-orange/50 group-hover:bg-orange-gradient">
+                  <step.icon
+                    className="h-6 w-6 text-brand-orange transition group-hover:text-white"
+                    strokeWidth={2}
+                  />
+                </div>
+
+                <h3 className="mt-5 font-display text-lg font-bold text-text">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                  {step.text}
+                </p>
               </div>
-              <h3 className="font-display text-lg font-bold text-text">
-                {step.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                {step.text}
-              </p>
             </motion.div>
           ))}
         </div>
