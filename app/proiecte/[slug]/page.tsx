@@ -23,6 +23,10 @@ import {
   Workflow,
   Cpu,
   Quote,
+  Gauge,
+  Package,
+  HelpCircle,
+  Home,
 } from "lucide-react";
 import { Aurora } from "@/components/effects/Aurora";
 import { Meteors } from "@/components/effects/Meteors";
@@ -63,8 +67,11 @@ export default function ProjectDetailPage({
   const index = importedProjects.findIndex((x) => x.slug === params.slug);
   if (index === -1) notFound();
   const p = importedProjects[index];
-  const study =
-    projectOverrides[p.slug] ?? getDefaultCaseStudy(p.title, p.categories);
+  const override = projectOverrides[p.slug];
+  const defaults = getDefaultCaseStudy(p.title, p.categories);
+  // Merge: override-urile manuale au prioritate, dar completăm câmpurile lipsă
+  // cu default-uri inteligente pentru ca fiecare pagină să fie la fel de bogată.
+  const study = { ...defaults, ...override };
 
   const prev =
     index > 0
@@ -102,13 +109,30 @@ export default function ProjectDetailPage({
         <Aurora />
         <Meteors count={8} />
         <div className="container-app relative z-10">
-          <Link
-            href="/proiecte"
-            className="group inline-flex items-center gap-2 rounded-full border border-bg-border bg-bg-card/60 px-4 py-2 text-xs font-medium text-text-muted backdrop-blur transition hover:border-brand-orange hover:text-text"
+          <nav
+            aria-label="Breadcrumb"
+            className="flex flex-wrap items-center gap-2 text-xs text-text-subtle"
           >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
-            Înapoi la portofoliu
-          </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 rounded-full border border-bg-border bg-bg-card/60 px-3 py-1.5 backdrop-blur transition hover:border-brand-orange hover:text-text"
+            >
+              <Home className="h-3 w-3" />
+              Acasă
+            </Link>
+            <ChevronRight className="h-3 w-3 text-text-subtle/60" />
+            <Link
+              href="/proiecte"
+              className="inline-flex items-center gap-1 rounded-full border border-bg-border bg-bg-card/60 px-3 py-1.5 backdrop-blur transition hover:border-brand-orange hover:text-text"
+            >
+              <ArrowLeft className="h-3 w-3" />
+              Portofoliu
+            </Link>
+            <ChevronRight className="h-3 w-3 text-text-subtle/60" />
+            <span className="inline-flex items-center gap-1 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-3 py-1.5 font-medium text-brand-orangeLight">
+              {p.title}
+            </span>
+          </nav>
 
           <div className="mt-10 grid gap-12 lg:grid-cols-[1fr,1fr] lg:items-center">
             <div>
@@ -382,7 +406,13 @@ export default function ProjectDetailPage({
                     <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-purple to-indigo-600 text-white shadow-glow-purple">
                       <Workflow className="h-5 w-5" />
                     </span>
-                    <h3 className="mt-4 font-display text-lg font-extrabold text-text">
+                    {step.duration && (
+                      <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-bg-border bg-bg-soft/60 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-brand-orangeLight">
+                        <Clock className="h-3 w-3" />
+                        {step.duration}
+                      </span>
+                    )}
+                    <h3 className="mt-3 font-display text-lg font-extrabold text-text">
                       {step.title}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-text-muted">
@@ -441,6 +471,89 @@ export default function ProjectDetailPage({
                       </span>
                     ))}
                   </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* DELIVERABLES + METRICI PERFORMANȚĂ */}
+      {((study.deliverables && study.deliverables.length > 0) ||
+        (study.metrics && study.metrics.length > 0)) && (
+        <section className="relative py-16">
+          <div className="container-app max-w-6xl">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {study.deliverables && study.deliverables.length > 0 && (
+                <div className="rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-8">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-orange to-amber-500 text-white shadow-glow-orange">
+                      <Package className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h2 className="font-display text-2xl font-extrabold text-text">
+                        Livrabile
+                      </h2>
+                      <p className="mt-1 text-sm text-text-muted">
+                        Tot ce ai primit concret la final.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    {study.deliverables.map((d) => (
+                      <div
+                        key={d.label}
+                        className="rounded-2xl border border-bg-border bg-bg-soft/60 p-4 transition hover:border-brand-orange/50"
+                      >
+                        <p className="text-shimmer font-display text-3xl font-extrabold">
+                          {d.count}
+                        </p>
+                        <p className="mt-1 text-xs uppercase tracking-wider text-text-muted">
+                          {d.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {study.metrics && study.metrics.length > 0 && (
+                <div className="rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-8">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                      <Gauge className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h2 className="font-display text-2xl font-extrabold text-text">
+                        Performanță tehnică
+                      </h2>
+                      <p className="mt-1 text-sm text-text-muted">
+                        Scorul site-ului pe metrici reali.
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="mt-6 space-y-3">
+                    {study.metrics.map((m) => (
+                      <li
+                        key={m.label}
+                        className="flex items-center justify-between gap-4 rounded-2xl border border-bg-border bg-bg-soft/60 px-4 py-3"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-text">
+                            {m.label}
+                          </p>
+                          {m.hint && (
+                            <p className="truncate text-[11px] text-text-subtle">
+                              {m.hint}
+                            </p>
+                          )}
+                        </div>
+                        <span className="flex-shrink-0 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 font-display text-sm font-bold text-emerald-400">
+                          {m.value}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
@@ -649,6 +762,61 @@ export default function ProjectDetailPage({
                   </Link>
                 );
               })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQ */}
+      {study.faq && study.faq.length > 0 && (
+        <section className="relative py-20">
+          <div className="container-app max-w-4xl">
+            <div className="text-center">
+              <span className="chip">Întrebări frecvente</span>
+              <h2 className="section-title mt-4 mx-auto">
+                Poate te <span className="text-gradient">întrebi și tu</span>
+              </h2>
+              <p className="section-subtitle mx-auto">
+                Răspunsurile la lucrurile pe care ni le spun cel mai des potențialii clienți.
+              </p>
+            </div>
+            <div className="mt-12 space-y-3">
+              {study.faq.map((item, i) => (
+                <details
+                  key={item.question}
+                  className="group rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-6 transition hover:border-brand-orange/50"
+                  open={i === 0}
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand-purple to-indigo-600 text-white">
+                        <HelpCircle className="h-5 w-5" />
+                      </span>
+                      <h3 className="font-display text-base font-bold text-text sm:text-lg">
+                        {item.question}
+                      </h3>
+                    </div>
+                    <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-full border border-bg-border text-text-muted transition group-open:rotate-45 group-open:border-brand-orange group-open:bg-orange-gradient group-open:text-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-4 w-4"
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                    </span>
+                  </summary>
+                  <p className="mt-4 pl-14 text-sm leading-relaxed text-text-muted sm:text-base">
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
             </div>
           </div>
         </section>

@@ -16,7 +16,13 @@ export type ProjectOverride = {
   // Obiective — ce își dorea clientul la început
   objectives?: string[];
   // Proces — etapele prin care am trecut
-  process?: Array<{ title: string; description: string }>;
+  process?: Array<{ title: string; description: string; duration?: string }>;
+  // FAQ specific proiectului
+  faq?: Array<{ question: string; answer: string }>;
+  // Metrici de performanță (Lighthouse, LCP, etc.)
+  metrics?: Array<{ label: string; value: string; hint?: string }>;
+  // Livrabile concrete (nr. pagini, template-uri email, posts social etc.)
+  deliverables?: Array<{ label: string; count: string }>;
   // Tehnologii folosite
   technologies?: string[];
   // Testimonial client
@@ -64,21 +70,25 @@ export const projectOverrides: Record<string, ProjectOverride> = {
         title: "Discovery & research",
         description:
           "Interviuri cu echipa asociației, analiza competitorilor non-profit și definirea userflow-ului pentru rezervări.",
+        duration: "Săptămâna 1",
       },
       {
         title: "UX & design emoțional",
         description:
           "Wireframing, design system cu paletă caldă și prototipuri interactive validate cu echipa H.A.P.PY.",
+        duration: "Săptămânile 2-3",
       },
       {
         title: "Dezvoltare & integrări",
         description:
           "Implementare WordPress custom, sistem rezervări proprietar, email notifications, integrare calendar dinamic.",
+        duration: "Săptămânile 3-5",
       },
       {
         title: "Testare & lansare",
         description:
           "QA pe mobile/desktop, training pentru administratori și go-live cu suport dedicat prima lună.",
+        duration: "Săptămâna 6",
       },
     ],
     technologies: ["WordPress", "PHP", "Tailwind", "Custom booking", "Google Calendar API"],
@@ -366,27 +376,65 @@ export function getDefaultCaseStudy(
         title: "Discovery & research",
         description:
           "Am analizat business-ul, competiția și publicul țintă pentru a defini strategia de comunicare.",
+        duration: "Săptămâna 1",
       },
       {
         title: "Design & prototip",
         description:
           "Wireframing, moodboard și mockup-uri în high-fidelity, aprobate împreună cu clientul înainte de dev.",
+        duration: "Săptămâna 2",
       },
       {
         title: "Dezvoltare",
         description:
           "Implementare pixel-perfect, optimizări performanță, SEO tehnic și integrări cu serviciile clientului.",
+        duration: "Săptămânile 2-4",
       },
       {
         title: "Lansare & suport",
         description:
           "Testare pe dispozitive reale, setup analytics, training admin și suport post-lansare.",
+        duration: "Săptămâna 4",
       },
     ],
     technologies: hasEcommerce
       ? ["WordPress", "WooCommerce", "Stripe", "Tailwind", "Google Analytics"]
       : ["WordPress", "Elementor", "Tailwind", "Google Analytics", "Search Console"],
     services,
+    deliverables: [
+      { label: "Pagini custom", count: "8+" },
+      { label: "Iterații design", count: "3" },
+      { label: "Dispozitive testate", count: "15+" },
+      { label: "Ore suport post-launch", count: "30" },
+    ],
+    metrics: [
+      { label: "Lighthouse Performance", value: "95+", hint: "Mobile & desktop" },
+      { label: "Largest Contentful Paint", value: "<1.5s" },
+      { label: "Core Web Vitals", value: "Passed" },
+      { label: "SEO Score", value: "100/100" },
+    ],
+    faq: [
+      {
+        question: "Cât durează un proiect similar?",
+        answer:
+          "În medie între 4 și 8 săptămâni, în funcție de complexitate, numărul de pagini și integrările necesare. Îți dăm un timeline exact după prima discuție.",
+      },
+      {
+        question: "Ce include prețul final?",
+        answer:
+          "Totul: design custom, dezvoltare, domeniu + hosting în primul an, SSL, setup analytics, optimizări de bază SEO și instrucțiuni pentru admin. Fără costuri ascunse.",
+      },
+      {
+        question: "Pot modifica singur conținutul după lansare?",
+        answer:
+          "Da. Primești acces la un panou de administrare simplu + un scurt training video. În plus, ai 30 de zile de suport gratuit pentru orice întrebare.",
+      },
+      {
+        question: "Oferiți mentenanță pe termen lung?",
+        answer:
+          "Absolut. Avem pachete de mentenanță lunară care includ update-uri, backup-uri, monitorizare uptime și modificări minore — fără stres pentru tine.",
+      },
+    ],
   };
 }
 
