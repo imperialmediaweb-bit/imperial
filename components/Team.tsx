@@ -53,8 +53,8 @@ function Avatar({ m }: { m: Member }) {
   const [failed, setFailed] = useState(false);
   const showPhoto = m.photo && !failed;
   return (
-    <div className="relative aspect-[4/5] overflow-hidden">
-      {/* Gradient background (vizibil dacă poza nu e disponibilă) */}
+    <div className="relative aspect-[3/4] overflow-hidden bg-bg-soft">
+      {/* Gradient background (vizibil până se încarcă poza sau dacă eșuează) */}
       <div
         className={`absolute inset-0 bg-gradient-to-br ${m.grad} opacity-90`}
       />
@@ -64,24 +64,25 @@ function Avatar({ m }: { m: Member }) {
           {m.initials}
         </span>
       </div>
-      {/* Fotografia reală — override peste gradient+inițiale */}
+      {/* Fotografia reală — object-cover object-top ca să se vadă capul/umerii
+          fără să fie deformată; aspect containter 3:4 potrivit pentru portrete */}
       {showPhoto && (
         <Image
           src={m.photo!}
           alt={m.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
           onError={() => setFailed(true)}
         />
       )}
-      {/* Overlay fade spre card */}
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-bg-card via-bg-card/70 to-transparent" />
+      {/* Overlay fade spre card — mai scurt să nu acopere fața */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg-card via-bg-card/60 to-transparent" />
       {/* LinkedIn badge */}
       <button
         type="button"
         aria-label={`LinkedIn ${m.name}`}
-        className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-orange-gradient text-white shadow-glow-orange transition group-hover:scale-110"
+        className="absolute bottom-4 right-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-orange-gradient text-white shadow-glow-orange transition group-hover:scale-110"
       >
         <Linkedin className="h-4 w-4" strokeWidth={2} />
       </button>

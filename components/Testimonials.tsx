@@ -57,19 +57,20 @@ function TestimonialAvatar({ t }: { t: Testimonial }) {
   const showPhoto = t.photo && !failed;
   return (
     <span
-      className={`relative grid h-12 w-12 flex-shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br ${t.grad} font-display text-sm font-bold text-white ring-2 ring-brand-orange/30`}
+      className={`relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-br ${t.grad} ring-2 ring-brand-orange/30`}
     >
-      {/* Inițiale fallback sub imagine */}
-      <span className="absolute inset-0 flex items-center justify-center">
+      {/* Inițiale fallback — vizibile dacă poza nu s-a încărcat */}
+      <span className="absolute inset-0 grid place-items-center font-display text-sm font-bold text-white">
         {t.initials}
       </span>
+      {/* Poză reală — object-cover center, nu deformează */}
       {showPhoto && (
         <Image
           src={t.photo!}
           alt={t.name}
           fill
           sizes="48px"
-          className="relative z-10 h-full w-full object-cover"
+          className="object-cover object-center"
           onError={() => setFailed(true)}
         />
       )}
