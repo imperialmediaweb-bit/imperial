@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter } from "lucide-react";
 import { ProjectCard } from "@/components/Projects";
 import { importedProjects } from "@/lib/projects-data";
+import { sortProjectsNewestFirst } from "@/lib/project-overrides";
+
+const sortedProjects = sortProjectsNewestFirst(importedProjects);
 
 const SPAN_CYCLE = [
   { col: "lg:col-span-8", row: "lg:row-span-2", big: true },
@@ -29,7 +32,7 @@ export function ProjectsListClient() {
 
   const allCats = useMemo(() => {
     const set = new Set<string>();
-    importedProjects.forEach((p) =>
+    sortedProjects.forEach((p) =>
       p.categories.forEach((c) => set.add(c))
     );
     return ["Toate", ...Array.from(set).sort()];
@@ -37,9 +40,9 @@ export function ProjectsListClient() {
 
   const catCounts = useMemo(() => {
     const counts: Record<string, number> = {
-      Toate: importedProjects.length,
+      Toate: sortedProjects.length,
     };
-    importedProjects.forEach((p) => {
+    sortedProjects.forEach((p) => {
       p.categories.forEach((c) => {
         counts[c] = (counts[c] ?? 0) + 1;
       });
@@ -48,7 +51,7 @@ export function ProjectsListClient() {
   }, []);
 
   const filtered = useMemo(() => {
-    return importedProjects.filter((p) => {
+    return sortedProjects.filter((p) => {
       const matchesCat =
         activeCat === "Toate" || p.categories.includes(activeCat);
       const matchesSearch =
@@ -111,7 +114,7 @@ export function ProjectsListClient() {
               <span className="font-semibold text-text">
                 {filtered.length}
               </span>{" "}
-              / {importedProjects.length}
+              / {sortedProjects.length}
             </p>
           </div>
         </div>

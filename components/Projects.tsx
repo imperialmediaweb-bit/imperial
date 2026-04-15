@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { importedProjects, type ImportedProject } from "@/lib/projects-data";
+import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-overrides";
 
 // Chain de fallback pentru imagini:
 // 1. wpImages (pe imperial-media.ro) — BROWSER-UL le încarcă direct, nu e blocat
@@ -86,6 +87,7 @@ export function ProjectCard({
   const cat = p.categories[0] ?? "Web Design";
   const href = `/proiecte/${p.slug}`; // Link internal la pagina detaliu
   const hasUrl = !!p.externalUrl;
+  const year = extractYearFromImages(p.wpImages);
   const initials = p.title
     .split(" ")
     .filter((w) => /[A-ZĂÂÎȘȚ]/.test(w[0] ?? ""))
@@ -118,16 +120,29 @@ export function ProjectCard({
       {/* Bottom gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
+      {/* Tinted color overlay pe hover — dă pop visual per card */}
+      <div
+        aria-hidden
+        className={`absolute inset-0 bg-gradient-to-br ${grad} opacity-0 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-40`}
+      />
+
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-end p-5">
-        <span className="inline-flex w-fit items-center rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white backdrop-blur">
-          {cat}
-        </span>
-        <h3 className="mt-2 font-display text-lg font-bold leading-tight text-white sm:text-xl">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="inline-flex w-fit items-center rounded-full border border-brand-orange/40 bg-brand-orange/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-md">
+            {cat}
+          </span>
+          {year && (
+            <span className="inline-flex w-fit items-center rounded-full border border-white/20 bg-black/40 px-2 py-0.5 text-[10px] font-semibold text-white/90 backdrop-blur-md">
+              {year}
+            </span>
+          )}
+        </div>
+        <h3 className="mt-2 font-display text-lg font-bold leading-tight text-white drop-shadow-lg sm:text-xl">
           {p.title}
         </h3>
         {hasUrl && (
-          <p className="mt-1 flex items-center gap-1 text-[11px] text-white/60">
+          <p className="mt-1 flex items-center gap-1 text-[11px] text-white/70">
             <ExternalLink className="h-3 w-3" />
             {new URL(p.externalUrl!).hostname.replace("www.", "")}
           </p>
@@ -135,7 +150,7 @@ export function ProjectCard({
       </div>
 
       {/* Hover badge top-right */}
-      <span className="absolute right-4 top-4 grid h-10 w-10 translate-y-2 place-items-center rounded-full bg-white/15 text-white opacity-0 backdrop-blur transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+      <span className="absolute right-4 top-4 grid h-10 w-10 translate-y-2 place-items-center rounded-full bg-orange-gradient text-white opacity-0 shadow-glow-orange transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
         <ArrowUpRight className="h-4 w-4" />
       </span>
     </motion.a>
@@ -167,8 +182,8 @@ export function ProjectsGrid({
 }
 
 export function Projects() {
-  // Pe homepage: ultimele 4 proiecte (cele mai recente)
-  const latest = importedProjects.slice(-4);
+  // Pe homepage: cele mai recente 4 proiecte (sortate după an descrescător)
+  const latest = sortProjectsNewestFirst(importedProjects).slice(0, 4);
 
   return (
     <section id="proiecte" className="section relative">

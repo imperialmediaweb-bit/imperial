@@ -2,14 +2,28 @@
 
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
 
-const items = [
+type Testimonial = {
+  name: string;
+  role: string;
+  initials: string;
+  grad: string;
+  text: string;
+  photo?: string; // ex: "/testimonials/ionela.jpg"
+};
+
+// Pentru a adăuga pozele reale: urcă fișierele în public/testimonials/<nume>.jpg
+// și setează câmpul `photo` de mai jos. Fallback automat la inițiale colorate.
+const items: Testimonial[] = [
   {
     name: "Ionela Ivan",
     role: "TudoSa.ro",
     initials: "II",
     grad: "from-brand-orange to-pink-500",
     text: "Mulțumim Imperial Media, toate funcțiile dorite au fost implementate. Suntem foarte mulțumiți de site-ul realizat.",
+    photo: "/testimonials/ionela.jpg",
   },
   {
     name: "Ionuț-Bogdan Cărăuș",
@@ -17,6 +31,7 @@ const items = [
     initials: "IB",
     grad: "from-brand-purple to-indigo-600",
     text: "Constructiv în lucru, profesionist, raportare bună, ascultător și înțelegere. Răspunzător la o comunicare bună. Recomand!",
+    photo: "/testimonials/ionut.jpg",
   },
   {
     name: "Botoșeneanul.ro",
@@ -24,6 +39,7 @@ const items = [
     initials: "BO",
     grad: "from-pink-500 to-brand-purple",
     text: "Pentru clienții Botoșeneanul.ro, Imperial Media a realizat în timp record o pagină nouă de știri ce a contribuit la creșterea audienței.",
+    photo: "/testimonials/botoseneanul.jpg",
   },
   {
     name: "Marcu Liviu",
@@ -31,8 +47,34 @@ const items = [
     initials: "ML",
     grad: "from-brand-orange to-amber-500",
     text: "Îi recomand. Oameni serioși, mereu la curent cu ultima tehnologie. Recomand cu drag echipa Imperial Media!",
+    photo: "/testimonials/marcu.jpg",
   },
 ];
+
+function TestimonialAvatar({ t }: { t: Testimonial }) {
+  const [failed, setFailed] = useState(false);
+  const showPhoto = t.photo && !failed;
+  return (
+    <span
+      className={`relative grid h-12 w-12 flex-shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br ${t.grad} font-display text-sm font-bold text-white ring-2 ring-brand-orange/30`}
+    >
+      {/* Inițiale fallback sub imagine */}
+      <span className="absolute inset-0 flex items-center justify-center">
+        {t.initials}
+      </span>
+      {showPhoto && (
+        <Image
+          src={t.photo!}
+          alt={t.name}
+          fill
+          sizes="48px"
+          className="relative z-10 h-full w-full object-cover"
+          onError={() => setFailed(true)}
+        />
+      )}
+    </span>
+  );
+}
 
 export function Testimonials() {
   return (
@@ -68,11 +110,7 @@ export function Testimonials() {
               </p>
 
               <div className="mt-6 flex items-center gap-3 border-t border-bg-border/60 pt-4">
-                <span
-                  className={`grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br ${t.grad} font-display text-sm font-bold text-white`}
-                >
-                  {t.initials}
-                </span>
+                <TestimonialAvatar t={t} />
                 <div>
                   <p className="text-sm font-semibold text-text">{t.name}</p>
                   <p className="text-xs text-text-subtle">{t.role}</p>

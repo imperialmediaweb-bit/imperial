@@ -444,3 +444,22 @@ export function extractYearFromImages(images?: string[]): string | null {
   const match = images[0].match(/\/uploads\/(\d{4})\//);
   return match ? match[1] : null;
 }
+
+// Extrage luna din URL WP (pentru sortare mai fină in cadrul aceluiași an).
+export function extractMonthFromImages(images?: string[]): number {
+  if (!images || images.length === 0) return 0;
+  const match = images[0].match(/\/uploads\/\d{4}\/(\d{2})\//);
+  return match ? parseInt(match[1], 10) : 0;
+}
+
+// Sortează proiectele descrescător după an + lună (cele mai noi primele).
+export function sortProjectsNewestFirst<
+  T extends { wpImages?: string[] }
+>(projects: T[]): T[] {
+  return [...projects].sort((a, b) => {
+    const yearA = parseInt(extractYearFromImages(a.wpImages) ?? "0", 10);
+    const yearB = parseInt(extractYearFromImages(b.wpImages) ?? "0", 10);
+    if (yearA !== yearB) return yearB - yearA;
+    return extractMonthFromImages(b.wpImages) - extractMonthFromImages(a.wpImages);
+  });
+}
