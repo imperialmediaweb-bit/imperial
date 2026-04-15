@@ -120,3 +120,133 @@ html {
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }
+
+/* ───── Meteor shower ───── */
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-1500px);
+    opacity: 0;
+  }
+}
+
+/* ───── Aurora blobs (slow drift) ───── */
+@keyframes aurora-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(120px, 80px) scale(1.15); }
+  66% { transform: translate(-80px, 120px) scale(0.9); }
+}
+@keyframes aurora-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-100px, 60px) scale(0.95); }
+  66% { transform: translate(80px, -80px) scale(1.1); }
+}
+@keyframes aurora-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, -100px) scale(1.2); }
+}
+.animate-aurora-1 { animation: aurora-1 22s ease-in-out infinite; }
+.animate-aurora-2 { animation: aurora-2 28s ease-in-out infinite; }
+.animate-aurora-3 { animation: aurora-3 25s ease-in-out infinite; }
+
+/* ───── Shimmer text (titlu hero) ───── */
+@keyframes shimmer-text {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #FF6B1A 0%,
+    #FFB020 25%,
+    #FFFFFF 50%,
+    #FFB020 75%,
+    #FF6B1A 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 4s linear infinite;
+}
+
+/* ───── Animated gradient border ───── */
+@keyframes border-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    #FF6B1A 60deg,
+    #7B2FF7 120deg,
+    transparent 180deg,
+    transparent 360deg
+  );
+  border-radius: inherit;
+  z-index: -1;
+  animation: border-spin 4s linear infinite;
+}
+.gradient-border::after {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  background: #1F1338;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* ───── Text glitch (CTA) ───── */
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 0 0); }
+  20% { clip-path: inset(15% 0 50% 0); transform: translate(-2px, 2px); }
+  40% { clip-path: inset(50% 0 15% 0); transform: translate(2px, -2px); }
+  60% { clip-path: inset(0); }
+}
+
+/* ───── Glow pulse (rings around stat cards) ───── */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(255,107,26,0.4); }
+  100% { box-shadow: 0 0 0 24px rgba(255,107,26,0); }
+}
+.pulse-ring {
+  animation: pulse-ring 2.5s cubic-bezier(0.66, 0, 0, 1) infinite;
+}
+
+/* ───── Floating orbit ───── */
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+}
+.animate-orbit { animation: orbit 20s linear infinite; }
+.animate-orbit-reverse { animation: orbit 25s linear infinite reverse; }
+
+/* ───── Background beams (vertical lines) ───── */
+@keyframes beam-flow {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+/* ───── Reveal fade ───── */
+.glass {
+  background: rgba(31, 19, 56, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
