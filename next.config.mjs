@@ -7,6 +7,9 @@ const nextConfig = {
       { protocol: "https", hostname: "imperial-media.ro" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "source.unsplash.com" },
+      { protocol: "https", hostname: "s.wordpress.com" },
+      { protocol: "https", hostname: "s0.wp.com" },
+      { protocol: "https", hostname: "image.thum.io" },
     ],
   },
 };
