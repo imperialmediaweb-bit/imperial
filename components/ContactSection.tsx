@@ -55,71 +55,82 @@ export function ContactSection() {
   return (
     <section id="contact" className="section relative overflow-hidden">
       <Aurora />
-      <div className="container-app relative z-10 grid items-stretch gap-10 lg:grid-cols-2">
+      <div className="container-app relative z-10 grid items-stretch gap-8 lg:grid-cols-2">
         {/* LEFT — Contactează-ne */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col justify-center"
+          className="flex h-full flex-col rounded-3xl border border-bg-border bg-bg-card/40 p-7 backdrop-blur sm:p-9"
         >
-          <span className="chip">Get In Touch</span>
-          <h2 className="section-title mt-4">
+          <span className="chip self-start">Get In Touch</span>
+          <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
             Contactează-ne pentru{" "}
             <span className="text-gradient">soluții digitale eficiente</span>
           </h2>
-          <p className="section-subtitle">
-            Contactează-ne pentru consultanță, oferte personalizate sau detalii
-            suplimentare. Echipa noastră este pregătită să te ajute rapid și
-            eficient.
+          <p className="mt-4 text-base text-text-muted">
+            Consultanță, oferte personalizate și suport rapid. Echipa noastră
+            te ajută în maximum 24 de ore.
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-7 flex flex-col gap-3">
             <a
               href={`tel:${siteConfig.phoneRaw}`}
-              className="card group flex items-center gap-4 transition hover:border-brand-orange"
+              className="group flex items-center gap-4 rounded-2xl border border-bg-border bg-bg-card p-4 transition hover:border-brand-orange hover:bg-bg-card/80"
             >
               <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange transition group-hover:scale-110">
                 <Phone className="h-5 w-5" />
               </span>
-              <div>
-                <p className="text-xs uppercase tracking-wider text-text-subtle">
+              <div className="flex-1">
+                <p className="text-[10px] uppercase tracking-wider text-text-subtle">
                   Sună acum
                 </p>
-                <p className="font-semibold text-text">{siteConfig.phone}</p>
+                <p className="text-base font-semibold text-text">
+                  {siteConfig.phone}
+                </p>
               </div>
             </a>
 
             <a
               href={`mailto:${siteConfig.email}`}
-              className="card group flex items-center gap-4 transition hover:border-brand-orange"
+              className="group flex items-center gap-4 rounded-2xl border border-bg-border bg-bg-card p-4 transition hover:border-brand-orange hover:bg-bg-card/80"
             >
               <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange transition group-hover:scale-110">
                 <Mail className="h-5 w-5" />
               </span>
-              <div>
-                <p className="text-xs uppercase tracking-wider text-text-subtle">
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] uppercase tracking-wider text-text-subtle">
                   Email
                 </p>
-                <p className="text-sm font-semibold text-text break-all">
+                <p className="truncate text-base font-semibold text-text">
                   {siteConfig.email}
                 </p>
               </div>
             </a>
 
-            <div className="card flex items-center gap-4 sm:col-span-2">
+            <div className="flex items-center gap-4 rounded-2xl border border-bg-border bg-bg-card p-4">
               <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange">
                 <MapPin className="h-5 w-5" />
               </span>
-              <div>
-                <p className="text-xs uppercase tracking-wider text-text-subtle">
+              <div className="flex-1">
+                <p className="text-[10px] uppercase tracking-wider text-text-subtle">
                   Adresă
                 </p>
-                <p className="font-semibold text-text">
+                <p className="text-base font-semibold text-text">
                   Aleea Parcului, Botoșani
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Spacer to fill column height */}
+          <div className="mt-auto pt-7">
+            <div className="rounded-2xl border border-brand-orange/30 bg-brand-orange/5 p-4">
+              <p className="text-sm text-text">
+                💬 <strong className="text-brand-orange">Răspuns garantat în 24h</strong> sau te contactăm
+                gratuit pentru consultanță.
+              </p>
             </div>
           </div>
         </motion.div>
@@ -131,7 +142,7 @@ export function ContactSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="relative rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-7 shadow-card sm:p-9"
+          className="relative flex h-full flex-col rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-7 shadow-card sm:p-9"
         >
           <div className="mb-6">
             <span className="chip">Quick Contact</span>
