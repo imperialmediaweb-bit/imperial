@@ -100,6 +100,7 @@ type Project = {
   slug: string;
   categories: string[];
   image: string | null; // local path like "/projects/foo.jpg"
+  wpImages: string[]; // original WP image URLs (browser can load them directly)
   externalUrl?: string;
 };
 
@@ -194,6 +195,9 @@ async function main() {
       slug,
       categories,
       image: localPath,
+      wpImages: imgs.filter((u) => !/-\d+x\d+\.(png|jpe?g|webp)$/i.test(u)).length
+        ? imgs.filter((u) => !/-\d+x\d+\.(png|jpe?g|webp)$/i.test(u))
+        : imgs,
       externalUrl,
     });
   }
@@ -212,6 +216,7 @@ export type ImportedProject = {
   slug: string;
   categories: string[];
   image: string | null;
+  wpImages: string[];
   externalUrl?: string;
 };
 

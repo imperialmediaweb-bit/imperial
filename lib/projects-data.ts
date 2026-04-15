@@ -7,6 +7,7 @@ export type ImportedProject = {
   slug: string;
   categories: string[];
   image: string | null;
+  wpImages: string[];
   externalUrl?: string;
 };
 
@@ -23,6 +24,10 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2023/12/Screenshot_9-4.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2023/12/Screenshot_11-1.png"
+    ],
     "externalUrl": "https://www.dreamcleaning.ro"
   },
   {
@@ -37,6 +42,11 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_7-1.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_8-1.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_10-1.png"
+    ],
     "externalUrl": "https://www.ionut-bogdancarausu.ro"
   },
   {
@@ -50,7 +60,11 @@ export const importedProjects: ImportedProject[] = [
       "PR & Marketing",
       "Website de Prezentare"
     ],
-    "image": null
+    "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2022/12/Screenshot_12.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2022/12/Screenshot_11-2.png"
+    ]
   },
   {
     "key": "creare-website-asociatia-h-a-p-py",
@@ -64,6 +78,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_22-1.png"
+    ],
     "externalUrl": "https://www.asociatia-happy.ro/"
   },
   {
@@ -78,6 +95,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_18-1.png"
+    ],
     "externalUrl": "https://www.xn--scutbotonean-5nb500b.ro/"
   },
   {
@@ -89,6 +109,9 @@ export const importedProjects: ImportedProject[] = [
       "Mentenanță web"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_21-1.png"
+    ],
     "externalUrl": "https://www.botosaneanul.ro/"
   },
   {
@@ -101,6 +124,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_16-1.png"
+    ],
     "externalUrl": "https://www.clinicasfantulnicolae.ro/"
   },
   {
@@ -114,6 +140,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_21-2.png"
+    ],
     "externalUrl": "https://asociatiabrm.ro/"
   },
   {
@@ -128,6 +157,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot231520x775.png"
+    ],
     "externalUrl": "https://trafyt.ro/"
   },
   {
@@ -142,6 +174,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot361520x775.png"
+    ],
     "externalUrl": "https://autismbotosani.ro/"
   },
   {
@@ -156,6 +191,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot411520x775.png"
+    ],
     "externalUrl": "https://www.dream-movers.ro"
   },
   {
@@ -171,6 +209,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2023/04/Screenshot_47-1.png"
+    ],
     "externalUrl": "http://www.gospodarasul.ro"
   },
   {
@@ -185,6 +226,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_51-1.png"
+    ],
     "externalUrl": "https://fundraisingacademy.ro"
   },
   {
@@ -199,6 +243,9 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/Screenshot_63-1.webp"
+    ],
     "externalUrl": "https://www.teona-ariana.ro"
   },
   {
@@ -213,6 +260,11 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/teodora-1474x775.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/Screenshot_145-750x320.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/Screenshot_146-750x320.png"
+    ],
     "externalUrl": "https://www.parohiasfteodoradelasihla.ro"
   },
   {
@@ -226,6 +278,11 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/Screenshot_147-1520x775.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/Screenshot_149-750x320.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2025/09/Screenshot_148-750x320.png"
+    ],
     "externalUrl": "https://www.mutaribotosani.ro"
   },
   {
@@ -239,6 +296,11 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2025/11/Screenshot_400-1520x775.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2025/11/Screenshot_401-750x320.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2025/11/Screenshot_402-750x320.png"
+    ],
     "externalUrl": "https://www.groupextra.ro"
   },
   {
@@ -252,6 +314,11 @@ export const importedProjects: ImportedProject[] = [
       "Website de Prezentare"
     ],
     "image": null,
+    "wpImages": [
+      "https://www.imperial-media.ro/wp-content/uploads/2026/01/Screenshot_38-1520x775.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2026/01/Screenshot_39-750x320.png",
+      "https://www.imperial-media.ro/wp-content/uploads/2026/01/Screenshot_40-750x320.png"
+    ],
     "externalUrl": "https://www.cununa-film.ro/"
   }
 ];
