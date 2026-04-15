@@ -16,34 +16,36 @@ type Member = {
 // Pentru a adăuga poza reală: urcă fișierul în public/team/<nume>.jpg
 // și setează câmpul `photo` de mai jos. Dacă lipsește, se afișează inițialele
 // colorate ca fallback — layout-ul rămâne identic.
+// Poze preluate direct de pe imperial-media.ro (WP uploads) — browser-ul
+// le încarcă fără probleme (domeniul e whitelisted în next.config.mjs).
 const team: Member[] = [
   {
     initials: "AI",
     name: "A. Ionuț",
     role: "CEO & Web Designer",
     grad: "from-brand-orange to-pink-600",
-    photo: "/team/ionut.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/team-d1.jpg",
   },
   {
     initials: "VT",
     name: "Victor T.",
     role: "Web Developer",
     grad: "from-brand-purple to-indigo-600",
-    photo: "/team/victor.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/team-d2.jpg",
   },
   {
     initials: "ED",
     name: "Elena D.",
     role: "Project Manager",
     grad: "from-pink-500 to-brand-purple",
-    photo: "/team/elena.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/team-d3.jpg",
   },
   {
     initials: "ML",
     name: "Mihai L.",
     role: "Digital Marketing",
     grad: "from-brand-orange to-amber-500",
-    photo: "/team/mihai.jpg",
+    photo: "https://www.imperial-media.ro/wp-content/uploads/2023/12/team-d04.jpg",
   },
 ];
 
