@@ -109,16 +109,16 @@ export function Hero() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
           </Magnetic>
-          <button
-            type="button"
+          <a
+            href="/proiecte"
             className="group inline-flex items-center gap-3 rounded-full border border-bg-border bg-bg-card/40 px-5 py-3 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange hover:bg-bg-card/80"
           >
             <span className="relative grid h-9 w-9 place-items-center rounded-full bg-orange-gradient text-white">
               <span className="absolute inset-0 rounded-full pulse-ring" />
               <Play className="relative h-3.5 w-3.5 fill-white" strokeWidth={0} />
             </span>
-            Vezi reel
-          </button>
+            Vezi proiecte
+          </a>
         </motion.div>
 
         {/* Brand strip la fundul hero-ului — „trust by" fără poze */}
