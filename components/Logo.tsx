@@ -5,10 +5,10 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   // Dimensiuni echilibrate — proporționale cu restul elementelor din navbar.
   const heightClass =
     size === "lg"
-      ? "h-14 sm:h-16 md:h-20"
+      ? "h-20 sm:h-24 md:h-28"
       : size === "sm"
-        ? "h-10"
-        : "h-12 sm:h-14";
+        ? "h-14"
+        : "h-16 sm:h-20";
 
   return (
     <Link
@@ -19,10 +19,11 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       <Image
         src="/logo.png"
         alt="Imperial Media — Creatori de Emoții"
-        width={1000}
-        height={400}
+        width={1600}
+        height={640}
         priority
-        sizes="(max-width: 640px) 180px, (max-width: 1024px) 240px, 300px"
+        quality={100}
+        sizes="(max-width: 640px) 260px, (max-width: 1024px) 340px, 440px"
         className={`${heightClass} w-auto max-w-none object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition duration-300 group-hover:drop-shadow-[0_0_20px_rgba(255,107,26,0.35)]`}
       />
     </Link>
