@@ -98,8 +98,12 @@ export async function sendLeadEmails(p: LeadPayload) {
           ${row("Inspirație", p.inspiration)}
           ${row("Mesaj", p.message)}
         </table>
-        <div style="padding:20px 24px;background:#fafafa;border-top:1px solid #eee;display:flex;gap:8px;">
-          <a href="tel:${p.phone}" style="background:#FF6B1A;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">📞 Sună acum</a>
+        <div style="padding:20px 24px;background:#fafafa;border-top:1px solid #eee;display:flex;gap:8px;flex-wrap:wrap;">
+          ${
+            p.phone && p.phone !== "—"
+              ? `<a href="tel:${p.phone}" style="background:#FF6B1A;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">📞 Sună acum</a>`
+              : ""
+          }
           <a href="mailto:${p.email}" style="background:#7B2FF7;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">✉ Trimite ofertă</a>
         </div>
       </div>
@@ -117,7 +121,7 @@ export async function sendLeadEmails(p: LeadPayload) {
           <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
             Echipa Imperial Media analizează cererea ta și revine cu
             <strong>oferta personalizată în maximum 24 de ore</strong>
-            pe email și telefon.
+            pe email.
           </p>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
             Pachet selectat: <strong>${escapeHtml(p.selectedPackage)}</strong><br/>

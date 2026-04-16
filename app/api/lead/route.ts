@@ -21,19 +21,56 @@ export async function POST(req: Request) {
   }
 
   const name = String(body?.name ?? "").trim();
-  const phone = String(body?.phone ?? "").trim();
+  const phoneRaw = String(body?.phone ?? "").trim();
   const email = String(body?.email ?? "").trim();
 
-  if (name.length < 2 || !isPhone(phone) || !isEmail(email)) {
+  // Email OBLIGATORIU. Numele obligatoriu. Telefonul OPȚIONAL.
+  if (name.length < 2 || !isEmail(email)) {
     return NextResponse.json(
-      { error: "Câmpurile obligatorii lipsesc sau sunt invalide." },
+      { error: "Nume și email valid obligatorii." },
       { status: 400 }
     );
   }
 
+  // Dacă telefonul e dat, trebuie să fie valid. Altfel, "-" (neindicat).
+  const phone = phoneRaw ? (isPhone(phoneRaw) ? phoneRaw : "") : "";
+  if (phoneRaw && !phone) {
+    return NextResponse.json(
+      { error: "Telefonul dat nu pare valid. Lasă gol sau corectează-l." },
+      { status: 400 }
+    );
+  }
+
+  // Estimare AI (opțional) — o punem în câmpul "message" ca extra pentru echipă
+  const aiEstimateMin = Number.isFinite(body?.aiEstimateMin) ? body.aiEstimateMin : null;
+  const aiEstimateMax = Number.isFinite(body?.aiEstimateMax) ? body.aiEstimateMax : null;
+  const aiEstimateReason = String(body?.aiEstimateReason ?? "").trim();
+  const aiRecommendedPackage = String(body?.aiRecommendedPackage ?? "").trim();
+  const aiRecommendedReason = String(body?.aiRecommendedReason ?? "").trim();
+  const source = String(body?.source ?? "classic-form").trim();
+
+  // Construim secțiunea AI ca append la mesaj (vizibil în email)
+  let aiBlock = "";
+  if (source === "ai-chat") {
+    aiBlock += "\n\n─── Date generate de Imperial AI ───";
+    if (aiRecommendedPackage) {
+      aiBlock += `\n▸ Pachet recomandat de AI: ${aiRecommendedPackage}`;
+      if (aiRecommendedReason) aiBlock += ` — ${aiRecommendedReason}`;
+    }
+    if (aiEstimateMin !== null && aiEstimateMax !== null && (aiEstimateMin > 0 || aiEstimateMax > 0)) {
+      aiBlock += `\n▸ Estimare orientativă AI: ${aiEstimateMin}–${aiEstimateMax} €`;
+      if (aiEstimateReason) aiBlock += ` (${aiEstimateReason})`;
+    } else if (aiEstimateReason) {
+      aiBlock += `\n▸ Notă AI: ${aiEstimateReason}`;
+    }
+  }
+
+  const userMessage = String(body?.message ?? "").trim().slice(0, 4000);
+  const finalMessage = (userMessage + aiBlock).trim();
+
   const payload = {
     name,
-    phone,
+    phone: phone || "—",
     email,
     selectedPackage: String(body?.selectedPackage ?? "personalizat"),
     industry: String(body?.industry ?? "").trim(),
@@ -46,7 +83,7 @@ export async function POST(req: Request) {
       ? body.features.map(String).slice(0, 30)
       : [],
     inspiration: String(body?.inspiration ?? "").trim(),
-    message: String(body?.message ?? "").trim().slice(0, 4000),
+    message: finalMessage.slice(0, 6000),
   };
 
   try {

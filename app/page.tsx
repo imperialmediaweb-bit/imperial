@@ -5,7 +5,7 @@ import { Projects } from "@/components/Projects";
 import { Marquee } from "@/components/Marquee";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PricingCards } from "@/components/PricingCards";
-import { BriefForm } from "@/components/BriefForm";
+import { BriefChat } from "@/components/BriefChat";
 import { ContactSection } from "@/components/ContactSection";
 import { Testimonials } from "@/components/Testimonials";
 import { BlogPreview } from "@/components/BlogPreview";
@@ -21,7 +21,7 @@ export default function HomePage() {
       <Marquee />
       <HowItWorks />
       <PricingCards />
-      <BriefForm />
+      <BriefChat />
       <ContactSection />
       <Testimonials />
       <BlogPreview />
