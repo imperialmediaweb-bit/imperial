@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Phone, Search, Menu, X } from "lucide-react";
+import { Phone, Menu, X, Sparkles } from "lucide-react";
 import { Logo } from "./Logo";
 import { siteConfig } from "@/lib/site";
 
@@ -35,30 +35,24 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-label="Caută"
-            className="hidden h-10 w-10 place-items-center rounded-full border border-bg-border text-text-muted transition hover:border-brand-orange hover:text-brand-orange md:grid"
-          >
-            <Search className="h-4 w-4" />
-          </button>
-
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Phone — secundar, icon only */}
           <Link
             href={`tel:${siteConfig.phoneRaw}`}
-            className="group inline-flex items-center gap-2.5 rounded-full bg-bg-card/60 px-2 py-1.5 text-sm font-medium text-text transition hover:bg-bg-card sm:px-3"
+            aria-label={`Sună la ${siteConfig.phone}`}
+            title={`Sună: ${siteConfig.phone}`}
+            className="hidden h-10 w-10 place-items-center rounded-full border border-bg-border text-text-muted transition hover:border-brand-orange hover:text-brand-orange sm:grid"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-orange-gradient text-white shadow-glow-orange transition group-hover:scale-110">
-              <Phone className="h-4 w-4" strokeWidth={2.5} />
-            </span>
-            <span className="hidden flex-col items-start leading-tight sm:flex">
-              <span className="text-[10px] uppercase tracking-wider text-text-muted">
-                Sună
-              </span>
-              <span className="text-sm font-semibold text-text">
-                {siteConfig.phone}
-              </span>
-            </span>
+            <Phone className="h-4 w-4" strokeWidth={2.5} />
+          </Link>
+
+          {/* CTA principal — Primește estimare → chat AI */}
+          <Link
+            href="/#brief"
+            className="group inline-flex items-center gap-2 rounded-full bg-orange-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.03] hover:shadow-[0_0_45px_rgba(255,107,26,0.55)] sm:px-5 sm:py-3"
+          >
+            <Sparkles className="h-4 w-4" strokeWidth={2.5} />
+            <span>Primește estimare</span>
           </Link>
 
           <button
@@ -86,6 +80,24 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
+            {/* CTA principal mobil */}
+            <Link
+              href="/#brief"
+              onClick={() => setOpen(false)}
+              className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-5 py-3 text-sm font-semibold text-white shadow-glow-orange"
+            >
+              <Sparkles className="h-4 w-4" strokeWidth={2.5} />
+              Primește estimare
+            </Link>
+            {/* Telefon mobil — secundar */}
+            <Link
+              href={`tel:${siteConfig.phoneRaw}`}
+              onClick={() => setOpen(false)}
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full border border-bg-border px-5 py-3 text-sm font-medium text-text-muted"
+            >
+              <Phone className="h-4 w-4" />
+              {siteConfig.phone}
+            </Link>
           </nav>
         </div>
       )}
