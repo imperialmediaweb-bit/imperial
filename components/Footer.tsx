@@ -80,15 +80,20 @@ export function Footer() {
             </h4>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">
-              {["Despre", "Contact", "Servicii", "Proiecte"].map((s) => (
-                <li key={s}>
-                  <a
-                    href="#"
+              {[
+                { label: "Despre", href: "/despre" },
+                { label: "Contact", href: "/#contact" },
+                { label: "Servicii", href: "/servicii" },
+                { label: "Proiecte", href: "/proiecte" },
+              ].map((s) => (
+                <li key={s.label}>
+                  <Link
+                    href={s.href}
                     className="inline-flex items-center gap-2 text-sm text-text-muted transition hover:text-brand-orange"
                   >
                     <span className="text-brand-orange">›</span>
-                    {s}
-                  </a>
+                    {s.label}
+                  </Link>
                 </li>
               ))}
             </ul>

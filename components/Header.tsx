@@ -7,11 +7,11 @@ import { Logo } from "./Logo";
 import { siteConfig } from "@/lib/site";
 
 const navLinks = [
-  { href: "#despre", label: "Despre" },
-  { href: "#servicii", label: "Servicii" },
+  { href: "/despre", label: "Despre" },
+  { href: "/servicii", label: "Servicii" },
   { href: "/proiecte", label: "Proiecte" },
-  { href: "#blog", label: "Blog" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#blog", label: "Blog" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Header() {
