@@ -127,6 +127,87 @@ export default function DesprePage() {
         </div>
       </section>
 
+      {/* POVESTEA NOASTRĂ */}
+      <section className="section relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,107,26,0.08),transparent_60%)]" />
+        <div className="container-app relative">
+          <div className="mx-auto max-w-3xl">
+            <div className="text-center">
+              <span className="chip">Povestea noastră</span>
+              <h2 className="section-title mt-4">
+                Totul a început cu o{" "}
+                <span className="text-shimmer">singură idee</span>
+              </h2>
+            </div>
+
+            <div className="mt-12 space-y-6 text-base leading-relaxed text-text-muted sm:text-lg">
+              <p>
+                Prin 2014, într-un oraș în care &bdquo;site-ul firmei&rdquo;
+                încă mai era un lux, un grup mic de pasionați de design și
+                cod s-a hotărât să schimbe felul în care afacerile locale
+                arată online. Nu aveam birouri de sticlă, nici clienți
+                celebri. Aveam doar{" "}
+                <strong className="text-text">
+                  convingerea că un site bine făcut poate schimba o afacere
+                </strong>
+                .
+              </p>
+
+              <p>
+                Primul client a venit printr-o recomandare. Al doilea, la
+                fel. La fel și al zecelea. Nu am făcut niciodată reclamă
+                agresivă — am lăsat rezultatele să vorbească. Un restaurant
+                care a dublat rezervările în două luni. O clinică medicală
+                care a început să primească programări online zilnic. Un
+                magazin de cartier care a devenit un e-commerce cu livrare
+                în toată țara.
+              </p>
+
+              <p className="border-l-2 border-brand-orange pl-6 italic text-text">
+                &bdquo;Nu vindem site-uri. Construim instrumente care aduc
+                clienți reali, cât timp dormi.&rdquo;
+              </p>
+
+              <p>
+                Au trecut <strong className="text-text">peste 10 ani</strong>.
+                Echipa a crescut. În spatele proiectelor sunt acum
+                designeri, developeri, specialiști SEO, copywriteri și
+                project manageri — fiecare cu expertiza lui, toți cu
+                aceeași obsesie pentru detaliu. Am livrat{" "}
+                <strong className="text-text">peste 200 de proiecte</strong>{" "}
+                pentru{" "}
+                <strong className="text-text">240+ clienți</strong> din
+                România și din străinătate: de la ONG-uri care strâng
+                fonduri online, până la magazine cu mii de produse și
+                platforme SaaS.
+              </p>
+
+              <p>
+                Dar cel mai mult ne mândrim nu cu numărul de site-uri
+                livrate, ci cu câți dintre clienții noștri au rămas alături
+                de noi <strong className="text-text">ani la rând</strong>.
+                Pentru că un site bun nu e un proiect &mdash; e începutul
+                unei relații lungi.
+              </p>
+
+              <p>
+                Astăzi, Imperial Media e o agenție completă: web design,
+                magazine online, SEO, promovare în presa online, social
+                media, mentenanță. Dar în esență am rămas aceeași echipă
+                mică din 2014 — curioși, pragmatici și încăpățânați să
+                livrăm fiecare pixel cum trebuie.
+              </p>
+
+              <p className="text-center text-xl font-semibold text-text">
+                Iar dacă citești rândurile astea și ai o idee pe care vrei
+                să o aduci online —{" "}
+                <span className="text-shimmer">hai să stăm de vorbă</span>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* DE CE IMPERIAL MEDIA */}
       <section className="section bg-bg-soft/30">
         <div className="container-app">
