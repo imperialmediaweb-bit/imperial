@@ -8,9 +8,10 @@ import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-ov
 
 // Chain de fallback pentru imagini:
 // 1. wpImages (pe imperial-media.ro) — BROWSER-UL le încarcă direct, nu e blocat
-// 2. thum.io — fallback automat când WP dispare
-// 3. mShots — fallback final
-// 4. Gradient + inițiale dacă nimic nu merge
+// 2. thum.io — real screenshot live (max 1200px pe free tier!)
+// 3. mShots cu `after` — așteaptă render-ul înainte să întoarcă
+// 4. mShots clasic fallback
+// 5. Gradient + inițiale dacă nimic nu merge
 function buildImageChain(p: ImportedProject, w = 1200, h = 750): string[] {
   const chain: string[] = [];
   // 1. WP images (funcționează din browser, nu din server)
@@ -18,15 +19,25 @@ function buildImageChain(p: ImportedProject, w = 1200, h = 750): string[] {
     chain.push(...p.wpImages);
   }
   if (p.externalUrl) {
-    // 2. thum.io — real screenshot live
+    // thum.io free tier = max 1200px width. Clamp.
+    const safeW = Math.min(w, 1200);
+    const safeH = Math.min(h, Math.round((safeW * h) / w));
+    // 2. thum.io cu width + crop (dimensiuni corecte aspect)
     chain.push(
-      `https://image.thum.io/get/width/${w}/crop/${h}/noanimate/${p.externalUrl}`
+      `https://image.thum.io/get/width/${safeW}/crop/${safeH}/noanimate/${p.externalUrl}`
     );
-    // 3. mShots — fallback cu cache
+    // 3. thum.io simplu fără crop (fallback dacă crop fail)
     chain.push(
-      `https://s.wordpress.com/mshots/v1/${encodeURIComponent(
-        p.externalUrl
-      )}?w=${w}&h=${h}`
+      `https://image.thum.io/get/width/${safeW}/${p.externalUrl}`
+    );
+    // 4. mShots cu delay `after=3000` ca să aștepte render (dă screenshot real, nu placeholder)
+    const encodedUrl = encodeURIComponent(p.externalUrl);
+    chain.push(
+      `https://s.wordpress.com/mshots/v1/${encodedUrl}?w=${safeW}&h=${safeH}&after=3000`
+    );
+    // 5. mShots cu CDN alternativ
+    chain.push(
+      `https://s0.wp.com/mshots/v1/${encodedUrl}?w=${safeW}&h=${safeH}`
     );
   }
   return chain;
