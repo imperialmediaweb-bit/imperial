@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
+import { createHash } from "crypto";
 import { sendLeadEmails } from "@/lib/email";
+import { insertBrief } from "@/lib/briefs";
+import { hasDb } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const isPhone = (s: string) => /^[\d\s+()\-]{7,}$/.test(s);
+
+function hashIp(ip: string | null): string | undefined {
+  if (!ip) return undefined;
+  return createHash("sha256").update(ip).digest("hex").slice(0, 32);
+}
 
 export async function POST(req: Request) {
   let body: any;
@@ -24,7 +32,6 @@ export async function POST(req: Request) {
   const phoneRaw = String(body?.phone ?? "").trim();
   const email = String(body?.email ?? "").trim();
 
-  // Email OBLIGATORIU. Numele obligatoriu. Telefonul OPȚIONAL.
   if (name.length < 2 || !isEmail(email)) {
     return NextResponse.json(
       { error: "Nume și email valid obligatorii." },
@@ -32,7 +39,6 @@ export async function POST(req: Request) {
     );
   }
 
-  // Dacă telefonul e dat, trebuie să fie valid. Altfel, "-" (neindicat).
   const phone = phoneRaw ? (isPhone(phoneRaw) ? phoneRaw : "") : "";
   if (phoneRaw && !phone) {
     return NextResponse.json(
@@ -41,7 +47,7 @@ export async function POST(req: Request) {
     );
   }
 
-  // Estimare AI (opțional) — o punem în câmpul "message" ca extra pentru echipă
+  // Estimare AI (opțional)
   const aiEstimateMin = Number.isFinite(body?.aiEstimateMin) ? body.aiEstimateMin : null;
   const aiEstimateMax = Number.isFinite(body?.aiEstimateMax) ? body.aiEstimateMax : null;
   const aiEstimateReason = String(body?.aiEstimateReason ?? "").trim();
@@ -49,7 +55,11 @@ export async function POST(req: Request) {
   const aiRecommendedReason = String(body?.aiRecommendedReason ?? "").trim();
   const source = String(body?.source ?? "classic-form").trim();
 
-  // Construim secțiunea AI ca append la mesaj (vizibil în email)
+  const features = Array.isArray(body?.features)
+    ? body.features.map(String).slice(0, 30)
+    : [];
+
+  // Construim secțiunea AI pentru email
   let aiBlock = "";
   if (source === "ai-chat") {
     aiBlock += "\n\n─── Date generate de Imperial AI ───";
@@ -79,13 +89,48 @@ export async function POST(req: Request) {
     deadline: String(body?.deadline ?? "").trim(),
     hasLogo: String(body?.hasLogo ?? "").trim(),
     colorsPreference: String(body?.colorsPreference ?? "").trim(),
-    features: Array.isArray(body?.features)
-      ? body.features.map(String).slice(0, 30)
-      : [],
+    features,
     inspiration: String(body?.inspiration ?? "").trim(),
     message: finalMessage.slice(0, 6000),
   };
 
+  // ─── Salvează în DB dacă există (nu blochează pe eroare DB) ───
+  if (hasDb()) {
+    try {
+      const ip =
+        req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+        req.headers.get("x-real-ip") ||
+        null;
+      await insertBrief({
+        name,
+        email,
+        phone: phone || undefined,
+        selected_package: payload.selectedPackage,
+        industry: payload.industry,
+        current_site: payload.currentSite,
+        pages: payload.pages,
+        deadline: payload.deadline,
+        has_logo: payload.hasLogo,
+        colors_preference: payload.colorsPreference,
+        features,
+        inspiration: payload.inspiration,
+        message: userMessage,
+        ai_estimate_min: aiEstimateMin,
+        ai_estimate_max: aiEstimateMax,
+        ai_estimate_reason: aiEstimateReason || undefined,
+        ai_recommended_package: aiRecommendedPackage || undefined,
+        ai_recommended_reason: aiRecommendedReason || undefined,
+        source,
+        ip_hash: hashIp(ip),
+        user_agent: req.headers.get("user-agent")?.slice(0, 500) ?? undefined,
+      });
+    } catch (e) {
+      // Nu picăm request-ul — loghăm și continuăm cu email
+      console.error("[/api/lead] DB insert failed (continuing):", e);
+    }
+  }
+
+  // ─── Trimite email-uri ───
   try {
     await sendLeadEmails(payload);
     return NextResponse.json({ ok: true });
