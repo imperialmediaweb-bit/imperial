@@ -1,11 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Sparkles, Wand2, Info, Send } from "lucide-react";
+import { Check, Sparkles, Wand2, Info, Send, Plus, TrendingUp } from "lucide-react";
 import { useMemo } from "react";
 import type { BriefState } from "@/lib/brief-schema";
-import { canSubmitBrief, computeBriefProgress } from "@/lib/brief-schema";
+import { canSubmitBrief, computeBriefProgress, computeLiveEstimate } from "@/lib/brief-schema";
 import { getPackageByKey } from "@/lib/packages";
+import { LiveMockup } from "./LiveMockup";
 
 type Props = {
   brief: BriefState;
@@ -22,6 +23,7 @@ type FieldRow = {
 export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
   const progress = useMemo(() => computeBriefProgress(brief), [brief]);
   const canSubmit = useMemo(() => canSubmitBrief(brief), [brief]);
+  const liveEstimate = useMemo(() => computeLiveEstimate(brief), [brief]);
 
   const recommendedPkg = brief.recommendedPackage
     ? getPackageByKey(brief.recommendedPackage)
@@ -89,6 +91,20 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
 
         {/* Secțiuni cu câmpuri */}
         <div className="flex-1 space-y-5 overflow-y-auto p-5">
+          {/* Live mockup — apare doar când avem suficiente date */}
+          <AnimatePresence>
+            {brief.selectedPackage && brief.selectedPackage !== "personalizat" && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <LiveMockup brief={brief} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <BriefSection title="Contact" fields={contactFields} />
           <BriefSection title="Proiect" fields={projectFields} />
           <BriefSection title="Design & detalii" fields={designFields} />
@@ -169,6 +185,78 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                   Ofertă custom
                 </p>
                 <p className="mt-1 text-sm text-text">{brief.estimate.reasoning}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Breakdown LIVE — estimare running cu linii */}
+          <AnimatePresence>
+            {liveEstimate && !hasEstimate && !hasCustomEstimate && liveEstimate.lines.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="overflow-hidden rounded-2xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/5 via-transparent to-brand-purple/5 p-4"
+              >
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-3.5 w-3.5 text-brand-orange" />
+                  <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Estimare live
+                  </p>
+                </div>
+
+                <div className="mt-3 space-y-1.5">
+                  <AnimatePresence initial={false}>
+                    {liveEstimate.lines.map((line, idx) => (
+                      <motion.div
+                        key={line.label + idx}
+                        initial={{ opacity: 0, x: -8, height: 0 }}
+                        animate={{ opacity: 1, x: 0, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex items-start justify-between gap-2 overflow-hidden text-[11px]"
+                      >
+                        <span className="flex items-start gap-1.5 text-text-muted">
+                          {idx === 0 ? (
+                            <span className="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-brand-orange" />
+                          ) : (
+                            <Plus className="mt-0.5 h-3 w-3 flex-shrink-0 text-brand-orange/60" />
+                          )}
+                          <span className="break-words">{line.label}</span>
+                        </span>
+                        <span className="flex-shrink-0 whitespace-nowrap font-mono text-text">
+                          {line.priceMin === line.priceMax
+                            ? `${line.priceMin}€`
+                            : `${line.priceMin}–${line.priceMax}€`}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+
+                <div className="mt-3 flex items-end justify-between gap-2 border-t border-brand-orange/20 pt-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                    Total estimat
+                  </span>
+                  <motion.span
+                    key={`${liveEstimate.totalMin}-${liveEstimate.totalMax}`}
+                    initial={{ scale: 0.85, opacity: 0.6 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className="font-display text-xl font-extrabold sm:text-2xl"
+                  >
+                    <span className="text-gradient">
+                      {liveEstimate.totalMin === liveEstimate.totalMax
+                        ? `${liveEstimate.totalMin} €`
+                        : `${liveEstimate.totalMin}–${liveEstimate.totalMax} €`}
+                    </span>
+                  </motion.span>
+                </div>
+
+                <p className="mt-2 flex items-start gap-1.5 text-[10px] leading-snug text-text-subtle">
+                  <Info className="mt-0.5 h-3 w-3 flex-shrink-0" />
+                  Se actualizează pe măsură ce conversăm. Oferta fermă — pe email în 24h.
+                </p>
               </motion.div>
             )}
           </AnimatePresence>

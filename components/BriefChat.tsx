@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Send, Sparkles, MessageSquare, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { BriefState } from "@/lib/brief-schema";
-import { emptyBrief } from "@/lib/brief-schema";
+import type { BriefState, MoodBoard } from "@/lib/brief-schema";
+import { emptyBrief, MOODBOARDS } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
 import { getPackageByKey } from "@/lib/packages";
 
@@ -31,6 +31,7 @@ type UIMessage = {
   text: string;
   pending?: boolean;
   options?: ChipOptions;
+  moodboards?: { answered?: boolean }; // când AI cere mood boards
 };
 
 const INITIAL_GREETING =
@@ -223,13 +224,18 @@ export function BriefChat() {
     const newHistory = [...history, userMsg];
     setHistory(newHistory);
 
-    // Marchează chips-urile existente ca "answered" (dezactivează)
+    // Marchează chips-urile / moodboard-urile existente ca "answered" (dezactivează)
     setUiMessages((prev) => {
-      const next = prev.map((m) =>
-        m.options && !m.options.answered
-          ? { ...m, options: { ...m.options, answered: true } }
-          : m
-      );
+      const next = prev.map((m) => {
+        const updated = { ...m };
+        if (m.options && !m.options.answered) {
+          updated.options = { ...m.options, answered: true };
+        }
+        if (m.moodboards && !m.moodboards.answered) {
+          updated.moodboards = { answered: true };
+        }
+        return updated;
+      });
       next.push({ role: "user", text });
       next.push({ role: "assistant", text: "", pending: true });
       return next;
@@ -254,7 +260,9 @@ export function BriefChat() {
       const toolCalls: Array<{ name: string; input: any }> = data.toolCalls ?? [];
       // Aplică tool-urile "de state" (update_brief, etc)
       for (const tc of toolCalls) {
-        if (tc.name !== "present_options") applyToolCall(tc);
+        if (tc.name !== "present_options" && tc.name !== "present_moodboards") {
+          applyToolCall(tc);
+        }
       }
       // Găsește present_options (atașăm la bula AI curentă)
       const optCall = toolCalls.find((tc) => tc.name === "present_options");
@@ -266,6 +274,9 @@ export function BriefChat() {
             }
           : undefined;
 
+      // Găsește present_moodboards
+      const hasMoodboards = toolCalls.some((tc) => tc.name === "present_moodboards");
+
       setUiMessages((prev) => {
         const next = [...prev];
         const lastIdx = next.length - 1;
@@ -274,6 +285,7 @@ export function BriefChat() {
             role: "assistant",
             text: data.assistantText || "…",
             options: newOptions,
+            moodboards: hasMoodboards ? {} : undefined,
           };
         }
         return next;
@@ -313,6 +325,68 @@ export function BriefChat() {
     if (!multiDraft || multiDraft.selected.length === 0) return;
     send(multiDraft.selected.join(", "));
   };
+
+  // ─── Click pe mood board ───
+  const onMoodboardPick = (mb: MoodBoard) => {
+    if (sending) return;
+    // Setăm paleta în state ca user preference
+    setBrief((prev) => ({
+      ...prev,
+      colorsPreference: `${mb.name} (${mb.colors.slice(0, 3).join(", ")})`,
+    }));
+    // Trimitem ca mesaj user pentru ca AI să știe alegerea
+    send(`Îmi place stilul "${mb.name}" (${mb.description})`);
+  };
+
+  // ─── Clonez stilul de pe URL ───
+  const [analyzing, setAnalyzing] = useState(false);
+  const cloneUrlStyle = async (url: string) => {
+    if (sending || analyzing) return;
+    setError(null);
+    setAnalyzing(true);
+    try {
+      const res = await fetch("/api/analyze-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || "Eroare analiză URL.");
+
+      const colors = (data.colors ?? []).slice(0, 4).join(", ");
+      const vibe = data.vibe ?? "modern";
+      const msg = `Uite un site care îmi place: ${url}
+Stilul lui: ${data.style_description ?? vibe}
+Culori dominante: ${colors}
+Features: ${(data.features_detected ?? []).join(", ")}
+Vreau ceva în aceeași direcție.`;
+
+      setBrief((prev) => ({
+        ...prev,
+        colorsPreference: `Inspiră-te după ${url} (${vibe}, ${colors})`,
+        inspiration: prev.inspiration ? `${prev.inspiration}, ${url}` : url,
+      }));
+
+      setAnalyzing(false);
+      await send(msg);
+    } catch (e: any) {
+      setError(e?.message ?? "Nu am putut analiza site-ul.");
+      setAnalyzing(false);
+    }
+  };
+
+  // Detectează URL-uri în ultimul mesaj al user-ului (pentru CTA "Clonez stilul")
+  const urlInLastUserMsg = useMemo(() => {
+    for (let i = uiMessages.length - 1; i >= 0; i--) {
+      const m = uiMessages[i];
+      if (m.role === "user") {
+        const match = m.text.match(/https?:\/\/[\w.-]+\.[a-z]{2,}[^\s]*/i) ||
+          m.text.match(/\b(?:www\.)?[\w-]+\.(ro|com|net|org|eu|store|shop|online|io|dev)\b[^\s]*/i);
+        return match ? match[0] : null;
+      }
+    }
+    return null;
+  }, [uiMessages]);
 
   const handleSubmit = async () => {
     if (submitting) return;
@@ -393,11 +467,13 @@ export function BriefChat() {
               text={m.text}
               pending={m.pending}
               options={m.options}
+              moodboards={m.moodboards}
               msgIdx={idx}
               multiDraft={multiDraft}
               onChipClick={(opt) =>
                 onChipClick(idx, opt, !!m.options?.multi)
               }
+              onMoodboardPick={onMoodboardPick}
               disabled={sending}
             />
           ))}
@@ -440,6 +516,42 @@ export function BriefChat() {
 
         {/* Input bar */}
         <div className="border-t border-bg-border/60 p-4">
+          {/* Clone URL CTA — apare când user a menționat un URL */}
+          <AnimatePresence>
+            {urlInLastUserMsg && !analyzing && !sending && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mb-3 flex items-center justify-between gap-2 rounded-xl border border-brand-purple/40 bg-brand-purple/10 px-3 py-2"
+              >
+                <p className="truncate text-xs text-text">
+                  <span className="text-brand-orange">🎨</span> Vrei să clonez stilul de pe{" "}
+                  <span className="font-mono text-brand-orange">{urlInLastUserMsg.slice(0, 40)}</span>?
+                </p>
+                <button
+                  type="button"
+                  onClick={() => cloneUrlStyle(urlInLastUserMsg)}
+                  className="flex-shrink-0 rounded-full bg-brand-purple px-3 py-1 text-[11px] font-semibold text-white hover:bg-brand-glow"
+                >
+                  Da, analizează
+                </button>
+              </motion.div>
+            )}
+            {analyzing && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-3 flex items-center gap-2 rounded-xl border border-brand-purple/40 bg-brand-purple/10 px-3 py-2"
+              >
+                <span className="h-3 w-3 animate-spin rounded-full border-2 border-brand-purple/30 border-t-brand-purple" />
+                <p className="text-xs text-text">
+                  Analizez site-ul... extrag culori, stil, features...
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {listening && (
             <motion.div
               initial={{ opacity: 0, y: 6 }}
@@ -525,9 +637,11 @@ type BubbleProps = {
   text: string;
   pending?: boolean;
   options?: ChipOptions;
+  moodboards?: { answered?: boolean };
   msgIdx: number;
   multiDraft: { msgIdx: number; selected: string[] } | null;
   onChipClick: (opt: string) => void;
+  onMoodboardPick: (mb: MoodBoard) => void;
   disabled?: boolean;
 };
 
@@ -536,9 +650,11 @@ function MessageBubble({
   text,
   pending,
   options,
+  moodboards,
   msgIdx,
   multiDraft,
   onChipClick,
+  onMoodboardPick,
   disabled,
 }: BubbleProps) {
   const isUser = role === "user";
@@ -609,6 +725,40 @@ function MessageBubble({
                 </button>
               );
             })}
+          </div>
+        )}
+
+        {/* Mood board picker */}
+        {!isUser && moodboards && !moodboards.answered && (
+          <div className="ml-10 grid w-full max-w-lg grid-cols-2 gap-2 sm:grid-cols-3">
+            {MOODBOARDS.map((mb) => (
+              <button
+                key={mb.key}
+                type="button"
+                onClick={() => onMoodboardPick(mb)}
+                disabled={disabled}
+                className="group relative overflow-hidden rounded-xl border border-bg-border bg-bg-soft/60 p-2.5 text-left transition hover:border-brand-orange hover:shadow-glow-orange disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {/* Paleta de culori */}
+                <div className="flex h-8 w-full gap-0.5 overflow-hidden rounded-md">
+                  {mb.colors.map((c, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 transition-transform group-hover:scale-105"
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
+                <div className="mt-2">
+                  <p className="text-xs font-semibold text-text">
+                    {mb.emoji} {mb.name}
+                  </p>
+                  <p className="mt-0.5 line-clamp-2 text-[10px] leading-tight text-text-muted">
+                    {mb.description}
+                  </p>
+                </div>
+              </button>
+            ))}
           </div>
         )}
       </div>

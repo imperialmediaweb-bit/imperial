@@ -88,6 +88,184 @@ export function computeBriefProgress(b: BriefState): number {
   return Math.min(100, score);
 }
 
+// ────────────────────────────────────────────────────────────
+// MOOD BOARDS — 6 preseturi vizuale pentru alegerea esteticii.
+// ────────────────────────────────────────────────────────────
+
+export type MoodBoard = {
+  key: string;
+  name: string;
+  emoji: string;
+  description: string;
+  colors: string[]; // hex
+  vibe: string;
+};
+
+export const MOODBOARDS: MoodBoard[] = [
+  {
+    key: "dark-premium",
+    name: "Dark Premium",
+    emoji: "🌙",
+    description: "Negru + auriu, elegant, lux",
+    colors: ["#0A0A0A", "#1F1F1F", "#D4AF37", "#FFFFFF"],
+    vibe: "premium, elegant, sofisticat",
+  },
+  {
+    key: "minimalist-alb",
+    name: "Minimalist Alb",
+    emoji: "☀️",
+    description: "Alb curat, spațiu, tipografie elegantă",
+    colors: ["#FFFFFF", "#F5F5F5", "#111111", "#FF6B1A"],
+    vibe: "minimalist, aerisit, modern",
+  },
+  {
+    key: "fun-playful",
+    name: "Fun & Playful",
+    emoji: "🌈",
+    description: "Colorat, vesel, energic",
+    colors: ["#FF6B9D", "#FFDD59", "#4ECDC4", "#A855F7"],
+    vibe: "vesel, creativ, tinerese",
+  },
+  {
+    key: "corporate",
+    name: "Corporate Profesional",
+    emoji: "💼",
+    description: "Albastru + gri, încredere, serios",
+    colors: ["#1E3A8A", "#3B82F6", "#6B7280", "#F3F4F6"],
+    vibe: "corporate, serios, încredere",
+  },
+  {
+    key: "natural",
+    name: "Natural Organic",
+    emoji: "🌿",
+    description: "Verde + crem, natural, calm",
+    colors: ["#4A7C59", "#8FBC8F", "#F5F0E1", "#3C2F2F"],
+    vibe: "natural, eco, calm, organic",
+  },
+  {
+    key: "bold-agresiv",
+    name: "Bold & Agresiv",
+    emoji: "🔥",
+    description: "Portocaliu + negru, impact, energie",
+    colors: ["#FF6B1A", "#111111", "#FFB020", "#FFFFFF"],
+    vibe: "energic, bold, impact, dinamic",
+  },
+];
+
+// ────────────────────────────────────────────────────────────
+// ESTIMARE LIVE — calcul client-side pe măsură ce brief-ul se umple.
+// AI-ul poate seta un `estimate` oficial la sfârșit (set_estimate),
+// dar aceasta e estimarea "running" vizibilă în permanență.
+// ────────────────────────────────────────────────────────────
+
+export type EstimateLine = {
+  label: string;
+  priceMin: number;
+  priceMax: number;
+};
+
+export type LiveEstimate = {
+  lines: EstimateLine[];
+  totalMin: number;
+  totalMax: number;
+};
+
+const FEATURE_COMPLEX = new Set([
+  "Rezervări online",
+  "Plăți online",
+  "Multilimbă",
+  "CRM / Newsletter",
+  "CRM/Newsletter",
+  "Zonă de membri",
+  "Zonă membri",
+  "Formular contact avansat",
+  "Formular avansat",
+]);
+
+const FEATURE_SIMPLE = new Set([
+  "Blog",
+  "Galerie / Portofoliu",
+  "Galerie foto",
+  "Galerie",
+  "Hartă Google Maps",
+  "Hartă",
+  "Integrare social media",
+  "Social media",
+]);
+
+export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
+  if (!b.selectedPackage) return null;
+
+  const lines: EstimateLine[] = [];
+  const pkg = b.selectedPackage;
+
+  // ─── Bază per pachet ───
+  if (pkg === "website") {
+    lines.push({ label: "Website Prezentare (bază)", priceMin: 699, priceMax: 699 });
+  } else if (pkg === "shop") {
+    lines.push({ label: "Magazin Online (bază)", priceMin: 1200, priceMax: 1200 });
+  } else if (pkg === "promo") {
+    lines.push({ label: "Campanie Promovare", priceMin: 180, priceMax: 220 });
+  } else if (pkg === "admin") {
+    lines.push({ label: "Mentenanță lunară", priceMin: 50, priceMax: 100 });
+  } else if (pkg === "personalizat") {
+    // Personalizat nu are estimare automată
+    return null;
+  }
+
+  // ─── Pagini extra (doar pentru website) ───
+  if (pkg === "website" && b.pages) {
+    if (b.pages.includes("5-15")) {
+      lines.push({ label: "Pagini extra (5-15)", priceMin: 100, priceMax: 200 });
+    } else if (b.pages.includes("15+")) {
+      lines.push({ label: "Pagini extra (15+)", priceMin: 300, priceMax: 500 });
+    }
+  }
+
+  // ─── Logo nou ───
+  if (b.hasLogo === "nu" && (pkg === "website" || pkg === "shop")) {
+    lines.push({
+      label: "Logo nou (draft inclus — extra dacă vrei variante)",
+      priceMin: pkg === "website" ? 150 : 100,
+      priceMax: pkg === "website" ? 250 : 200,
+    });
+  }
+
+  // ─── Features ───
+  if ((pkg === "website" || pkg === "shop") && b.features.length > 0) {
+    for (const f of b.features) {
+      if (FEATURE_COMPLEX.has(f)) {
+        lines.push({ label: f, priceMin: pkg === "shop" ? 100 : 120, priceMax: pkg === "shop" ? 150 : 180 });
+      } else if (FEATURE_SIMPLE.has(f)) {
+        lines.push({ label: f, priceMin: 80, priceMax: 120 });
+      } else {
+        // Feature necunoscut (custom) — estimăm conservator
+        lines.push({ label: f, priceMin: 80, priceMax: 150 });
+      }
+    }
+  }
+
+  // ─── Urgență ───
+  if (pkg === "website" && b.deadline === "Cât mai repede") {
+    lines.push({ label: "Urgență (prioritate)", priceMin: 100, priceMax: 100 });
+  }
+
+  // ─── Plăți card pentru shop ───
+  if (pkg === "shop" && b.features.some((f) => f.toLowerCase().includes("plăți") || f.toLowerCase().includes("card"))) {
+    // Deja contat la features — dar asigură minim
+  }
+
+  const totalMin = lines.reduce((s, l) => s + l.priceMin, 0);
+  const totalMax = lines.reduce((s, l) => s + l.priceMax, 0);
+
+  // Rotunjește la 10€
+  return {
+    lines,
+    totalMin: Math.round(totalMin / 10) * 10,
+    totalMax: Math.round(totalMax / 10) * 10,
+  };
+}
+
 // Validare minimă pentru a trimite brief-ul (nu blocăm pe estimate)
 export function canSubmitBrief(b: BriefState): boolean {
   const nameOk = b.name.trim().length >= 2;
@@ -177,6 +355,15 @@ export const briefToolsJsonSchema = {
     name: "request_submit",
     description:
       "Marchează brief-ul ca gata de trimis. Apelează doar după ce ai: nume + email + pachet + industrie + ai făcut rezumat în ultimul mesaj și ai întrebat clientul dacă e ok să trimitem.",
+    input_schema: {
+      type: "object" as const,
+      properties: {},
+    },
+  },
+  present_moodboards: {
+    name: "present_moodboards",
+    description:
+      "Arată user-ului 6 mood board-uri vizuale (culori + vibe) ca să aleagă estetica. FOLOSEȘTE în loc de a întreba 'ce culori vrei?'. Este mult mai ușor pentru user să aleagă vizual decât să descrie. Nu ia parametri — mood board-urile sunt predefinite.",
     input_schema: {
       type: "object" as const,
       properties: {},
