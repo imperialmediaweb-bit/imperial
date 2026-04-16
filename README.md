@@ -21,11 +21,11 @@ Aplicația rulează pe http://localhost:3000
 
 ## ☁️ Deploy pe Railway
 
-1. **Push branch-ul** pe GitHub (e deja făcut: `claude/website-development-7VJb0`)
+1. **Push branch-ul** pe GitHub (ex: `claude/nsu-eface-deployment-RcGHO` sau merge în `main`)
 2. Intră pe [railway.app](https://railway.app) → New Project → Deploy from GitHub repo
 3. Selectează repo-ul `imperialmediaweb-bit/imperial`
-4. Selectează branch-ul `claude/website-development-7VJb0` (sau merge-uiește în `main`)
-5. Railway detectează automat `Dockerfile`-ul și buildează
+4. Selectează branch-ul dorit (sau merge-uiește în `main`)
+5. Railway detectează automat `Dockerfile`-ul (multi-stage + Next.js `output: standalone`) și buildează
 6. Setează **Variables** în Railway:
    - `RESEND_API_KEY` — cheia de la resend.com
    - `LEAD_EMAIL` — `office@imperial-media.ro`
