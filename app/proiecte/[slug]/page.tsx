@@ -169,7 +169,7 @@ export default function ProjectDetailPage({
                     <ExternalLink className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </a>
                 )}
-                <Link href="/#brief" className="btn-ghost">
+                <Link href="/brief" className="btn-ghost">
                   <Zap className="h-4 w-4" />
                   Vreau ceva similar
                 </Link>
@@ -831,7 +831,7 @@ export default function ProjectDetailPage({
           <p className="section-subtitle mx-auto">
             Completează briefingul și revenim cu oferta ta personalizată în 24h.
           </p>
-          <Link href="/#brief" className="btn-primary mt-8 inline-flex">
+          <Link href="/brief" className="btn-primary mt-8 inline-flex">
             <Zap className="h-4 w-4" />
             Începe proiectul tău
           </Link>

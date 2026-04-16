@@ -182,4 +182,25 @@ export const briefToolsJsonSchema = {
       properties: {},
     },
   },
+  present_options: {
+    name: "present_options",
+    description:
+      "Prezintă user-ului chips CLICKABILE sub mesajul tău, ca să aleagă rapid fără să tasteze. FOLOSEȘTE MEREU când întrebi lucruri cu opțiuni predefinite: features dorite, număr pagini, are logo?, termen, tip proiect, culori frecvente. NU pune user-ul să tasteze dacă poți oferi opțiuni. Textul tău din mesaj trebuie să fie întrebarea, iar chips-urile sunt răspunsurile posibile.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        options: {
+          type: "array",
+          items: { type: "string" },
+          description: "Lista opțiunilor. Max 10. Folosește formulare scurte (1-3 cuvinte).",
+        },
+        multi_select: {
+          type: "boolean",
+          description:
+            "true dacă user-ul poate alege MAI MULTE (ex: features). false pentru alegere unică (ex: da/nu, pachet, termen).",
+        },
+      },
+      required: ["options"],
+    },
+  },
 };

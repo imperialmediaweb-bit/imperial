@@ -225,7 +225,7 @@ export function Skills() {
             ))}
           </div>
 
-          <a href="#brief" className="btn-primary mt-9">
+          <a href="/brief" className="btn-primary mt-9">
             Primește estimare
             <ArrowRight className="h-4 w-4" />
           </a>

@@ -78,7 +78,7 @@ export default function ProiectePage() {
           <p className="section-subtitle mx-auto">
             Spune-ne ce-ți dorești și revenim cu oferta ta personalizată în 24h.
           </p>
-          <Link href="/#brief" className="btn-primary mt-8 inline-flex">
+          <Link href="/brief" className="btn-primary mt-8 inline-flex">
             <ArrowUpRight className="h-4 w-4" />
             Începe proiectul tău
           </Link>

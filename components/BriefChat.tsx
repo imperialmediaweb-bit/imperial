@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Mic, MicOff, Send, Sparkles, MessageSquare } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mic, MicOff, Send, Sparkles, MessageSquare, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { BriefState } from "@/lib/brief-schema";
 import { emptyBrief } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
+import { getPackageByKey } from "@/lib/packages";
 
 // Tipuri minime pentru mesajele Anthropic (nu importăm SDK-ul pe client)
 type AnthropicContentBlock =
@@ -19,20 +20,32 @@ type AnthropicMsg = {
   content: AnthropicContentBlock[] | string;
 };
 
+type ChipOptions = {
+  list: string[];
+  multi: boolean;
+  answered?: boolean;
+};
+
 type UIMessage = {
   role: "user" | "assistant";
   text: string;
   pending?: boolean;
+  options?: ChipOptions;
 };
 
 const INITIAL_GREETING =
-  "Salut! 👋 Sunt Imperial AI. Spune-mi pe scurt: ce proiect ai în minte? (Un site, magazin online, promovare sau altceva?) Poți scrie sau apăsa 🎤 ca să-mi vorbești.";
+  "Salut! 👋 Sunt Imperial AI. Spune-mi pe scurt: ce proiect ai în minte? Poți scrie, apăsa 🎤 ca să-mi vorbești, sau bifa rapid mai jos.";
+
+const INITIAL_OPTIONS: ChipOptions = {
+  list: ["Site prezentare", "Magazin online", "Promovare", "Altceva"],
+  multi: false,
+};
 
 export function BriefChat() {
   const router = useRouter();
   const [history, setHistory] = useState<AnthropicMsg[]>([]);
   const [uiMessages, setUiMessages] = useState<UIMessage[]>([
-    { role: "assistant", text: INITIAL_GREETING },
+    { role: "assistant", text: INITIAL_GREETING, options: INITIAL_OPTIONS },
   ]);
   const [brief, setBrief] = useState<BriefState>(emptyBrief);
   const [input, setInput] = useState("");
@@ -42,9 +55,33 @@ export function BriefChat() {
   const [listening, setListening] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(false);
 
+  // State pentru multi-select: { msgIdx: number; selected: Set<string> }
+  const [multiDraft, setMultiDraft] = useState<{
+    msgIdx: number;
+    selected: string[];
+  } | null>(null);
+
   const recognitionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // ─── Preselecție pachet din URL: /brief?pachet=shop ───
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const pachet = params.get("pachet");
+    if (!pachet) return;
+    const pkg = getPackageByKey(pachet);
+    if (!pkg) return;
+    setBrief((b) => ({ ...b, selectedPackage: pachet as any }));
+    // Actualizează prima bula AI ca să reflecte pachetul preselectat
+    setUiMessages([
+      {
+        role: "assistant",
+        text: `Perfect — văd că te interesează ${pkg.name} 🎯 Ca să-ți pot da o estimare potrivită, zi-mi rapid câteva lucruri. Pentru început: cum te numești și pe ce email să-ți trimitem oferta?`,
+      },
+    ]);
+  }, []);
 
   // ─── Web Speech API setup (Chrome/Edge/Safari) ───
   useEffect(() => {
@@ -83,7 +120,7 @@ export function BriefChat() {
     recognitionRef.current = recognition;
   }, []);
 
-  // Auto-scroll
+  // Auto-scroll la mesaj nou
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [uiMessages]);
@@ -117,55 +154,52 @@ export function BriefChat() {
   }, [listening]);
 
   // ─── Aplică tool_use-urile AI-ului în state-ul brief-ului ───
-  const applyToolCall = useCallback(
-    (tc: { name: string; input: any }) => {
-      setBrief((prev) => {
-        const next: BriefState = { ...prev };
-        const inp = tc.input ?? {};
+  const applyToolCall = useCallback((tc: { name: string; input: any }) => {
+    setBrief((prev) => {
+      const next: BriefState = { ...prev };
+      const inp = tc.input ?? {};
 
-        if (tc.name === "update_brief") {
-          const fields: (keyof BriefState)[] = [
-            "name",
-            "email",
-            "phone",
-            "selectedPackage",
-            "industry",
-            "currentSite",
-            "pages",
-            "deadline",
-            "hasLogo",
-            "colorsPreference",
-            "features",
-            "inspiration",
-            "message",
-          ];
-          for (const f of fields) {
-            if (inp[f] !== undefined && inp[f] !== null && inp[f] !== "") {
-              (next as any)[f] = inp[f];
-            }
+      if (tc.name === "update_brief") {
+        const fields: (keyof BriefState)[] = [
+          "name",
+          "email",
+          "phone",
+          "selectedPackage",
+          "industry",
+          "currentSite",
+          "pages",
+          "deadline",
+          "hasLogo",
+          "colorsPreference",
+          "features",
+          "inspiration",
+          "message",
+        ];
+        for (const f of fields) {
+          if (inp[f] !== undefined && inp[f] !== null && inp[f] !== "") {
+            (next as any)[f] = inp[f];
           }
-        } else if (tc.name === "set_recommendation") {
-          if (inp.package) next.recommendedPackage = inp.package;
-          if (inp.reason) next.recommendedReason = inp.reason;
-          if (!next.selectedPackage && inp.package) {
-            next.selectedPackage = inp.package;
-          }
-        } else if (tc.name === "set_estimate") {
-          next.estimate = {
-            min: typeof inp.min === "number" ? inp.min : null,
-            max: typeof inp.max === "number" ? inp.max : null,
-            currency: "EUR",
-            reasoning: typeof inp.reasoning === "string" ? inp.reasoning : "",
-          };
-        } else if (tc.name === "request_submit") {
-          next.readyToSubmit = true;
         }
+      } else if (tc.name === "set_recommendation") {
+        if (inp.package) next.recommendedPackage = inp.package;
+        if (inp.reason) next.recommendedReason = inp.reason;
+        if (!next.selectedPackage && inp.package) {
+          next.selectedPackage = inp.package;
+        }
+      } else if (tc.name === "set_estimate") {
+        next.estimate = {
+          min: typeof inp.min === "number" ? inp.min : null,
+          max: typeof inp.max === "number" ? inp.max : null,
+          currency: "EUR",
+          reasoning: typeof inp.reasoning === "string" ? inp.reasoning : "",
+        };
+      } else if (tc.name === "request_submit") {
+        next.readyToSubmit = true;
+      }
 
-        return next;
-      });
-    },
-    []
-  );
+      return next;
+    });
+  }, []);
 
   const send = async (rawText: string) => {
     const text = rawText.trim();
@@ -180,6 +214,7 @@ export function BriefChat() {
 
     setError(null);
     setSending(true);
+    setMultiDraft(null); // resetează orice selecție multi în progres
 
     const userMsg: AnthropicMsg = {
       role: "user",
@@ -187,11 +222,18 @@ export function BriefChat() {
     };
     const newHistory = [...history, userMsg];
     setHistory(newHistory);
-    setUiMessages((prev) => [
-      ...prev,
-      { role: "user", text },
-      { role: "assistant", text: "", pending: true },
-    ]);
+
+    // Marchează chips-urile existente ca "answered" (dezactivează)
+    setUiMessages((prev) => {
+      const next = prev.map((m) =>
+        m.options && !m.options.answered
+          ? { ...m, options: { ...m.options, answered: true } }
+          : m
+      );
+      next.push({ role: "user", text });
+      next.push({ role: "assistant", text: "", pending: true });
+      return next;
+    });
     setInput("");
 
     try {
@@ -208,7 +250,21 @@ export function BriefChat() {
       }
 
       setHistory((prev) => [...prev, ...(data.appendedMessages ?? [])]);
-      (data.toolCalls ?? []).forEach((tc: any) => applyToolCall(tc));
+
+      const toolCalls: Array<{ name: string; input: any }> = data.toolCalls ?? [];
+      // Aplică tool-urile "de state" (update_brief, etc)
+      for (const tc of toolCalls) {
+        if (tc.name !== "present_options") applyToolCall(tc);
+      }
+      // Găsește present_options (atașăm la bula AI curentă)
+      const optCall = toolCalls.find((tc) => tc.name === "present_options");
+      const newOptions: ChipOptions | undefined =
+        optCall && Array.isArray(optCall.input?.options)
+          ? {
+              list: optCall.input.options.slice(0, 10).map((s: any) => String(s)),
+              multi: !!optCall.input.multi_select,
+            }
+          : undefined;
 
       setUiMessages((prev) => {
         const next = [...prev];
@@ -217,17 +273,45 @@ export function BriefChat() {
           next[lastIdx] = {
             role: "assistant",
             text: data.assistantText || "…",
+            options: newOptions,
           };
         }
         return next;
       });
     } catch (e: any) {
       setError(e?.message ?? "Eroare.");
-      // Scoate bula "pending" dacă a eșuat
       setUiMessages((prev) => prev.filter((m) => !m.pending));
     } finally {
       setSending(false);
     }
+  };
+
+  // ─── Handlers pentru chips ───
+  const onChipClick = (msgIdx: number, option: string, multi: boolean) => {
+    if (sending) return;
+    if (!multi) {
+      // Single-select: trimite direct
+      send(option);
+    } else {
+      // Multi-select: toggle în draft
+      setMultiDraft((curr) => {
+        if (!curr || curr.msgIdx !== msgIdx) {
+          return { msgIdx, selected: [option] };
+        }
+        const exists = curr.selected.includes(option);
+        return {
+          msgIdx,
+          selected: exists
+            ? curr.selected.filter((x) => x !== option)
+            : [...curr.selected, option],
+        };
+      });
+    }
+  };
+
+  const sendMultiDraft = () => {
+    if (!multiDraft || multiDraft.selected.length === 0) return;
+    send(multiDraft.selected.join(", "));
   };
 
   const handleSubmit = async () => {
@@ -252,7 +336,6 @@ export function BriefChat() {
           features: brief.features,
           inspiration: brief.inspiration,
           message: brief.message,
-          // Extra: trimitem și estimarea + recomandarea ca parte a mesajului către echipă
           aiEstimateMin: brief.estimate.min,
           aiEstimateMax: brief.estimate.max,
           aiEstimateReason: brief.estimate.reasoning,
@@ -272,171 +355,201 @@ export function BriefChat() {
     }
   };
 
+  const lastMsgIdx = uiMessages.length - 1;
+  const lastMsg = uiMessages[lastMsgIdx];
+  const showMultiBar =
+    multiDraft !== null &&
+    multiDraft.msgIdx === lastMsgIdx &&
+    lastMsg?.options?.multi &&
+    !lastMsg.options.answered;
+
   return (
-    <section id="brief" className="section relative">
-      <div className="container-app max-w-6xl">
-        <div className="text-center">
-          <span className="chip">
-            <Sparkles className="h-3 w-3" /> Brief AI conversațional
-          </span>
-          <h2 className="section-title mt-4 mx-auto">
-            Spune-ne <span className="text-gradient">ce vrei</span> — scris sau prin voce
-          </h2>
-          <p className="section-subtitle mx-auto">
-            Imperial AI te ghidează în ~2 minute și-ți dă estimare orientativă pe loc.
-          </p>
+    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">
+      {/* ─── CHAT COLUMN ─── */}
+      <div className="flex min-h-[640px] flex-col overflow-hidden rounded-3xl border border-bg-border bg-bg-card bg-card-gradient shadow-card">
+        {/* Header mic */}
+        <div className="flex items-center gap-3 border-b border-bg-border/60 px-5 py-3.5">
+          <div className="grid h-9 w-9 place-items-center rounded-full bg-orange-gradient shadow-glow-orange">
+            <Sparkles className="h-4 w-4 text-white" />
+          </div>
+          <div>
+            <p className="font-display text-sm font-bold text-text">Imperial AI</p>
+            <p className="flex items-center gap-1.5 text-[11px] text-text-muted">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
+              </span>
+              Online · răspunde instant
+            </p>
+          </div>
         </div>
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">
-          {/* ─── CHAT COLUMN ─── */}
-          <div className="flex min-h-[640px] flex-col overflow-hidden rounded-3xl border border-bg-border bg-bg-card bg-card-gradient shadow-card">
-            {/* Header mic */}
-            <div className="flex items-center gap-3 border-b border-bg-border/60 px-5 py-3.5">
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-orange-gradient shadow-glow-orange">
-                <Sparkles className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <p className="font-display text-sm font-bold text-text">Imperial AI</p>
-                <p className="flex items-center gap-1.5 text-[11px] text-text-muted">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
-                  </span>
-                  Online · răspunde instant
+        {/* Messages */}
+        <div className="flex-1 space-y-4 overflow-y-auto p-5 sm:p-6">
+          {uiMessages.map((m, idx) => (
+            <MessageBubble
+              key={idx}
+              role={m.role}
+              text={m.text}
+              pending={m.pending}
+              options={m.options}
+              msgIdx={idx}
+              multiDraft={multiDraft}
+              onChipClick={(opt) =>
+                onChipClick(idx, opt, !!m.options?.multi)
+              }
+              disabled={sending}
+            />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {error && (
+          <p className="mx-5 mb-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">
+            {error}
+          </p>
+        )}
+
+        {/* Bară "Trimite selecții" pentru multi-select */}
+        <AnimatePresence>
+          {showMultiBar && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              className="border-t border-brand-orange/30 bg-brand-orange/10 px-4 py-3"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs text-text-muted">
+                  Bifat: <span className="font-semibold text-text">{multiDraft?.selected.length}</span>{" "}
+                  {multiDraft?.selected.length === 1 ? "selecție" : "selecții"}
                 </p>
-              </div>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 space-y-4 overflow-y-auto p-5 sm:p-6">
-              {uiMessages.map((m, idx) => (
-                <MessageBubble
-                  key={idx}
-                  role={m.role}
-                  text={m.text}
-                  pending={m.pending}
-                />
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {error && (
-              <p className="mx-5 mb-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">
-                {error}
-              </p>
-            )}
-
-            {/* Input bar */}
-            <div className="border-t border-bg-border/60 p-4">
-              {listening && (
-                <motion.div
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-3 flex items-center gap-2 rounded-xl border border-brand-orange/40 bg-brand-orange/10 px-3 py-2"
-                >
-                  <AnimatedWave />
-                  <p className="text-xs text-text">Ascult... vorbește în română.</p>
-                </motion.div>
-              )}
-
-              <div className="flex items-end gap-2">
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      send(input);
-                    }
-                  }}
-                  rows={1}
-                  placeholder={
-                    listening
-                      ? "Te ascult..."
-                      : sending
-                        ? "Imperial AI se gândește..."
-                        : "Scrie aici sau apasă 🎤..."
-                  }
-                  className="input max-h-36 min-h-[48px] flex-1 resize-none py-3"
-                  disabled={sending}
-                />
-                {voiceSupported && (
-                  <button
-                    type="button"
-                    onClick={toggleMic}
-                    disabled={sending}
-                    aria-label={listening ? "Oprește microfon" : "Pornește microfon"}
-                    className={`grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl transition ${
-                      listening
-                        ? "bg-brand-orange text-white shadow-glow-orange"
-                        : "border border-bg-border bg-bg-soft text-text-muted hover:border-brand-orange hover:text-text"
-                    }`}
-                  >
-                    {listening ? (
-                      <MicOff className="h-5 w-5" />
-                    ) : (
-                      <Mic className="h-5 w-5" />
-                    )}
-                  </button>
-                )}
                 <button
                   type="button"
-                  onClick={() => send(input)}
-                  disabled={sending || !input.trim()}
-                  aria-label="Trimite mesaj"
-                  className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+                  onClick={sendMultiDraft}
+                  disabled={sending || (multiDraft?.selected.length ?? 0) === 0}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-orange-gradient px-4 py-1.5 text-xs font-semibold text-white shadow-glow-orange transition hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
                 >
-                  <Send className="h-5 w-5" />
+                  Trimite
+                  <Send className="h-3 w-3" />
                 </button>
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-              {!voiceSupported && (
-                <p className="mt-2 flex items-center gap-1.5 text-[11px] text-text-subtle">
-                  <MessageSquare className="h-3 w-3" />
-                  Browser-ul tău nu suportă voce — Chrome/Edge/Safari funcționează.
-                </p>
-              )}
-            </div>
+        {/* Input bar */}
+        <div className="border-t border-bg-border/60 p-4">
+          {listening && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-3 flex items-center gap-2 rounded-xl border border-brand-orange/40 bg-brand-orange/10 px-3 py-2"
+            >
+              <AnimatedWave />
+              <p className="text-xs text-text">Ascult... vorbește în română.</p>
+            </motion.div>
+          )}
+
+          <div className="flex items-end gap-2">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  send(input);
+                }
+              }}
+              rows={1}
+              placeholder={
+                listening
+                  ? "Te ascult..."
+                  : sending
+                    ? "Imperial AI se gândește..."
+                    : "Scrie aici sau apasă 🎤..."
+              }
+              className="input max-h-36 min-h-[48px] flex-1 resize-none py-3"
+              disabled={sending}
+            />
+            {voiceSupported && (
+              <button
+                type="button"
+                onClick={toggleMic}
+                disabled={sending}
+                aria-label={listening ? "Oprește microfon" : "Pornește microfon"}
+                className={`grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl transition ${
+                  listening
+                    ? "bg-brand-orange text-white shadow-glow-orange"
+                    : "border border-bg-border bg-bg-soft text-text-muted hover:border-brand-orange hover:text-text"
+                }`}
+              >
+                {listening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => send(input)}
+              disabled={sending || !input.trim()}
+              aria-label="Trimite mesaj"
+              className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+            >
+              <Send className="h-5 w-5" />
+            </button>
           </div>
 
-          {/* ─── LIVE BRIEF CARD ─── */}
-          <LiveBriefCard
-            brief={brief}
-            onSubmit={handleSubmit}
-            submitting={submitting}
-          />
+          {!voiceSupported && (
+            <p className="mt-2 flex items-center gap-1.5 text-[11px] text-text-subtle">
+              <MessageSquare className="h-3 w-3" />
+              Browser-ul tău nu suportă voce — Chrome/Edge/Safari funcționează.
+            </p>
+          )}
         </div>
-
-        {/* Fallback text */}
-        <p className="mt-6 text-center text-xs text-text-subtle">
-          Preferi formular clasic?{" "}
-          <a href="#contact" className="text-brand-orange hover:underline">
-            Scrie-ne direct
-          </a>
-          {"  ·  "}
-          Sau sună la{" "}
-          <a href="tel:0758169388" className="text-brand-orange hover:underline">
-            0758 169 388
-          </a>
-        </p>
       </div>
-    </section>
+
+      {/* ─── LIVE BRIEF CARD ─── */}
+      <LiveBriefCard
+        brief={brief}
+        onSubmit={handleSubmit}
+        submitting={submitting}
+      />
+    </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────
 
+type BubbleProps = {
+  role: "user" | "assistant";
+  text: string;
+  pending?: boolean;
+  options?: ChipOptions;
+  msgIdx: number;
+  multiDraft: { msgIdx: number; selected: string[] } | null;
+  onChipClick: (opt: string) => void;
+  disabled?: boolean;
+};
+
 function MessageBubble({
   role,
   text,
   pending,
-}: {
-  role: "user" | "assistant";
-  text: string;
-  pending?: boolean;
-}) {
+  options,
+  msgIdx,
+  multiDraft,
+  onChipClick,
+  disabled,
+}: BubbleProps) {
   const isUser = role === "user";
+
+  const selectedSet = useMemo(() => {
+    if (!options?.multi || !multiDraft || multiDraft.msgIdx !== msgIdx) {
+      return new Set<string>();
+    }
+    return new Set(multiDraft.selected);
+  }, [options, multiDraft, msgIdx]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -445,26 +558,59 @@ function MessageBubble({
       className={`flex ${isUser ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`flex max-w-[85%] gap-2 ${isUser ? "flex-row-reverse" : "flex-row"}`}
+        className={`flex max-w-[85%] flex-col gap-2 ${
+          isUser ? "items-end" : "items-start"
+        }`}
       >
-        {!isUser && (
-          <div className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-full bg-orange-gradient text-[10px] font-bold text-white">
-            AI
+        <div
+          className={`flex ${isUser ? "flex-row-reverse" : "flex-row"} gap-2`}
+        >
+          {!isUser && (
+            <div className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-full bg-orange-gradient text-[10px] font-bold text-white">
+              AI
+            </div>
+          )}
+          <div
+            className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+              isUser
+                ? "bg-orange-gradient text-white shadow-glow-orange"
+                : "border border-bg-border bg-bg-soft/60 text-text"
+            }`}
+          >
+            {pending ? (
+              <TypingDots />
+            ) : (
+              <p className="whitespace-pre-wrap break-words">{text}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Chips clickabile sub bula AI */}
+        {!isUser && options && !options.answered && (
+          <div className="ml-10 flex flex-wrap gap-1.5">
+            {options.list.map((opt) => {
+              const selected = selectedSet.has(opt);
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => onChipClick(opt)}
+                  disabled={disabled}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                    selected
+                      ? "border-brand-orange bg-brand-orange/20 text-text shadow-glow-orange"
+                      : "border-bg-border bg-bg-soft/60 text-text-muted hover:border-brand-orange/60 hover:bg-brand-orange/5 hover:text-text"
+                  } disabled:cursor-not-allowed disabled:opacity-50`}
+                >
+                  {selected && (
+                    <Check className="h-3 w-3 text-brand-orange" strokeWidth={3} />
+                  )}
+                  {opt}
+                </button>
+              );
+            })}
           </div>
         )}
-        <div
-          className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-            isUser
-              ? "bg-orange-gradient text-white shadow-glow-orange"
-              : "border border-bg-border bg-bg-soft/60 text-text"
-          }`}
-        >
-          {pending ? (
-            <TypingDots />
-          ) : (
-            <p className="whitespace-pre-wrap break-words">{text}</p>
-          )}
-        </div>
       </div>
     </motion.div>
   );

@@ -81,24 +81,14 @@ export function PricingCards() {
               </ul>
 
               <a
-                href={`#brief?pachet=${pkg.key}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Scroll + setează pachetul în brief via custom event
-                  document
-                    .getElementById("brief")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                  window.dispatchEvent(
-                    new CustomEvent("brief:setPackage", { detail: pkg.key })
-                  );
-                }}
+                href={`/brief?pachet=${pkg.key}`}
                 className={`mt-7 inline-flex items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold transition-all ${
                   pkg.popular
                     ? "bg-orange-gradient text-white shadow-glow-orange hover:scale-[1.02]"
                     : "border border-bg-border bg-white/5 text-text hover:border-brand-orange hover:bg-brand-orange/10"
                 }`}
               >
-                Cere oferta
+                Primește estimare
                 <ArrowRight className="h-4 w-4" />
               </a>
             </motion.div>

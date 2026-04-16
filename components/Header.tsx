@@ -48,7 +48,7 @@ export function Header() {
 
           {/* CTA principal — Primește estimare → chat AI */}
           <Link
-            href="/#brief"
+            href="/brief"
             className="group inline-flex items-center gap-2 rounded-full bg-orange-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.03] hover:shadow-[0_0_45px_rgba(255,107,26,0.55)] sm:px-5 sm:py-3"
           >
             <Sparkles className="h-4 w-4" strokeWidth={2.5} />
@@ -82,7 +82,7 @@ export function Header() {
             ))}
             {/* CTA principal mobil */}
             <Link
-              href="/#brief"
+              href="/brief"
               onClick={() => setOpen(false)}
               className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-orange-gradient px-5 py-3 text-sm font-semibold text-white shadow-glow-orange"
             >

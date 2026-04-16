@@ -80,7 +80,7 @@ export function Services() {
               transition={{ duration: 0.5, delay: idx * 0.06 }}
             >
               <TiltCard className="group rounded-2xl border border-bg-border bg-bg-card bg-card-gradient transition-all hover:border-brand-orange/50">
-                <a href="#brief" className="relative block h-full p-7">
+                <a href="/brief" className="relative block h-full p-7">
                   {/* Glow corner */}
                   <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-brand-orange/0 blur-3xl transition-all duration-500 group-hover:bg-brand-orange/30" />
 
