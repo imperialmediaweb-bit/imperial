@@ -8,7 +8,7 @@ import { importedProjects } from "@/lib/projects-data";
 export const metadata = {
   title: "Proiecte — Portofoliu Imperial Media",
   description:
-    "Portofoliu complet Imperial Media: 18 proiecte realizate pentru clienți reali — site-uri de prezentare, magazine online, branding și promovare.",
+    "Portofoliu Imperial Media: peste 200 de proiecte realizate pentru clienți reali — site-uri de prezentare, magazine online, branding și promovare.",
 };
 
 export default function ProiectePage() {
@@ -36,7 +36,7 @@ export default function ProiectePage() {
           </div>
 
           <h1 className="mx-auto mt-7 font-display text-5xl font-extrabold leading-[0.98] tracking-tight text-text sm:text-6xl lg:text-7xl">
-            <span className="text-shimmer">{importedProjects.length}</span>{" "}
+            <span className="text-shimmer">200+</span>{" "}
             proiecte
             <br />
             realizate <span className="text-gradient">cu pasiune</span>
@@ -49,7 +49,7 @@ export default function ProiectePage() {
 
           <div className="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-x-10 gap-y-4">
             {[
-              { n: importedProjects.length, label: "Proiecte" },
+              { n: 200, label: "Proiecte" },
               { n: allCats.length, label: "Categorii" },
               { n: liveCount, label: "Site-uri live" },
             ].map((s) => (

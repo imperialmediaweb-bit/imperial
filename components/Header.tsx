@@ -7,11 +7,11 @@ import { Logo } from "./Logo";
 import { siteConfig } from "@/lib/site";
 
 const navLinks = [
-  { href: "#despre", label: "Despre" },
-  { href: "#servicii", label: "Servicii" },
+  { href: "/despre", label: "Despre" },
+  { href: "/servicii", label: "Servicii" },
   { href: "/proiecte", label: "Proiecte" },
-  { href: "#blog", label: "Blog" },
-  { href: "#contact", label: "Contact" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -24,14 +24,14 @@ export function Header() {
 
         <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((l) => (
-            <a
+            <Link
               key={l.href}
               href={l.href}
               className="relative text-sm font-medium text-text-muted transition hover:text-text"
             >
               {l.label}
               <span className="absolute -bottom-1.5 left-0 h-0.5 w-0 bg-brand-orange transition-all duration-300 group-hover:w-full" />
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -77,14 +77,14 @@ export function Header() {
         <div className="border-t border-bg-border bg-bg/95 backdrop-blur-xl lg:hidden">
           <nav className="container-app flex flex-col gap-1 py-4">
             {navLinks.map((l) => (
-              <a
+              <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition hover:bg-white/5 hover:text-text"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>

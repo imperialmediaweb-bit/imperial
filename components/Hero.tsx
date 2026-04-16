@@ -51,7 +51,6 @@ export function Hero() {
               <span className="text-shimmer font-semibold">
                 Creatori de Emoții digitale
               </span>
-              <span className="inline-flex h-1.5 w-1.5 rounded-full bg-brand-orange shadow-[0_0_8px_2px_rgba(255,107,26,0.8)]" />
             </span>
           </div>
         </motion.div>

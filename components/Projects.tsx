@@ -195,7 +195,7 @@ function HomepageProjectsGrid({ items }: { items: ImportedProject[] }) {
             key={p.key + idx}
             p={p}
             idx={idx}
-            span={{ col: "", row: "aspect-[4/5]", big: false }}
+            span={{ col: "", row: "aspect-[4/3]", big: false }}
             grad={grad}
           />
         );
@@ -218,11 +218,11 @@ export function Projects() {
               Ultimele <span className="text-shimmer">proiecte</span>
             </h2>
             <p className="section-subtitle">
-              Cele mai recente site-uri lansate pentru clienți reali.
+              Câteva dintre cele <span className="text-brand-orange font-semibold">peste 200 de site-uri</span> lansate pentru clienți reali.
             </p>
           </div>
           <a href="/proiecte" className="btn-primary">
-            Vezi toate 18 proiectele
+            Vezi toate proiectele
             <ArrowUpRight className="h-4 w-4" />
           </a>
         </div>
