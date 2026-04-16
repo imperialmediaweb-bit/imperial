@@ -12,10 +12,29 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30; // secunde — răspunsul ar trebui să vină sub 5s normal
 
-// Protejăm împotriva abuzului — max 40 mesaje per sesiune (mai mult decât suficient pentru un brief)
-const MAX_MESSAGES_PER_SESSION = 40;
+// Protejăm împotriva abuzului — max 60 de mesaje TEXT de la user per sesiune.
+// Nu numărăm mesajele sintetice (tool_result) sau răspunsurile AI.
+const MAX_USER_TEXT_MESSAGES = 60;
 
 type ToolCall = { name: string; input: Record<string, unknown>; id: string };
+
+// Numără doar mesajele de tip "user cu text real" (nu tool_result-urile sintetice)
+function countUserTextMessages(messages: Anthropic.MessageParam[]): number {
+  let count = 0;
+  for (const m of messages) {
+    if (m.role !== "user") continue;
+    if (typeof m.content === "string") {
+      count++;
+      continue;
+    }
+    // Verificăm dacă în array există un block de tip "text" (vs doar "tool_result")
+    if (Array.isArray(m.content)) {
+      const hasText = m.content.some((b: any) => b?.type === "text");
+      if (hasText) count++;
+    }
+  }
+  return count;
+}
 
 export async function POST(req: Request) {
   let body: { messages?: Anthropic.MessageParam[] };
@@ -31,11 +50,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Niciun mesaj." }, { status: 400 });
   }
 
-  if (messages.length > MAX_MESSAGES_PER_SESSION) {
+  const userTextCount = countUserTextMessages(messages);
+  if (userTextCount > MAX_USER_TEXT_MESSAGES) {
     return NextResponse.json(
       {
         error:
-          "Conversație prea lungă. Te rugăm să apelezi direct 0758 169 388 ca să finalizăm rapid.",
+          "Am strâns deja multe detalii — hai să finalizăm! Apasă 'Trimite brief-ul' sau sună direct la 0758 169 388.",
       },
       { status: 429 }
     );
