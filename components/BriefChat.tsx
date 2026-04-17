@@ -9,6 +9,19 @@ import { emptyBrief, MOODBOARDS } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
 import { getPackageByKey } from "@/lib/packages";
 
+function renderMarkdown(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^---$/gm, '<hr class="my-2 border-bg-border" />')
+    .replace(/^(\d+)\.\s+(.+)$/gm, '<div class="flex gap-2 items-start"><span class="text-brand-orange font-bold text-xs mt-0.5">$1.</span><span>$2</span></div>')
+    .replace(/^[-•]\s+(.+)$/gm, '<div class="flex gap-2 items-start"><span class="text-brand-orange mt-1.5">•</span><span>$1</span></div>')
+    .replace(/([❌✅⚠️🔥💡📊✨🚀📱💰🎯])/g, '<span class="not-italic">$1</span>');
+}
+
 // Tipuri minime pentru mesajele Anthropic (nu importăm SDK-ul pe client)
 type AnthropicContentBlock =
   | { type: "text"; text: string }
@@ -716,7 +729,7 @@ function MessageBubble({
             {pending ? (
               <TypingDots />
             ) : (
-              <p className="whitespace-pre-wrap break-words">{text}</p>
+              <div className="whitespace-pre-wrap break-words chat-markdown" dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }} />
             )}
           </div>
         </div>
