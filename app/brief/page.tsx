@@ -28,6 +28,7 @@ export default function BriefPage() {
             Vorbește cu Imperial AI — scris sau prin voce. Îți adaptăm întrebările
             pe proiectul tău, îți propunem pachetul potrivit și îți dăm o estimare
             orientativă pe loc. Oferta fermă pe email în maxim 24h.
+            <strong className="text-brand-orange"> BONUS: campanie de promovare gratuită în 50 ziare la orice site nou.</strong>
           </p>
 
           {/* Benefits strip */}

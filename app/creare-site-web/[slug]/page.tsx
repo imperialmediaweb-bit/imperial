@@ -12,8 +12,8 @@ import {
   Megaphone,
   CheckCircle2,
   ArrowRight,
-  Phone,
   Star,
+  Gift,
 } from "lucide-react";
 import { LOCATIONS, getLocationBySlug, getNearbyLocations } from "@/lib/locations";
 import { siteConfig } from "@/lib/site";
@@ -144,13 +144,6 @@ export default function LocationPage({
               Primește estimare gratuită
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <a
-              href={`tel:${siteConfig.phoneRaw}`}
-              className="inline-flex items-center gap-2 rounded-full border border-bg-border bg-bg-card/40 px-6 py-3.5 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange"
-            >
-              <Phone className="h-4 w-4 text-brand-orange" />
-              {siteConfig.phone}
-            </a>
           </div>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs uppercase tracking-[0.2em] text-text-subtle">
@@ -321,14 +314,8 @@ export default function LocationPage({
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <p className="mt-4 text-xs text-text-subtle">
-            Sau sună direct:{" "}
-            <a
-              href={`tel:${siteConfig.phoneRaw}`}
-              className="text-brand-orange hover:underline"
-            >
-              {siteConfig.phone}
-            </a>
+          <p className="mt-4 text-xs text-text-muted">
+            🎁 BONUS: Primești <strong className="text-brand-orange">campanie de promovare gratuită</strong> în 50 ziare online la orice site nou.
           </p>
         </div>
       </section>

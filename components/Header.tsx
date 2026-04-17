@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Phone, Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 import { Logo } from "./Logo";
 import { siteConfig } from "@/lib/site";
 
@@ -36,16 +36,6 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Phone — secundar, icon only */}
-          <Link
-            href={`tel:${siteConfig.phoneRaw}`}
-            aria-label={`Sună la ${siteConfig.phone}`}
-            title={`Sună: ${siteConfig.phone}`}
-            className="hidden h-10 w-10 place-items-center rounded-full border border-bg-border text-text-muted transition hover:border-brand-orange hover:text-brand-orange sm:grid"
-          >
-            <Phone className="h-4 w-4" strokeWidth={2.5} />
-          </Link>
-
           {/* CTA principal — Primește estimare → chat AI */}
           <Link
             href="/brief"
@@ -88,15 +78,6 @@ export function Header() {
             >
               <Sparkles className="h-4 w-4" strokeWidth={2.5} />
               Primește estimare
-            </Link>
-            {/* Telefon mobil — secundar */}
-            <Link
-              href={`tel:${siteConfig.phoneRaw}`}
-              onClick={() => setOpen(false)}
-              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full border border-bg-border px-5 py-3 text-sm font-medium text-text-muted"
-            >
-              <Phone className="h-4 w-4" />
-              {siteConfig.phone}
             </Link>
           </nav>
         </div>
