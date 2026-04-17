@@ -343,14 +343,14 @@ export default function LocationPage({
             {nearby.map((n) => (
               <Link
                 key={n.slug}
-                href={`/creare-site-web-${n.slug}`}
+                href={`/creare-site-web/${n.slug}`}
                 className="rounded-full border border-bg-border bg-white/5 px-3 py-1.5 text-xs text-text-muted transition hover:border-brand-orange hover:text-text"
               >
                 {n.name}
               </Link>
             ))}
             <Link
-              href="/creare-site-web-bucuresti"
+              href="/creare-site-web/bucuresti"
               className="rounded-full border border-bg-border bg-white/5 px-3 py-1.5 text-xs text-text-muted transition hover:border-brand-orange hover:text-text"
             >
               toate orașele →
@@ -368,7 +368,7 @@ export default function LocationPage({
             "@type": "ProfessionalService",
             name: `Imperial Media — Web Design ${loc.name}`,
             description: `Creare site web și magazine online pentru afaceri din ${loc.name}, ${loc.county}.`,
-            url: `${siteConfig.url}/creare-site-web-${loc.slug}`,
+            url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
             telephone: siteConfig.phone,
             email: siteConfig.email,
             address: {

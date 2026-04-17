@@ -13,6 +13,15 @@ const nextConfig = {
       { protocol: "https", hostname: "image.thum.io" },
     ],
   },
+  async rewrites() {
+    return [
+      // SEO: /creare-site-web-botosani → /creare-site-web/botosani (flat URL)
+      {
+        source: "/creare-site-web-:slug",
+        destination: "/creare-site-web/:slug",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

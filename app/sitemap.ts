@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const locationPages: MetadataRoute.Sitemap = LOCATIONS.map((loc) => ({
-    url: `${base}/creare-site-web-${loc.slug}`,
+    url: `${base}/creare-site-web/${loc.slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
     priority: loc.isCountySeat ? 0.8 : 0.6,
