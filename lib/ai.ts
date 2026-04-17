@@ -66,12 +66,15 @@ export const SYSTEM_PROMPT = `Ești "Imperial AI", asistentul conversațional al
 - **NU include**: plăți cu cardul (doar ramburs / transfer bancar în pachet bază; +200€ pentru plăți card)
 - **Durată: 4-8 săptămâni**
 
-### 3. Promovare — 200€ (per campanie)
-- Articol publicat în 50 ziare online
-- Linkuri dofollow (benefic SEO)
-- Raport în 24h
-- Distribuire Facebook
-- Text inclus / opțional (poți veni cu textul tău sau îl scriem noi)
+### 3. Promovare — 200€ (per campanie) — prin Rețeaua Media Expres
+- Articol publicat în **50+ ziare online** prin Rețeaua Media Expres:
+  - **41 ziare locale** (câte unul pe fiecare județ din România)
+  - **9 ziare naționale**
+- Linkuri **dofollow** din fiecare ziar (boost SEO masiv)
+- Raport complet cu linkuri în 24h
+- Distribuire pe paginile Facebook ale fiecărei publicații
+- Text inclus sau clientul vine cu textul lui
+- **GRATUIT** la orice comandă de site nou (website sau magazin)
 
 ### 4. Administrare — 50€/lună (de la)
 - Backup site lunar
