@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { LOCATIONS } from "@/lib/locations";
+import { getAllArticles } from "@/lib/blog-articles";
 import { siteConfig } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,13 @@ export async function GET() {
     freq: "monthly",
   }));
 
-  const allPages = [...staticPages, ...locationPages];
+  const blogPages = getAllArticles().map((a) => ({
+    url: `${base}/blog/${a.slug}`,
+    priority: "0.6",
+    freq: "monthly",
+  }));
+
+  const allPages = [...staticPages, ...locationPages, ...blogPages];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
