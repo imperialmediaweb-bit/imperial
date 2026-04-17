@@ -6,7 +6,7 @@
 
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { ANTHROPIC_TOOLS, CLAUDE_MODEL, SYSTEM_PROMPT, getAnthropic } from "@/lib/ai";
+import { ANTHROPIC_TOOLS, CLAUDE_MODEL, SYSTEM_PROMPT, CONSULTANTA_PROMPT, getAnthropic } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,7 +37,7 @@ function countUserTextMessages(messages: Anthropic.MessageParam[]): number {
 }
 
 export async function POST(req: Request) {
-  let body: { messages?: Anthropic.MessageParam[] };
+  let body: { messages?: Anthropic.MessageParam[]; mode?: string };
   try {
     body = await req.json();
   } catch {
@@ -45,6 +45,7 @@ export async function POST(req: Request) {
   }
 
   const messages = Array.isArray(body.messages) ? body.messages : [];
+  const mode = body.mode === "consultanta" ? "consultanta" : "brief";
 
   if (messages.length === 0) {
     return NextResponse.json({ error: "Niciun mesaj." }, { status: 400 });
@@ -101,6 +102,14 @@ export async function POST(req: Request) {
             text: SYSTEM_PROMPT,
             cache_control: { type: "ephemeral" },
           },
+          ...(mode === "consultanta"
+            ? [
+                {
+                  type: "text" as const,
+                  text: CONSULTANTA_PROMPT,
+                },
+              ]
+            : []),
         ],
         tools: ANTHROPIC_TOOLS,
         messages: currentMessages,

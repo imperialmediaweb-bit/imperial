@@ -266,7 +266,7 @@ export function BriefChat({ mode = "brief" }: BriefChatProps) {
       const resp = await fetch("/api/brief-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newHistory }),
+        body: JSON.stringify({ messages: newHistory, mode }),
       });
       const data = await resp.json();
       if (!resp.ok) {
