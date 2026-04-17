@@ -34,19 +34,39 @@ type UIMessage = {
   moodboards?: { answered?: boolean }; // când AI cere mood boards
 };
 
-const INITIAL_GREETING =
-  "Salut! 👋 Sunt Imperial AI. Spune-mi pe scurt: ce proiect ai în minte? Poți scrie, apăsa 🎤 ca să-mi vorbești, sau bifa rapid mai jos.";
-
-const INITIAL_OPTIONS: ChipOptions = {
-  list: ["Site prezentare", "Magazin online", "Promovare", "Altceva"],
-  multi: false,
+const GREETINGS = {
+  brief: "Salut! 👋 Sunt Imperial AI. Spune-mi pe scurt: ce proiect ai în minte? Poți scrie, apăsa 🎤 ca să-mi vorbești, sau bifa rapid mai jos.",
+  consultanta:
+    "Salut! 👋 Sunt consultantul tău digital. Spune-mi: ce afacere ai și în ce oraș? Analizez prezența ta online și-ți zic exact unde pierzi clienți — gratuit, fără obligații.",
 };
 
-export function BriefChat() {
+const CHIPS: Record<string, ChipOptions> = {
+  brief: {
+    list: ["Site prezentare", "Magazin online", "Promovare", "Altceva"],
+    multi: false,
+  },
+  consultanta: {
+    list: [
+      "Am un business mic",
+      "Am firmă / SRL",
+      "Vreau să încep o afacere",
+      "Am site dar nu merge bine",
+    ],
+    multi: false,
+  },
+};
+
+type BriefChatProps = {
+  mode?: "brief" | "consultanta";
+};
+
+export function BriefChat({ mode = "brief" }: BriefChatProps) {
+  const greeting = GREETINGS[mode];
+  const initialChips = CHIPS[mode];
   const router = useRouter();
   const [history, setHistory] = useState<AnthropicMsg[]>([]);
   const [uiMessages, setUiMessages] = useState<UIMessage[]>([
-    { role: "assistant", text: INITIAL_GREETING, options: INITIAL_OPTIONS },
+    { role: "assistant", text: greeting, options: initialChips },
   ]);
   const [brief, setBrief] = useState<BriefState>(emptyBrief);
   const [input, setInput] = useState("");
@@ -415,7 +435,7 @@ Vreau ceva în aceeași direcție.`;
           aiEstimateReason: brief.estimate.reasoning,
           aiRecommendedPackage: brief.recommendedPackage,
           aiRecommendedReason: brief.recommendedReason,
-          source: "ai-chat",
+          source: mode === "consultanta" ? "consultanta" : "ai-chat",
         }),
       });
       if (!res.ok) {
