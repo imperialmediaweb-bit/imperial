@@ -10,22 +10,47 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.name} · Cere ofertă pentru site profesional`,
+    default: `${siteConfig.name} · Creare site web profesional`,
     template: `%s · ${siteConfig.name}`,
   },
   description:
-    "Cere ofertă pentru site profesional. Pachete complete: site prezentare, magazin online, promovare, administrare. Răspundem în 24h.",
+    "Creare site web profesional, magazine online, promovare în 50 ziare și consultanță digitală. Estimare gratuită cu AI în 2 minute. 10+ ani experiență, 200+ clienți.",
   metadataBase: new URL(siteConfig.url),
   openGraph: {
-    title: `${siteConfig.name} · Soluții web personalizate`,
+    title: `${siteConfig.name} · Creare site web profesional`,
     description:
-      "Cere ofertă pentru site profesional. Răspundem în 24h cu propunere personalizată.",
+      "Site-uri custom, magazine online, promovare în 50 ziare. Estimare gratuită cu AI. 10+ ani experiență.",
     type: "website",
     locale: "ro_RO",
     url: siteConfig.url,
     siteName: siteConfig.name,
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "Imperial Media — Creare site web profesional",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} · Creare site web profesional`,
+    description:
+      "Site-uri custom, magazine online, promovare în 50 ziare. Estimare gratuită cu AI.",
+    images: ["/og-image.svg"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+    apple: "/logo.png",
   },
   robots: { index: true, follow: true },
+  alternates: {
+    canonical: siteConfig.url,
+  },
 };
 
 export const viewport: Viewport = {
@@ -41,6 +66,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ro">
+      <head>
+        {/* Font preconnect — elimină latența DNS/TCP pentru Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       {/* Google Analytics 4 + Google Tag */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-TBV24GHJTD"
@@ -57,10 +91,8 @@ export default function RootLayout({
         `}
       </Script>
       <body className="min-h-screen bg-bg text-text antialiased">
-        {/* Global premium effects */}
         <NoiseOverlay />
         <ScrollProgress />
-
         <Header />
         <main>{children}</main>
         <Footer />

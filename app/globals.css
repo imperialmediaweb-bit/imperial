@@ -352,3 +352,24 @@ html {
 .project-content svg {
   display: none; /* hide inline SVG social icons from import */
 }
+
+/* ───── Accessibility: reduce motion ───── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-bg { animation: none; }
+  .animate-aurora-1,
+  .animate-aurora-2,
+  .animate-aurora-3 { animation: none; }
+  .text-shimmer { animation: none; background-size: 100% auto; }
+  .gradient-border::before { animation: none; }
+  .pulse-ring { animation: none; }
+  .animate-orbit,
+  .animate-orbit-reverse { animation: none; }
+}
