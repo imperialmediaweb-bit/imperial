@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ro">
-      {/* Google Analytics 4 */}
+      {/* Google Analytics 4 + Google Tag */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-TBV24GHJTD"
         strategy="afterInteractive"
@@ -52,6 +52,8 @@ export default function RootLayout({
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-TBV24GHJTD');
+          gtag('config', 'G-MB9S50SJZ8');
+          gtag('config', 'GT-NS8RS5P');
         `}
       </Script>
       <body className="min-h-screen bg-bg text-text antialiased">
