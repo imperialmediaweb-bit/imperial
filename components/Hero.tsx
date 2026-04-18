@@ -13,7 +13,7 @@ import { Magnetic } from "./effects/MagneticButton";
 // Text masiv + toate efectele în background fac toată treaba.
 export function Hero() {
   return (
-    <section className="relative flex min-h-[96vh] items-center overflow-hidden">
+    <section className="relative flex min-h-[85vh] items-center overflow-hidden sm:min-h-[96vh]">
       {/* === STRATURI EFECTE === */}
       <Aurora />
       <InteractiveGrid />
@@ -61,7 +61,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="mx-auto mt-8 max-w-5xl font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-text sm:text-7xl lg:text-[7rem] xl:text-[8.5rem]"
+          className="mx-auto mt-6 max-w-5xl font-display text-4xl font-extrabold leading-[0.95] tracking-tight text-text sm:mt-8 sm:text-6xl md:text-7xl lg:text-[7rem] xl:text-[8.5rem]"
         >
           <motion.span
             initial={{ opacity: 0, y: 40 }}
@@ -86,7 +86,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.55 }}
-          className="mx-auto mt-7 max-w-xl text-base text-text-muted sm:text-lg"
+          className="mx-auto mt-4 max-w-xl text-sm text-text-muted sm:mt-7 sm:text-base md:text-lg"
         >
           Design premium · Dezvoltare rapidă · Rezultate reale
         </motion.p>
@@ -96,12 +96,12 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-3"
+          className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:mt-10 sm:gap-3"
         >
           <Magnetic strength={0.45}>
             <a
               href="/brief"
-              className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-orange-gradient px-8 py-4 text-base font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,107,26,0.7)]"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-orange-gradient px-5 py-3 text-sm font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,107,26,0.7)] sm:gap-2.5 sm:px-8 sm:py-4 sm:text-base"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <Zap className="h-5 w-5" />
@@ -111,7 +111,7 @@ export function Hero() {
           </Magnetic>
           <a
             href="/proiecte"
-            className="group inline-flex items-center gap-3 rounded-full border border-bg-border bg-bg-card/40 px-5 py-3 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange hover:bg-bg-card/80"
+            className="group inline-flex items-center gap-2 rounded-full border border-bg-border bg-bg-card/40 px-4 py-2.5 text-xs font-medium text-text backdrop-blur transition hover:border-brand-orange hover:bg-bg-card/80 sm:gap-3 sm:px-5 sm:py-3 sm:text-sm"
           >
             <span className="relative grid h-9 w-9 place-items-center rounded-full bg-orange-gradient text-white">
               <span className="absolute inset-0 rounded-full pulse-ring" />
@@ -126,7 +126,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-20 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-[11px] uppercase tracking-[0.25em] text-text-subtle"
+          className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] uppercase tracking-[0.2em] text-text-subtle sm:mt-20 sm:gap-x-10 sm:text-[11px] sm:tracking-[0.25em]"
         >
           <span>10 ani experiență</span>
           <span className="text-brand-orange/40">/</span>
