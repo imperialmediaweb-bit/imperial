@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import type { BriefState, MoodBoard } from "@/lib/brief-schema";
 import { emptyBrief, MOODBOARDS } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
+import { ConsultantaPanel } from "./ConsultantaPanel";
 import { getPackageByKey } from "@/lib/packages";
 
 function renderMarkdown(text: string): string {
@@ -653,12 +654,20 @@ Vreau ceva în aceeași direcție.`;
         </div>
       </div>
 
-      {/* ─── LIVE BRIEF CARD ─── */}
-      <LiveBriefCard
-        brief={brief}
-        onSubmit={handleSubmit}
-        submitting={submitting}
-      />
+      {/* ─── SIDE PANEL (diferit per mod) ─── */}
+      {mode === "consultanta" ? (
+        <ConsultantaPanel
+          brief={brief}
+          onSubmit={handleSubmit}
+          submitting={submitting}
+        />
+      ) : (
+        <LiveBriefCard
+          brief={brief}
+          onSubmit={handleSubmit}
+          submitting={submitting}
+        />
+      )}
     </div>
   );
 }
