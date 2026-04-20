@@ -149,12 +149,40 @@ export async function POST(req: Request) {
         break;
       }
 
-      // Generăm tool_results sintetice — tool-urile noastre nu returnează date server-side
-      const toolResults: Anthropic.ToolResultBlockParam[] = toolUseBlocks.map((t) => ({
-        type: "tool_result",
-        tool_use_id: t.id,
-        content: "ok",
-      }));
+      // Generăm tool_results — scan_business execută server-side, restul sunt sintetice
+      const toolResults: Anthropic.ToolResultBlockParam[] = await Promise.all(
+        toolUseBlocks.map(async (t) => {
+          if (t.name === "scan_business") {
+            try {
+              const scanRes = await fetch(
+                new URL("/api/scan-business", req.url).toString(),
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(t.input),
+                }
+              );
+              const scanData = await scanRes.json();
+              return {
+                type: "tool_result" as const,
+                tool_use_id: t.id,
+                content: JSON.stringify(scanData),
+              };
+            } catch {
+              return {
+                type: "tool_result" as const,
+                tool_use_id: t.id,
+                content: JSON.stringify({ found: false, error: "Căutare eșuată" }),
+              };
+            }
+          }
+          return {
+            type: "tool_result" as const,
+            tool_use_id: t.id,
+            content: "ok",
+          };
+        })
+      );
 
       const toolResultMsg: Anthropic.MessageParam = {
         role: "user",

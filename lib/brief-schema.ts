@@ -390,4 +390,17 @@ export const briefToolsJsonSchema = {
       required: ["options"],
     },
   },
+  scan_business: {
+    name: "scan_business",
+    description:
+      "Caută o firmă pe Google Maps și returnează date REALE: rating, nr review-uri, website, adresă. Folosește IMEDIAT când ai numele firmei + orașul. Rezultatul e REAL din Google, nu inventat. Dacă nu găsește → firma nu are Google Business Profile.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        name: { type: "string", description: "Numele firmei" },
+        city: { type: "string", description: "Orașul" },
+      },
+      required: ["name", "city"],
+    },
+  },
 };
