@@ -99,17 +99,9 @@ export async function POST(req: Request) {
         system: [
           {
             type: "text",
-            text: SYSTEM_PROMPT,
+            text: mode === "consultanta" ? CONSULTANTA_PROMPT : SYSTEM_PROMPT,
             cache_control: { type: "ephemeral" },
           },
-          ...(mode === "consultanta"
-            ? [
-                {
-                  type: "text" as const,
-                  text: CONSULTANTA_PROMPT,
-                },
-              ]
-            : []),
         ],
         tools: ANTHROPIC_TOOLS,
         messages: currentMessages,
