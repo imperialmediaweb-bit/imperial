@@ -360,8 +360,6 @@ export default function LocationPage({
             email: siteConfig.email,
             address: {
               "@type": "PostalAddress",
-              addressLocality: "Botoșani",
-              addressRegion: "Botoșani",
               addressCountry: "RO",
             },
             areaServed: {

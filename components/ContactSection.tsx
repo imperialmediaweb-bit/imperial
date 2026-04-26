@@ -109,19 +109,6 @@ export function ContactSection() {
               </div>
             </a>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-bg-border bg-bg-card p-4">
-              <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange">
-                <MapPin className="h-5 w-5" />
-              </span>
-              <div className="flex-1">
-                <p className="text-[10px] uppercase tracking-wider text-text-subtle">
-                  Adresă
-                </p>
-                <p className="text-base font-semibold text-text">
-                  Aleea Parcului, Botoșani
-                </p>
-              </div>
-            </div>
           </div>
 
           {/* Spacer to fill column height */}

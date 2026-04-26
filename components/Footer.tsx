@@ -101,10 +101,6 @@ export function Footer() {
             </h4>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">
-              <li className="flex items-start gap-2.5 text-sm text-text-muted">
-                <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" />
-                Aleea Parcului, Botoșani
-              </li>
               <li>
                 <a
                   href={`tel:${siteConfig.phoneRaw}`}
