@@ -67,15 +67,16 @@ export async function POST(req: Request) {
 
   try {
     const ac = new AbortController();
-    const t = setTimeout(() => ac.abort(), 10000);
+    const t = setTimeout(() => ac.abort(), 15000);
     const start = Date.now();
     const res = await fetch(url.toString(), {
       signal: ac.signal,
       redirect: "follow",
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; ImperialAuditBot/1.0; +https://imperial-media.ro)",
-        Accept: "text/html",
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "ro-RO,ro;q=0.9,en;q=0.8",
       },
     });
     loadTimeMs = Date.now() - start;
