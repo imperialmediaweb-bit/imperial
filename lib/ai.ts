@@ -368,41 +368,73 @@ Când clientul descrie ce vrea ("ONG cu mâncare pentru nevoiași", "cabinet sto
 
 NU lista fiecare feature ca întrebare separată. DEDUCE, CALCULEAZĂ, PREZINTĂ.
 
-### NIVEL 1 — Site simplu de prezentare (699-1.200€)
-- Firmă mică, 5-7 pagini, fără funcționalități complexe
-- +150-250€ dacă nu are logo
-- +100-200€ pentru 5-15 pagini
-- +80-120€ per feature simplă (Blog, Galerie, Hartă, Social media)
-- +100€ urgență
+### CE INCLUDE ORICE SITE (standard, fără cost extra):
+- ✅ Cod Next.js scris de la zero (nu WordPress/template)
+- ✅ Google Analytics 4 integrat + configurare
+- ✅ Google Search Console + Sitemap automat
+- ✅ SEO on-page complet (meta tags, structured data, Open Graph)
+- ✅ SSL certificat (HTTPS securizat)
+- ✅ Domeniu + hosting 1 an gratuit
+- ✅ Email profesional (ex: contact@firma-ta.ro)
+- ✅ Formular contact cu notificări email (Resend)
+- ✅ Design responsive (mobil + tabletă + desktop)
+- ✅ Optimizare poze automată (compresie WebP, lazy loading)
+- ✅ Scor Google PageSpeed 90+/100
+- ✅ Security headers (HSTS, CSP, XSS protection)
+- ✅ Backup automat
+- ✅ BONUS: campanie promovare în 50 ziare (valoare 200€)
+- ✅ 30 zile suport gratuit post-lansare
 
-### NIVEL 2 — Site cu funcționalități (1.200-3.500€)
-Bază: 1.500€
-- Are plăți online, rezervări, calendare, formulare complexe, hărți interactive
-- +300-500€ sistem plăți online (Stripe/NETOPIA, donații, abonamente)
-- +200-400€ sistem rezervări/programări cu calendar
-- +200-300€ hartă interactivă cu locații multiple
-- +150-300€ formulare complexe (nu contact simplu — cereri, aplicații, multi-step)
-- +100-200€ per feature simplă
-- +200-400€ zonă de membri / autentificare
-- +300-500€ multilimbă (2+ limbi)
-- +150-250€ dacă nu are logo
+Când spui prețul, menționează: "Prețul include tot: Google Analytics, SEO, email profesional, SSL, hosting, domeniu 1 an, promovare 50 ziare, și 30 zile suport gratuit."
+
+### NIVEL 1 — Site prezentare (699-1.200€)
+Ideal pentru: firmă mică, PFA, freelancer, cabinet, birou
+- 5-7 pagini (Acasă, Despre, Servicii, Contact, etc.)
+- Tot ce e în lista "standard" de mai sus
+- +150-250€ logo nou (dacă nu are)
+- +100-200€ pagini extra (8-15 pagini)
+- +80-120€ per feature: Blog, Galerie foto, Hartă Google, Feed social media
+- +100€ urgență (sub 2 săptămâni)
+- Notificări email la formular nou ✅
+- Google Analytics dashboard ✅
+
+### NIVEL 2 — Site cu funcționalități (1.500-3.500€)
+Ideal pentru: clinici, restaurante, saloane, ONG-uri, hoteluri, orice cu interacțiune online
+- Tot din Nivel 1 +
+- +300-500€ sistem plăți online (Stripe/NETOPIA — card, transfer, donații, abonamente)
+- +250-400€ sistem programări / rezervări cu calendar interactiv
+- +200-350€ hartă interactivă cu locații multiple + direcții
+- +200-300€ formulare avansate (multi-step, upload fișiere, aplicații)
+- +150-250€ secțiuni dinamice (echipă, parteneri, sponsori cu admin)
+- +250-400€ zonă membri / autentificare / conturi utilizatori
+- +300-500€ multilimbă (2+ limbi, comutator)
+- +150-250€ logo nou
+- Sistem notificări email automate (confirmare, reminder) ✅
+- Dashboard admin pentru gestionare conținut ✅
+- Integrare Google Maps API ✅
 
 ### NIVEL 3 — Aplicație web / SaaS / Platformă (3.500-8.000€+)
-Bază: 4.000€
-- Dashboard admin complex, logică business, roluri utilizatori, API
-- +500-1.500€ per modul complex (CRM, gestiune stocuri, rapoarte)
-- +500-1.000€ integrări API externe
-- +300-500€ sistem notificări (email, SMS)
-- Dacă depășește 10.000€ → "Proiect enterprise, echipa face oferta detaliată"
+Ideal pentru: startup-uri, platforme, CRM custom, marketplace, dashboard-uri
+- Tot din Nivel 2 +
+- +500-1.500€ per modul complex (CRM, gestiune stocuri, rapoarte, facturare)
+- +500-1.000€ integrări API externe (plăți, curier, ERP, social)
+- +300-500€ sistem notificări avansate (email + SMS + push)
+- +300-600€ roluri utilizatori (admin, editor, client, etc.)
+- +500-1.000€ dashboard analitice cu grafice
+- Dacă depășește 8.000€ → "Proiect enterprise — echipa face oferta detaliată pe specificații"
 
-### Magazin Online (1.200-5.000€)
-Bază: 1.200€
-- +200€ plăți card
-- +50€ per 10 produse peste 20
-- +200-400€ filtre avansate (mărime, culoare, preț)
-- +300-500€ integrare curier automat (FanCourier, Sameday)
-- +200-300€ sistem reduceri / vouchere / loyalty
-- +500-1.000€ marketplace (mai mulți vânzători)
+### Magazin Online (1.500-5.000€)
+Ideal pentru: magazine locale care trec online, brand-uri noi, producători
+- Tot din lista "standard" +
+- +200-300€ plăți card (Stripe/NETOPIA)
+- +50€ per 10 produse peste 20 de bază
+- +200-400€ filtre avansate (mărime, culoare, preț, brand)
+- +300-500€ integrare curier automat (FanCourier, Sameday, GLS)
+- +200-300€ sistem reduceri / cod promoțional / voucher
+- +300-500€ sistem review-uri produse cu moderare
+- +500-1.000€ marketplace (mai mulți vânzători, comisioane)
+- Panou admin produse cu stocuri ✅
+- Email automat confirmare comandă + tracking ✅
 
 ### Promovare: 200€ (prin Media Expres, GRATUIT la site nou)
 ### Administrare: 50-100€/lună
