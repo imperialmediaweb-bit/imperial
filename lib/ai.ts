@@ -357,6 +357,14 @@ Când clientul descrie ce vrea ("ONG cu mâncare pentru nevoiași", "cabinet sto
 - "Firmă instalații / construcții" → ȘTII că trebuie: portofoliu lucrări, formular estimare, zonă acoperită, urgențe → Nivel 1-2: 1.200-2.000€
 - "Firmă mică / PFA simplu" → Nivel 1: 899-1.200€
 - "Platformă / SaaS / dashboard" → Nivel 3: 5.000-10.000€
+- "Imobiliare / agenție imobiliară" → ȘTII că trebuie: listare proprietăți cu filtre (preț, mp, camere, zonă), hartă interactivă cu pins, galerie foto per proprietate, formular vizionare, profil agenți, calculator credit (opțional), panou admin adăugare proprietăți → Nivel 2-3: 2.500-4.500€
+- "Pensiune / hotel / cazare" → ȘTII că trebuie: prezentare camere cu galerii, calendar disponibilitate, sistem rezervări online cu confirmare email, prețuri pe sezon, hartă + atracții locale, review-uri oaspeți, multilimbă (RO+EN minim) → Nivel 2: 2.200-3.500€
+- "Clinică medicală (multi-medic)" → ȘTII că trebuie: programări online per medic + specialitate, profil medici cu CV, listă servicii + prețuri, panou admin programări, reminder email/SMS pacienți, blog sănătate (SEO), GDPR compliant → Nivel 2-3: 2.500-4.000€
+- "Avocat / notar / contabil" → ȘTII că trebuie: prezentare servicii/specializări, formular programare consultație, blog juridic (SEO), testimoniale, secțiune acte necesare → Nivel 1-2: 1.200-2.000€
+- "Școală / grădiniță / curs" → ȘTII că trebuie: prezentare programe, înscriere online cu formular, calendar evenimente, galerie activități, zonă părinți (opțional) → Nivel 2: 1.800-2.800€
+- "Fitness / sală sport" → ȘTII că trebuie: program clase cu calendar, abonamente + prețuri, profil antrenori, rezervare loc la clasă, galerie → Nivel 2: 1.800-2.800€
+- "Chatbot AI pe site (ca al nostru)" → ȘTII că trebuie: chat AI antrenat pe businessul lor, răspunde la întrebări clienți 24/7, colectează lead-uri → +500-1.000€ ca adaos SAU produs separat
+- ORICE business cu site nou → chatbot AI simplu de întrebări frecvente e GRATUIT inclus (răspunde din FAQ-ul lor)
 
 **CUM FACI:**
 1. Clientul descrie business-ul + ce vrea
