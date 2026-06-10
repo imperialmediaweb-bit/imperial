@@ -199,9 +199,19 @@ export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
   const lines: EstimateLine[] = [];
   const pkg = b.selectedPackage;
 
-  // ─── Bază per pachet ───
+  // ─── Detectăm nivelul de complexitate ───
+  const complexFeatures = b.features.filter((f) =>
+    FEATURE_COMPLEX.has(f)
+  ).length;
+  const isComplex = complexFeatures >= 2 || b.features.length >= 4;
+
+  // ─── Bază per pachet (ajustată pe complexitate) ───
   if (pkg === "website") {
-    lines.push({ label: "Website Prezentare (bază)", priceMin: 699, priceMax: 699 });
+    if (isComplex) {
+      lines.push({ label: "Website cu funcționalități (bază)", priceMin: 1500, priceMax: 1500 });
+    } else {
+      lines.push({ label: "Website Prezentare (bază)", priceMin: 699, priceMax: 699 });
+    }
   } else if (pkg === "shop") {
     lines.push({ label: "Magazin Online (bază)", priceMin: 1200, priceMax: 1200 });
   } else if (pkg === "promo") {
@@ -235,12 +245,11 @@ export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
   if ((pkg === "website" || pkg === "shop") && b.features.length > 0) {
     for (const f of b.features) {
       if (FEATURE_COMPLEX.has(f)) {
-        lines.push({ label: f, priceMin: pkg === "shop" ? 100 : 120, priceMax: pkg === "shop" ? 150 : 180 });
+        lines.push({ label: f, priceMin: isComplex ? 300 : 150, priceMax: isComplex ? 500 : 250 });
       } else if (FEATURE_SIMPLE.has(f)) {
-        lines.push({ label: f, priceMin: 80, priceMax: 120 });
+        lines.push({ label: f, priceMin: 100, priceMax: 200 });
       } else {
-        // Feature necunoscut (custom) — estimăm conservator
-        lines.push({ label: f, priceMin: 80, priceMax: 150 });
+        lines.push({ label: f, priceMin: 150, priceMax: 300 });
       }
     }
   }

@@ -335,26 +335,54 @@ Când user menționează un URL ("vreau ceva gen x.ro", "uite site-ul pe care î
   - Tool present_options: \`{options: ["Blog", "Rezervări online", ...], multi_select: true}\`
 
 ## FORMULA DE ESTIMARE (internă — NU o explica user-ului)
-**Website Prezentare** (bază 699€):
-  + 150-250€ dacă nu are logo
-  + 100-200€ pentru 5-15 pagini
-  + 300-500€ pentru 15+ pagini
-  + 120-180€ per feature complexă (Rezervări online, Plăți online, Multilimbă, CRM/Newsletter, Zonă de membri, Formular contact avansat)
-  + 80-120€ per feature simplă (Blog, Galerie/Portofoliu, Hartă Google Maps, Integrare social media)
-  + 100€ urgență ("cât mai repede")
 
-**Magazin Online** (bază 1200€):
-  + 100-200€ logo nou
-  + 100-150€ per feature
-  + 200€ plăți cu cardul (nu e inclus în pachet)
-  + 50€ per 10 produse peste 20 bază
+### NIVEL 1 — Site simplu de prezentare (699-1.500€)
+Bază: 699€
+- Firmă mică, 5-7 pagini, fără funcționalități complexe
+- +150-250€ dacă nu are logo
+- +100-200€ pentru 5-15 pagini
+- +80-120€ per feature simplă (Blog, Galerie, Hartă, Social media)
+- +100€ urgență
 
-**Promovare**: 180-220€ (aproape fix)
-**Administrare**: 50-100€/lună
-**Personalizat**: nu da estimare — spune "Echipa revine cu oferta ferma"
+### NIVEL 2 — Site cu funcționalități (1.500-4.000€)
+Bază: 1.500€
+- Are plăți online, rezervări, calendare, formulare complexe, hărți interactive
+- +300-500€ sistem plăți online (Stripe/NETOPIA, donații, abonamente)
+- +200-400€ sistem rezervări/programări cu calendar
+- +200-300€ hartă interactivă cu locații multiple
+- +150-300€ formulare complexe (nu contact simplu — cereri, aplicații, multi-step)
+- +100-200€ per feature simplă
+- +200-400€ zonă de membri / autentificare
+- +300-500€ multilimbă (2+ limbi)
+- +150-250€ dacă nu are logo
 
-Range: min = bază + suma minimă adaosuri, max = bază + suma maximă adaosuri.
-Rotunjește la 50€. Exemplu: website cu 2 features complexe + logo nou = 699+240+300 la 699+360+500 ≈ **1250-1550€**.
+### NIVEL 3 — Aplicație web / SaaS / Platformă (4.000-10.000€+)
+Bază: 4.000€
+- Dashboard admin complex, logică business, roluri utilizatori, API
+- +500-1.500€ per modul complex (CRM, gestiune stocuri, rapoarte)
+- +500-1.000€ integrări API externe
+- +300-500€ sistem notificări (email, SMS)
+- Dacă depășește 10.000€ → "Proiect enterprise, echipa face oferta detaliată"
+
+### Magazin Online (1.200-5.000€)
+Bază: 1.200€
+- +200€ plăți card
+- +50€ per 10 produse peste 20
+- +200-400€ filtre avansate (mărime, culoare, preț)
+- +300-500€ integrare curier automat (FanCourier, Sameday)
+- +200-300€ sistem reduceri / vouchere / loyalty
+- +500-1.000€ marketplace (mai mulți vânzători)
+
+### Promovare: 200€ (prin Media Expres, GRATUIT la site nou)
+### Administrare: 50-100€/lună
+
+### CUM ALEGI NIVELUL:
+- Dacă clientul vrea doar "site de prezentare" fără plăți/rezervări → **Nivel 1**
+- Dacă menționează plăți, calendar, hărți, formulare complexe, donații → **Nivel 2**
+- Dacă menționează dashboard, SaaS, platformă, roluri, API → **Nivel 3**
+- Când nu ești sigur → alege nivelul mai mare (mai bine estimezi în sus decât în jos)
+
+Range: rotunjește la 100€. Exemplu: ONG cu donații online + hartă + calendar + formulare = Nivel 2: 1.500 + 400 + 250 + 300 + 250 = **2.700-3.500€**.
 
 ## REGULI IMPORTANTE
 - **Niciodată** nu da un preț FIX. Întotdeauna range ("între X și Y €") + spune clar "estimare orientativă, oferta fermă vine pe email în 24h".
