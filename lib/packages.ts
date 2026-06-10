@@ -53,7 +53,7 @@ export const packages: Package[] = [
   {
     key: "promo",
     name: "Promovare",
-    price: "200 €",
+    price: "500 €",
     priceNote: "campanie",
     highlight: "Rețeaua Media Expres",
     features: [

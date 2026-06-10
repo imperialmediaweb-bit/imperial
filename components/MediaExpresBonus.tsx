@@ -66,7 +66,7 @@ export function MediaExpresBonus() {
             </div>
             <div className="flex-1 text-center sm:text-left">
               <h3 className="font-display text-xl font-bold text-text">
-                Campanie gratuită — valoare 200€
+                Campanie gratuită — valoare 500€
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-text-muted">
                 Fiecare client care comandă un site primește gratuit publicarea
