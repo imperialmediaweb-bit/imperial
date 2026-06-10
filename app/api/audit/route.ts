@@ -162,7 +162,7 @@ REGULI:
   try {
     const resp = await client.messages.create({
       model: CLAUDE_MODEL,
-      max_tokens: 1024,
+      max_tokens: 2048,
       system: auditPrompt,
       messages: [
         { role: "user", content: `HTML:\n${cleanedHtml}` },
@@ -175,7 +175,34 @@ REGULI:
     const jsonMatch = textBlock.text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("JSON invalid.");
 
-    const parsed = JSON.parse(jsonMatch[0]);
+    let parsed: any;
+    try {
+      parsed = JSON.parse(jsonMatch[0]);
+    } catch {
+      // JSON malformat (truncat / virgule lipsă) — încercăm reparare:
+      // tăiem la ultima acoladă/paranteză închisă validă și balansăm
+      let repaired = jsonMatch[0]
+        .replace(/,\s*([}\]])/g, "$1") // virgule trailing
+        .replace(/([}\]"])\s*\n\s*"/g, '$1,\n"'); // virgule lipsă între proprietăți
+      try {
+        parsed = JSON.parse(repaired);
+      } catch {
+        // Ultimă încercare: balansăm acoladele tăind ce e după ultima structură completă
+        const lastBrace = repaired.lastIndexOf("}");
+        if (lastBrace > 0) {
+          let candidate = repaired.slice(0, lastBrace + 1);
+          const opens = (candidate.match(/\{/g) || []).length;
+          const closes = (candidate.match(/\}/g) || []).length;
+          const opensB = (candidate.match(/\[/g) || []).length;
+          const closesB = (candidate.match(/\]/g) || []).length;
+          candidate += "]".repeat(Math.max(0, opensB - closesB));
+          candidate += "}".repeat(Math.max(0, opens - closes));
+          parsed = JSON.parse(candidate);
+        } else {
+          throw new Error("JSON nereparabil.");
+        }
+      }
+    }
     const categories: AuditCategory[] = (parsed.categories ?? []).map((c: any) => ({
       name: String(c.name ?? ""),
       score: Math.max(0, Math.min(100, Number(c.score) || 50)),
