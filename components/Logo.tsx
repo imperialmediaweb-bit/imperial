@@ -19,11 +19,11 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       <Image
         src="/logo.png"
         alt="Imperial Media — Creatori de Emoții"
-        width={1600}
-        height={640}
+        width={880}
+        height={352}
         priority
-        quality={100}
-        sizes="(max-width: 640px) 260px, (max-width: 1024px) 340px, 440px"
+        quality={90}
+        sizes="(max-width: 640px) 260px, 440px"
         className={`${heightClass} w-auto max-w-none object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition duration-300 group-hover:drop-shadow-[0_0_20px_rgba(255,107,26,0.35)]`}
       />
     </Link>

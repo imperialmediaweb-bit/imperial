@@ -68,11 +68,51 @@ export default function RootLayout({
     <html lang="ro">
       <head>
         {/* Font preconnect — elimină latența DNS/TCP pentru Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
+        />
+        {/* JSON-LD: Organization + LocalBusiness */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": `${siteConfig.url}/#organization`,
+                  name: siteConfig.name,
+                  url: siteConfig.url,
+                  logo: `${siteConfig.url}/logo.png`,
+                  email: siteConfig.email,
+                  telephone: siteConfig.phone,
+                  sameAs: [
+                    siteConfig.social.facebook,
+                    siteConfig.social.instagram,
+                  ],
+                },
+                {
+                  "@type": "ProfessionalService",
+                  "@id": `${siteConfig.url}/#localbusiness`,
+                  name: siteConfig.name,
+                  description:
+                    "Creare site web profesional, magazine online, promovare în 50 ziare și consultanță digitală.",
+                  url: siteConfig.url,
+                  telephone: siteConfig.phone,
+                  email: siteConfig.email,
+                  priceRange: "899€ - 10000€",
+                  address: {
+                    "@type": "PostalAddress",
+                    addressCountry: "RO",
+                  },
+                  areaServed: { "@type": "Country", name: "România" },
+                },
+              ],
+            }),
+          }}
         />
       </head>
       {/* Google Analytics 4 + Google Tag */}

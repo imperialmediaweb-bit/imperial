@@ -4,7 +4,7 @@
 export function Meteors({ count = 20 }: { count?: number }) {
   const meteors = Array.from({ length: count }, (_, i) => i);
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block" aria-hidden="true">
       {meteors.map((i) => {
         const left = Math.random() * 100;
         const top = Math.random() * -50;

@@ -353,6 +353,26 @@ html {
   display: none; /* hide inline SVG social icons from import */
 }
 
+/* ───── Performance: dezactivează animații grele pe mobil ───── */
+@media (max-width: 767px) {
+  .animate-aurora-1,
+  .animate-aurora-2,
+  .animate-aurora-3 {
+    animation: none;
+  }
+  .hero-bg {
+    animation: none;
+    filter: blur(24px); /* blur mai mic = mai puțin GPU */
+  }
+  .gradient-border::before {
+    animation: none;
+  }
+  .animate-orbit,
+  .animate-orbit-reverse {
+    animation: none;
+  }
+}
+
 /* ───── Accessibility: reduce motion ───── */
 @media (prefers-reduced-motion: reduce) {
   *,

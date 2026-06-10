@@ -22,6 +22,8 @@ export function ParticleField({
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+    // Pe mobil nu pornim canvas-ul deloc — economisim GPU/baterie (Core Web Vitals)
+    if (window.innerWidth < 768) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
