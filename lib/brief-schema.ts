@@ -178,12 +178,12 @@ const FEATURE_COMPLEX = new Set([
   "CRM/Newsletter",
   "Zonă de membri",
   "Zonă membri",
-  "Formular contact avansat",
-  "Formular avansat",
 ]);
 
 const FEATURE_SIMPLE = new Set([
   "Blog",
+  "Formular contact avansat",
+  "Formular avansat",
   "Galerie / Portofoliu",
   "Galerie foto",
   "Galerie",
@@ -203,7 +203,7 @@ export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
   const complexFeatures = b.features.filter((f) =>
     FEATURE_COMPLEX.has(f)
   ).length;
-  const isComplex = complexFeatures >= 2 || b.features.length >= 4;
+  const isComplex = complexFeatures >= 3 || b.features.length >= 6;
 
   // ─── Bază per pachet (ajustată pe complexitate) ───
   if (pkg === "website") {
