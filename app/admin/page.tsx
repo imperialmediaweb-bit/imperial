@@ -117,7 +117,41 @@ export default async function AdminPage({
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-bg-border bg-bg-card/60">
+        <>
+        {/* Carduri pe mobil (tabelul nu încape) */}
+        <div className="space-y-3 md:hidden">
+          {rows.map((b) => (
+            <div
+              key={b.id}
+              className="rounded-2xl border border-bg-border bg-bg-card/60 p-4"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <Link href={`/admin/${b.id}`} className="min-w-0 flex-1">
+                  <p className="font-semibold text-text">{b.name}</p>
+                  <p className="mt-0.5 truncate text-xs text-text-muted">{b.email}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <span className="chip">{packageLabel(b.selected_package)}</span>
+                    {b.source === "ai-chat" && (
+                      <span className="text-[10px] text-brand-orange">✨ AI</span>
+                    )}
+                    {b.ai_estimate_min && b.ai_estimate_max && (
+                      <span className="font-mono text-[11px] text-text">
+                        {b.ai_estimate_min}–{b.ai_estimate_max}€
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-2 text-[10px] text-text-subtle">
+                    {formatDate(b.created_at)}
+                  </p>
+                </Link>
+                <StatusPill id={b.id} status={b.status} compact />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Tabel pe desktop */}
+        <div className="hidden overflow-hidden rounded-2xl border border-bg-border bg-bg-card/60 md:block">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="border-b border-bg-border bg-bg-soft/40 text-[10px] uppercase tracking-wider text-text-subtle">
@@ -202,6 +236,7 @@ export default async function AdminPage({
             </table>
           </div>
         </div>
+        </>
       )}
 
       <p className="mt-4 text-center text-[11px] text-text-subtle">

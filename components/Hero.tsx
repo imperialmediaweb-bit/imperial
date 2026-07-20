@@ -8,6 +8,7 @@ import { Spotlight } from "./effects/Spotlight";
 import { Aurora } from "./effects/Aurora";
 import { InteractiveGrid } from "./effects/InteractiveGrid";
 import { Magnetic } from "./effects/MagneticButton";
+import { NumberTicker } from "./effects/NumberTicker";
 
 // Hero centrat, minimalist, premium — fără mockup-uri placeholder.
 // Text masiv + toate efectele în background fac toată treaba.
@@ -121,18 +122,29 @@ export function Hero() {
           </a>
         </motion.div>
 
-        {/* Brand strip la fundul hero-ului — „trust by" fără poze */}
+        {/* Stats animate — numere care urcă la 0 → valoare */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] uppercase tracking-[0.2em] text-text-subtle sm:mt-20 sm:gap-x-10 sm:text-[11px] sm:tracking-[0.25em]"
+          className="mt-10 flex flex-wrap items-start justify-center gap-x-8 gap-y-4 sm:mt-20 sm:gap-x-14"
         >
-          <span>10 ani experiență</span>
-          <span className="text-brand-orange/40">/</span>
-          <span>200+ clienți</span>
-          <span className="text-brand-orange/40">/</span>
-          <span>384+ proiecte livrate</span>
+          {[
+            { value: 10, suffix: "", label: "ani experiență" },
+            { value: 200, suffix: "+", label: "clienți fericiți" },
+            { value: 384, suffix: "+", label: "proiecte livrate" },
+          ].map((s) => (
+            <div key={s.label} className="text-center">
+              <NumberTicker
+                value={s.value}
+                suffix={s.suffix}
+                className="font-display text-2xl font-extrabold text-text sm:text-3xl"
+              />
+              <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-text-subtle sm:text-[11px]">
+                {s.label}
+              </p>
+            </div>
+          ))}
         </motion.div>
       </div>
 
