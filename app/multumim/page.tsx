@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle2, Phone, Mail, Home } from "lucide-react";
+import { CheckCircle2, Mail, Home, Gift } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 export const metadata = {
@@ -19,25 +19,10 @@ export default function MultumimPage() {
         </h1>
         <p className="mt-5 text-base text-text-muted sm:text-lg">
           Echipa Imperial Media analizează cererea ta și revine cu oferta
-          personalizată în maximum <strong>24 de ore</strong>, pe email și
-          telefon.
+          personalizată în maximum <strong>24 de ore</strong>, pe email.
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          <a
-            href={`tel:${siteConfig.phoneRaw}`}
-            className="card flex items-center gap-4 text-left transition hover:border-brand-orange"
-          >
-            <div className="grid h-12 w-12 place-items-center rounded-xl bg-orange-gradient text-white">
-              <Phone className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-text-subtle">
-                Sună-ne acum
-              </p>
-              <p className="font-semibold text-text">{siteConfig.phone}</p>
-            </div>
-          </a>
           <a
             href={`mailto:${siteConfig.email}`}
             className="card flex items-center gap-4 text-left transition hover:border-brand-orange"
@@ -47,11 +32,22 @@ export default function MultumimPage() {
             </div>
             <div>
               <p className="text-xs uppercase tracking-wider text-text-subtle">
-                Scrie-ne pe email
+                Ai întrebări? Scrie-ne
               </p>
               <p className="font-semibold text-text">{siteConfig.email}</p>
             </div>
           </a>
+          <div className="card flex items-center gap-4 text-left">
+            <div className="grid h-12 w-12 place-items-center rounded-xl bg-orange-gradient text-white">
+              <Gift className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-wider text-text-subtle">
+                Bonus inclus
+              </p>
+              <p className="font-semibold text-text">Promovare în 50 ziare</p>
+            </div>
+          </div>
         </div>
 
         <Link href="/" className="btn-ghost mt-10 inline-flex">

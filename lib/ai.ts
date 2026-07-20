@@ -356,20 +356,20 @@ Când user menționează un URL ("vreau ceva gen x.ro", "uite site-ul pe care î
 Când clientul descrie ce vrea ("ONG cu mâncare pentru nevoiași", "cabinet stomato", "restaurant"), TU ȘTII deja ce funcționalități trebuie. NU întreba "vrei blog? vrei hartă? vrei formular?" — DEDUCE din industrie + descriere și calculează direct.
 
 **Exemple de deducere automată:**
-- "ONG / asociație / donații" → ȘTII că trebuie: sistem donații online (card+transfer), hartă locații, calendar, formulare cereri, galerie, parteneri/sponsori → Nivel 2: 2.200-3.500€
-- "Cabinet stomato / medic" → ȘTII că trebuie: programări online cu calendar, profil medici, servicii+prețuri, galerie înainte/după → Nivel 2: 1.800-2.500€
-- "Restaurant" → ȘTII că trebuie: meniu digital cu poze+prețuri, rezervări masă, galerie, hartă, program → Nivel 2: 1.800-2.800€
-- "Salon beauty / frizerie" → ȘTII că trebuie: programări, portofoliu stilist, prețuri, galerie Instagram → Nivel 2: 1.800-2.500€
+- "ONG / asociație / donații" → ȘTII că trebuie: sistem donații online (card+transfer), hartă locații, calendar, formulare cereri, galerie, parteneri/sponsori → Nivel 2: 1.500-2.200€
+- "Cabinet stomato / medic" → ȘTII că trebuie: programări online cu calendar, profil medici, servicii+prețuri, galerie înainte/după → Nivel 2: 1.400-1.900€
+- "Restaurant" → ȘTII că trebuie: meniu digital cu poze+prețuri, rezervări masă, galerie, hartă, program → Nivel 2: 1.400-2.000€
+- "Salon beauty / frizerie" → ȘTII că trebuie: programări, portofoliu stilist, prețuri, galerie Instagram → Nivel 2: 1.300-1.800€
 - "Magazin haine / produse" → ȘTII că trebuie: catalog produse, coș, plăți, filtre, curier → Magazin: 2.000-4.500€
 - "Firmă instalații / construcții" → ȘTII că trebuie: portofoliu lucrări, formular estimare, zonă acoperită, urgențe → Nivel 1-2: 1.200-2.000€
 - "Firmă mică / PFA simplu" → Nivel 1: 899-1.200€
 - "Platformă / SaaS / dashboard" → Nivel 3: 5.000-10.000€
-- "Imobiliare / agenție imobiliară" → ȘTII că trebuie: listare proprietăți cu filtre (preț, mp, camere, zonă), hartă interactivă cu pins, galerie foto per proprietate, formular vizionare, profil agenți, calculator credit (opțional), panou admin adăugare proprietăți → Nivel 2-3: 2.500-4.500€
-- "Pensiune / hotel / cazare" → ȘTII că trebuie: prezentare camere cu galerii, calendar disponibilitate, sistem rezervări online cu confirmare email, prețuri pe sezon, hartă + atracții locale, review-uri oaspeți, multilimbă (RO+EN minim) → Nivel 2: 2.200-3.500€
-- "Clinică medicală (multi-medic)" → ȘTII că trebuie: programări online per medic + specialitate, profil medici cu CV, listă servicii + prețuri, panou admin programări, reminder email/SMS pacienți, blog sănătate (SEO), GDPR compliant → Nivel 2-3: 2.500-4.000€
+- "Imobiliare / agenție imobiliară" → ȘTII că trebuie: listare proprietăți cu filtre (preț, mp, camere, zonă), hartă interactivă cu pins, galerie foto per proprietate, formular vizionare, profil agenți, calculator credit (opțional), panou admin adăugare proprietăți → Nivel 2-3: 2.000-3.500€
+- "Pensiune / hotel / cazare" → ȘTII că trebuie: prezentare camere cu galerii, calendar disponibilitate, sistem rezervări online cu confirmare email, prețuri pe sezon, hartă + atracții locale, review-uri oaspeți, multilimbă (RO+EN minim) → Nivel 2: 1.500-2.200€
+- "Clinică medicală (multi-medic)" → ȘTII că trebuie: programări online per medic + specialitate, profil medici cu CV, listă servicii + prețuri, panou admin programări, reminder email/SMS pacienți, blog sănătate (SEO), GDPR compliant → Nivel 2-3: 2.000-3.200€
 - "Avocat / notar / contabil" → ȘTII că trebuie: prezentare servicii/specializări, formular programare consultație, blog juridic (SEO), testimoniale, secțiune acte necesare → Nivel 1-2: 1.200-2.000€
-- "Școală / grădiniță / curs" → ȘTII că trebuie: prezentare programe, înscriere online cu formular, calendar evenimente, galerie activități, zonă părinți (opțional) → Nivel 2: 1.800-2.800€
-- "Fitness / sală sport" → ȘTII că trebuie: program clase cu calendar, abonamente + prețuri, profil antrenori, rezervare loc la clasă, galerie → Nivel 2: 1.800-2.800€
+- "Școală / grădiniță / curs" → ȘTII că trebuie: prezentare programe, înscriere online cu formular, calendar evenimente, galerie activități, zonă părinți (opțional) → Nivel 2: 1.400-2.000€
+- "Fitness / sală sport" → ȘTII că trebuie: program clase cu calendar, abonamente + prețuri, profil antrenori, rezervare loc la clasă, galerie → Nivel 2: 1.400-2.000€
 - "Chatbot AI pe site (ca al nostru)" → ȘTII că trebuie: chat AI antrenat pe businessul lor, răspunde la întrebări clienți 24/7, colectează lead-uri → +500-1.000€ ca adaos SAU produs separat
 - ORICE business cu site nou → chatbot AI simplu de întrebări frecvente e GRATUIT inclus (răspunde din FAQ-ul lor)
 
