@@ -104,6 +104,7 @@ export async function POST(req: Request) {
   };
 
   // ─── Salvează în DB dacă există (nu blochează pe eroare DB) ───
+  let dbSaved = false;
   if (hasDb()) {
     try {
       const ip =
@@ -133,21 +134,37 @@ export async function POST(req: Request) {
         ip_hash: hashIp(ip),
         user_agent: req.headers.get("user-agent")?.slice(0, 500) ?? undefined,
       });
+      dbSaved = true;
     } catch (e) {
       // Nu picăm request-ul — loghăm și continuăm cu email
-      console.error("[/api/lead] DB insert failed (continuing):", e);
+      console.error("[/api/lead] DB insert FAILED:", e);
     }
+  } else {
+    console.warn("[/api/lead] DATABASE_URL missing — lead NOT saved to DB");
   }
 
   // ─── Trimite email-uri ───
+  let emailSent = false;
   try {
     await sendLeadEmails(payload);
-    return NextResponse.json({ ok: true });
+    emailSent = true;
   } catch (e: any) {
-    console.error("[/api/lead] send error:", e);
-    return NextResponse.json(
-      { error: "Nu am putut trimite mesajul. Sună-ne direct." },
-      { status: 500 }
-    );
+    console.error("[/api/lead] email send FAILED:", e?.message ?? e);
   }
+
+  // Lead-ul e considerat primit dacă a ajuns MĂCAR pe un canal (DB sau email).
+  // Eroare doar dacă au picat ambele — altfel am respinge lead-uri valide.
+  if (dbSaved || emailSent) {
+    if (!emailSent) {
+      console.error(
+        "[/api/lead] ATENȚIE: lead salvat în DB dar emailul NU a plecat — verifică RESEND_API_KEY/FROM_EMAIL"
+      );
+    }
+    return NextResponse.json({ ok: true });
+  }
+
+  return NextResponse.json(
+    { error: "Nu am putut trimite mesajul. Sună-ne direct." },
+    { status: 500 }
+  );
 }
