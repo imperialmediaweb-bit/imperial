@@ -663,20 +663,23 @@ Vreau ceva în aceeași direcție.`;
         </div>
       </div>
 
-      {/* ─── SIDE PANEL (diferit per mod) ─── */}
-      {mode === "consultanta" ? (
-        <ConsultantaPanel
-          brief={brief}
-          onSubmit={handleSubmit}
-          submitting={submitting}
-        />
-      ) : (
-        <LiveBriefCard
-          brief={brief}
-          onSubmit={handleSubmit}
-          submitting={submitting}
-        />
-      )}
+      {/* ─── SIDE PANEL (diferit per mod) ───
+          sticky pe desktop: urmărește scroll-ul, fără spațiu gol sub el */}
+      <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto">
+        {mode === "consultanta" ? (
+          <ConsultantaPanel
+            brief={brief}
+            onSubmit={handleSubmit}
+            submitting={submitting}
+          />
+        ) : (
+          <LiveBriefCard
+            brief={brief}
+            onSubmit={handleSubmit}
+            submitting={submitting}
+          />
+        )}
+      </div>
     </div>
   );
 }

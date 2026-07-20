@@ -170,28 +170,37 @@ export type LiveEstimate = {
   totalMax: number;
 };
 
-const FEATURE_COMPLEX = new Set([
-  "Rezervări online",
-  "Plăți online",
-  "Multilimbă",
-  "CRM / Newsletter",
-  "CRM/Newsletter",
-  "Zonă de membri",
-  "Zonă membri",
-]);
+// Cuvinte-cheie pentru clasificare — match fuzzy (lowercase contains),
+// fiindcă AI-ul trimite variante libere ("Programări online cu calendar" etc.)
+const COMPLEX_KEYWORDS = [
+  "rezerv", // rezervări
+  "program", // programări
+  "plăți", "plati", "card", "stripe", "netopia",
+  "multilimb", "limbi",
+  "crm", "newsletter",
+  "membri", "autentificare", "cont",
+  "donați", "donatii",
+  "calendar",
+  "api", "integrare erp",
+];
 
-const FEATURE_SIMPLE = new Set([
-  "Blog",
-  "Formular contact avansat",
-  "Formular avansat",
-  "Galerie / Portofoliu",
-  "Galerie foto",
-  "Galerie",
-  "Hartă Google Maps",
-  "Hartă",
-  "Integrare social media",
-  "Social media",
-]);
+const SIMPLE_KEYWORDS = [
+  "blog", "articol",
+  "formular",
+  "galerie", "portofoliu", "poze",
+  "hartă", "harta", "maps",
+  "social", "facebook", "instagram",
+  "recenzi", "review", "testimonial",
+  "profil", "echipă", "echipa", "doctori", "medici",
+  "preț", "pret", "servicii",
+];
+
+function classifyFeature(f: string): "complex" | "simple" | "unknown" {
+  const lower = f.toLowerCase();
+  if (COMPLEX_KEYWORDS.some((k) => lower.includes(k))) return "complex";
+  if (SIMPLE_KEYWORDS.some((k) => lower.includes(k))) return "simple";
+  return "unknown";
+}
 
 export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
   if (!b.selectedPackage) return null;
@@ -200,8 +209,8 @@ export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
   const pkg = b.selectedPackage;
 
   // ─── Detectăm nivelul de complexitate ───
-  const complexFeatures = b.features.filter((f) =>
-    FEATURE_COMPLEX.has(f)
+  const complexFeatures = b.features.filter(
+    (f) => classifyFeature(f) === "complex"
   ).length;
   const isComplex = complexFeatures >= 3 || b.features.length >= 6;
 
@@ -241,12 +250,13 @@ export function computeLiveEstimate(b: BriefState): LiveEstimate | null {
     });
   }
 
-  // ─── Features ───
+  // ─── Features (fuzzy matching pe cuvinte-cheie) ───
   if ((pkg === "website" || pkg === "shop") && b.features.length > 0) {
     for (const f of b.features) {
-      if (FEATURE_COMPLEX.has(f)) {
-        lines.push({ label: f, priceMin: isComplex ? 300 : 150, priceMax: isComplex ? 500 : 250 });
-      } else if (FEATURE_SIMPLE.has(f)) {
+      const kind = classifyFeature(f);
+      if (kind === "complex") {
+        lines.push({ label: f, priceMin: 250, priceMax: 400 });
+      } else if (kind === "simple") {
         lines.push({ label: f, priceMin: 100, priceMax: 200 });
       } else {
         lines.push({ label: f, priceMin: 150, priceMax: 300 });

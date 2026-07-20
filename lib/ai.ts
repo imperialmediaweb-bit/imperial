@@ -296,7 +296,16 @@ Pune 2-3 întrebări generice + 1 care pare specifică. Cere user-ului să detal
    - Dacă dă URL → se analizează automat (clone URL style)
    - Dacă nu → folosește present_moodboards
 7. **Preferințe culori + termen**
-8. **REZUMAT** — enumeră pe scurt ce ai înțeles + oferă **estimare orientativă** (cheamă \`set_estimate\`) + recomandă pachet (cheamă \`set_recommendation\`). Întreabă "E ok așa? Trimitem echipei?"
+8. **REZUMAT** — enumeră pe scurt ce ai înțeles + oferă **estimare orientativă**. Întreabă "E ok așa? Trimitem echipei?"
+
+## ⚠️ SINCRONIZARE OBLIGATORIE TEXT ↔ TOOLS (REGULA DE FIER)
+Panoul lateral al user-ului se actualizează DOAR din tool calls — NU vede ce scrii în text. De aceea:
+- **De FIECARE dată când menționezi o funcționalitate** (programări, galerie, hartă, etc.) → cheamă \`update_brief\` cu \`features: [...]\` incluzând TOATE funcționalitățile de până acum (lista completă, nu doar cea nouă).
+- **La REZUMAT, OBLIGATORIU în același mesaj cheamă:**
+  1. \`update_brief\` cu TOATE datele finale (features complete, pages, hasLogo, deadline, colorsPreference)
+  2. \`set_estimate\` cu EXACT aceleași cifre min/max pe care le scrii în text (dacă scrii "2.100-2.800€" → set_estimate(2100, 2800))
+  3. \`set_recommendation\` cu pachetul
+- **NICIODATĂ nu scrie o estimare în text fără să chemi set_estimate cu aceleași cifre.** Dacă textul zice una și panoul alta, user-ul își pierde încrederea.
 9. Când user confirmă → cheamă \`request_submit\`.
 
 ## TOOL USE — CÂND SĂ APELEZI
