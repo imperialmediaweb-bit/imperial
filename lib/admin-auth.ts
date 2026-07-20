@@ -10,7 +10,12 @@ const COOKIE_MAX_AGE_SEC = 60 * 60 * 24; // 24h
 function getSecret(): string {
   // Folosim ADMIN_PASSWORD ca secret HMAC (OK pentru MVP).
   // Pentru producție serioasă, setează separat AUTH_SECRET.
-  return process.env.AUTH_SECRET || process.env.ADMIN_PASSWORD || "dev-secret-change-me";
+  const secret = process.env.AUTH_SECRET || process.env.ADMIN_PASSWORD;
+  if (!secret) {
+    // Fără secret real, orice cookie ar putea fi falsificat — refuzăm auth-ul.
+    throw new Error("ADMIN_PASSWORD sau AUTH_SECRET trebuie setat");
+  }
+  return secret;
 }
 
 function sign(value: string): string {

@@ -472,9 +472,9 @@ Vreau ceva în aceeași direcție.`;
     !lastMsg.options.answered;
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-5">
       {/* ─── CHAT COLUMN ─── */}
-      <div className="flex min-h-[640px] flex-col overflow-hidden rounded-3xl border border-bg-border bg-bg-card bg-card-gradient shadow-card">
+      <div className="flex min-h-[480px] flex-col overflow-hidden rounded-3xl border border-bg-border bg-bg-card bg-card-gradient shadow-card sm:min-h-[640px]">
         {/* Header mic */}
         <div className="flex items-center gap-3 border-b border-bg-border/60 px-5 py-3.5">
           <div className="grid h-9 w-9 place-items-center rounded-full bg-orange-gradient shadow-glow-orange">
@@ -515,9 +515,17 @@ Vreau ceva în aceeași direcție.`;
         </div>
 
         {error && (
-          <p className="mx-5 mb-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">
-            {error}
-          </p>
+          <div className="mx-5 mb-2 flex items-center justify-between gap-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2">
+            <p className="text-sm text-red-300">{error}</p>
+            <button
+              type="button"
+              onClick={() => setError(null)}
+              aria-label="Închide eroarea"
+              className="flex-shrink-0 rounded-full p-1 text-red-300 transition hover:bg-red-500/20"
+            >
+              ✕
+            </button>
+          </div>
         )}
 
         {/* Bară "Trimite selecții" pentru multi-select */}
@@ -609,6 +617,7 @@ Vreau ceva în aceeași direcție.`;
                 }
               }}
               rows={1}
+              maxLength={2000}
               placeholder={
                 listening
                   ? "Te ascult..."

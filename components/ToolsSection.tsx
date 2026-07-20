@@ -53,7 +53,7 @@ export function ToolsSection() {
           </p>
         </div>
 
-        <div className="mx-auto mt-10 grid max-w-5xl gap-5 sm:grid-cols-3">
+        <div className="mx-auto mt-10 grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {tools.map((t, idx) => (
             <motion.div
               key={t.title}

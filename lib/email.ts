@@ -30,7 +30,11 @@ async function send(opts: {
 }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("[email] RESEND_API_KEY missing — skipping send. Payload:", {
+    // În producție lipsa cheii e o eroare reală — lead-ul s-ar pierde silențios.
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("RESEND_API_KEY missing in production — email NOT sent");
+    }
+    console.warn("[email] RESEND_API_KEY missing — skipping send (dev only). Payload:", {
       to: opts.to,
       subject: opts.subject,
     });

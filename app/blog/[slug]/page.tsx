@@ -124,7 +124,11 @@ function markdownToHtml(md: string): string {
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, (_m, text, href) => {
+      // Doar link-uri relative sau http(s) — blochează javascript:, data:, etc.
+      const safe = /^(\/|https?:\/\/)/i.test(href.trim());
+      return safe ? `<a href="${href}">${text}</a>` : text;
+    })
     .replace(/^- (.+)$/gm, "<li>$1</li>")
     .replace(/(<li>.*<\/li>\n?)+/g, (m) => `<ul>${m}</ul>`)
     .replace(/^(?!<[hulo])((?!<\/)[^\n]+)$/gm, "<p>$1</p>")

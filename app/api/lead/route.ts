@@ -3,6 +3,7 @@ import { createHash } from "crypto";
 import { sendLeadEmails } from "@/lib/email";
 import { insertBrief } from "@/lib/briefs";
 import { hasDb } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,6 +17,14 @@ function hashIp(ip: string | null): string | undefined {
 }
 
 export async function POST(req: Request) {
+  // Max 5 lead-uri per IP per 10 minute — suficient pentru orice client real
+  if (!rateLimit(`lead:${getClientIp(req)}`, 5, 10 * 60_000)) {
+    return NextResponse.json(
+      { error: "Prea multe cereri. Așteaptă câteva minute și încearcă din nou." },
+      { status: 429 }
+    );
+  }
+
   let body: any;
   try {
     body = await req.json();
@@ -23,8 +32,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Body invalid." }, { status: 400 });
   }
 
-  // Honeypot
-  if (body?.hp) {
+  // Honeypot — orice valoare non-goală SAU câmp prezent dar gol trimis de bot
+  if (typeof body?.hp === "string" && body.hp.length > 0) {
     return NextResponse.json({ ok: true });
   }
 

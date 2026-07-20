@@ -7,6 +7,7 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { ANTHROPIC_TOOLS, CLAUDE_MODEL, SYSTEM_PROMPT, CONSULTANTA_PROMPT, getAnthropic } from "@/lib/ai";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,6 +38,14 @@ function countUserTextMessages(messages: Anthropic.MessageParam[]): number {
 }
 
 export async function POST(req: Request) {
+  // Max 30 mesaje AI per IP per 10 minute — protejează costurile Claude
+  if (!rateLimit(`chat:${getClientIp(req)}`, 30, 10 * 60_000)) {
+    return NextResponse.json(
+      { error: "Prea multe mesaje. Ia o pauză scurtă și revino în câteva minute." },
+      { status: 429 }
+    );
+  }
+
   let body: { messages?: Anthropic.MessageParam[]; mode?: string };
   try {
     body = await req.json();

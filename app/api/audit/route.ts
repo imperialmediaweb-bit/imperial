@@ -203,7 +203,8 @@ REGULI:
         }
       }
     }
-    const categories: AuditCategory[] = (parsed.categories ?? []).map((c: any) => ({
+    const rawCategories = Array.isArray(parsed?.categories) ? parsed.categories : [];
+    const categories: AuditCategory[] = rawCategories.map((c: any) => ({
       name: String(c.name ?? ""),
       score: Math.max(0, Math.min(100, Number(c.score) || 50)),
       emoji: String(c.emoji ?? "📊"),

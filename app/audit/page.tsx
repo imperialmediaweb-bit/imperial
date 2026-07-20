@@ -54,8 +54,9 @@ export default function AuditPage() {
   async function sendReport(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !result) return;
+    setError(null);
     try {
-      await fetch("/api/lead", {
+      const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -67,8 +68,14 @@ export default function AuditPage() {
           source: "audit-page",
         }),
       });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j?.error || "Nu am putut trimite. Încearcă din nou.");
+      }
       setEmailSent(true);
-    } catch {}
+    } catch (err: any) {
+      setError(err?.message ?? "Nu am putut trimite emailul. Încearcă din nou.");
+    }
   }
 
   return (
