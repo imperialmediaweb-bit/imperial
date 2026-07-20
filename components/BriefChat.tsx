@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Send, Sparkles, MessageSquare, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { BriefState, MoodBoard } from "@/lib/brief-schema";
-import { emptyBrief, MOODBOARDS } from "@/lib/brief-schema";
+import { emptyBrief, MOODBOARDS, canSubmitBrief } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
 import { ConsultantaPanel } from "./ConsultantaPanel";
 import { getPackageByKey } from "@/lib/packages";
@@ -421,6 +421,22 @@ Vreau ceva în aceeași direcție.`;
     }
     return null;
   }, [uiMessages]);
+
+  // AUTO-SUBMIT: când AI cheamă request_submit (user a confirmat în chat),
+  // trimitem automat brief-ul — user-ul nu trebuie să mai apese butonul din panou.
+  const autoSubmittedRef = useRef(false);
+  useEffect(() => {
+    if (
+      brief.readyToSubmit &&
+      !autoSubmittedRef.current &&
+      !submitting &&
+      canSubmitBrief(brief)
+    ) {
+      autoSubmittedRef.current = true;
+      handleSubmit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [brief.readyToSubmit, brief, submitting]);
 
   const handleSubmit = async () => {
     if (submitting) return;
