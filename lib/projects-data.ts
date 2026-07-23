@@ -375,9 +375,9 @@ export const importedProjects: ImportedProject[] = [
     "categories": ["Dezvoltare Web", "Aplicații Web", "SaaS", "Branding"],
     "image": null,
     "wpImages": [
-      "https://image.thum.io/get/width/1520/https://cardova.com"
+      "https://image.thum.io/get/width/1520/https://cardova.net"
     ],
-    "externalUrl": "https://cardova.com",
+    "externalUrl": "https://cardova.net",
     "excerpt": "SaaS la cheie pentru cărți de vizită digitale: profil personal partajabil prin link sau cod QR, cu bio generat de AI și acțiune „salvează contactul\" într-un tap.",
     "content": "<h3>Descriere Proiect</h3><p><strong>Cardova</strong> este un SaaS la cheie pentru cărți de vizită digitale. Cărțile de hârtie se pierd; Cardova oferă fiecărui profesionist o pagină de profil personală pe care o partajează în secunde prin link sau cod QR — cu date de contact, linkuri sociale și acțiune „salvează contactul\" într-un singur tap.</p><p>Utilizatorii își construiesc cardul printr-un editor simplu, personalizează aspectul și îl distribuie oriunde. Fiecare scanare devine un lead capturat, nu un carton uitat într-un sertar.</p><h3>Funcționalități cheie</h3><ul><li>Editor de card simplu cu teme premium</li><li>Bio generat de AI pentru profiluri profesionale</li><li>Cod QR unic pentru fiecare card</li><li>Pagini publice de profil optimizate pentru mobil</li><li>Salvare contact într-un singur tap (vCard)</li><li>Conturi utilizator + site de marketing complet</li></ul><h3>Tehnologii</h3><p>Next.js, TypeScript, Tailwind CSS, PostgreSQL. Design mobile-first — o carte de vizită digitală trăiește pe ecranul telefonului.</p><h3>Rezultatul Proiectului</h3><p>Un produs complet, de la editor la paginile publice: networking modern fără cartoane pierdute.</p>"
   },
