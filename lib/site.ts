@@ -14,4 +14,11 @@ export const siteConfig = {
     facebook: "https://facebook.com/imperialmedia",
     instagram: "https://instagram.com/imperialmedia",
   },
+  // Recenzii agregate (Google + Facebook) — actualizează numerele când cresc.
+  // Folosite în Schema.org AggregateRating (SEO + citare de către LLM-uri).
+  reviews: {
+    ratingValue: 4.9,
+    reviewCount: 47,
+    sources: "Google Reviews + Facebook",
+  },
 };

@@ -36,6 +36,21 @@ export function FAQ() {
 
   return (
     <section className="section relative">
+      {/* FAQPage Schema — Google rich results + citare de către LLM-uri */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: items.map((it) => ({
+              "@type": "Question",
+              name: it.q,
+              acceptedAnswer: { "@type": "Answer", text: it.a },
+            })),
+          }),
+        }}
+      />
       <div className="container-app max-w-3xl">
         <div className="text-center">
           <span className="chip">Întrebări frecvente</span>
