@@ -94,7 +94,7 @@ export function Services() {
 
                     <div className="mt-6 flex items-center justify-between">
                       <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text transition group-hover:text-brand-orange">
-                        Read More
+                        Vezi detalii
                         <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                       <span

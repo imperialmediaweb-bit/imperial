@@ -66,11 +66,11 @@ html {
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-bg-border bg-white/5 px-3 py-1 text-xs font-medium text-text-muted;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-brand-orange/25 bg-brand-orange/[0.07] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-orangeLight;
   }
 
   .section {
-    @apply py-20 sm:py-24 lg:py-32;
+    @apply relative py-20 sm:py-24 lg:py-32;
   }
 
   .section-title {
@@ -78,8 +78,41 @@ html {
   }
 
   .section-subtitle {
-    @apply mt-4 max-w-2xl text-base text-text-muted sm:text-lg;
+    @apply mt-4 max-w-2xl text-base leading-relaxed text-text-muted sm:text-lg;
   }
+}
+
+/* ───── Separator premium între secțiuni — linie gradient subtilă ───── */
+.section + .section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, 80%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 107, 26, 0.25) 30%,
+    rgba(123, 47, 247, 0.25) 70%,
+    transparent
+  );
+}
+
+/* ───── Hover lift universal pe carduri ───── */
+.card {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 107, 26, 0.35);
+  box-shadow:
+    0 18px 50px -12px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(255, 107, 26, 0.08);
 }
 
 /* Text gradient pentru titluri */
