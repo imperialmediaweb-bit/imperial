@@ -276,6 +276,9 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                 <p className="mt-2 text-center text-[10px] font-semibold text-brand-orangeLight">
                   Plată în 2 rate: 50% avans · 50% la livrare
                 </p>
+                <p className="mt-1.5 text-center text-[9px] leading-snug text-text-subtle">
+                  După anul 1: hosting+domeniu ~50-80€/an · Mentenanță opțională de la 50€/lună
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
