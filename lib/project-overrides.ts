@@ -453,10 +453,26 @@ export function extractMonthFromImages(images?: string[]): number {
 }
 
 // Sortează proiectele descrescător după an + lună (cele mai noi primele).
+// Proiectele "featured" (SaaS-uri noi) rămân mereu PRIMELE, în ordinea dată.
+const FEATURED_KEYS = [
+  "nexit-marketplace",
+  "invofyx-facturare",
+  "cardova-carti-vizita",
+  "coursbit-cursuri",
+  "edulynk-fise-teste",
+  "ebooklygoods",
+];
+
 export function sortProjectsNewestFirst<
-  T extends { wpImages?: string[] }
+  T extends { wpImages?: string[]; key?: string }
 >(projects: T[]): T[] {
   return [...projects].sort((a, b) => {
+    const fa = FEATURED_KEYS.indexOf((a as any).key ?? "");
+    const fb = FEATURED_KEYS.indexOf((b as any).key ?? "");
+    // Featured înaintea tuturor, în ordinea din FEATURED_KEYS
+    if (fa !== -1 && fb !== -1) return fa - fb;
+    if (fa !== -1) return -1;
+    if (fb !== -1) return 1;
     const yearA = parseInt(extractYearFromImages(a.wpImages) ?? "0", 10);
     const yearB = parseInt(extractYearFromImages(b.wpImages) ?? "0", 10);
     if (yearA !== yearB) return yearB - yearA;

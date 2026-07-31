@@ -257,6 +257,25 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                   <Info className="mt-0.5 h-3 w-3 flex-shrink-0" />
                   Se actualizează pe măsură ce conversăm. Oferta fermă — pe email în 24h.
                 </p>
+
+                {/* Ce include prețul — trust builder */}
+                <div className="mt-3 grid grid-cols-2 gap-1.5 border-t border-brand-orange/15 pt-3">
+                  {[
+                    "✅ Cod custom Next.js",
+                    "✅ SEO + Google Analytics",
+                    "✅ Domeniu + hosting 1 an",
+                    "✅ SSL + securitate",
+                    "🎁 Promovare 50 ziare",
+                    "🛟 30 zile suport gratuit",
+                  ].map((item) => (
+                    <span key={item} className="text-[10px] leading-snug text-text-muted">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-2 text-center text-[10px] font-semibold text-brand-orangeLight">
+                  Plată în 2 rate: 50% avans · 50% la livrare
+                </p>
               </motion.div>
             )}
           </AnimatePresence>
