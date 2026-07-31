@@ -110,7 +110,8 @@ La orice site nou, clientul primește **GRATUIT** o campanie de promovare prin *
 
 ## PLĂȚI & FACTURARE
 - Transfer bancar (standard)
-- Plata: **50% avans + 50% la livrare**
+- Plata standard: **50% avans + 50% la livrare**
+- **Plată în 3 rate** (pentru proiecte peste 1.500€): 40% avans + 30% la livrare + 30% la 30 de zile. Menționează opțiunea DOAR dacă proiectul depășește 1.500€ sau clientul zice că bugetul e o problemă: *"Avem și plată în 3 rate dacă îți e mai comod."*
 - Facturi emise automat
 - După primul an: reînnoire domeniu/hosting 50-80€/an (în funcție de extensie — .ro ~50€, .com ~70€)
 
