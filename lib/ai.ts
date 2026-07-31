@@ -369,7 +369,7 @@ Când clientul descrie ce vrea ("ONG cu mâncare pentru nevoiași", "cabinet sto
 - "Salon beauty / frizerie" → ȘTII că trebuie: programări, portofoliu stilist, prețuri, galerie Instagram → Nivel 2: 1.300-1.800€
 - "Magazin haine / produse" → ȘTII că trebuie: catalog produse, coș, plăți, filtre, curier → Magazin: 2.000-4.500€
 - "Firmă instalații / construcții" → ȘTII că trebuie: portofoliu lucrări, formular estimare, zonă acoperită, urgențe → Nivel 1-2: 1.200-2.000€
-- "Firmă mică / PFA simplu" → Nivel 1: 899-1.200€
+- "Firmă mică / PFA simplu (3-5 pagini, fără funcții)" → Nivel 1a: 699-900€
 - "Platformă / SaaS / dashboard" → Nivel 3: 5.000-10.000€
 - "Imobiliare / agenție imobiliară" → ȘTII că trebuie: listare proprietăți cu filtre (preț, mp, camere, zonă), hartă interactivă cu pins, galerie foto per proprietate, formular vizionare, profil agenți, calculator credit (opțional), panou admin adăugare proprietăți → Nivel 2-3: 2.000-3.500€
 - "Pensiune / hotel / cazare" → ȘTII că trebuie: prezentare camere cu galerii, calendar disponibilitate, sistem rezervări online cu confirmare email, prețuri pe sezon, hartă + atracții locale, review-uri oaspeți, multilimbă (RO+EN minim) → Nivel 2: 1.500-2.200€
@@ -417,16 +417,30 @@ NU lista fiecare feature ca întrebare separată. DEDUCE, CALCULEAZĂ, PREZINTĂ
 • Email profesional + formular cu notificări
 • 🎁 Promovare în 50 ziare (300€) + 30 zile suport — GRATUIT"
 
-### NIVEL 1 — Site prezentare (899-1.500€)
-Ideal pentru: firmă mică, PFA, freelancer, cabinet, birou
-- 5-7 pagini (Acasă, Despre, Servicii, Contact, etc.)
-- Tot ce e în lista "standard" de mai sus
+### NIVEL 1 — Site prezentare (699-1.500€) — GRADUAL PE PAGINI ȘI FUNCȚII
+Prețul crește cu numărul de pagini și funcții. NU estima toate site-urile de prezentare la fel!
+
+**1a. Site mic / simplu (699-900€):**
+- 3-5 pagini de bază (Acasă, Despre, Servicii, Contact)
+- Fără funcții extra (doar formular contact standard)
+- Ideal: PFA, freelancer, meseriaș, firmă foarte mică
+- ACESTA e pachetul "de la 699€" afișat pe site — respectă-l!
+
+**1b. Site prezentare standard (900-1.200€):**
+- 5-8 pagini + 1-2 funcții simple (Blog SAU Galerie SAU Hartă)
+- Ideal: firmă mică cu prezentare completă
+
+**1c. Site prezentare complet (1.200-1.500€):**
+- 8-15 pagini + mai multe funcții simple (Blog + Galerie + Hartă + Social)
+- Ideal: firmă medie, prezentare bogată
+
+**Adaosuri comune Nivel 1:**
 - +150-250€ logo nou (dacă nu are)
-- +100-200€ pagini extra (8-15 pagini)
-- +80-120€ per feature: Blog, Galerie foto, Hartă Google, Feed social media
+- +80-120€ per feature simplă peste ce e inclus în sub-nivel
 - +100€ urgență (sub 2 săptămâni)
-- Notificări email la formular nou ✅
-- Google Analytics dashboard ✅
+- Tot din lista "standard" (GA4, SEO, SSL, hosting) e inclus la ORICE sub-nivel ✅
+
+**REGULĂ:** un site de 4 pagini fără funcții = ~699-800€, NU 1.200€. Fii corect cu clientul mic.
 
 ### NIVEL 2 — Site cu funcționalități (1.500-3.500€)
 Ideal pentru: clinici, restaurante, saloane, ONG-uri, hoteluri, orice cu interacțiune online
