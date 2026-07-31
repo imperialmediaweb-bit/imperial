@@ -261,11 +261,13 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                 {/* Ce include prețul — trust builder */}
                 <div className="mt-3 grid grid-cols-2 gap-1.5 border-t border-brand-orange/15 pt-3">
                   {[
-                    "✅ Cod custom Next.js",
-                    "✅ SEO + Google Analytics",
+                    "✅ Cod de la zero (Next.js)",
+                    "✅ Viteză maximă (Google 95+)",
+                    "✅ SEO + optimizare AI/LLM",
+                    "✅ GA4 + Search Console",
+                    "✅ Securitate maximă + SSL",
                     "✅ Domeniu + hosting 1 an",
-                    "✅ SSL + securitate",
-                    "🎁 Promovare 50 ziare",
+                    "🎁 Promovare 50 ziare (300€)",
                     "🛟 30 zile suport gratuit",
                   ].map((item) => (
                     <span key={item} className="text-[10px] leading-snug text-text-muted">
