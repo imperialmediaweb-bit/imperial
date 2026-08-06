@@ -28,7 +28,6 @@ import {
 import type { ServiceReport, ServiceReportPreview } from "@/app/api/service-report/route";
 import { ServiceReportView, ScoreCircle } from "@/components/ServiceReportView";
 import { ShineCard } from "@/components/effects/ShineCard";
-import { Aurora } from "@/components/effects/Aurora";
 import { Magnetic } from "@/components/effects/MagneticButton";
 import { getPartner } from "@/lib/partners";
 
@@ -237,55 +236,60 @@ export default function ServicePage() {
     <main className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
 
-      {/* HERO */}
-      <section className="container-app pb-8 pt-14 text-center sm:pt-20">
-        <span className="chip"><Stethoscope className="h-3 w-3" /> Consultanță de afaceri</span>
+      {/* HERO — scurt și aerisit */}
+      <section className="container-app pb-6 pt-14 text-center sm:pt-20">
+        <span className="chip"><Stethoscope className="h-3 w-3" /> Coach-ul cu date al afacerii tale</span>
         <h1 className="section-title mt-4 mx-auto max-w-3xl">
-          Raportul complet al <span className="text-gradient">afacerii tale</span>
+          Radiografia <span className="text-gradient">afacerii tale</span>
         </h1>
-        <p className="section-subtitle mx-auto">
-          Completează datele firmei și primești pe loc analiza completă:
-          prezența online, competiția reală, cifrele oficiale de la ANAF,
-          câți clienți pierzi lunar și planul exact de acțiune pe 12 luni —
-          adaptat pe domeniul tău, de la imobiliare la service auto sau notariat.
+        <p className="section-subtitle mx-auto max-w-xl text-center">
+          Date reale — Google, ANAF, competiția din zona ta — și planul tău pe 12 luni. În 60 de secunde.
         </p>
-        <p className="mt-3 text-sm font-semibold text-brand-orangeLight">
-          Audit complet (valoare 299€) + articol de promovare în presa online din orașul tău — totul pentru{" "}
-          {promo ? (
-            <>
-              <span className="text-text-subtle line-through">{BASE_PRICE} lei</span> {price} lei
-            </>
+
+        {/* Prețul, compact */}
+        <div className="mx-auto mt-5 flex flex-wrap items-center justify-center gap-2">
+          {price === 0 ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2 text-sm font-bold text-green-300">
+              ⭐ Invitație VIP — raportul complet e gratuit pentru tine
+            </span>
           ) : (
-            `${BASE_PRICE} lei`
+            <>
+              <span className="inline-flex items-baseline gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-5 py-2">
+                {promo && <span className="text-sm font-semibold text-text-subtle line-through">{BASE_PRICE} lei</span>}
+                <span className="font-display text-lg font-extrabold text-brand-orangeLight">{price} lei</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-bg-border bg-bg-soft/60 px-4 py-2 text-xs font-semibold text-text-muted">
+                🗞️ + articol în presa din orașul tău, cadou
+              </span>
+              {promo && promo.kind === "partner" && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-2 text-xs font-bold text-green-300">
+                  🎟️ Reducere {promo.label}
+                </span>
+              )}
+              {promo && promo.kind === "ref" && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-2 text-xs font-bold text-green-300">
+                  🎟️ Reducere prin recomandare
+                </span>
+              )}
+            </>
           )}
-        </p>
-        {promo && (
-          <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5 text-xs font-bold text-green-300">
-            {price === 0
-              ? `⭐ ${promo.label} — raportul complet e GRATUIT pentru tine`
-              : `🎟️ ${promo.kind === "partner" ? `Reducere ${promo.label} aplicată` : "Reducere prin recomandare aplicată"} — plătești ${price} lei`}
+        </div>
+
+        {/* Parteneriatul — DOAR pentru linkul Bizz Club, nu pentru VIP */}
+        {promo?.partner === "bizzclub" && (
+          <p className="mx-auto mt-4 max-w-lg text-xs leading-relaxed text-text-subtle">
+            🤝 <a href="https://botosani.bizz.club" target="_blank" rel="noopener noreferrer" className="font-semibold text-text-muted hover:text-brand-orange">Bizz Club Botoșani</a> —
+            partenerul nostru: la club crești prin comunitate și mentorat, aici îți ținem scorul cu date.
           </p>
         )}
-        {promo?.kind === "partner" && (
-          <p className="mx-auto mt-3 max-w-2xl rounded-2xl border border-bg-border bg-bg-card/60 px-5 py-3 text-xs leading-relaxed text-text-muted">
-            🤝 <b className="text-text">{promo.label} — partenerul nostru pentru dezvoltare.</b> O comunitate
-            de antreprenori de calitate din zonă: la{" "}
-            <a href="https://botosani.bizz.club" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">întâlnirile clubului</a>{" "}
-            crești prin mentorat, relații și schimb de experiență cu oameni care chiar fac business;
-            aici îți ținem scorul — analiza pe date reale, lună de lună. Împreună: direcție + dovadă.
-          </p>
-        )}
-        <p className="mx-auto mt-2 max-w-2xl text-xs text-text-subtle">
-          <span className="font-semibold text-text-muted">Coach-ul cu date al afacerii tale:</span>{" "}
-          Google, ANAF, competiția din zona ta — pași concreți, cu costuri și impact,
-          la prețul unei cine.
-        </p>
       </section>
 
       {/* FORM */}
       {showForm && (
-        <section className="relative container-app pb-20">
-          <Aurora />
+        <section className="relative container-app overflow-hidden pb-20 pt-4">
+          {/* Glow discret, ținut în spatele cardului — nu peste text */}
+          <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[520px] w-[720px] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-orange/10 blur-[130px]" />
+          <div aria-hidden className="pointer-events-none absolute left-[15%] bottom-0 -z-10 h-[320px] w-[420px] rounded-full bg-brand-purple/15 blur-[120px]" />
           <div className="gradient-border relative mx-auto max-w-2xl rounded-3xl">
             <ShineCard className="rounded-3xl bg-bg-card bg-card-gradient p-6 shadow-card sm:p-9">
             {/* Progres */}
