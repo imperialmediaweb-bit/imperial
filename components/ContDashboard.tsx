@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { NumberTicker } from "@/components/effects/NumberTicker";
 import {
   Bell,
   FileText,
@@ -117,6 +118,28 @@ export function ContDashboard({
           <a href="/api/cont/session?logout=1" className="btn-ghost text-xs">
             <LogOut className="h-3.5 w-3.5" /> Ieși din cont
           </a>
+        </div>
+
+        {/* Stat tiles */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="rounded-2xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/10 to-transparent p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Scor actual</p>
+            <p className={`mt-1 font-display text-3xl font-extrabold ${!latest || latest.score >= 70 ? "text-green-400" : latest.score >= 40 ? "text-yellow-400" : "text-red-400"}`}>
+              {latest ? <NumberTicker value={latest.score} /> : "—"}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-bg-border bg-bg-card/60 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Rapoarte</p>
+            <p className="mt-1 font-display text-3xl font-extrabold text-text"><NumberTicker value={reports.length} /></p>
+          </div>
+          <div className="rounded-2xl border border-bg-border bg-bg-card/60 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Notificări noi</p>
+            <p className="mt-1 font-display text-3xl font-extrabold text-text"><NumberTicker value={notifications.filter((n) => !n.seen).length} /></p>
+          </div>
+          <div className="rounded-2xl border border-green-500/30 bg-gradient-to-br from-green-500/10 to-transparent p-4">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Firme aduse</p>
+            <p className="mt-1 font-display text-3xl font-extrabold text-green-400"><NumberTicker value={referralCount} /></p>
+          </div>
         </div>
 
         {/* Evoluția scorului */}
@@ -329,14 +352,27 @@ function ScoreChart({ points }: { points: Array<{ date: string; score: number }>
       </div>
       <div className="mt-3 overflow-x-auto">
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full min-w-[420px]">
+          <defs>
+            <linearGradient id="scoreArea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ea580c" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#ea580c" stopOpacity="0" />
+            </linearGradient>
+          </defs>
           {[25, 50, 75].map((v) => {
             const y = h - pad - ((v / 100) * (h - pad * 2));
-            return <line key={v} x1={pad} x2={w - pad} y1={y} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth={1} />;
+            return <line key={v} x1={pad} x2={w - pad} y1={y} y2={y} stroke="currentColor" strokeOpacity={0.08} strokeWidth={1} />;
           })}
-          <path d={path} fill="none" stroke="#FF6B1A" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d={`${path} L${xs[xs.length - 1]},${h - pad} L${xs[0]},${h - pad} Z`}
+            fill="url(#scoreArea)"
+          />
+          <path d={path} fill="none" stroke="#ea580c" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
           {xs.map((x, i) => (
-            <circle key={i} cx={x} cy={ys[i]} r={4} fill="#FF6B1A" />
+            <circle key={i} cx={x} cy={ys[i]} r={i === xs.length - 1 ? 5.5 : 4} fill="#ea580c" stroke="#0e0617" strokeWidth={2} />
           ))}
+          <text x={xs[xs.length - 1]} y={ys[ys.length - 1] - 12} textAnchor="middle" fontSize={12} fontWeight={700} fill="currentColor">
+            {points[points.length - 1].score}
+          </text>
         </svg>
       </div>
     </div>

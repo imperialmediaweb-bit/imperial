@@ -427,13 +427,23 @@ html {
   .animate-orbit-reverse { animation: none; }
 }
 
-/* ───── Print: raportul /service salvat ca PDF ───── */
+/* ───── Diagramele din raport (bare cu culoare per entitate) ───── */
+.viz-bar {
+  background: var(--bar-color);
+  transition: width 0.6s ease;
+}
+
+/* ───── Print: raportul /service salvat ca PDF — colorat, ca un document de design ───── */
 @media print {
+  @page {
+    margin: 12mm;
+  }
   header,
   footer,
   nav {
     display: none !important;
   }
+  html,
   body {
     background: #fff !important;
   }
@@ -443,19 +453,88 @@ html {
   main > div[class*="bg-hero-gradient"] {
     display: none !important;
   }
-  .service-report-print,
-  .service-report-print * {
-    color: #111 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    border-color: #ddd !important;
-    text-shadow: none !important;
-  }
   .service-report-print {
     max-width: 100% !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
+  /* Baza: text închis pe alb */
+  .service-report-print,
+  .service-report-print * {
+    color: #1f2430 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  /* Cardurile devin suprafețe albe/tentate cu borduri colorate vizibile */
   .service-report-print [class*="rounded-3xl"] {
+    background: #fff !important;
+    border-color: #e3e5ec !important;
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  .service-report-print [class*="border-red-500"] {
+    background: #fef2f2 !important;
+    border-color: #fca5a5 !important;
+  }
+  .service-report-print [class*="border-green-500"] {
+    background: #f0fdf4 !important;
+    border-color: #86efac !important;
+  }
+  .service-report-print [class*="border-brand-orange"] {
+    background: #fff7ed !important;
+    border-color: #fdba74 !important;
+  }
+  .service-report-print [class*="border-brand-purple"] {
+    background: #faf5ff !important;
+    border-color: #d8b4fe !important;
+  }
+  /* Accentele de culoare rămân colorate (nuanțe cu contrast pe alb) */
+  .service-report-print [class*="text-brand-orange"] {
+    color: #c2410c !important;
+  }
+  .service-report-print [class*="text-brand-purple"] {
+    color: #7c3aed !important;
+  }
+  .service-report-print [class*="text-green-3"],
+  .service-report-print [class*="text-green-4"] {
+    color: #15803d !important;
+  }
+  .service-report-print [class*="text-red-3"],
+  .service-report-print [class*="text-red-4"] {
+    color: #dc2626 !important;
+  }
+  .service-report-print [class*="text-yellow-4"] {
+    color: #b45309 !important;
+  }
+  .service-report-print [class*="text-text-subtle"],
+  .service-report-print [class*="text-text-muted"] {
+    color: #5b6170 !important;
+  }
+  /* Barele diagramelor își păstrează culoarea entității */
+  .service-report-print .viz-bar {
+    background: var(--bar-color) !important;
+  }
+  /* Pastilele/badge-urile colorate rămân tentate */
+  .service-report-print [class*="bg-green-500/10"] {
+    background: #dcfce7 !important;
+  }
+  .service-report-print [class*="bg-brand-orange/10"],
+  .service-report-print [class*="bg-brand-orange/15"] {
+    background: #ffedd5 !important;
+  }
+}
+
+/* La print, animațiile nu trebuie să lase conținut invizibil sau bare la 0 */
+@media print {
+  .service-report-print *,
+  .service-report-print {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .service-report-print .viz-bar {
+    width: var(--bar-w) !important;
   }
 }

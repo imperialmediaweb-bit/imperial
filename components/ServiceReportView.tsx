@@ -25,6 +25,7 @@ import {
   FileDown,
 } from "lucide-react";
 import type { ServiceReport } from "@/app/api/service-report/route";
+import { ShineCard } from "@/components/effects/ShineCard";
 
 export function ServiceReportView({
   report,
@@ -184,7 +185,7 @@ export function ServiceReportView({
 
       {/* Recomandarea #1 */}
       {report.topRecommendation && (
-        <div className="rounded-3xl border-2 border-brand-orange/50 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 sm:p-7">
+        <ShineCard className="rounded-3xl border-2 border-brand-orange/50 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 sm:p-7">
           <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-orange">
             <Star className="h-4 w-4 fill-brand-orange" /> Recomandarea #1 — dacă faci un singur lucru luna asta
           </p>
@@ -197,7 +198,7 @@ export function ServiceReportView({
               <b>Primul pas (azi):</b> {report.topRecommendation.firstStep}
             </p>
           )}
-        </div>
+        </ShineCard>
       )}
 
       {/* Diagnostics */}
@@ -225,6 +226,7 @@ export function ServiceReportView({
             <Trophy className="mr-1.5 inline h-5 w-5 text-brand-orange" />
             Tu vs competiția din {report.city}
           </h3>
+          <CompetitorChart report={report} />
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -260,18 +262,7 @@ export function ServiceReportView({
             <TrendingUp className="mr-1.5 inline h-5 w-5 text-green-400" />
             Proiecția economică — bagi vs. scoți
           </h3>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-bg-border bg-bg-soft/50 p-4">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Primele 3 luni</p>
-              <p className="mt-2 text-sm text-text-muted">Investiție: <b className="text-text">{report.projection.invest3m.toLocaleString("ro-RO")}€</b></p>
-              <p className="mt-1 text-sm text-text-muted">Venit suplimentar: <b className="text-green-400">+{report.projection.return3m.toLocaleString("ro-RO")}€</b></p>
-            </div>
-            <div className="rounded-2xl border border-bg-border bg-bg-soft/50 p-4">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">12 luni</p>
-              <p className="mt-2 text-sm text-text-muted">Investiție totală: <b className="text-text">{report.projection.invest12m.toLocaleString("ro-RO")}€</b></p>
-              <p className="mt-1 text-sm text-text-muted">Venit suplimentar: <b className="text-green-400">+{report.projection.return12m.toLocaleString("ro-RO")}€</b></p>
-            </div>
-          </div>
+          <ProjectionChart projection={report.projection} />
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-green-500/40 bg-green-500/10 px-3.5 py-1.5 text-xs font-bold text-green-300">
               ✓ Investiția recuperată în luna {report.projection.breakEvenMonth}
@@ -443,6 +434,116 @@ export function ServiceReportView({
         </p>
       </div>
     </motion.div>
+  );
+}
+
+// Culori diagrame — validate CVD + contrast pe dark și pe print alb (dataviz).
+const VIZ = {
+  you: "#ea580c", // firma clientului
+  other: "#6366f1", // competitori / investiție
+  gain: "#16a34a", // venit suplimentar
+};
+
+// Bară orizontală cu etichetă directă — refolosită de ambele diagrame.
+function VizBar({
+  label,
+  value,
+  max,
+  color,
+  valueLabel,
+  bold = false,
+}: {
+  label: string;
+  value: number;
+  max: number;
+  color: string;
+  valueLabel: string;
+  bold?: boolean;
+}) {
+  const pct = Math.max(2, Math.round((value / Math.max(1, max)) * 100));
+  return (
+    <div>
+      <div className="mb-1 flex items-baseline justify-between gap-2">
+        <span className={`truncate text-xs ${bold ? "font-bold text-text" : "text-text-muted"}`}>{label}</span>
+        <span className={`flex-shrink-0 text-xs tabular-nums ${bold ? "font-bold text-text" : "text-text-muted"}`}>{valueLabel}</span>
+      </div>
+      <div className="h-[14px] w-full overflow-hidden rounded-r border-l-2 border-bg-border/80 bg-bg-soft/50">
+        <motion.div
+          className="viz-bar h-full rounded-r"
+          style={{ ["--bar-color" as any]: color, ["--bar-w" as any]: `${pct}%` }}
+          initial={{ width: 0 }}
+          whileInView={{ width: `${pct}%` }}
+          viewport={{ once: true, margin: "-30px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// Diagramă: recenziile tale vs competitorii reali (etichete directe + tabelul de sub ea = vederea-tabel).
+function CompetitorChart({ report }: { report: ServiceReport }) {
+  const youReviews = report.googleData.found ? (report.googleData.reviewCount ?? 0) : 0;
+  const rows = [
+    { name: `${report.companyName} (tu)`, reviews: youReviews, you: true },
+    ...report.competitors.map((c) => ({ name: c.name, reviews: c.reviewCount, you: false })),
+  ];
+  const max = Math.max(1, ...rows.map((r) => r.reviews));
+  return (
+    <div className="mt-4">
+      <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Recenzii pe Google</p>
+      <div className="mt-2 space-y-2.5">
+        {rows.map((r) => (
+          <VizBar
+            key={r.name}
+            label={r.name}
+            value={r.reviews}
+            max={max}
+            color={r.you ? VIZ.you : VIZ.other}
+            valueLabel={r.you && !report.googleData.found ? "nu apari" : String(r.reviews)}
+            bold={r.you}
+          />
+        ))}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-4 text-[11px] text-text-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ background: VIZ.you }} /> Firma ta
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ background: VIZ.other }} /> Competitori
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Diagramă: investiție vs venit suplimentar, pe 3 și 12 luni.
+function ProjectionChart({ projection }: { projection: NonNullable<ServiceReport["projection"]> }) {
+  const max = Math.max(1, projection.invest3m, projection.return3m, projection.invest12m, projection.return12m);
+  const eur = (v: number) => `${v.toLocaleString("ro-RO")}€`;
+  return (
+    <div className="mt-4 space-y-5">
+      {[
+        { title: "Primele 3 luni", invest: projection.invest3m, ret: projection.return3m },
+        { title: "12 luni", invest: projection.invest12m, ret: projection.return12m },
+      ].map((p) => (
+        <div key={p.title}>
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-text-subtle">{p.title}</p>
+          <div className="space-y-2">
+            <VizBar label="Investiție" value={p.invest} max={max} color={VIZ.other} valueLabel={eur(p.invest)} />
+            <VizBar label="Venit suplimentar" value={p.ret} max={max} color={VIZ.gain} valueLabel={`+${eur(p.ret)}`} bold />
+          </div>
+        </div>
+      ))}
+      <div className="flex flex-wrap gap-4 text-[11px] text-text-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ background: VIZ.other }} /> Investiție
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ background: VIZ.gain }} /> Venit suplimentar
+        </span>
+      </div>
+    </div>
   );
 }
 
