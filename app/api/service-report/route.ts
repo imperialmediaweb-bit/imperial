@@ -392,6 +392,7 @@ REGULI ANTI-ȘABLON (obligatorii):
 - Ariile de diagnostic le ALEGI TU: 5-8 arii RELEVANTE pentru domeniul "${industry}" și tipul afacerii (ex: notariat → "Programări & accesibilitate", "Poziția pe «notar + oraș»"; imobiliare → "Calitatea anunțurilor", "Tururi virtuale"; service auto → "Recenzii & încredere", "Apeluri pierdute"; afacere online → "Funnel & conversie", "SEO național", "Încredere & dovezi sociale").
 - Folosește benchmarkuri din domeniu: câte recenzii are un lider local tipic, ce canale aduc clienți în acest domeniu, ticket mediu tipic — și compară-i direct ("ai 12 recenzii, un lider local are 200+").
 - Planul de acțiune = acțiuni SPECIFICE domeniului, cu cifrele lor, nu pași generici.
+- OFFLINE OBLIGATORIU: fiecare fază din actionPlan conține MINIM o acțiune offline pentru afacerea lui — procese, vânzare, oferte, fidelizarea clienților, organizare, upsell, promovare locală (presă locală, parteneriate cu alte firme din zonă, evenimente, materiale la punctul de lucru) — specifică domeniului (ex: service auto → sună clienții la 6 luni pentru revizie; salon → pachete de abonament pentru cliente fidele; restaurant → oferta de prânz pentru firmele din zonă). Nu doar digital.
 - Fii SINCER și DIRECT — cifrele contează mai mult decât politețea.
 
 TIP AFACERE: ${typeLabel}
