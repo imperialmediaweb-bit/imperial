@@ -148,6 +148,53 @@ async function fetchAnafBilant(cui: number, year: number): Promise<Partial<AnafD
   };
 }
 
+// Repară un JSON trunchiat (răspuns tăiat de limita de tokeni): închide stringurile
+// și parantezele rămase deschise, apoi — dacă tot nu merge — taie înapoi la ultima
+// valoare completă și reînchide.
+function repairJson(raw: string): string {
+  let out = "";
+  const stack: string[] = [];
+  let inStr = false;
+  let esc = false;
+  for (const ch of raw) {
+    out += ch;
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === "\\") esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') inStr = true;
+    else if (ch === "{") stack.push("}");
+    else if (ch === "[") stack.push("]");
+    else if (ch === "}" || ch === "]") stack.pop();
+  }
+  if (inStr) out += '"';
+  out = out.replace(/[,:\s]+$/, "");
+  while (stack.length) out += stack.pop();
+  out = out.replace(/,\s*([}\]])/g, "$1");
+  return out;
+}
+
+function parseReportJson(raw: string): any {
+  try {
+    return JSON.parse(raw);
+  } catch {}
+  try {
+    return JSON.parse(repairJson(raw));
+  } catch {}
+  let cut = raw;
+  for (let i = 0; i < 10; i++) {
+    const p = cut.lastIndexOf(",");
+    if (p <= 0) break;
+    cut = cut.slice(0, p);
+    try {
+      return JSON.parse(repairJson(cut));
+    } catch {}
+  }
+  throw new Error("unparseable json");
+}
+
 export async function POST(req: Request) {
   if (!rateLimit(`service-report:${getClientIp(req)}`, 5, 15 * 60_000)) {
     return NextResponse.json(
@@ -423,6 +470,8 @@ ${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu:
 
 REGULĂ CANALE LIPSĂ: pentru FIECARE canal absent sau slab (site, Google Business Profile, pagină Facebook), planul de acțiune TREBUIE să includă crearea/refacerea lui la nivel profesionist — concret ce să conțină ca să arate mai bine decât al competitorilor (nu doar „fă-ți pagină").
 
+IMPORTANT — CONCIZIE: scrie compact (constatări de 1-2 fraze, acțiuni de max 12-15 cuvinte), ca răspunsul să încapă COMPLET. Un raport complet și concis bate unul lung și tăiat.
+
 Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
 {
   "overallScore": <0-100, sănătatea digitală+comercială generală>,
@@ -453,7 +502,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
   try {
     const resp = await client.messages.create({
       model: CLAUDE_MODEL,
-      max_tokens: 3500,
+      max_tokens: 6000,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -461,7 +510,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     if (!textBlock || textBlock.type !== "text") throw new Error("empty");
     const jsonMatch = textBlock.text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("no json");
-    const parsed = JSON.parse(jsonMatch[0]);
+    const parsed = parseReportJson(jsonMatch[0]);
 
     const tr = parsed.topRecommendation;
     const pj = parsed.projection;
