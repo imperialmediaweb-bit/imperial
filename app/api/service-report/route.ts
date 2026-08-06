@@ -312,6 +312,44 @@ export async function POST(req: Request) {
     }
   }
 
+  // ─── 2b. Scanare Facebook (există pagina? ce semnale are?) ───
+  let fbData: any = null;
+  if (facebook) {
+    try {
+      const handle = facebook
+        .replace(/^https?:\/\/(www\.|m\.)?facebook\.com\//i, "")
+        .replace(/^@/, "")
+        .split(/[?#]/)[0]
+        .trim();
+      const fbUrl = /^https?:\/\//i.test(facebook)
+        ? facebook
+        : `https://www.facebook.com/${encodeURIComponent(handle)}`;
+      const res = await fetch(fbUrl, {
+        signal: AbortSignal.timeout(8000),
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+        },
+        redirect: "follow",
+      });
+      const html = (await res.text()).slice(0, 60000);
+      const ogTitle = html.match(/property=["']og:title["'][^>]*content=["']([^"']+)["']/i)?.[1]
+        ?? html.match(/content=["']([^"']+)["'][^>]*property=["']og:title["']/i)?.[1];
+      const ogDesc = html.match(/property=["']og:description["'][^>]*content=["']([^"']+)["']/i)?.[1]
+        ?? html.match(/content=["']([^"']+)["'][^>]*property=["']og:description["']/i)?.[1];
+      const followers = html.match(/([\d.,]+)\s*(?:de\s+)?(?:aprecieri|urm[ăa]ritori|followers|likes)/i)?.[1];
+      const looksDead = /page not found|pagina nu a fost g[ăa]sit|content isn'?t available|con[țt]inutul nu (?:mai )?este disponibil/i.test(html);
+      fbData = {
+        reachable: res.ok && !looksDead,
+        title: ogTitle ?? null,
+        description: ogDesc ? ogDesc.slice(0, 200) : null,
+        followers: followers ?? null,
+      };
+    } catch {
+      fbData = { reachable: false };
+    }
+  }
+
   // ─── 3. Claude generează raportul complet ───
   let client: Anthropic;
   try {
@@ -369,6 +407,11 @@ ${competitors.length > 0 ? `COMPETIȚIA LOCALĂ REALĂ (scanată acum — top fi
 
 DATE REALE SITE (scanate acum):
 ${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
+
+PREZENȚA PE FACEBOOK (scanată acum):
+${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu: ${fbData.title}` : ""}${fbData.followers ? `\n- Urmăritori/aprecieri: ~${fbData.followers}` : ""}${fbData.description ? `\n- Descriere: ${fbData.description}` : ""}` : `- Pagina declarată NU a putut fi accesată — posibil inexistentă, ștearsă sau scrisă greșit`) : "- NU are pagină de Facebook declarată"}
+
+REGULĂ CANALE LIPSĂ: pentru FIECARE canal absent sau slab (site, Google Business Profile, pagină Facebook), planul de acțiune TREBUIE să includă crearea/refacerea lui la nivel profesionist — concret ce să conțină ca să arate mai bine decât al competitorilor (nu doar „fă-ți pagină").
 
 Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
 {
