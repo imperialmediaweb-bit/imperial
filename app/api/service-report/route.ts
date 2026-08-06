@@ -436,8 +436,9 @@ export async function POST(req: Request) {
       { timeout: 30_000 }
     );
     // Server tools pot întoarce pause_turn — continuăm bucla serverului
+    // (cast: versiunea SDK-ului nu are încă "pause_turn" în tipul stop_reason)
     let visLoops = 0;
-    while (visResp.stop_reason === "pause_turn" && visLoops < 3) {
+    while ((visResp.stop_reason as string) === "pause_turn" && visLoops < 3) {
       visMessages = [...visMessages, { role: "assistant", content: visResp.content as any }];
       visResp = await client.messages.create(
         { model: CLAUDE_MODEL, max_tokens: 700, tools: visTools, messages: visMessages },
