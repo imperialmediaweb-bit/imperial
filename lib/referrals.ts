@@ -19,14 +19,17 @@ export function refCodeForEmail(email: string): string {
     .toLowerCase();
 }
 
-// Câte firme plătite au venit prin codul ăsta.
-export async function countPaidReferrals(code: string): Promise<number> {
+// Câte firme plătite au venit prin codul ăsta (fără rapoartele proprii —
+// nu te poți recomanda pe tine însuți).
+export async function countPaidReferrals(code: string, excludeEmail?: string): Promise<number> {
   const pool = getPool();
   if (!pool) return 0;
   await ensureSchema();
   const res = await pool.query(
-    `SELECT COUNT(*)::int AS n FROM service_reports WHERE paid = TRUE AND form_data->>'ref' = $1`,
-    [code]
+    `SELECT COUNT(*)::int AS n FROM service_reports
+     WHERE paid = TRUE AND form_data->>'ref' = $1
+       AND ($2::text IS NULL OR LOWER(COALESCE(email, '')) <> LOWER($2))`,
+    [code, excludeEmail ?? null]
   );
   return res.rows[0]?.n ?? 0;
 }

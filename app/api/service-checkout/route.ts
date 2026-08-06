@@ -61,13 +61,29 @@ export async function POST(req: Request) {
     labelSuffix = " (reducere recomandare)";
   }
 
-  // Invitație VIP (preț 0) → deblocare directă, fără plată
+  // Invitație VIP (preț 0) → deblocare directă, fără plată.
+  // Proprietarul e notificat la FIECARE deblocare VIP — dacă linkul scapă în public,
+  // se vede imediat din volumul de emailuri (și codul se schimbă dintr-o linie).
   if (priceRon <= 0) {
     try {
       await markServiceReportPaid(token);
     } catch (e) {
       console.error("[service-checkout] VIP unlock failed:", e);
       return NextResponse.json({ error: "Eroare temporară. Încearcă din nou." }, { status: 500 });
+    }
+    try {
+      const { sendSimpleEmail, ownerEmail } = await import("@/lib/email");
+      const fd = row.form_data ?? {};
+      await sendSimpleEmail({
+        to: ownerEmail(),
+        subject: `⭐ Deblocare VIP — ${fd.companyName ?? "?"} (${fd.city ?? "?"})`,
+        html: `<p>Raport deblocat GRATUIT prin linkul de invitație VIP:<br/>
+          <b>${fd.companyName ?? "?"}</b> · ${fd.city ?? "?"} · ${fd.industry ?? "?"}<br/>
+          <a href="${new URL(req.url).origin}${reportUrl}">Vezi raportul</a></p>
+          <p style="color:#666;font-size:13px;">Dacă primești multe astfel de emailuri de la necunoscuți, linkul VIP a scăpat — schimbăm codul.</p>`,
+      });
+    } catch (e) {
+      console.error("[service-checkout] VIP notify failed:", e);
     }
     return NextResponse.json({ url: reportUrl, vip: true });
   }

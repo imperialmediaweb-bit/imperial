@@ -42,7 +42,7 @@ export default async function ContPage({
   const [reports, notifications, referralCount, subscription] = await Promise.all([
     getServiceReportsByEmail(email).catch(() => []),
     getNotifications(email).catch(() => []),
-    countPaidReferrals(refCode).catch(() => 0),
+    countPaidReferrals(refCode, email).catch(() => 0),
     getSubscription(email).catch(() => null),
   ]);
   // Notificările devin „văzute" după ce le-a deschis pagina.

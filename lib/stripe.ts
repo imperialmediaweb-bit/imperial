@@ -2,7 +2,7 @@
 // + verificarea semnăturii de webhook cu HMAC. Cheile vin din env:
 //   STRIPE_SECRET_KEY      — sk_live_... / sk_test_...
 //   STRIPE_WEBHOOK_SECRET  — whsec_... (din dashboard, la endpoint-ul de webhook)
-//   SERVICE_REPORT_PRICE_RON — opțional, default 199
+//   SERVICE_REPORT_PRICE_RON — opțional, default 299
 
 import { createHmac, timingSafeEqual } from "crypto";
 

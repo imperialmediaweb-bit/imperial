@@ -78,6 +78,15 @@ export async function POST(req: Request) {
   if (session.mode === "subscription") {
     const email = billing.email ?? String(session.client_reference_id ?? "");
     const plan = String(session.metadata?.plan ?? "lunar");
+    // Idempotență: același eveniment relivrat → abonatul e deja activ cu același
+    // subscription id → nu mai emitem a doua factură / al doilea email.
+    if (email && session.subscription) {
+      const { getSubscription } = await import("@/lib/subscribers");
+      const cur = await getSubscription(email).catch(() => null);
+      if (cur?.active) {
+        return NextResponse.json({ received: true, duplicate: true });
+      }
+    }
     if (email) {
       try {
         await upsertSubscriber({
@@ -129,6 +138,13 @@ export async function POST(req: Request) {
   if (!/^[0-9a-f-]{36}$/i.test(token)) {
     console.error("[stripe-webhook] missing/invalid client_reference_id");
     return NextResponse.json({ received: true });
+  }
+
+  // IDEMPOTENȚĂ: Stripe livrează „at-least-once" — la retry/duplicat, raportul e deja
+  // plătit și NU mai emitem încă o factură / încă un rând de emailuri.
+  const existing = await getServiceReport(token).catch(() => null);
+  if (existing?.paid) {
+    return NextResponse.json({ received: true, duplicate: true });
   }
 
   try {

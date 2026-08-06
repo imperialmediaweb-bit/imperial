@@ -8,6 +8,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { insertServiceReport } from "@/lib/service-reports";
+import { safeExternalUrl } from "@/lib/url-guard";
+import { hasDb } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -222,6 +224,7 @@ export async function POST(req: Request) {
   const facebook = String(body?.facebook ?? "").trim();
   const monthlyClients = String(body?.monthlyClients ?? "").trim();
   const avgValue = String(body?.avgValue ?? "").trim();
+  const employees = String(body?.employees ?? "").trim();
   const mainProblem = String(body?.mainProblem ?? "").trim();
   // Atribuire: cod de recomandare / partener (vin din URL, se salvează pe raport)
   const ref = /^[a-z0-9]{4,16}$/i.test(String(body?.ref ?? "")) ? String(body.ref).toLowerCase() : "";
@@ -339,12 +342,13 @@ export async function POST(req: Request) {
     }
   }
 
-  // ─── 2. Scanare site (dacă a dat URL) ───
+  // ─── 2. Scanare site (dacă a dat URL) — doar URL-uri publice (anti-SSRF) ───
   let siteData: any = null;
   const siteUrl = website || googleData.website;
-  if (siteUrl) {
+  const safeSiteUrl = siteUrl ? safeExternalUrl(String(siteUrl)) : null;
+  if (safeSiteUrl) {
     try {
-      const withProto = /^https?:\/\//i.test(siteUrl) ? siteUrl : `https://${siteUrl}`;
+      const withProto = safeSiteUrl;
       const start = Date.now();
       const res = await fetch(withProto, {
         signal: AbortSignal.timeout(10000),
@@ -378,8 +382,9 @@ export async function POST(req: Request) {
         .split(/[?#]/)[0]
         .trim();
       const fbUrl = /^https?:\/\//i.test(facebook)
-        ? facebook
+        ? safeExternalUrl(facebook)
         : `https://www.facebook.com/${encodeURIComponent(handle)}`;
+      if (!fbUrl) throw new Error("unsafe url");
       const res = await fetch(fbUrl, {
         signal: AbortSignal.timeout(8000),
         headers: {
@@ -453,6 +458,7 @@ DATE FIRMĂ (de la proprietar):
 - Facebook declarat: ${facebook || "NU ARE / nu a dat"}
 - Clienți pe lună: ${monthlyClients || "necunoscut"}
 - Valoare medie per client: ${avgValue || "necunoscut"}
+- Angajați: ${employees || "necunoscut"}
 - Problema principală (în cuvintele lui): ${mainProblem || "nespecificată"}
 
 ${anafBlock}
@@ -592,7 +598,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     try {
       saved = await insertServiceReport({
         token,
-        formData: { companyName, city, industry, businessType, cui: cuiRaw, website, facebook, monthlyClients, avgValue, mainProblem, ref, partner },
+        formData: { companyName, city, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, employees, mainProblem, ref, partner },
         report,
       });
     } catch (e) {
@@ -600,7 +606,14 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     }
 
     if (!saved) {
-      // Fără DB — nu putem ține raportul „sub cheie", îl dăm direct (degradare grațioasă).
+      if (hasDb()) {
+        // DB configurat dar indisponibil temporar — NU dăm produsul plătit gratuit.
+        return NextResponse.json(
+          { error: "Sistemul e aglomerat momentan. Încearcă din nou în câteva minute." },
+          { status: 503 }
+        );
+      }
+      // Fără DATABASE_URL (mediu de dev) — raportul se dă direct, deblocat.
       return NextResponse.json({ locked: false, report });
     }
 

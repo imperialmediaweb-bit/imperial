@@ -37,9 +37,12 @@ export function rateLimit(key: string, limit: number, windowMs: number): boolean
 
 /** Extrage IP-ul din request (Railway/proxy aware). */
 export function getClientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown"
-  );
+  // Luăm ULTIMA valoare din x-forwarded-for: prima e setabilă de client (spoofing),
+  // ultima e adăugată de proxy-ul de încredere (Railway edge).
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) {
+    const parts = xff.split(",").map((s) => s.trim()).filter(Boolean);
+    if (parts.length > 0) return parts[parts.length - 1];
+  }
+  return req.headers.get("x-real-ip") || "unknown";
 }

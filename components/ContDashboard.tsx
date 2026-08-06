@@ -76,6 +76,7 @@ export function ContDashboard({
 }) {
   const [subSent, setSubSent] = useState(false);
   const [subLoading, setSubLoading] = useState<string | null>(null);
+  const [subError, setSubError] = useState<string | null>(null);
   const [refCopied, setRefCopied] = useState(false);
   const refLink = refCode ? `https://imperial-media.ro/service?ref=${refCode}` : "";
 
@@ -92,20 +93,28 @@ export function ContDashboard({
   // Activare abonament self-service: cu Stripe → plată recurentă; fără → cerere în admin.
   async function subscribe(plan: "lunar" | "anual") {
     setSubLoading(plan);
+    setSubError(null);
     try {
       const res = await fetch("/api/subscribe-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error || "Nu am putut porni activarea. Încearcă din nou.");
+      }
       if (data?.url) {
         window.location.href = data.url;
         return;
       }
-      setSubSent(true); // mod lansare — cererea a ajuns în admin
-    } catch {
-      setSubSent(true);
+      if (data?.launchMode) {
+        setSubSent(true); // mod lansare — cererea a ajuns în admin
+        return;
+      }
+      throw new Error("Răspuns neașteptat. Încearcă din nou.");
+    } catch (e: any) {
+      setSubError(e?.message ?? "Eroare de rețea. Încearcă din nou.");
     } finally {
       setSubLoading(null);
     }
@@ -330,6 +339,12 @@ export function ContDashboard({
                 {subLoading === "anual" ? "Se încarcă..." : "Anual — 990 lei (2 luni gratis)"}
               </button>
             </div>
+          )}
+          {subError && (
+            <p className="mx-auto mt-3 max-w-md rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs text-red-300">
+              {subError}{" "}
+              <a href="/cont" className="underline">Reîncarcă pagina</a> dacă persistă.
+            </p>
           )}
           {!subscription?.active && !subSent && (
             <p className="mt-2 text-[10px] text-text-subtle">

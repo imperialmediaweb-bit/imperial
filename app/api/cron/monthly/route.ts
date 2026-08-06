@@ -14,6 +14,7 @@ import {
 import { sendSimpleEmail } from "@/lib/email";
 import { siteConfig } from "@/lib/site";
 import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
+import { safeExternalUrl } from "@/lib/url-guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -79,9 +80,10 @@ async function scanFirm(form: any, placesKey: string | undefined): Promise<Monit
     }
   }
 
-  if (form.website) {
+  const safeUrl = form.website ? safeExternalUrl(String(form.website)) : null;
+  if (safeUrl) {
     try {
-      const url = /^https?:\/\//i.test(form.website) ? form.website : `https://${form.website}`;
+      const url = safeUrl;
       const start = Date.now();
       const res = await fetch(url, {
         signal: AbortSignal.timeout(10000),

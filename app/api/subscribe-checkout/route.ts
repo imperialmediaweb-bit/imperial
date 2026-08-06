@@ -7,6 +7,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { getClientEmail } from "@/lib/client-auth";
 import { createSubscriptionCheckoutSession, stripeEnabled } from "@/lib/stripe";
 import { insertBrief } from "@/lib/briefs";
+import { sendSimpleEmail, ownerEmail } from "@/lib/email";
 import { hasDb } from "@/lib/db";
 
 export const runtime = "nodejs";
@@ -46,7 +47,9 @@ export async function POST(req: Request) {
     }
   }
 
-  // Mod lansare: fără Stripe — cererea ajunge în admin.
+  // Mod lansare: fără Stripe — cererea ajunge în admin (DB) ȘI pe emailul proprietarului,
+  // ca să nu se piardă niciodată în tăcere.
+  let recorded = false;
   if (hasDb()) {
     try {
       await insertBrief({
@@ -56,9 +59,24 @@ export async function POST(req: Request) {
         message: `Vrea abonamentul de monitorizare (${plan}) — activare manuală până se configurează Stripe.`,
         source: "abonament-interes",
       });
+      recorded = true;
     } catch (e) {
       console.error("[subscribe-checkout] lead insert failed:", e);
     }
+  }
+  try {
+    await sendSimpleEmail({
+      to: ownerEmail(),
+      subject: `🔄 Cerere abonament (${plan}) — ${email}`,
+      html: `<p><b>${email}</b> vrea abonamentul de monitorizare (<b>${plan}</b>). Activare manuală până se configurează Stripe.</p>`,
+      replyTo: email,
+    });
+    recorded = true;
+  } catch (e) {
+    console.error("[subscribe-checkout] owner email failed:", e);
+  }
+  if (!recorded) {
+    return NextResponse.json({ error: "Nu am putut înregistra cererea. Încearcă din nou." }, { status: 500 });
   }
   return NextResponse.json({ launchMode: true });
 }
