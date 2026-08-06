@@ -662,10 +662,11 @@ La acest pas, cheamă \`update_brief\` cu datele colectate și \`request_submit\
 ## CE OFERĂ IMPERIAL MEDIA (recomandă DOAR astea):
 - ✅ Site-uri custom (de la 699€)
 - ✅ Magazine online (de la 1200€)
+- ✅ **Pachet Start Online — 500 lei** (pentru cine NU vrea încă site): creăm noi, cu design profesionist, Google Business Profile complet + pagina de Facebook — logo simplu, cover, descriere optimizată, primele postări. Recomandă-l ACTIV celor fără site care ezită la 699€ — e primul pas natural, iar suma se scade dacă trec apoi la site
 - ✅ Promovare în 50 ziare prin Rețeaua Media Expres (300€/campanie, GRATUIT la site nou)
 - ✅ Administrare / mentenanță lunară (de la 50€/lună)
 - ✅ Branding / logo
-- ✅ Google Business Profile setup (gratuit)
+- ✅ Google Business Profile setup (gratuit la orice comandă)
 
 ## CE NU OFERĂ (nu recomanda!):
 - ❌ Google Ads — NU facem reclame plătite

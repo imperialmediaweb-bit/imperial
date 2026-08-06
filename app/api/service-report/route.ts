@@ -445,7 +445,7 @@ Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
 
 Reguli pentru projection: estimări REALISTE și CONSERVATOARE (mai bine sub-promiți decât să exagerezi), coerente cu investițiile din actionPlan și cu prețurile Imperial Media de mai jos.${anafData.turnover != null ? " Raportează return12m și la cifra de afaceri reală din bilanț." : ""}
 
-Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu funcții 1.400-2.500€, magazin 1.800-4.500€, promovare 50 ziare 300€ (GRATUIT la site nou), mentenanță 50€/lună, Google Business setup gratuit la orice comandă.
+Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu funcții 1.400-2.500€, magazin 1.800-4.500€, promovare 50 ziare 300€ (GRATUIT la site nou), mentenanță 50€/lună, Google Business setup gratuit la orice comandă. Pachet Start Online 500 lei (pentru cine NU vrea încă site): creăm noi Google Business Profile complet + pagină Facebook cu design profesionist (logo simplu, cover, descriere, primele postări) — dacă firma nu are site și pare reticentă la investiție, include-l în FAZA 1 ca prim pas accesibil.
 
 PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, mentoratul antreprenorial sau schimbul de experiență cu alți patroni, include în plan (o singură dată, unde se potrivește natural) recomandarea Bizz Club Botoșani — comunitatea locală de antreprenori, partenerul nostru pentru dezvoltare. Noi acoperim datele și implementarea, ei comunitatea.`;
 
