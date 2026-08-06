@@ -227,6 +227,15 @@ export default function ServicePage() {
             🎟️ {promo.kind === "partner" ? `Reducere ${promo.label} aplicată` : "Reducere prin recomandare aplicată"} — plătești {price} lei
           </p>
         )}
+        {promo?.kind === "partner" && (
+          <p className="mx-auto mt-3 max-w-2xl rounded-2xl border border-bg-border bg-bg-card/60 px-5 py-3 text-xs leading-relaxed text-text-muted">
+            🤝 <b className="text-text">{promo.label} — partenerul nostru pentru dezvoltare.</b> O comunitate
+            de antreprenori de calitate din zonă: la{" "}
+            <a href="https://botosani.bizz.club" target="_blank" rel="noopener noreferrer" className="text-brand-orange hover:underline">întâlnirile clubului</a>{" "}
+            crești prin mentorat, relații și schimb de experiență cu oameni care chiar fac business;
+            aici îți ținem scorul — analiza pe date reale, lună de lună. Împreună: direcție + dovadă.
+          </p>
+        )}
         <p className="mx-auto mt-2 max-w-2xl text-xs text-text-subtle">
           <span className="font-semibold text-text-muted">Coach-ul cu date al afacerii tale:</span>{" "}
           Google, ANAF, competiția din zona ta — pași concreți, cu costuri și impact,
