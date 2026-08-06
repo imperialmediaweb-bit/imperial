@@ -163,8 +163,11 @@ export default function ServicePage() {
               {step === 0 && (
                 <motion.div key="s0" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} className="grid gap-4">
                   <div>
-                    <label className="label">Numele firmei *</label>
+                    <label className="label">Numele afacerii (brandul) *</label>
                     <input className="input" placeholder="ex: Pizzeria La Mario" value={form.companyName} onChange={(e) => set("companyName", e.target.value)} />
+                    <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                      Numele sub care te știu clienții și apari pe Google — nu cel de la ANAF (ex: brandul „Imperial Media", nu „SC Legio Web SRL").
+                    </p>
                   </div>
                   <div>
                     <label className="label">Orașul *</label>

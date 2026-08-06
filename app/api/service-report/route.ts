@@ -182,7 +182,7 @@ DATE FIRMĂ (de la proprietar):
 - Problema principală (în cuvintele lui): ${mainProblem || "nespecificată"}
 
 DATE REALE GOOGLE (scanate acum):
-${googleData.found ? `- Găsit pe Google Maps: DA\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : `- NU a fost găsit pe Google Maps → NU are Google Business Profile (problemă gravă)`}
+${googleData.found ? `- Găsit pe Google Maps: DA\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : `- NU a fost găsit pe Google Maps sub numele "${companyName}" în ${city} → fie nu are Google Business Profile (problemă gravă), fie e listat sub alt nume. Formulează constatarea prudent: "Nu te-am găsit pe Google sub acest nume — dacă ai profil sub alt nume, e un semn că brandul tău nu e consecvent; dacă nu ai deloc, pierzi clienții care caută pe Maps."`}
 
 COMPETIȚIA LOCALĂ REALĂ (scanată acum — top firme din "${industry} ${city}" pe Google):
 ${competitors.length > 0 ? competitors.map((c) => `- ${c.name}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n") : "- Nu s-au putut scana competitorii"}
