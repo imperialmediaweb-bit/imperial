@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -19,13 +19,25 @@ import {
   Zap,
   Mail,
   Stethoscope,
+  MapPin,
+  ShieldCheck,
+  Store,
+  Laptop,
+  Shuffle,
 } from "lucide-react";
 import type { ServiceReport } from "@/app/api/service-report/route";
 
 const INDUSTRIES = [
   "Restaurant / HoReCa", "Salon / Beauty", "Cabinet medical / Stomatologie",
   "Construcții / Instalații", "Magazin / Comerț", "Imobiliare",
-  "Auto / Service", "Fitness / Sport", "Educație / Cursuri", "Altceva",
+  "Auto / Service", "Avocat / Juridic", "Notariat", "Contabilitate",
+  "Fitness / Sport", "Educație / Cursuri", "IT / Servicii online", "Altceva",
+];
+
+const BUSINESS_TYPES = [
+  { key: "local", label: "Local (punct fizic)", icon: Store },
+  { key: "online", label: "Online", icon: Laptop },
+  { key: "ambele", label: "Ambele", icon: Shuffle },
 ];
 const CLIENTS_OPTS = ["Sub 20 / lună", "20-50 / lună", "50-100 / lună", "Peste 100 / lună"];
 const VALUE_OPTS = ["Sub 50€", "50-200€", "200-500€", "Peste 500€"];
@@ -33,7 +45,8 @@ const EMPLOYEE_OPTS = ["Doar eu", "2-5", "6-15", "Peste 15"];
 
 const LOADING_STEPS = [
   "Scanez firma pe Google...",
-  "Analizez competiția din orașul tău...",
+  "Verific firma la ANAF (bilanț, CAEN, TVA)...",
+  "Analizez competiția din domeniul tău...",
   "Verific site-ul și prezența online...",
   "Calculez pierderile lunare...",
   "Construiesc planul de acțiune...",
@@ -42,11 +55,14 @@ const LOADING_STEPS = [
 export default function ServicePage() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
-    companyName: "", city: "", industry: "",
+    businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "",
     website: "", facebook: "",
     monthlyClients: "", avgValue: "", employees: "",
     mainProblem: "",
   });
+  const [suggestions, setSuggestions] = useState<Array<{ placeId: string; name: string; detail: string }>>([]);
+  const [showSug, setShowSug] = useState(false);
+  const sugTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [report, setReport] = useState<ServiceReport | null>(null);
@@ -57,8 +73,39 @@ export default function ServicePage() {
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
+  // Autocomplete Google Maps pe numele afacerii
+  function onNameChange(v: string) {
+    setForm((f) => ({ ...f, companyName: v, placeId: "" }));
+    if (sugTimer.current) clearTimeout(sugTimer.current);
+    if (v.trim().length < 3) {
+      setSuggestions([]);
+      setShowSug(false);
+      return;
+    }
+    sugTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/place-suggest?q=${encodeURIComponent(v.trim())}&city=${encodeURIComponent(form.city.trim())}`
+        );
+        const data = await res.json();
+        setSuggestions(data.suggestions ?? []);
+        setShowSug((data.suggestions ?? []).length > 0);
+      } catch {
+        setSuggestions([]);
+      }
+    }, 400);
+  }
+
+  function pickSuggestion(s: { placeId: string; name: string; detail: string }) {
+    setForm((f) => ({ ...f, companyName: s.name, placeId: s.placeId }));
+    setSuggestions([]);
+    setShowSug(false);
+  }
+
+  useEffect(() => () => { if (sugTimer.current) clearTimeout(sugTimer.current); }, []);
+
   const canNext =
-    step === 0 ? form.companyName.trim() && form.city.trim() && form.industry
+    step === 0 ? form.businessType && form.companyName.trim() && form.city.trim() && form.industry
     : step === 1 ? true
     : step === 2 ? form.monthlyClients && form.avgValue
     : true;
@@ -101,7 +148,7 @@ export default function ServicePage() {
           selectedPackage: "personalizat",
           industry: form.industry,
           currentSite: form.website,
-          message: `RAPORT SERVICE — Scor: ${report.overallScore}/100 | Pierderi: ~${report.lostClientsPerMonth} clienți/lună ≈ ${report.lostRevenuePerMonth}€/lună\nProblema: ${form.mainProblem}\nRezumat: ${report.summary}`,
+          message: `RAPORT SERVICE — Scor: ${report.overallScore}/100 | Pierderi: ~${report.lostClientsPerMonth} clienți/lună ≈ ${report.lostRevenuePerMonth}€/lună\nTip: ${form.businessType} | CUI: ${form.cui || "-"} | Firmă ANAF: ${report.anafData?.legalName || "-"}${report.anafData?.turnover != null ? ` | CA ${report.anafData.balanceYear}: ${report.anafData.turnover.toLocaleString("ro-RO")} lei` : ""}\nProblema: ${form.mainProblem}\nRezumat: ${report.summary}`,
           source: "service-report",
         }),
       });
@@ -131,8 +178,9 @@ export default function ServicePage() {
         </h1>
         <p className="section-subtitle mx-auto">
           Completează datele firmei și primești pe loc analiza completă:
-          prezența online, competiția din orașul tău, câți clienți pierzi lunar
-          și planul exact de acțiune pe 12 luni.
+          prezența online, competiția reală, cifrele oficiale de la ANAF,
+          câți clienți pierzi lunar și planul exact de acțiune pe 12 luni —
+          adaptat pe domeniul tău, de la imobiliare la service auto sau notariat.
         </p>
         <p className="mt-3 text-sm font-semibold text-brand-orangeLight">
           Raport de consultanță în valoare de 299€ — GRATUIT în perioada de lansare
@@ -163,15 +211,51 @@ export default function ServicePage() {
               {step === 0 && (
                 <motion.div key="s0" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} className="grid gap-4">
                   <div>
-                    <label className="label">Numele afacerii (brandul) *</label>
-                    <input className="input" placeholder="ex: Pizzeria La Mario" value={form.companyName} onChange={(e) => set("companyName", e.target.value)} />
-                    <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
-                      Numele sub care te știu clienții și apari pe Google — nu cel de la ANAF (ex: brandul „Imperial Media", nu „SC Legio Web SRL").
-                    </p>
+                    <label className="label">Cum lucrezi cu clienții? *</label>
+                    <div className="flex flex-wrap gap-2">
+                      {BUSINESS_TYPES.map((t) => (
+                        <button key={t.key} type="button" onClick={() => set("businessType", t.key)}
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition ${
+                            form.businessType === t.key ? "border-brand-orange bg-brand-orange/15 text-text" : "border-bg-border bg-bg-soft/60 text-text-muted hover:border-brand-orange/50"
+                          }`}>
+                          <t.icon className="h-3.5 w-3.5" /> {t.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <label className="label">Orașul *</label>
                     <input className="input" placeholder="ex: Botoșani" value={form.city} onChange={(e) => set("city", e.target.value)} />
+                  </div>
+                  <div className="relative">
+                    <label className="label">Numele afacerii *</label>
+                    <input className="input" placeholder="ex: Pizzeria La Mario" value={form.companyName}
+                      onChange={(e) => onNameChange(e.target.value)}
+                      onBlur={() => setTimeout(() => setShowSug(false), 200)}
+                      onFocus={() => suggestions.length > 0 && setShowSug(true)} />
+                    {form.placeId ? (
+                      <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-green-400">
+                        <CheckCircle2 className="h-3 w-3" /> Găsit pe Google Maps — analizăm profilul exact
+                      </p>
+                    ) : (
+                      <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                        Scrie numele sub care te știu clienții și alege-l din listă. Dacă brandul diferă de firma de la ANAF, scrie brandul.
+                      </p>
+                    )}
+                    {showSug && suggestions.length > 0 && (
+                      <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-bg-border bg-bg-card shadow-card">
+                        {suggestions.map((s) => (
+                          <button key={s.placeId} type="button" onClick={() => pickSuggestion(s)}
+                            className="flex w-full items-start gap-2 px-3.5 py-2.5 text-left transition hover:bg-brand-orange/10">
+                            <MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-orange" />
+                            <span>
+                              <span className="block text-sm font-semibold text-text">{s.name}</span>
+                              {s.detail && <span className="block text-[11px] text-text-subtle">{s.detail}</span>}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="label">Domeniul de activitate *</label>
@@ -185,6 +269,14 @@ export default function ServicePage() {
                         </button>
                       ))}
                     </div>
+                  </div>
+                  <div>
+                    <label className="label">CUI / cod fiscal (opțional)</label>
+                    <input className="input" placeholder="ex: 12345678 — analizăm firma pe datele oficiale ANAF" inputMode="numeric"
+                      value={form.cui} onChange={(e) => set("cui", e.target.value.replace(/[^\dRrOo]/g, ""))} />
+                    <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                      Cu CUI-ul verificăm firma la ANAF: cifră de afaceri, profit, CAEN, TVA — raportul se calculează pe cifrele tale oficiale.
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -309,6 +401,42 @@ export default function ServicePage() {
                 </div>
               </div>
             </div>
+
+            {/* Firma verificată ANAF */}
+            {report.anafData?.found && (
+              <div className="rounded-3xl border border-green-500/25 bg-green-500/5 p-5">
+                <p className="inline-flex items-center gap-1.5 text-sm font-bold text-green-300">
+                  <ShieldCheck className="h-4 w-4" /> Firmă verificată la ANAF
+                </p>
+                <p className="mt-1.5 text-sm text-text">
+                  {report.anafData.legalName}
+                  {report.anafData.regYear && <span className="text-text-muted"> · din {report.anafData.regYear}</span>}
+                  {" · "}
+                  <span className={report.anafData.active ? "text-green-400" : "font-bold text-red-400"}>
+                    {report.anafData.active ? "activă" : "INACTIVĂ"}
+                  </span>
+                  {" · "}
+                  <span className="text-text-muted">{report.anafData.vatPayer ? "plătitoare de TVA" : "neplătitoare de TVA"}</span>
+                </p>
+                {report.anafData.caen && (
+                  <p className="mt-1 text-xs text-text-muted">
+                    CAEN {report.anafData.caen}{report.anafData.caenLabel ? ` — ${report.anafData.caenLabel}` : ""}
+                  </p>
+                )}
+                {report.anafData.turnover != null && (
+                  <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 border-t border-green-500/15 pt-3 text-xs">
+                    <span className="text-text"><b>Bilanț {report.anafData.balanceYear}:</b></span>
+                    <span className="text-text-muted">Cifră de afaceri: <b className="text-text">{report.anafData.turnover.toLocaleString("ro-RO")} lei</b></span>
+                    {report.anafData.profit != null && (
+                      <span className="text-text-muted">Profit net: <b className={report.anafData.profit >= 0 ? "text-green-400" : "text-red-400"}>{report.anafData.profit.toLocaleString("ro-RO")} lei</b></span>
+                    )}
+                    {report.anafData.employees != null && (
+                      <span className="text-text-muted">Angajați: <b className="text-text">{report.anafData.employees}</b></span>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Pierderi */}
             {report.lostClientsPerMonth > 0 && (

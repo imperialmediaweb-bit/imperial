@@ -1,5 +1,5 @@
-// Generator de raport digital pentru afaceri.
-// Primește datele firmei → scanează Google + site-ul → Claude generează
+// Generator de raport de consultanță pentru afaceri.
+// Primește datele firmei → scanează Google + ANAF + site-ul → Claude generează
 // raport complet: diagnostic, scoruri, pierderi estimate, plan de acțiune.
 
 import { NextResponse } from "next/server";
@@ -9,13 +9,28 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export type Competitor = {
   name: string;
   rating: number | null;
   reviewCount: number;
   hasWebsite: boolean;
+};
+
+export type AnafData = {
+  found: boolean;
+  legalName?: string;
+  active?: boolean;
+  vatPayer?: boolean;
+  caen?: string;
+  caenLabel?: string;
+  regYear?: string;
+  address?: string;
+  balanceYear?: number;
+  turnover?: number;
+  profit?: number;
+  employees?: number;
 };
 
 export type ServiceReport = {
@@ -29,6 +44,7 @@ export type ServiceReport = {
     reviewCount?: number;
     hasWebsite?: boolean;
   };
+  anafData: AnafData;
   competitors: Competitor[];
   diagnostics: Array<{
     area: string;
@@ -45,6 +61,53 @@ export type ServiceReport = {
   }>;
   summary: string;
 };
+
+// ─── ANAF: registru TVA (nume legal, stare, TVA, CAEN) ───
+async function fetchAnafTva(cui: number): Promise<Partial<AnafData>> {
+  const today = new Date().toISOString().slice(0, 10);
+  const res = await fetch("https://webservicesp.anaf.ro/PlatitorTvaWs/api/v9/ws/tva", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify([{ cui, data: today }]),
+    signal: AbortSignal.timeout(6000),
+  });
+  const data = await res.json();
+  const f = data?.found?.[0];
+  if (!f?.date_generale?.denumire) return { found: false };
+  const dg = f.date_generale;
+  return {
+    found: true,
+    legalName: String(dg.denumire),
+    active: !(f.stare_inactiv?.statusInactivi === true),
+    vatPayer: f.inregistrare_scop_Tva?.scpTVA === true,
+    caen: dg.cod_CAEN ? String(dg.cod_CAEN) : undefined,
+    regYear: dg.data_inregistrare ? String(dg.data_inregistrare).slice(0, 4) : undefined,
+    address: dg.adresa ? String(dg.adresa).slice(0, 160) : undefined,
+  };
+}
+
+// ─── ANAF: bilanț publicat (cifră de afaceri, profit, salariați) ───
+async function fetchAnafBilant(cui: number, year: number): Promise<Partial<AnafData> | null> {
+  const res = await fetch(`https://webservicesp.anaf.ro/bilant?an=${year}&cui=${cui}`, {
+    signal: AbortSignal.timeout(6000),
+  });
+  const data = await res.json();
+  const indicators: any[] = Array.isArray(data?.i) ? data.i : [];
+  if (indicators.length === 0) return null;
+  const find = (needle: string) =>
+    indicators.find((x) => String(x.val_den_indicator ?? "").toLowerCase().includes(needle));
+  const turnover = find("cifra de afaceri");
+  const profit = find("profit sau pierdere net") ?? find("profit");
+  const employees = find("salariati") ?? find("salariați");
+  return {
+    balanceYear: year,
+    turnover: turnover ? Number(turnover.val_indicator) : undefined,
+    profit: profit ? Number(profit.val_indicator) : undefined,
+    employees: employees ? Number(employees.val_indicator) : undefined,
+    caenLabel: data?.den_caen ? String(data.den_caen) : undefined,
+    caen: data?.caen ? String(data.caen) : undefined,
+  };
+}
 
 export async function POST(req: Request) {
   if (!rateLimit(`service-report:${getClientIp(req)}`, 5, 15 * 60_000)) {
@@ -64,6 +127,11 @@ export async function POST(req: Request) {
   const companyName = String(body?.companyName ?? "").trim();
   const city = String(body?.city ?? "").trim();
   const industry = String(body?.industry ?? "").trim();
+  const businessType = ["local", "online", "ambele"].includes(body?.businessType)
+    ? (body.businessType as string)
+    : "local";
+  const placeId = String(body?.placeId ?? "").trim();
+  const cuiRaw = String(body?.cui ?? "").replace(/\D/g, "");
   const website = String(body?.website ?? "").trim();
   const facebook = String(body?.facebook ?? "").trim();
   const monthlyClients = String(body?.monthlyClients ?? "").trim();
@@ -72,7 +140,7 @@ export async function POST(req: Request) {
 
   if (!companyName || !city || !industry) {
     return NextResponse.json(
-      { error: "Numele firmei, orașul și domeniul sunt obligatorii." },
+      { error: "Numele afacerii, orașul și domeniul sunt obligatorii." },
       { status: 400 }
     );
   }
@@ -81,36 +149,85 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Serviciul e temporar indisponibil." }, { status: 503 });
   }
 
-  // ─── 1. Scanare Google Places (date reale) ───
-  let googleData: any = { found: false };
   const placesKey = process.env.GOOGLE_PLACES_API_KEY;
+
+  // ─── 1. Scanare Google (exactă cu place_id, altfel căutare text) ───
+  let googleData: any = { found: false };
   if (placesKey) {
     try {
-      const q = encodeURIComponent(`${companyName} ${city}`);
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${q}&inputtype=textquery&fields=name,rating,user_ratings_total,website,business_status&key=${placesKey}`,
-        { signal: AbortSignal.timeout(8000) }
-      );
-      const data = await res.json();
-      if (data.candidates?.length > 0) {
-        const p = data.candidates[0];
-        googleData = {
-          found: true,
-          name: p.name,
-          rating: p.rating ?? null,
-          reviewCount: p.user_ratings_total ?? 0,
-          hasWebsite: !!p.website,
-          website: p.website ?? null,
-        };
+      if (placeId) {
+        const res = await fetch(
+          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(placeId)}&fields=name,rating,user_ratings_total,website,business_status&language=ro&key=${placesKey}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const data = await res.json();
+        const p = data?.result;
+        if (p?.name) {
+          googleData = {
+            found: true,
+            exact: true,
+            name: p.name,
+            rating: p.rating ?? null,
+            reviewCount: p.user_ratings_total ?? 0,
+            hasWebsite: !!p.website,
+            website: p.website ?? null,
+          };
+        }
+      }
+      if (!googleData.found) {
+        const q = encodeURIComponent(`${companyName} ${city}`);
+        const res = await fetch(
+          `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${q}&inputtype=textquery&fields=name,rating,user_ratings_total,website,business_status&key=${placesKey}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const data = await res.json();
+        if (data.candidates?.length > 0) {
+          const p = data.candidates[0];
+          googleData = {
+            found: true,
+            exact: false,
+            name: p.name,
+            rating: p.rating ?? null,
+            reviewCount: p.user_ratings_total ?? 0,
+            hasWebsite: !!p.website,
+            website: p.website ?? null,
+          };
+        }
       }
     } catch (e) {
       console.warn("[service-report] Places scan failed:", e);
     }
   }
 
-  // ─── 1b. Scanare COMPETIȚIE locală (top 5 din domeniu + oraș) ───
+  // ─── 1b. Verificare ANAF pe CUI: firmă + CAEN + cifră de afaceri ───
+  let anafData: AnafData = { found: false };
+  if (cuiRaw.length >= 2 && cuiRaw.length <= 10) {
+    const cui = Number(cuiRaw);
+    try {
+      const tva = await fetchAnafTva(cui);
+      anafData = { ...anafData, ...tva };
+    } catch (e) {
+      console.warn("[service-report] ANAF TVA failed:", e);
+    }
+    if (anafData.found) {
+      const lastYear = new Date().getFullYear() - 1;
+      for (const year of [lastYear, lastYear - 1]) {
+        try {
+          const bilant = await fetchAnafBilant(cui, year);
+          if (bilant) {
+            anafData = { ...anafData, ...bilant };
+            break;
+          }
+        } catch (e) {
+          console.warn(`[service-report] ANAF bilant ${year} failed:`, e);
+        }
+      }
+    }
+  }
+
+  // ─── 1c. Competiția locală (doar pentru afaceri cu punct fizic) ───
   let competitors: Competitor[] = [];
-  if (placesKey) {
+  if (placesKey && businessType !== "online") {
     try {
       const cq = encodeURIComponent(`${industry} ${city}`);
       const res = await fetch(
@@ -118,8 +235,9 @@ export async function POST(req: Request) {
         { signal: AbortSignal.timeout(8000) }
       );
       const data = await res.json();
+      const ownName = (googleData.name ?? companyName).toLowerCase();
       competitors = (data.results ?? [])
-        .filter((p: any) => p.name?.toLowerCase() !== companyName.toLowerCase())
+        .filter((p: any) => p.name?.toLowerCase() !== ownName)
         .slice(0, 4)
         .map((p: any) => ({
           name: String(p.name ?? ""),
@@ -169,10 +287,38 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Serviciul e temporar indisponibil." }, { status: 503 });
   }
 
-  const prompt = `Ești consultant digital senior. Generează un raport de diagnostic digital pentru această afacere din România. Fii SINCER, DIRECT și CONCRET — cifrele reale contează mai mult decât politețea.
+  const typeLabel =
+    businessType === "online"
+      ? "AFACERE ONLINE (fără punct fizic — clienții vin din online, nu din trafic local)"
+      : businessType === "ambele"
+        ? "AFACERE MIXTĂ (punct fizic + vânzare/clienți online)"
+        : "AFACERE LOCALĂ (punct fizic — clienții vin din zonă)";
+
+  const anafBlock = anafData.found
+    ? `DATE OFICIALE ANAF (verificate acum pe CUI):
+- Denumire legală: ${anafData.legalName}
+- Stare: ${anafData.active ? "ACTIVĂ" : "INACTIVĂ (red flag major — menționează!)"}
+- Plătitor TVA: ${anafData.vatPayer ? "DA" : "NU"}
+- CAEN: ${anafData.caen ?? "necunoscut"}${anafData.caenLabel ? ` (${anafData.caenLabel})` : ""}
+- Înregistrată din: ${anafData.regYear ?? "necunoscut"}
+${anafData.turnover != null ? `- BILANȚ ${anafData.balanceYear}: cifră de afaceri ${anafData.turnover.toLocaleString("ro-RO")} lei · ${anafData.profit != null ? `profit net ${anafData.profit.toLocaleString("ro-RO")} lei` : "profit necunoscut"} · ${anafData.employees != null ? `${anafData.employees} salariați` : "salariați necunoscut"}
+IMPORTANT: calculează pierderile CA PROCENT din cifra de afaceri reală și exprimă-le și în lei/an (1 EUR ≈ 5 lei).` : "- Bilanț: nedepus / indisponibil"}`
+    : "DATE ANAF: nu s-a dat CUI sau firma nu a fost găsită — lucrează cu cifrele declarate de proprietar.";
+
+  const prompt = `Ești un consultant de afaceri cu 10+ ani de experiență STRICT în domeniul "${industry}" din România. Cunoști în detaliu cum funcționează acest tip de afacere: canalele reale de achiziție de clienți, marjele tipice, sezonalitatea, greșelile clasice ale patronilor din domeniu și ce fac liderii pieței diferit. Generează un raport de consultanță pentru afacerea de mai jos.
+
+REGULI ANTI-ȘABLON (obligatorii):
+- INTERZIS sfaturi generice ("e important să ai site", "fii activ pe social media"). Fiecare constatare pleacă de la DATELE REALE de mai jos: cifrele lor, ratingul lor vs competitori, site-ul lor scanat, problema descrisă de ei.
+- Ariile de diagnostic le ALEGI TU: 5-8 arii RELEVANTE pentru domeniul "${industry}" și tipul afacerii (ex: notariat → "Programări & accesibilitate", "Poziția pe «notar + oraș»"; imobiliare → "Calitatea anunțurilor", "Tururi virtuale"; service auto → "Recenzii & încredere", "Apeluri pierdute"; afacere online → "Funnel & conversie", "SEO național", "Încredere & dovezi sociale").
+- Folosește benchmarkuri din domeniu: câte recenzii are un lider local tipic, ce canale aduc clienți în acest domeniu, ticket mediu tipic — și compară-i direct ("ai 12 recenzii, un lider local are 200+").
+- Planul de acțiune = acțiuni SPECIFICE domeniului, cu cifrele lor, nu pași generici.
+- Fii SINCER și DIRECT — cifrele contează mai mult decât politețea.
+
+TIP AFACERE: ${typeLabel}
+${businessType === "online" ? "ATENȚIE: fiind afacere online, NU penaliza lipsa unui punct pe Google Maps și NU analiza competiția locală din oraș — analizează prezența în căutări, funnel-ul online, încrederea și competiția din nișă la nivel național." : ""}
 
 DATE FIRMĂ (de la proprietar):
-- Nume: ${companyName}
+- Brand: ${companyName}
 - Oraș: ${city}
 - Domeniu: ${industry}
 - Site declarat: ${website || "NU ARE / nu a dat"}
@@ -181,35 +327,31 @@ DATE FIRMĂ (de la proprietar):
 - Valoare medie per client: ${avgValue || "necunoscut"}
 - Problema principală (în cuvintele lui): ${mainProblem || "nespecificată"}
 
-DATE REALE GOOGLE (scanate acum):
-${googleData.found ? `- Găsit pe Google Maps: DA\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : `- NU a fost găsit pe Google Maps sub numele "${companyName}" în ${city} → fie nu are Google Business Profile (problemă gravă), fie e listat sub alt nume. Formulează constatarea prudent: "Nu te-am găsit pe Google sub acest nume — dacă ai profil sub alt nume, e un semn că brandul tău nu e consecvent; dacă nu ai deloc, pierzi clienții care caută pe Maps."`}
+${anafBlock}
 
-COMPETIȚIA LOCALĂ REALĂ (scanată acum — top firme din "${industry} ${city}" pe Google):
-${competitors.length > 0 ? competitors.map((c) => `- ${c.name}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n") : "- Nu s-au putut scana competitorii"}
+DATE REALE GOOGLE (scanate acum):
+${googleData.found ? `- Găsit pe Google Maps: DA${googleData.exact ? " (profil confirmat de utilizator — date exacte)" : ""}\n- Nume profil: ${googleData.name}\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : businessType === "online" ? `- Nu are profil Google Maps (normal pentru afacere online — nu penaliza)` : `- NU a fost găsit pe Google Maps sub numele "${companyName}" în ${city} → fie nu are Google Business Profile (problemă gravă), fie e listat sub alt nume. Formulează constatarea prudent.`}
+
+${competitors.length > 0 ? `COMPETIȚIA LOCALĂ REALĂ (scanată acum — top firme din "${industry} ${city}" pe Google):\n${competitors.map((c) => `- ${c.name}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n")}` : ""}
 
 DATE REALE SITE (scanate acum):
 ${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
 
 Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
 {
-  "overallScore": <0-100, sănătatea digitală generală>,
-  "lostClientsPerMonth": <estimare realistă clienți pierduți lunar din lipsa prezenței online>,
-  "lostRevenuePerMonth": <lostClients × valoarea medie (dacă știută, altfel estimează pentru industrie) în EUR>,
+  "overallScore": <0-100, sănătatea digitală+comercială generală>,
+  "lostClientsPerMonth": <estimare realistă clienți pierduți lunar>,
+  "lostRevenuePerMonth": <lostClients × valoarea medie (reală sau tipică industriei) în EUR>,
   "diagnostics": [
-    {"area":"Site web","emoji":"🌐","status":"good|warning|bad","finding":"constatare concretă 1 frază"},
-    {"area":"Google Business","emoji":"📍","status":"...","finding":"..."},
-    {"area":"Recenzii","emoji":"⭐","status":"...","finding":"... (compară cu competiția!)"},
-    {"area":"Social Media","emoji":"📱","status":"...","finding":"..."},
-    {"area":"Vizibilitate SEO","emoji":"🔍","status":"...","finding":"..."},
-    {"area":"Procese & vânzare (offline)","emoji":"🏪","status":"...","finding":"analiza fluxului de clienți/organizării — dedusă din problema descrisă + industrie"}
+    {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 1-2 fraze"}
   ],
   "actionPlan": [
-    {"phase":"FAZA 1 — URGENT (luna 1)","title":"...","actions":["...","..."],"investment":"X-Y€","impact":"+N clienți/lună estimat"},
+    {"phase":"FAZA 1 — URGENT (luna 1)","title":"...","actions":["acțiune specifică domeniului","..."],"investment":"X-Y€","impact":"+N clienți/lună estimat"},
     {"phase":"FAZA 2 — CREȘTERE (lunile 2-3)","title":"...","actions":["..."],"investment":"...","impact":"..."},
     {"phase":"FAZA 3 — CONSOLIDARE (lunile 4-6)","title":"...","actions":["..."],"investment":"...","impact":"..."},
-    {"phase":"FAZA 4 — DOMINARE (lunile 6-12)","title":"...","actions":["..."],"investment":"...","impact":"poziție de lider local"}
+    {"phase":"FAZA 4 — DOMINARE (lunile 6-12)","title":"...","actions":["..."],"investment":"...","impact":"poziție de lider"}
   ],
-  "summary": "2-3 fraze sincere: starea actuală + ce se întâmplă dacă implementează planul"
+  "summary": "2-3 fraze sincere: starea actuală + ce se întâmplă dacă implementează planul${anafData.turnover != null ? " + raportează pierderile la cifra de afaceri reală" : ""}"
 }
 
 Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu funcții 1.400-2.500€, magazin 1.800-4.500€, promovare 50 ziare 300€ (GRATUIT la site nou), mentenanță 50€/lună, Google Business setup gratuit la orice comandă.`;
@@ -217,7 +359,7 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
   try {
     const resp = await client.messages.create({
       model: CLAUDE_MODEL,
-      max_tokens: 2048,
+      max_tokens: 3000,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -238,9 +380,10 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
         reviewCount: googleData.reviewCount ?? undefined,
         hasWebsite: googleData.hasWebsite ?? undefined,
       },
+      anafData,
       competitors,
       diagnostics: Array.isArray(parsed.diagnostics)
-        ? parsed.diagnostics.slice(0, 7).map((d: any) => ({
+        ? parsed.diagnostics.slice(0, 8).map((d: any) => ({
             area: String(d.area ?? ""),
             emoji: String(d.emoji ?? "📊"),
             status: ["good", "warning", "bad"].includes(d.status) ? d.status : "warning",
@@ -256,7 +399,7 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
             impact: String(p.impact ?? ""),
           }))
         : [],
-      summary: String(parsed.summary ?? "").slice(0, 500),
+      summary: String(parsed.summary ?? "").slice(0, 600),
     };
 
     return NextResponse.json(report);
