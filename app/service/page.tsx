@@ -60,6 +60,7 @@ const SCAN_FEED = [
   { icon: "🥊", text: "Scanez competitorii din zona ta, unul câte unul" },
   { icon: "⭐", text: "Compar recenziile tale cu ale fiecărui competitor" },
   { icon: "🌐", text: "Testez site-ul: viteză, HTTPS, adaptare pe mobil" },
+  { icon: "🤖", text: "Întreb AI-ul: te recomandă când caută lumea în domeniul tău?" },
   { icon: "📱", text: "Verific pagina de Facebook și prezența socială" },
   { icon: "🧮", text: "Calculez clienții și banii pierduți lunar" },
   { icon: "📈", text: "Construiesc proiecția: investiție vs. câștig pe 3 și 12 luni" },

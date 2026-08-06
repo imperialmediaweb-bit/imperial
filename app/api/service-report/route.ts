@@ -13,7 +13,7 @@ import { hasDb } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export type Competitor = {
   name: string;
@@ -419,6 +419,49 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Serviciul e temporar indisponibil." }, { status: 503 });
   }
 
+  // ─── 2c. Vizibilitate în căutările AI — test REAL cu căutare web ───
+  // Întrebăm un model cu web search dacă firma apare când cauți brandul și când
+  // cauți generic în domeniu+oraș (cum ar face ChatGPT/Perplexity). Fail-silent.
+  let aiVisibility: { brandVisible: boolean; genericVisible: boolean; note: string } | null = null;
+  try {
+    const visTools: any = [{ type: "web_search_20250305", name: "web_search", max_uses: 3 }];
+    let visMessages: Anthropic.MessageParam[] = [
+      {
+        role: "user",
+        content: `Fă două căutări web: 1) "${industry} ${city} recomandare firmă" și 2) "${companyName} ${city}". Apoi răspunde: apare firma "${companyName}" în rezultate (site propriu, topuri, directoare, articole)? Răspunde DOAR cu JSON: {"brandVisible": true/false (apare la căutarea după numele ei), "genericVisible": true/false (apare și când cauți GENERIC domeniul+orașul, fără nume), "note": "o frază concretă despre ce ai găsit"}`,
+      },
+    ];
+    let visResp = await client.messages.create(
+      { model: CLAUDE_MODEL, max_tokens: 700, tools: visTools, messages: visMessages },
+      { timeout: 30_000 }
+    );
+    // Server tools pot întoarce pause_turn — continuăm bucla serverului
+    let visLoops = 0;
+    while (visResp.stop_reason === "pause_turn" && visLoops < 3) {
+      visMessages = [...visMessages, { role: "assistant", content: visResp.content as any }];
+      visResp = await client.messages.create(
+        { model: CLAUDE_MODEL, max_tokens: 700, tools: visTools, messages: visMessages },
+        { timeout: 30_000 }
+      );
+      visLoops++;
+    }
+    const visText = visResp.content
+      .filter((b: any) => b.type === "text")
+      .map((b: any) => b.text)
+      .join("\n");
+    const visMatch = visText.match(/\{[\s\S]*\}/);
+    if (visMatch) {
+      const vp = JSON.parse(visMatch[0]);
+      aiVisibility = {
+        brandVisible: !!vp.brandVisible,
+        genericVisible: !!vp.genericVisible,
+        note: String(vp.note ?? "").slice(0, 300),
+      };
+    }
+  } catch (e) {
+    console.warn("[service-report] AI visibility scan failed:", e);
+  }
+
   const typeLabel =
     businessType === "online"
       ? "AFACERE ONLINE (fără punct fizic — clienții vin din online, nu din trafic local)"
@@ -470,6 +513,9 @@ ${competitors.length > 0 ? `COMPETIȚIA LOCALĂ REALĂ (scanată acum — top fi
 
 DATE REALE SITE (scanate acum):
 ${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
+
+VIZIBILITATE ÎN CĂUTĂRILE AI (test REAL făcut acum — am întrebat un AI cu căutare web, exact cum ar face ChatGPT/Perplexity):
+${aiVisibility ? `- Găsit la căutarea după numele firmei: ${aiVisibility.brandVisible ? "DA" : "NU"}\n- Recomandat la căutări GENERICE („${industry} ${city}", fără nume): ${aiVisibility.genericVisible ? "DA — apare, avantaj rar!" : "NU — clienții care întreabă AI-ul primesc COMPETITORII"}\n- Constatare: ${aiVisibility.note}\nInclude OBLIGATORIU un diagnostic cu area "Vizibilitate în AI (ChatGPT, Perplexity)" pe baza testului. Dacă NU apare la căutări generice, planul include acțiuni GEO concrete: prezența în topuri/directoare locale (ex: necesit.ro), articole în presa online, date structurate și pagini locale pe site.` : "- Testul nu a putut rula de data asta — nu inventa rezultate; poți menționa vizibilitatea AI ca arie de verificat."}
 
 PREZENȚA PE FACEBOOK (scanată acum):
 ${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu: ${fbData.title}` : ""}${fbData.followers ? `\n- Urmăritori/aprecieri: ~${fbData.followers}` : ""}${fbData.description ? `\n- Descriere: ${fbData.description}` : ""}` : `- Pagina declarată NU a putut fi accesată — posibil inexistentă, ștearsă sau scrisă greșit`) : "- NU are pagină de Facebook declarată"}
