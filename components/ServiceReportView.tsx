@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   CheckCircle2,
   AlertTriangle,
@@ -97,10 +98,28 @@ export function ServiceReportView({
 
   return (
     <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-3xl space-y-5">
-      {/* Header raport */}
+      {/* Header raport — antet oficial Imperial Media */}
       <div className="rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-6 shadow-card sm:p-8">
-        <p className="text-xs uppercase tracking-wider text-text-subtle">Raport de consultanță · Imperial Media</p>
-        <h2 className="mt-1 font-display text-2xl font-extrabold text-text sm:text-3xl">{report.companyName}</h2>
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-bg-border/60 pb-4">
+          <Image
+            src="/logo.png"
+            alt="Imperial Media"
+            width={880}
+            height={352}
+            quality={90}
+            className="h-12 w-auto object-contain sm:h-14"
+          />
+          <div className="text-right">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-orange">Raport de consultanță</p>
+            <p className="mt-0.5 text-[10px] text-text-subtle">
+              {new Date().toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" })} · Confidențial
+            </p>
+          </div>
+        </div>
+        <h2 className="mt-4 font-display text-2xl font-extrabold text-text sm:text-3xl">{report.companyName}</h2>
+        <p className="mt-0.5 text-xs text-text-subtle">
+          {report.city} · Analiză completă: online, social, offline, competiție, financiar
+        </p>
         <div className="mt-5 flex flex-col items-center gap-6 sm:flex-row">
           <ScoreCircle score={report.overallScore} />
           <div className="flex-1">
@@ -404,6 +423,24 @@ export function ServiceReportView({
       {error && (
         <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</p>
       )}
+
+      {/* Footer oficial */}
+      <div className="rounded-3xl border border-bg-border bg-bg-card/40 p-5 text-center">
+        <Image
+          src="/logo.png"
+          alt="Imperial Media"
+          width={880}
+          height={352}
+          quality={90}
+          className="mx-auto h-10 w-auto object-contain opacity-90"
+        />
+        <p className="mt-2 text-[11px] text-text-subtle">
+          Raport realizat de Imperial Media · Botoșani · office@imperial-media.ro · imperial-media.ro
+        </p>
+        <p className="mt-1 text-[10px] text-text-subtle">
+          Date: Google, ANAF (bilanțuri publice), scanare proprie. Estimările sunt orientative și calculate conservator.
+        </p>
+      </div>
     </motion.div>
   );
 }
