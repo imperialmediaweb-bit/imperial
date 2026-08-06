@@ -20,6 +20,10 @@ import {
   Info,
   Lightbulb,
   MessageCircle,
+  Stethoscope,
+  SearchCheck,
+  Calculator,
+  Wrench,
 } from "lucide-react";
 
 type ReportItem = {
@@ -113,6 +117,39 @@ export function ContDashboard({
                 : "Aici va apărea graficul evoluției scorului tău, raport după raport."}
             </p>
           )}
+        </div>
+
+        {/* Toolurile hubului */}
+        <div className="rounded-3xl border border-bg-border bg-bg-card/60 p-6">
+          <h2 className="inline-flex items-center gap-2 font-display text-lg font-bold text-text">
+            <Wrench className="h-5 w-5 text-brand-orange" /> Toolurile tale
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <Link href="/cont/consultant" className="group rounded-2xl border border-bg-border bg-bg-soft/40 p-4 transition hover:border-brand-orange/50">
+              <p className="inline-flex items-center gap-2 text-sm font-bold text-text">
+                <MessageCircle className="h-4 w-4 text-brand-orange" /> Consultantul tău
+              </p>
+              <p className="mt-1 text-xs text-text-muted">Îți știe firma și cifrele — sfaturi pe afacerea ta, oricând</p>
+            </Link>
+            <Link href="/service" className="group rounded-2xl border border-bg-border bg-bg-soft/40 p-4 transition hover:border-brand-orange/50">
+              <p className="inline-flex items-center gap-2 text-sm font-bold text-text">
+                <Stethoscope className="h-4 w-4 text-brand-orange" /> Audit de afaceri
+              </p>
+              <p className="mt-1 text-xs text-text-muted">Raport nou complet: Google, ANAF, competiție, plan 12 luni</p>
+            </Link>
+            <Link href="/audit" className="group rounded-2xl border border-bg-border bg-bg-soft/40 p-4 transition hover:border-brand-orange/50">
+              <p className="inline-flex items-center gap-2 text-sm font-bold text-text">
+                <SearchCheck className="h-4 w-4 text-brand-orange" /> Audit de site
+              </p>
+              <p className="mt-1 text-xs text-text-muted">Scanează-ți site-ul: viteză, SEO, mobil — gratuit</p>
+            </Link>
+            <Link href="/brief" className="group rounded-2xl border border-bg-border bg-bg-soft/40 p-4 transition hover:border-brand-orange/50">
+              <p className="inline-flex items-center gap-2 text-sm font-bold text-text">
+                <Calculator className="h-4 w-4 text-brand-orange" /> Estimare site nou
+              </p>
+              <p className="mt-1 text-xs text-text-muted">Afli în 2 minute cât ar costa site-ul tău — gratuit</p>
+            </Link>
+          </div>
         </div>
 
         {/* Consultantul dedicat */}
