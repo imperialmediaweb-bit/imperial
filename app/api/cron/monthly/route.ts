@@ -13,6 +13,7 @@ import {
 } from "@/lib/monitoring";
 import { sendSimpleEmail } from "@/lib/email";
 import { siteConfig } from "@/lib/site";
+import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -156,6 +157,47 @@ function diffToNotifications(
   return out;
 }
 
+// „Acțiunile lunii" — 2-3 sfaturi concrete de consultant (online + OFFLINE),
+// generate din datele scanate + specificul firmei. Fail-silent: fără sfaturi ≠ fără scanare.
+async function generateMonthlyAdvice(
+  form: any,
+  prev: MonitorSnapshot | null,
+  cur: MonitorSnapshot
+): Promise<Array<{ title: string; body: string }>> {
+  if (!process.env.ANTHROPIC_API_KEY) return [];
+  try {
+    const client = getAnthropic();
+    const resp = await client.messages.create({
+      model: CLAUDE_MODEL,
+      max_tokens: 700,
+      messages: [
+        {
+          role: "user",
+          content: `Ești consultant de afaceri cu experiență în domeniul "${form.industry ?? "necunoscut"}" din România. Client: ${form.companyName ?? "?"} din ${form.city ?? "?"}, tip: ${form.businessType ?? "local"}. Problema declarată inițial: ${form.mainProblem || "nespecificată"}.
+
+Date scanate ACUM: rating ${cur.rating ?? "—"}, ${cur.reviewCount} recenzii, site ${cur.siteUp === false ? "PICAT" : cur.siteUp ? `OK (${cur.siteMs}ms)` : "inexistent"}.${prev ? ` Luna trecută: rating ${prev.rating ?? "—"}, ${prev.reviewCount} recenzii.` : ""}${cur.competitors.length > 0 ? ` Competitori: ${cur.competitors.map((c) => `${c.name} (${c.rating ?? "—"}★, ${c.reviewCount} rec.)`).join(", ")}.` : ""}
+
+Dă-i 3 acțiuni pentru LUNA ASTA: măcar una de OFFLINE (procese, vânzare, clienți, organizare — specifică domeniului lui) și restul pe online, legate de datele de mai sus. Concrete, aplicabile de mâine, fără generalități. Răspunde DOAR cu JSON: {"tips":[{"title":"scurt, imperativ","body":"1-2 fraze cum anume"}]}`,
+        },
+      ],
+    });
+    const text = resp.content.find((b) => b.type === "text");
+    if (!text || text.type !== "text") return [];
+    const m = text.text.match(/\{[\s\S]*\}/);
+    if (!m) return [];
+    const parsed = JSON.parse(m[0]);
+    return Array.isArray(parsed.tips)
+      ? parsed.tips.slice(0, 3).map((t: any) => ({
+          title: String(t.title ?? "").slice(0, 160),
+          body: String(t.body ?? "").slice(0, 400),
+        }))
+      : [];
+  } catch (e) {
+    console.warn("[cron/monthly] advice generation failed:", e);
+    return [];
+  }
+}
+
 export async function POST(req: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret) {
@@ -192,6 +234,12 @@ export async function POST(req: Request) {
       const notifs = diffToNotifications(firm, prev, cur);
       await insertSnapshot(row.token, row.email, cur);
       scanned++;
+
+      // Sfaturile consultantului pentru luna asta (online + offline)
+      const advice = await generateMonthlyAdvice(form, prev, cur);
+      for (const t of advice) {
+        notifs.push({ kind: "advice", title: `💡 ${t.title}`, body: t.body });
+      }
 
       for (const n of notifs) {
         await insertNotification(row.email, n.kind, n.title, n.body);

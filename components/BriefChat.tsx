@@ -72,9 +72,11 @@ const CHIPS: Record<string, ChipOptions> = {
 
 type BriefChatProps = {
   mode?: "brief" | "consultanta";
+  // Context despre client (ex: din /cont) — consultantul îl știe fără să întrebe.
+  clientContext?: string;
 };
 
-export function BriefChat({ mode = "brief" }: BriefChatProps) {
+export function BriefChat({ mode = "brief", clientContext }: BriefChatProps) {
   const greeting = GREETINGS[mode];
   const initialChips = CHIPS[mode];
   const router = useRouter();
@@ -280,7 +282,7 @@ export function BriefChat({ mode = "brief" }: BriefChatProps) {
       const resp = await fetch("/api/brief-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newHistory, mode }),
+        body: JSON.stringify({ messages: newHistory, mode, ...(clientContext ? { clientContext } : {}) }),
       });
       const data = await resp.json();
       if (!resp.ok) {

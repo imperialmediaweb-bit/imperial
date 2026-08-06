@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { messages?: Anthropic.MessageParam[]; mode?: string };
+  let body: { messages?: Anthropic.MessageParam[]; mode?: string; clientContext?: string };
   try {
     body = await req.json();
   } catch {
@@ -55,6 +55,11 @@ export async function POST(req: Request) {
 
   const messages = Array.isArray(body.messages) ? body.messages : [];
   const mode = body.mode === "consultanta" ? "consultanta" : "brief";
+  // Context despre client (doar consultanță, ex: din /cont — datele firmei lui)
+  const clientContext =
+    mode === "consultanta" && typeof body.clientContext === "string"
+      ? body.clientContext.slice(0, 1500)
+      : "";
 
   if (messages.length === 0) {
     return NextResponse.json({ error: "Niciun mesaj." }, { status: 400 });
@@ -111,6 +116,14 @@ export async function POST(req: Request) {
             text: mode === "consultanta" ? CONSULTANTA_PROMPT : SYSTEM_PROMPT,
             cache_control: { type: "ephemeral" },
           },
+          ...(clientContext
+            ? [
+                {
+                  type: "text" as const,
+                  text: `\nDATE REALE DESPRE ACEST CLIENT (din contul lui — folosește-le direct, nu i le mai cere):\n${clientContext}\n\nREGULI SUPLIMENTARE: Ești consultantul LUI dedicat — vorbește-i personal, pe firma lui, nu generic. Dacă NU are site, obiectivul principal al conversației e să-l duci către estimarea rapidă: spune-i să intre pe /brief (estimare gratuită în 2 minute). Valabil pentru orice client, cu sau fără abonament.`,
+                },
+              ]
+            : []),
         ],
         tools: ANTHROPIC_TOOLS,
         messages: currentMessages,

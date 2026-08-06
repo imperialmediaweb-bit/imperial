@@ -18,6 +18,8 @@ import {
   Globe,
   Swords,
   Info,
+  Lightbulb,
+  MessageCircle,
 } from "lucide-react";
 
 type ReportItem = {
@@ -42,6 +44,7 @@ const KIND_ICON: Record<string, any> = {
   review: Star,
   site: Globe,
   competitor: Swords,
+  advice: Lightbulb,
   info: Info,
 };
 
@@ -111,6 +114,23 @@ export function ContDashboard({
             </p>
           )}
         </div>
+
+        {/* Consultantul dedicat */}
+        <Link href="/cont/consultant"
+          className="block rounded-3xl border-2 border-brand-orange/40 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 transition hover:border-brand-orange/70">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="inline-flex items-center gap-2 font-display text-lg font-bold text-text">
+                <MessageCircle className="h-5 w-5 text-brand-orange" /> Consultantul tău de afaceri
+              </p>
+              <p className="mt-1 text-sm text-text-muted">
+                Îți știe firma, scorul, cifrele și notificările. Spune-i cum ți-a mers luna,
+                întreabă-l orice — online sau offline — și primești sfaturi pe afacerea TA.
+              </p>
+            </div>
+            <ArrowRight className="h-5 w-5 flex-shrink-0 text-brand-orange" />
+          </div>
+        </Link>
 
         {/* Notificări */}
         <div className="rounded-3xl border border-bg-border bg-bg-card/60 p-6">
