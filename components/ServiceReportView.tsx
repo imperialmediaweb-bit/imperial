@@ -19,6 +19,8 @@ import {
   Star,
   Crown,
   RefreshCw,
+  Share2,
+  Link2,
 } from "lucide-react";
 import type { ServiceReport } from "@/app/api/service-report/route";
 
@@ -105,6 +107,7 @@ export function ServiceReportView({
             <p className="text-sm leading-relaxed text-text-muted">{report.summary}</p>
           </div>
         </div>
+        <ShareRow score={report.overallScore} />
       </div>
 
       {/* Firma verificată ANAF */}
@@ -367,6 +370,42 @@ export function ServiceReportView({
         <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</p>
       )}
     </motion.div>
+  );
+}
+
+// Butoane de distribuire — omul se laudă cu scorul, prietenii vin să și-l vadă pe al lor.
+function ShareRow({ score }: { score: number }) {
+  const [copied, setCopied] = useState(false);
+  const shareText = `Mi-am făcut Radiografia Afacerii 📊 Scorul firmei mele: ${score}/100. Fă-ți și tu testul (Google + ANAF + competiția reală): https://imperial-media.ro/service`;
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+  const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://imperial-media.ro/service")}&quote=${encodeURIComponent(shareText)}`;
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(shareText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  }
+
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-bg-border/60 pt-4">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-muted">
+        <Share2 className="h-3.5 w-3.5" /> Laudă-te cu scorul:
+      </span>
+      <a href={waUrl} target="_blank" rel="noopener noreferrer"
+        className="rounded-full border border-green-500/40 bg-green-500/10 px-3.5 py-1.5 text-xs font-semibold text-green-300 transition hover:bg-green-500/20">
+        WhatsApp
+      </a>
+      <a href={fbUrl} target="_blank" rel="noopener noreferrer"
+        className="rounded-full border border-blue-500/40 bg-blue-500/10 px-3.5 py-1.5 text-xs font-semibold text-blue-300 transition hover:bg-blue-500/20">
+        Facebook
+      </a>
+      <button type="button" onClick={copy}
+        className="inline-flex items-center gap-1 rounded-full border border-bg-border bg-bg-soft/60 px-3.5 py-1.5 text-xs font-semibold text-text-muted transition hover:border-brand-orange/50">
+        <Link2 className="h-3 w-3" /> {copied ? "Copiat ✓" : "Copiază"}
+      </button>
+    </div>
   );
 }
 
