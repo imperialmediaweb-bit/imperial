@@ -21,10 +21,15 @@ import {
   Shuffle,
   Lock,
   Newspaper,
+  Hash,
+  Facebook,
+  Radar,
 } from "lucide-react";
 import type { ServiceReport, ServiceReportPreview } from "@/app/api/service-report/route";
 import { ServiceReportView, ScoreCircle } from "@/components/ServiceReportView";
 import { ShineCard } from "@/components/effects/ShineCard";
+import { Aurora } from "@/components/effects/Aurora";
+import { Magnetic } from "@/components/effects/MagneticButton";
 import { getPartner } from "@/lib/partners";
 
 const BASE_PRICE = 299;
@@ -47,14 +52,28 @@ const CLIENTS_OPTS = ["Sub 20 / lună", "20-50 / lună", "50-100 / lună", "Pest
 const VALUE_OPTS = ["Sub 50€", "50-200€", "200-500€", "Peste 500€"];
 const EMPLOYEE_OPTS = ["Doar eu", "2-5", "6-15", "Peste 15"];
 
-const LOADING_STEPS = [
-  "Scanez firma pe Google...",
-  "Verific firma la ANAF (bilanț, CAEN, TVA)...",
-  "Analizez competiția din domeniul tău...",
-  "Verific site-ul și prezența online...",
-  "Calculez pierderile lunare...",
-  "Construiesc planul de acțiune...",
+// Fluxul „scanner live" — spectacolul e procesul: omul VEDE sistemul lucrând.
+const SCAN_FEED = [
+  { icon: "🛰️", text: "Conectare la Google Maps..." },
+  { icon: "📍", text: "Profilul firmei localizat — citesc ratingul și recenziile" },
+  { icon: "🏛️", text: "Interogare ANAF: registrul TVA + codul CAEN" },
+  { icon: "📊", text: "Descarc bilanțul publicat: cifră de afaceri, profit, angajați" },
+  { icon: "🥊", text: "Scanez competitorii din zona ta, unul câte unul" },
+  { icon: "⭐", text: "Compar recenziile tale cu ale fiecărui competitor" },
+  { icon: "🌐", text: "Testez site-ul: viteză, HTTPS, adaptare pe mobil" },
+  { icon: "📱", text: "Verific pagina de Facebook și prezența socială" },
+  { icon: "🧮", text: "Calculez clienții și banii pierduți lunar" },
+  { icon: "📈", text: "Construiesc proiecția: investiție vs. câștig pe 3 și 12 luni" },
+  { icon: "🎯", text: "Scriu planul de acțiune pe 12 luni, pe domeniul tău" },
+  { icon: "✨", text: "Finisez raportul..." },
 ];
+
+// Chips: intră în cascadă, pop la selecție
+const chipGroupV = { hidden: {}, show: { transition: { staggerChildren: 0.045 } } };
+const chipItemV = {
+  hidden: { opacity: 0, y: 12, scale: 0.92 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 400, damping: 24 } },
+};
 
 // Secțiunile din raportul complet, arătate blurat până la deblocare.
 const LOCKED_SECTIONS = [
@@ -69,6 +88,7 @@ const LOCKED_SECTIONS = [
 
 export default function ServicePage() {
   const [step, setStep] = useState(0);
+  const [dir, setDir] = useState(1); // direcția tranziției între pași (1 înainte, -1 înapoi)
   const [form, setForm] = useState({
     businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "",
     website: "", facebook: "",
@@ -145,8 +165,8 @@ export default function ServicePage() {
     setError(null);
     setLoadingStep(0);
     const interval = setInterval(() => {
-      setLoadingStep((s) => Math.min(s + 1, LOADING_STEPS.length - 1));
-    }, 2500);
+      setLoadingStep((s) => Math.min(s + 1, SCAN_FEED.length - 1));
+    }, 1400);
     try {
       const res = await fetch("/api/service-report", {
         method: "POST",
@@ -194,6 +214,14 @@ export default function ServicePage() {
     { icon: BarChart3, label: "Cifre", title: "Cifrele afacerii tale", desc: "Estimări rapide — din ele calculăm cât pierzi lunar" },
     { icon: MessageSquare, label: "Problema", title: "Care e problema ta principală?", desc: "Cu cuvintele tale — consultantul pornește de aici" },
   ];
+
+  // Tranziția între pași — direcțională, cu blur cinematic
+  const stepAnim = {
+    initial: { opacity: 0, x: 48 * dir, filter: "blur(8px)" },
+    animate: { opacity: 1, x: 0, filter: "blur(0px)" },
+    exit: { opacity: 0, x: -48 * dir, filter: "blur(8px)" },
+    transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] as const },
+  };
 
   // Chips premium — selecția e gradient cu glow, hover-ul se ridică ușor
   const chipCls = (sel: boolean) =>
@@ -256,8 +284,10 @@ export default function ServicePage() {
 
       {/* FORM */}
       {showForm && (
-        <section className="container-app pb-20">
-          <ShineCard className="mx-auto max-w-2xl rounded-3xl border border-brand-orange/20 bg-bg-card bg-card-gradient p-6 shadow-card sm:p-9">
+        <section className="relative container-app pb-20">
+          <Aurora />
+          <div className="gradient-border relative mx-auto max-w-2xl rounded-3xl">
+            <ShineCard className="rounded-3xl bg-bg-card bg-card-gradient p-6 shadow-card sm:p-9">
             {/* Progres */}
             <div className="mb-8">
               <div className="flex items-center">
@@ -295,28 +325,34 @@ export default function ServicePage() {
 
             <AnimatePresence mode="wait">
               {step === 0 && (
-                <motion.div key="s0" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} className="grid gap-4">
+                <motion.div key="s0" {...stepAnim} className="grid gap-4">
                   <div>
                     <label className="label">Cum lucrezi cu clienții? *</label>
-                    <div className="flex flex-wrap gap-2">
+                    <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
                       {BUSINESS_TYPES.map((t) => (
-                        <button key={t.key} type="button" onClick={() => set("businessType", t.key)}
+                        <motion.button key={t.key} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button" onClick={() => set("businessType", t.key)}
                           className={`inline-flex items-center gap-2 ${chipCls(form.businessType === t.key)}`}>
                           <t.icon className="h-4 w-4" /> {t.label}
-                        </button>
+                        </motion.button>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                   <div>
                     <label className="label">Orașul *</label>
-                    <input className="input rounded-2xl py-3.5 text-[15px]" placeholder="ex: Botoșani" value={form.city} onChange={(e) => set("city", e.target.value)} />
+                    <div className="relative">
+                      <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
+                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: Botoșani" value={form.city} onChange={(e) => set("city", e.target.value)} />
+                    </div>
                   </div>
                   <div className="relative">
                     <label className="label">Numele afacerii *</label>
-                    <input className="input rounded-2xl py-3.5 text-[15px]" placeholder="ex: Pizzeria La Mario" value={form.companyName}
-                      onChange={(e) => onNameChange(e.target.value)}
-                      onBlur={() => setTimeout(() => setShowSug(false), 200)}
-                      onFocus={() => suggestions.length > 0 && setShowSug(true)} />
+                    <div className="relative">
+                      <Building2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
+                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: Pizzeria La Mario" value={form.companyName}
+                        onChange={(e) => onNameChange(e.target.value)}
+                        onBlur={() => setTimeout(() => setShowSug(false), 200)}
+                        onFocus={() => suggestions.length > 0 && setShowSug(true)} />
+                    </div>
                     {form.placeId ? (
                       <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-green-400">
                         <CheckCircle2 className="h-3 w-3" /> Găsit pe Google Maps — analizăm profilul exact
@@ -343,18 +379,21 @@ export default function ServicePage() {
                   </div>
                   <div>
                     <label className="label">Domeniul de activitate *</label>
-                    <div className="flex flex-wrap gap-2">
+                    <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
                       {INDUSTRIES.map((ind) => (
-                        <button key={ind} type="button" onClick={() => set("industry", ind)} className={chipCls(form.industry === ind)}>
+                        <motion.button key={ind} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button" onClick={() => set("industry", ind)} className={chipCls(form.industry === ind)}>
                           {ind}
-                        </button>
+                        </motion.button>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                   <div>
                     <label className="label">CUI / cod fiscal (opțional)</label>
-                    <input className="input rounded-2xl py-3.5 text-[15px]" placeholder="ex: 12345678 — analizăm firma pe datele oficiale ANAF" inputMode="numeric"
-                      value={form.cui} onChange={(e) => set("cui", e.target.value.replace(/[^\dRrOo]/g, ""))} />
+                    <div className="relative">
+                      <Hash className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
+                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: 12345678 — analizăm firma pe datele oficiale ANAF" inputMode="numeric"
+                        value={form.cui} onChange={(e) => set("cui", e.target.value.replace(/[^\dRrOo]/g, ""))} />
+                    </div>
                     <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
                       Cu CUI-ul verificăm firma la ANAF: cifră de afaceri, profit, CAEN, TVA — raportul se calculează pe cifrele tale oficiale.
                     </p>
@@ -363,61 +402,70 @@ export default function ServicePage() {
               )}
 
               {step === 1 && (
-                <motion.div key="s1" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} className="grid gap-4">
+                <motion.div key="s1" {...stepAnim} className="grid gap-4">
                   <div>
                     <label className="label">Site-ul tău (dacă ai)</label>
-                    <input className="input rounded-2xl py-3.5 text-[15px]" placeholder="ex: firma-mea.ro — sau lasă gol" value={form.website} onChange={(e) => set("website", e.target.value)} />
+                    <div className="relative">
+                      <Globe className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
+                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: firma-mea.ro — sau lasă gol" value={form.website} onChange={(e) => set("website", e.target.value)} />
+                    </div>
                   </div>
                   <div>
                     <label className="label">Pagina de Facebook (dacă ai)</label>
-                    <input className="input rounded-2xl py-3.5 text-[15px]" placeholder="link sau nume — sau lasă gol" value={form.facebook} onChange={(e) => set("facebook", e.target.value)} />
+                    <div className="relative">
+                      <Facebook className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
+                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="link sau nume — sau lasă gol" value={form.facebook} onChange={(e) => set("facebook", e.target.value)} />
+                    </div>
                   </div>
                   <p className="text-xs text-text-subtle">Nu ai? Nicio problemă — exact asta analizăm.</p>
                 </motion.div>
               )}
 
               {step === 2 && (
-                <motion.div key="s2" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} className="grid gap-5">
+                <motion.div key="s2" {...stepAnim} className="grid gap-5">
                   <div>
                     <label className="label">Câți clienți ai pe lună? *</label>
-                    <div className="flex flex-wrap gap-2">
+                    <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
                       {CLIENTS_OPTS.map((o) => (
-                        <button key={o} type="button" onClick={() => set("monthlyClients", o)} className={chipCls(form.monthlyClients === o)}>
+                        <motion.button key={o} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button" onClick={() => set("monthlyClients", o)} className={chipCls(form.monthlyClients === o)}>
                           {o}
-                        </button>
+                        </motion.button>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                   <div>
                     <label className="label">Cât valorează în medie un client? *</label>
-                    <div className="flex flex-wrap gap-2">
+                    <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
                       {VALUE_OPTS.map((o) => (
-                        <button key={o} type="button" onClick={() => set("avgValue", o)} className={chipCls(form.avgValue === o)}>
+                        <motion.button key={o} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button" onClick={() => set("avgValue", o)} className={chipCls(form.avgValue === o)}>
                           {o}
-                        </button>
+                        </motion.button>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                   <div>
                     <label className="label">Câți angajați?</label>
-                    <div className="flex flex-wrap gap-2">
+                    <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
                       {EMPLOYEE_OPTS.map((o) => (
-                        <button key={o} type="button" onClick={() => set("employees", o)} className={chipCls(form.employees === o)}>
+                        <motion.button key={o} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button" onClick={() => set("employees", o)} className={chipCls(form.employees === o)}>
                           {o}
-                        </button>
+                        </motion.button>
                       ))}
-                    </div>
+                    </motion.div>
                   </div>
                 </motion.div>
               )}
 
               {step === 3 && (
-                <motion.div key="s3" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} className="grid gap-4">
+                <motion.div key="s3" {...stepAnim} className="grid gap-4">
                   <div>
                     <label className="label">Care e cea mai mare problemă a afacerii tale acum?</label>
                     <textarea className="input min-h-[130px] resize-y rounded-2xl py-3.5 text-[15px]" maxLength={1000}
                       placeholder="ex: Am clienți puțini, concurența e peste tot, nu mă găsește nimeni online..."
                       value={form.mainProblem} onChange={(e) => set("mainProblem", e.target.value)} />
+                    <p className="mt-2 text-[11px] text-text-subtle">
+                      💡 Cu cât scrii mai sincer, cu atât raportul lovește mai precis.
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -427,39 +475,88 @@ export default function ServicePage() {
               <p className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</p>
             )}
 
-            {/* Loading state */}
+            {/* Scanner live — spectacolul e procesul */}
             {loading && (
-              <div className="mt-6 rounded-2xl border border-brand-orange/30 bg-brand-orange/5 p-5 text-center">
-                <Loader2 className="mx-auto h-8 w-8 animate-spin text-brand-orange" />
-                <AnimatePresence mode="wait">
-                  <motion.p key={loadingStep} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-3 text-sm font-medium text-text">
-                    {LOADING_STEPS[loadingStep]}
-                  </motion.p>
-                </AnimatePresence>
-              </div>
+              <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+                className="mt-6 overflow-hidden rounded-2xl border border-brand-orange/30 bg-[#0a0512]/80 p-5 sm:p-6">
+                {/* Antena radar */}
+                <div className="flex items-center gap-4">
+                  <span className="relative grid h-12 w-12 flex-shrink-0 place-items-center">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-brand-orange/25" />
+                    <span className="absolute inset-1.5 animate-ping rounded-full bg-brand-orange/15 [animation-delay:300ms]" />
+                    <span className="relative grid h-9 w-9 place-items-center rounded-full bg-orange-gradient shadow-glow-orange">
+                      <Radar className="h-5 w-5 text-white" />
+                    </span>
+                  </span>
+                  <div className="flex-1">
+                    <p className="font-display text-base font-extrabold text-text sm:text-lg">
+                      Scanez afacerea ta în timp real
+                    </p>
+                    <p className="text-[11px] text-text-subtle">
+                      Google · ANAF · competiție · site · social — date reale, nu presupuneri
+                    </p>
+                  </div>
+                  <span className="font-display text-2xl font-extrabold text-brand-orange tabular-nums">
+                    {Math.min(97, Math.round(((loadingStep + 1) / SCAN_FEED.length) * 100))}%
+                  </span>
+                </div>
+
+                {/* Feed-ul de scanare */}
+                <div className="mt-5 max-h-64 space-y-2 overflow-hidden font-mono text-[13px]">
+                  {SCAN_FEED.slice(0, loadingStep + 1).slice(-7).map((line, idx, arr) => {
+                    const isLast = idx === arr.length - 1;
+                    return (
+                      <motion.div key={line.text} initial={{ opacity: 0, x: -12 }} animate={{ opacity: isLast ? 1 : 0.55, x: 0 }}
+                        className="flex items-center gap-2.5">
+                        {isLast ? (
+                          <Loader2 className="h-3.5 w-3.5 flex-shrink-0 animate-spin text-brand-orange" />
+                        ) : (
+                          <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0 text-green-400" />
+                        )}
+                        <span className={isLast ? "text-text" : "text-text-muted"}>
+                          {line.icon} {line.text}
+                          {isLast && <span className="ml-1 inline-block h-3.5 w-[7px] animate-pulse bg-brand-orange align-middle" />}
+                        </span>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Bara de progres */}
+                <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-bg-soft/60">
+                  <motion.div className="h-full rounded-full bg-orange-gradient"
+                    animate={{ width: `${Math.min(97, ((loadingStep + 1) / SCAN_FEED.length) * 100)}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }} />
+                </div>
+              </motion.div>
             )}
 
             {/* Nav */}
             {!loading && (
               <div className="mt-8 flex items-center justify-between border-t border-bg-border/60 pt-6">
                 {step > 0 ? (
-                  <button type="button" onClick={() => setStep((s) => s - 1)} className="btn-ghost">
+                  <button type="button" onClick={() => { setDir(-1); setStep((s) => s - 1); }} className="btn-ghost">
                     <ArrowLeft className="h-4 w-4" /> Înapoi
                   </button>
                 ) : <span className="text-xs text-text-subtle">Pasul {step + 1} din 4</span>}
 
                 {step < 3 ? (
-                  <button type="button" disabled={!canNext} onClick={() => setStep((s) => s + 1)} className="btn-primary">
-                    Continuă <ArrowRight className="h-4 w-4" />
-                  </button>
+                  <Magnetic>
+                    <button type="button" disabled={!canNext} onClick={() => { setDir(1); setStep((s) => s + 1); }} className="btn-primary">
+                      Continuă <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </Magnetic>
                 ) : (
-                  <button type="button" onClick={generate} className="btn-primary">
-                    <Zap className="h-4 w-4" /> Generează raportul
-                  </button>
+                  <Magnetic>
+                    <button type="button" onClick={generate} className="btn-primary pulse-ring">
+                      <Zap className="h-4 w-4" /> Generează raportul
+                    </button>
+                  </Magnetic>
                 )}
               </div>
             )}
-          </ShineCard>
+            </ShineCard>
+          </div>
         </section>
       )}
 
