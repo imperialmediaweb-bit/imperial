@@ -286,6 +286,31 @@ export async function POST(req: Request) {
           };
         }
       }
+      // A doua încercare — căutare mai largă (textsearch), acceptată doar dacă
+      // numele găsit seamănă cu cel introdus (evităm să luăm alt local).
+      if (!googleData.found) {
+        const q2 = encodeURIComponent(`${companyName} ${city}`);
+        const res2 = await fetch(
+          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${q2}&language=ro&key=${placesKey}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const data2 = await res2.json();
+        const firstWord = companyName.toLowerCase().split(/\s+/)[0];
+        const hit = (data2.results ?? []).find((p: any) =>
+          String(p.name ?? "").toLowerCase().includes(firstWord)
+        );
+        if (hit) {
+          googleData = {
+            found: true,
+            exact: false,
+            name: hit.name,
+            rating: hit.rating ?? null,
+            reviewCount: hit.user_ratings_total ?? 0,
+            hasWebsite: false,
+            website: null,
+          };
+        }
+      }
     } catch (e) {
       console.warn("[service-report] Places scan failed:", e);
     }
@@ -358,7 +383,7 @@ export async function POST(req: Request) {
         },
       });
       const loadMs = Date.now() - start;
-      const html = (await res.text()).slice(0, 6000);
+      const html = (await res.text()).slice(0, 60000);
       siteData = {
         reachable: res.ok,
         loadTimeMs: loadMs,
@@ -366,6 +391,10 @@ export async function POST(req: Request) {
         hasViewport: /name=["']viewport["']/i.test(html),
         hasMetaDesc: /name=["']description["']/i.test(html),
         hasH1: /<h1[\s>]/i.test(html),
+        // Semnale euristice din homepage — indicii, nu verdicte
+        hasPortfolioHint: /portofoli|proiecte|portfolio|lucr[aă]ri(le)? noastre|case stud/i.test(html),
+        hasTestimonialsHint: /testimonial|recenzi|p[aă]reri(le)? clien/i.test(html),
+        hasContactHint: /contact|tel:|wa\.me|whatsapp/i.test(html),
       };
     } catch {
       siteData = { reachable: false };
@@ -489,7 +518,8 @@ REGULI ANTI-ȘABLON (obligatorii):
 - Folosește benchmarkuri din domeniu: câte recenzii are un lider local tipic, ce canale aduc clienți în acest domeniu, ticket mediu tipic — și compară-i direct ("ai 12 recenzii, un lider local are 200+").
 - Planul de acțiune = acțiuni SPECIFICE domeniului, cu cifrele lor, nu pași generici.
 - OFFLINE OBLIGATORIU: fiecare fază din actionPlan conține MINIM o acțiune offline pentru afacerea lui — procese, vânzare, oferte, fidelizarea clienților, organizare, upsell, promovare locală (presă locală, parteneriate cu alte firme din zonă, evenimente, materiale la punctul de lucru) — specifică domeniului (ex: service auto → sună clienții la 6 luni pentru revizie; salon → pachete de abonament pentru cliente fidele; restaurant → oferta de prânz pentru firmele din zonă). Nu doar digital.
-- Fii SINCER și DIRECT — cifrele contează mai mult decât politețea.
+- Fii SINCER și DIRECT — cifrele contează mai mult decât politeța.
+- REGULA DE ONESTITATE (cea mai importantă): afirmă DOAR ce e susținut de datele scanate. Ce NU a putut fi verificat (Facebook blocat, pagini de site nescanate, Google negăsit sub numele dat) se raportează ca „nu am putut verifica" cu status "warning" — NU ca „zero" sau „nu există". Un patron care ARE recenzii și portofoliu și citește în raport că n-are NIMIC își pierde toată încrederea în analiză. Necunoscut ≠ absent.
 
 TIP AFACERE: ${typeLabel}
 ${businessType === "online" ? "ATENȚIE: fiind afacere online, NU penaliza lipsa unui punct pe Google Maps și NU analiza competiția locală din oraș — analizează prezența în căutări, funnel-ul online, încrederea și competiția din nișă la nivel național." : ""}
@@ -512,14 +542,14 @@ ${googleData.found ? `- Găsit pe Google Maps: DA${googleData.exact ? " (profil 
 
 ${competitors.length > 0 ? `COMPETIȚIA LOCALĂ REALĂ (scanată acum — top firme din "${industry} ${city}" pe Google):\n${competitors.map((c) => `- ${c.name}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n")}` : ""}
 
-DATE REALE SITE (scanate acum):
-${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
+DATE REALE SITE (scanate acum — DOAR homepage-ul):
+${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}\n- Semnale în homepage (euristic): portofoliu/proiecte menționate: ${siteData.hasPortfolioHint ? "DA" : "nu am detectat"}; testimoniale/recenzii menționate: ${siteData.hasTestimonialsHint ? "DA" : "nu am detectat"}; contact vizibil: ${siteData.hasContactHint ? "DA" : "nu am detectat"}\n- ATENȚIE: am scanat DOAR homepage-ul — site-ul poate avea pagini de portofoliu/recenzii pe care nu le-am parcurs` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
 
 VIZIBILITATE ÎN CĂUTĂRILE AI (test REAL făcut acum — am întrebat un AI cu căutare web, exact cum ar face ChatGPT/Perplexity):
 ${aiVisibility ? `- Găsit la căutarea după numele firmei: ${aiVisibility.brandVisible ? "DA" : "NU"}\n- Recomandat la căutări GENERICE („${industry} ${city}", fără nume): ${aiVisibility.genericVisible ? "DA — apare, avantaj rar!" : "NU — clienții care întreabă AI-ul primesc COMPETITORII"}\n- Constatare: ${aiVisibility.note}\nInclude OBLIGATORIU un diagnostic cu area "Vizibilitate în AI (ChatGPT, Perplexity)" pe baza testului. Dacă NU apare la căutări generice, planul include acțiuni GEO concrete: prezența în topuri/directoare locale (ex: necesit.ro), articole în presa online, date structurate și pagini locale pe site.` : "- Testul nu a putut rula de data asta — nu inventa rezultate; poți menționa vizibilitatea AI ca arie de verificat."}
 
 PREZENȚA PE FACEBOOK (scanată acum):
-${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu: ${fbData.title}` : ""}${fbData.followers ? `\n- Urmăritori/aprecieri: ~${fbData.followers}` : ""}${fbData.description ? `\n- Descriere: ${fbData.description}` : ""}` : `- Pagina declarată NU a putut fi accesată — posibil inexistentă, ștearsă sau scrisă greșit`) : "- NU are pagină de Facebook declarată"}
+${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu: ${fbData.title}` : ""}${fbData.followers ? `\n- Urmăritori/aprecieri: ~${fbData.followers}` : ""}${fbData.description ? `\n- Descriere: ${fbData.description}` : ""}` : `- Pagina declarată NU a putut fi VERIFICATĂ automat (Facebook blochează des accesul roboților). NU concluziona că pagina nu există sau că e inactivă — spune doar că nu a putut fi verificată, cu status "warning".`) : "- NU are pagină de Facebook declarată de proprietar"}
 
 REGULĂ CANALE LIPSĂ: pentru FIECARE canal absent sau slab (site, Google Business Profile, pagină Facebook), planul de acțiune TREBUIE să includă crearea/refacerea lui la nivel profesionist — concret ce să conțină ca să arate mai bine decât al competitorilor (nu doar „fă-ți pagină").
 
