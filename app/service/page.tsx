@@ -224,7 +224,9 @@ export default function ServicePage() {
         </p>
         {promo && (
           <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5 text-xs font-bold text-green-300">
-            🎟️ {promo.kind === "partner" ? `Reducere ${promo.label} aplicată` : "Reducere prin recomandare aplicată"} — plătești {price} lei
+            {price === 0
+              ? `⭐ ${promo.label} — raportul complet e GRATUIT pentru tine`
+              : `🎟️ ${promo.kind === "partner" ? `Reducere ${promo.label} aplicată` : "Reducere prin recomandare aplicată"} — plătești ${price} lei`}
           </p>
         )}
         {promo?.kind === "partner" && (
@@ -522,7 +524,7 @@ export default function ServicePage() {
                   </h3>
                   <p className="mt-3 font-display text-3xl font-extrabold text-brand-orange">
                     {promo && <span className="mr-2 text-lg font-bold text-text-subtle line-through">{BASE_PRICE} lei</span>}
-                    {price} lei
+                    {price === 0 ? "GRATUIT" : `${price} lei`}
                   </p>
                   <ul className="mx-auto mt-4 max-w-sm space-y-2 text-left text-sm text-text-muted">
                     <li className="flex items-start gap-2">
@@ -544,7 +546,7 @@ export default function ServicePage() {
                   </ul>
                   <button type="button" onClick={unlock} disabled={unlocking} className="btn-primary mt-5 w-full justify-center">
                     {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                    {unlocking ? "Se încarcă..." : `Deblochează raportul — ${price} lei`}
+                    {unlocking ? "Se încarcă..." : price === 0 ? "Deblochează raportul — GRATUIT" : `Deblochează raportul — ${price} lei`}
                   </button>
                   <p className="mt-3 text-[11px] text-text-subtle">Plată securizată cu cardul · raportul rămâne al tău pe link permanent</p>
                   <p className="mt-1.5 text-[10px] leading-snug text-text-subtle">

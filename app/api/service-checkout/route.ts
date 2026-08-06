@@ -46,23 +46,35 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: reportUrl });
   }
 
+  // Reduceri: partener (ex: Bizz Club) sau link de recomandare — se aplică cea mai bună.
+  // Codurile sunt luate din raportul salvat (au venit din URL la generare), nu din client.
+  const fd = row.form_data ?? {};
+  const partner = getPartner(fd.partner);
+  const hasRef = /^[a-z0-9]{4,16}$/i.test(String(fd.ref ?? ""));
+  let priceRon = reportPriceRon();
+  let labelSuffix = "";
+  if (partner && partner.priceRon < priceRon) {
+    priceRon = partner.priceRon;
+    labelSuffix = ` (reducere ${partner.label})`;
+  } else if (hasRef && REF_PRICE_RON < priceRon) {
+    priceRon = REF_PRICE_RON;
+    labelSuffix = " (reducere recomandare)";
+  }
+
+  // Invitație VIP (preț 0) → deblocare directă, fără plată
+  if (priceRon <= 0) {
+    try {
+      await markServiceReportPaid(token);
+    } catch (e) {
+      console.error("[service-checkout] VIP unlock failed:", e);
+      return NextResponse.json({ error: "Eroare temporară. Încearcă din nou." }, { status: 500 });
+    }
+    return NextResponse.json({ url: reportUrl, vip: true });
+  }
+
   if (stripeEnabled()) {
     try {
       const origin = new URL(req.url).origin;
-      // Reduceri: partener (ex: Bizz Club) sau link de recomandare — se aplică cea mai bună.
-      // Codurile sunt luate din raportul salvat (au venit din URL la generare), nu din client.
-      const fd = row.form_data ?? {};
-      const partner = getPartner(fd.partner);
-      const hasRef = /^[a-z0-9]{4,16}$/i.test(String(fd.ref ?? ""));
-      let priceRon = reportPriceRon();
-      let labelSuffix = "";
-      if (partner && partner.priceRon < priceRon) {
-        priceRon = partner.priceRon;
-        labelSuffix = ` (reducere ${partner.label})`;
-      } else if (hasRef && REF_PRICE_RON < priceRon) {
-        priceRon = REF_PRICE_RON;
-        labelSuffix = " (reducere recomandare)";
-      }
       const { url } = await createReportCheckoutSession({ token, origin, priceRon, labelSuffix });
       return NextResponse.json({ url });
     } catch (e) {

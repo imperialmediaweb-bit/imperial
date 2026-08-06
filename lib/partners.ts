@@ -14,6 +14,13 @@ const PARTNERS: Record<string, Partner> = {
     label: "Bizz Club Botoșani",
     priceRon: 199,
   },
+  // Invitație VIP — acces gratuit, link discret pentru persoane-cheie
+  // (președinți de club, presă, parteneri). Nu-l publica nicăieri.
+  "vip-imperial": {
+    code: "vip-imperial",
+    label: "Invitație VIP",
+    priceRon: 0,
+  },
 };
 
 export function getPartner(code: string | null | undefined): Partner | null {
