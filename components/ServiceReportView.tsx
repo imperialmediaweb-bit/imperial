@@ -322,6 +322,9 @@ export function ServiceReportView({
           Raportul tău, regenerat automat în fiecare lună: evoluția scorului, recenziile noi
           ale competitorilor, starea site-ului și acțiunile lunii. Afacerea ta, ținută în priză.
         </p>
+        <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">
+          Sau 990 lei/an — plătești 10 luni, primești 12.
+        </p>
         {subSent ? (
           <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
             <CheckCircle2 className="h-4 w-4" /> Te-am notat! Te contactăm când pornim abonamentele.

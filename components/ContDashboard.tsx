@@ -281,6 +281,9 @@ export function ContDashboard({
             Scanare automată în fiecare lună: raport nou, evoluția scorului, recenziile competitorilor,
             starea site-ului + notificări pe email. Afacerea ta, ținută în priză.
           </p>
+          <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">
+            Sau 990 lei/an — plătești 10 luni, primești 12. Lunile câștigate din recomandări se scad din următoarea plată.
+          </p>
           {subSent ? (
             <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
               <CheckCircle2 className="h-4 w-4" /> Te-am notat! Te contactăm când activăm abonamentele.
