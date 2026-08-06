@@ -81,10 +81,12 @@ async function handle(req: Request) {
   await ensureSchema();
 
   // Rapoartele plătite, cu email, care mai au emailuri de primit.
+  // Invitațiile VIP (partener vip-imperial) sunt excluse — sunt gesturi de parteneriat, nu lead-uri.
   const res = await pool.query(`
     SELECT token, email, form_data, paid_at, followup_stage
     FROM service_reports
     WHERE paid = TRUE AND email IS NOT NULL AND email <> '' AND followup_stage < 3
+      AND COALESCE(form_data->>'partner', '') <> 'vip-imperial'
     ORDER BY paid_at ASC
     LIMIT 200
   `);
