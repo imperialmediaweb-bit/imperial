@@ -239,8 +239,14 @@ async function handle(req: Request) {
     const form = row.form_data ?? {};
     const firm = String(form.companyName ?? "firma ta");
     try {
+      // Siguranță anti-cost: nu re-scanăm o firmă mai des de o dată la 6 zile —
+      // endpoint-ul poate fi pingat zilnic (UptimeRobot) fără scanări în plus.
+      const last = await getLatestSnapshot(row.token);
+      if (last && Date.now() - last.createdAt.getTime() < 6 * 86_400_000) {
+        continue;
+      }
       const cur = await scanFirm(form, placesKey);
-      const prev = await getLatestSnapshot(row.token);
+      const prev = last?.data ?? null;
       const notifs = diffToNotifications(firm, prev, cur);
       await insertSnapshot(row.token, row.email, cur);
       scanned++;

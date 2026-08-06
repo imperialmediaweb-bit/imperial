@@ -22,15 +22,18 @@ export async function insertSnapshot(reportToken: string, email: string | null, 
   );
 }
 
-export async function getLatestSnapshot(reportToken: string): Promise<MonitorSnapshot | null> {
+export async function getLatestSnapshot(
+  reportToken: string
+): Promise<{ data: MonitorSnapshot; createdAt: Date } | null> {
   const pool = getPool();
   if (!pool) return null;
   await ensureSchema();
   const res = await pool.query(
-    `SELECT data FROM monitor_snapshots WHERE report_token = $1 ORDER BY created_at DESC LIMIT 1`,
+    `SELECT data, created_at FROM monitor_snapshots WHERE report_token = $1 ORDER BY created_at DESC LIMIT 1`,
     [reportToken]
   );
-  return (res.rows[0]?.data as MonitorSnapshot) ?? null;
+  if (!res.rows[0]) return null;
+  return { data: res.rows[0].data as MonitorSnapshot, createdAt: new Date(res.rows[0].created_at) };
 }
 
 export type ClientNotification = {
