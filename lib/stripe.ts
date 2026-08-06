@@ -36,6 +36,7 @@ export async function createReportCheckoutSession(opts: {
   origin: string;
   priceRon?: number;
   labelSuffix?: string;
+  customerEmail?: string;
 }): Promise<{ url: string }> {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY missing");
@@ -53,6 +54,7 @@ export async function createReportCheckoutSession(opts: {
     "line_items[0][price_data][product_data][description]":
       "Raport de consultanță Imperial Media (valoare 299€) + articol de promovare în presa online din zona ta (rețeaua Media Expres)",
   });
+  if (opts.customerEmail) params.set("customer_email", opts.customerEmail);
   billingParams(params);
 
   return createSession(key, params);

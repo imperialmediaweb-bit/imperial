@@ -103,6 +103,7 @@ export default function ServicePage() {
   const [preview, setPreview] = useState<{ token: string; data: ServiceReportPreview } | null>(null);
   const [unlockedReport, setUnlockedReport] = useState<ServiceReport | null>(null);
   const [unlocking, setUnlocking] = useState(false);
+  const [unlockEmail, setUnlockEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const reportRef = useRef<HTMLDivElement>(null);
   // Reduceri din URL: ?partener=bizzclub (partener) sau ?ref=cod (recomandare client)
@@ -191,13 +192,17 @@ export default function ServicePage() {
 
   async function unlock() {
     if (!preview) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(unlockEmail.trim())) {
+      setError("Lasă un email valid — pe el primești raportul și accesul în cont.");
+      return;
+    }
     setUnlocking(true);
     setError(null);
     try {
       const res = await fetch("/api/service-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: preview.token }),
+        body: JSON.stringify({ token: preview.token, email: unlockEmail.trim() }),
       });
       const data = await res.json();
       if (!res.ok || !data?.url) throw new Error(data?.error || "Nu am putut porni plata.");
@@ -666,7 +671,17 @@ export default function ServicePage() {
                       <span>Iar la orice pachet de site: <b className="text-text">campania completă în toate cele 50 de ziare din rețea (300€) — GRATUITĂ</b></span>
                     </li>
                   </ul>
-                  <button type="button" onClick={unlock} disabled={unlocking} className="btn-primary mt-5 w-full justify-center">
+                  <div className="relative mt-5">
+                    <input
+                      type="email"
+                      required
+                      value={unlockEmail}
+                      onChange={(e) => setUnlockEmail(e.target.value)}
+                      placeholder="emailul tău — aici primești raportul"
+                      className="input rounded-2xl py-3 text-center text-sm"
+                    />
+                  </div>
+                  <button type="button" onClick={unlock} disabled={unlocking} className="btn-primary mt-3 w-full justify-center">
                     {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
                     {unlocking ? "Se încarcă..." : price === 0 ? "Deblochează raportul — GRATUIT" : `Deblochează raportul — ${price} lei`}
                   </button>
