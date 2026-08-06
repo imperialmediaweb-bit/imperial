@@ -1,5 +1,5 @@
 // Webhook Stripe — inima automatizării, zero intervenție umană:
-// · plată audit → deblochează raportul, emite factura AUTOMAT (Oblio, dacă e configurat),
+// · plată audit → deblochează raportul, emite factura AUTOMAT (StartCo, dacă e configurat),
 //   email client cu linkul, email proprietar cu datele de facturare + reminder articol local
 // · abonament monitorizare → activează abonatul automat + factură + notificări
 // · anulare abonament → dezactivare automată
@@ -99,10 +99,10 @@ export async function POST(req: Request) {
         priceRon: amountRon,
       });
       invoiceNote = inv.issued
-        ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin Oblio.</p>`
+        ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
         : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
     } else {
-      invoiceNote = `<p>🧾 Emite factura manual (Oblio neconfigurat).</p>`;
+      invoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat — pune STARTCO_TOKEN + STARTCO_SERIES).</p>`;
     }
 
     try {
@@ -144,7 +144,7 @@ export async function POST(req: Request) {
   const city = row?.form_data?.city ?? billing.city ?? "";
   const reportUrl = `${siteConfig.url}/service/raport/${token}`;
 
-  // Factura — automată dacă Oblio e configurat
+  // Factura — automată dacă StartCo e configurat
   let invoiceNote = "";
   if (invoicingEnabled()) {
     const inv = await issueInvoice({
@@ -153,10 +153,10 @@ export async function POST(req: Request) {
       priceRon: amountRon,
     });
     invoiceNote = inv.issued
-      ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin Oblio.</p>`
+      ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
       : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
   } else {
-    invoiceNote = `<p>🧾 Emite factura manual (Oblio neconfigurat).</p>`;
+    invoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat — pune STARTCO_TOKEN + STARTCO_SERIES).</p>`;
   }
 
   try {

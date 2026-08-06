@@ -1,19 +1,19 @@
-// Emitere automată de facturi prin Oblio (www.oblio.eu — plan gratuit, API + e-Factura).
-// Se activează prin env: OBLIO_EMAIL, OBLIO_TOKEN (API secret), OBLIO_CIF (firma ta),
-// OBLIO_SERIES (seria facturilor, ex: "IMP"). Fără chei → returnează {issued:false}
-// și facturarea rămâne manuală (datele vin oricum pe emailul proprietarului).
+// Emitere automată de facturi prin StartCo Cloud (api.cloud.startco.ro).
+// Docs: https://api.cloud.startco.ro/developer/docs
+// Se activează prin env:
+//   STARTCO_TOKEN  — cheia API din StartCo Cloud (Contul Meu → Integrări → API)
+//   STARTCO_SERIES — seria facturilor (ex: "FCT")
+// Fără chei → returnează {issued:false} și facturarea rămâne manuală
+// (datele de facturare vin oricum pe emailul proprietarului).
 //
-// Notă: dacă folosești SmartBill în loc de Oblio, schimbăm doar acest fișier.
+// Flux: 1) creăm/actualizăm clientul (partner — StartCo validează CUI-ul la ANAF)
+//       2) emitem factura pe clientId (PDF generat automat, e-Factura conform
+//          setărilor contului StartCo).
 
-const OBLIO_BASE = "https://www.oblio.eu/api";
+const STARTCO_BASE = "https://api.cloud.startco.ro";
 
 export function invoicingEnabled(): boolean {
-  return !!(
-    process.env.OBLIO_EMAIL &&
-    process.env.OBLIO_TOKEN &&
-    process.env.OBLIO_CIF &&
-    process.env.OBLIO_SERIES
-  );
+  return !!(process.env.STARTCO_TOKEN && process.env.STARTCO_SERIES);
 }
 
 export type InvoiceClient = {
@@ -24,70 +24,82 @@ export type InvoiceClient = {
   email?: string;
 };
 
+async function startcoFetch(path: string, body: any): Promise<any> {
+  const res = await fetch(`${STARTCO_BASE}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: process.env.STARTCO_TOKEN!,
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(15_000),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(`StartCo ${path} → ${res.status}: ${JSON.stringify(data).slice(0, 300)}`);
+  }
+  return data;
+}
+
+// Id-ul poate veni sub mai multe forme în funcție de endpoint — căutăm defensiv.
+function extractId(data: any): number | null {
+  const candidates = [data?.id, data?.data?.id, data?.partner?.id, data?.client?.id, data?.data?.partner?.id];
+  for (const c of candidates) {
+    const n = Number(c);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return null;
+}
+
 export async function issueInvoice(opts: {
   client: InvoiceClient;
   productName: string;
-  priceRon: number; // preț final, TVA inclus
+  priceRon: number; // preț final încasat
 }): Promise<{ issued: boolean; link?: string; error?: string }> {
   if (!invoicingEnabled()) return { issued: false, error: "invoicing not configured" };
 
   try {
-    // 1. Token de acces
-    const tokenRes = await fetch(`${OBLIO_BASE}/authorize/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        client_id: process.env.OBLIO_EMAIL,
-        client_secret: process.env.OBLIO_TOKEN,
-      }),
-      signal: AbortSignal.timeout(10_000),
+    // 1. Clientul (partner) — trimitem CUI-ul sub ambele denumiri uzuale;
+    //    câmpurile necunoscute sunt ignorate de API.
+    const partnerData = await startcoFetch("/developer/partners", {
+      name: opts.client.name || "Persoană fizică",
+      cif: opts.client.cif || "",
+      cui: opts.client.cif || "",
+      address: opts.client.address || "",
+      city: opts.client.city || "",
+      email: opts.client.email || "",
+      country: "România",
     });
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData?.access_token;
-    if (!accessToken) throw new Error("Oblio auth failed");
-
-    // 2. Emitere factură + trimitere pe email către client
-    const invoiceRes = await fetch(`${OBLIO_BASE}/docs/invoice`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        cif: process.env.OBLIO_CIF,
-        seriesName: process.env.OBLIO_SERIES,
-        language: "RO",
-        precision: 2,
-        currency: "RON",
-        sendEmail: opts.client.email ? 1 : 0,
-        client: {
-          name: opts.client.name || "Persoană fizică",
-          cif: opts.client.cif || "",
-          address: opts.client.address || "",
-          city: opts.client.city || "",
-          country: "România",
-          email: opts.client.email || "",
-        },
-        products: [
-          {
-            name: opts.productName,
-            price: opts.priceRon,
-            quantity: 1,
-            measuringUnit: "buc",
-            currency: "RON",
-            vatIncluded: true,
-          },
-        ],
-      }),
-      signal: AbortSignal.timeout(15_000),
-    });
-    const invoiceData = await invoiceRes.json();
-    if (invoiceData?.status !== 200 && !invoiceData?.data) {
-      throw new Error(`Oblio invoice failed: ${JSON.stringify(invoiceData).slice(0, 200)}`);
+    const clientId = extractId(partnerData);
+    if (!clientId) {
+      throw new Error(`StartCo partner id missing: ${JSON.stringify(partnerData).slice(0, 300)}`);
     }
-    return { issued: true, link: invoiceData?.data?.link };
+
+    // 2. Factura
+    const today = new Date().toISOString().slice(0, 10);
+    const invoiceData = await startcoFetch("/developer/invoice", {
+      currency: "RON",
+      dateEmitted: today,
+      dateDue: today,
+      series: process.env.STARTCO_SERIES,
+      clientId,
+      products: [
+        {
+          name: opts.productName,
+          price: opts.priceRon,
+          um: "buc",
+          risky: false,
+          nc: "",
+          cpv: "",
+        },
+      ],
+    });
+
+    const link =
+      invoiceData?.pdf ?? invoiceData?.data?.pdf ?? invoiceData?.link ?? invoiceData?.data?.link ?? undefined;
+    return { issued: true, link: link ? String(link) : undefined };
   } catch (e: any) {
-    console.error("[invoicing] failed:", e?.message ?? e);
-    return { issued: false, error: String(e?.message ?? e) };
+    console.error("[invoicing/startco] failed:", e?.message ?? e);
+    return { issued: false, error: String(e?.message ??e) };
   }
 }
