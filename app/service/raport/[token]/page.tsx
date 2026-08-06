@@ -28,7 +28,7 @@ export default async function ReportPage({ params }: { params: { token: string }
     <main className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
       <section className="container-app pb-20 pt-14 sm:pt-20">
-        <ServiceReportView report={report} initialEmail={row.email ?? ""} />
+        <ServiceReportView report={report} initialEmail={row.email ?? ""} token={token} />
       </section>
     </main>
   );

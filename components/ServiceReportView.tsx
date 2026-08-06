@@ -25,9 +25,11 @@ import type { ServiceReport } from "@/app/api/service-report/route";
 export function ServiceReportView({
   report,
   initialEmail = "",
+  token,
 }: {
   report: ServiceReport;
   initialEmail?: string;
+  token?: string;
 }) {
   const [email, setEmail] = useState(initialEmail);
   const [emailSent, setEmailSent] = useState(false);
@@ -36,6 +38,14 @@ export function ServiceReportView({
   const [error, setError] = useState<string | null>(null);
 
   async function postLead(opts: { email: string; source: string; message: string }) {
+    // Legăm emailul de raport ca să-i apară în /cont (nu blocăm pe eroare).
+    if (token) {
+      fetch("/api/service-report/attach-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, email: opts.email }),
+      }).catch(() => {});
+    }
     const res = await fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -347,6 +357,11 @@ export function ServiceReportView({
           Sau <Link href="/brief" className="text-brand-orange hover:underline">cere estimare direct</Link> pentru Faza 1
         </p>
       </div>
+
+      <p className="text-center text-xs text-text-subtle">
+        Toate rapoartele + notificările tale de monitorizare:{" "}
+        <Link href="/cont" className="text-brand-orange hover:underline">intră în contul tău</Link>
+      </p>
 
       {error && (
         <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</p>

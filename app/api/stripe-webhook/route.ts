@@ -84,6 +84,7 @@ export async function POST(req: Request) {
           <p>Îl găsești oricând aici:</p>
           <p><a href="${reportUrl}" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Vezi raportul complet</a></p>
           <p>În următoarele zile pornim și <b>promovarea afacerii tale în 50 de ziare online</b> (inclusă). Te contactăm pe acest email pentru detalii.</p>
+          <p>Ai și un <b>cont</b> cu toate rapoartele și notificările tale de monitorizare: <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a> — intri cu emailul ăsta, fără parolă.</p>
           <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
         </div>`,
       });

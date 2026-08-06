@@ -38,6 +38,29 @@ export async function getServiceReport(token: string): Promise<ServiceReportRow 
   return (res.rows[0] as ServiceReportRow) ?? null;
 }
 
+export async function getServiceReportsByEmail(email: string): Promise<ServiceReportRow[]> {
+  const pool = getPool();
+  if (!pool) return [];
+  await ensureSchema();
+  const res = await pool.query(
+    `SELECT * FROM service_reports WHERE LOWER(email) = LOWER($1) ORDER BY created_at ASC`,
+    [email]
+  );
+  return res.rows as ServiceReportRow[];
+}
+
+// Leagă emailul de raport (ex: userul lasă emailul în raport, în modul de lansare fără Stripe).
+export async function setServiceReportEmail(token: string, email: string): Promise<boolean> {
+  const pool = getPool();
+  if (!pool) return false;
+  await ensureSchema();
+  const res = await pool.query(
+    `UPDATE service_reports SET email = $2 WHERE token = $1 AND (email IS NULL OR email = '')`,
+    [token, email]
+  );
+  return (res.rowCount ?? 0) > 0;
+}
+
 export async function markServiceReportPaid(token: string, email?: string): Promise<boolean> {
   const pool = getPool();
   if (!pool) return false;

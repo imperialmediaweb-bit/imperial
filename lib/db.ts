@@ -94,6 +94,28 @@ export async function ensureSchema(): Promise<void> {
 
     CREATE INDEX IF NOT EXISTS idx_service_reports_token ON service_reports(token);
     CREATE INDEX IF NOT EXISTS idx_service_reports_created ON service_reports(created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_service_reports_email ON service_reports(email);
+
+    -- Monitorizare lunară: snapshot-uri de scanare per raport (firmă) + notificări per client
+    CREATE TABLE IF NOT EXISTS monitor_snapshots (
+      id SERIAL PRIMARY KEY,
+      report_token TEXT NOT NULL,
+      email TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      data JSONB NOT NULL DEFAULT '{}'::jsonb
+    );
+    CREATE INDEX IF NOT EXISTS idx_monitor_snapshots_token ON monitor_snapshots(report_token, created_at DESC);
+
+    CREATE TABLE IF NOT EXISTS client_notifications (
+      id SERIAL PRIMARY KEY,
+      email TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      kind TEXT NOT NULL DEFAULT 'info',
+      title TEXT NOT NULL,
+      body TEXT,
+      seen BOOLEAN NOT NULL DEFAULT FALSE
+    );
+    CREATE INDEX IF NOT EXISTS idx_client_notifications_email ON client_notifications(email, created_at DESC);
   `;
 
   try {
