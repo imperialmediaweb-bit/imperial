@@ -12,7 +12,7 @@ export function stripeEnabled(): boolean {
 
 export function reportPriceRon(): number {
   const v = Number(process.env.SERVICE_REPORT_PRICE_RON);
-  return Number.isFinite(v) && v > 0 ? Math.round(v) : 199;
+  return Number.isFinite(v) && v > 0 ? Math.round(v) : 299;
 }
 
 export async function createReportCheckoutSession(opts: {

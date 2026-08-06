@@ -193,7 +193,12 @@ export default function ServicePage() {
           adaptat pe domeniul tău, de la imobiliare la service auto sau notariat.
         </p>
         <p className="mt-3 text-sm font-semibold text-brand-orangeLight">
-          Audit complet (valoare 299€) + promovare în 50 de ziare online (valoare 300€) — totul pentru 199 lei
+          Audit complet (valoare 299€) + promovare în 50 de ziare online (valoare 300€) — totul pentru 299 lei
+        </p>
+        <p className="mx-auto mt-2 max-w-2xl text-xs text-text-subtle">
+          <span className="font-semibold text-text-muted">Coach-ul cu date al afacerii tale:</span>{" "}
+          Google, ANAF, competiția din zona ta — pași concreți, cu costuri și impact,
+          la prețul unei cine.
         </p>
       </section>
 
@@ -474,7 +479,7 @@ export default function ServicePage() {
                   <h3 className="mt-4 font-display text-xl font-extrabold text-text sm:text-2xl">
                     Deblochează raportul complet
                   </h3>
-                  <p className="mt-3 font-display text-3xl font-extrabold text-brand-orange">199 lei</p>
+                  <p className="mt-3 font-display text-3xl font-extrabold text-brand-orange">299 lei</p>
                   <ul className="mx-auto mt-4 max-w-sm space-y-2 text-left text-sm text-text-muted">
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
@@ -486,12 +491,12 @@ export default function ServicePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-                      Cei 199 lei se scad integral din orice pachet comanzi în 30 de zile
+                      Cei 299 lei se scad integral din orice pachet comanzi în 30 de zile
                     </li>
                   </ul>
                   <button type="button" onClick={unlock} disabled={unlocking} className="btn-primary mt-5 w-full justify-center">
                     {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                    {unlocking ? "Se încarcă..." : "Deblochează raportul — 199 lei"}
+                    {unlocking ? "Se încarcă..." : "Deblochează raportul — 299 lei"}
                   </button>
                   <p className="mt-3 text-[11px] text-text-subtle">Plată securizată cu cardul · raportul rămâne al tău pe link permanent</p>
                   {error && (
