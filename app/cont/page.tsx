@@ -4,6 +4,7 @@
 import { getClientEmail } from "@/lib/client-auth";
 import { getServiceReportsByEmail } from "@/lib/service-reports";
 import { getNotifications, markNotificationsSeen } from "@/lib/monitoring";
+import { refCodeForEmail, countPaidReferrals } from "@/lib/referrals";
 import { hasDb } from "@/lib/db";
 import { ContLogin } from "@/components/ContLogin";
 import { ContDashboard } from "@/components/ContDashboard";
@@ -36,9 +37,11 @@ export default async function ContPage({
     );
   }
 
-  const [reports, notifications] = await Promise.all([
+  const refCode = refCodeForEmail(email);
+  const [reports, notifications, referralCount] = await Promise.all([
     getServiceReportsByEmail(email).catch(() => []),
     getNotifications(email).catch(() => []),
+    countPaidReferrals(refCode).catch(() => 0),
   ]);
   // Notificările devin „văzute" după ce le-a deschis pagina.
   markNotificationsSeen(email).catch(() => {});
@@ -48,6 +51,8 @@ export default async function ContPage({
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
       <ContDashboard
         email={email}
+        refCode={refCode}
+        referralCount={referralCount}
         reports={reports.map((r) => ({
           token: r.token,
           createdAt: new Date(r.created_at).toISOString(),

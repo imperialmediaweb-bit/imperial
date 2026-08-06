@@ -24,6 +24,8 @@ import {
   SearchCheck,
   Calculator,
   Wrench,
+  Gift,
+  Copy,
 } from "lucide-react";
 
 type ReportItem = {
@@ -60,12 +62,26 @@ export function ContDashboard({
   email,
   reports,
   notifications,
+  refCode,
+  referralCount = 0,
 }: {
   email: string;
   reports: ReportItem[];
   notifications: NotificationItem[];
+  refCode?: string;
+  referralCount?: number;
 }) {
   const [subSent, setSubSent] = useState(false);
+  const [refCopied, setRefCopied] = useState(false);
+  const refLink = refCode ? `https://imperial-media.ro/service?ref=${refCode}` : "";
+
+  async function copyRefLink() {
+    try {
+      await navigator.clipboard.writeText(refLink);
+      setRefCopied(true);
+      setTimeout(() => setRefCopied(false), 2000);
+    } catch {}
+  }
   const scores = reports.filter((r) => r.score > 0);
   const latest = reports[reports.length - 1];
 
@@ -230,6 +246,31 @@ export function ContDashboard({
             </div>
           )}
         </div>
+
+        {/* Recomandă și câștigi */}
+        {refCode && (
+          <div className="rounded-3xl border border-green-500/30 bg-green-500/5 p-6">
+            <h2 className="inline-flex items-center gap-2 font-display text-lg font-bold text-text">
+              <Gift className="h-5 w-5 text-green-400" /> Recomandă și câștigi
+            </h2>
+            <p className="mt-2 text-sm text-text-muted">
+              Trimite linkul tău unui alt patron: el primește <b className="text-text">reducere (249 în loc de 299 lei)</b>,
+              iar tu primești <b className="text-text">1 lună de monitorizare GRATIS</b> pentru fiecare firmă care cumpără.
+              Cu cât aduci mai mulți, cu atât mai bine.
+            </p>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <input readOnly value={refLink} className="input flex-1 text-xs" onFocus={(e) => e.target.select()} />
+              <button type="button" onClick={copyRefLink} className="btn-primary whitespace-nowrap">
+                <Copy className="h-4 w-4" /> {refCopied ? "Copiat ✓" : "Copiază linkul"}
+              </button>
+            </div>
+            <p className="mt-3 text-xs font-semibold text-green-300">
+              {referralCount > 0
+                ? `🎉 Ai adus ${referralCount} ${referralCount === 1 ? "firmă" : "firme"} → ${referralCount} ${referralCount === 1 ? "lună" : "luni"} de monitorizare gratis`
+                : "Încă nicio firmă adusă — trimite linkul pe WhatsApp unui patron pe care-l știi."}
+            </p>
+          </div>
+        )}
 
         {/* Abonament */}
         <div className="rounded-3xl border border-brand-purple/30 bg-brand-purple/5 p-6 text-center">

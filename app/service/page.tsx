@@ -24,6 +24,10 @@ import {
 } from "lucide-react";
 import type { ServiceReport, ServiceReportPreview } from "@/app/api/service-report/route";
 import { ServiceReportView, ScoreCircle } from "@/components/ServiceReportView";
+import { getPartner } from "@/lib/partners";
+
+const BASE_PRICE = 299;
+const REF_PRICE = 249;
 
 const INDUSTRIES = [
   "Restaurant / HoReCa", "Salon / Beauty", "Cabinet medical / Stomatologie",
@@ -79,6 +83,21 @@ export default function ServicePage() {
   const [unlocking, setUnlocking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const reportRef = useRef<HTMLDivElement>(null);
+  // Reduceri din URL: ?partener=bizzclub (partener) sau ?ref=cod (recomandare client)
+  const [promo, setPromo] = useState<{ kind: "partner" | "ref"; label: string; price: number; partner?: string; ref?: string } | null>(null);
+
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const partner = getPartner(sp.get("partener"));
+    const refRaw = String(sp.get("ref") ?? "").toLowerCase();
+    if (partner) {
+      setPromo({ kind: "partner", label: partner.label, price: partner.priceRon, partner: partner.code });
+    } else if (/^[a-z0-9]{4,16}$/.test(refRaw)) {
+      setPromo({ kind: "ref", label: "recomandare", price: REF_PRICE, ref: refRaw });
+    }
+  }, []);
+
+  const price = promo?.price ?? BASE_PRICE;
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -130,7 +149,7 @@ export default function ServicePage() {
       const res = await fetch("/api/service-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, partner: promo?.partner, ref: promo?.ref }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Eroare la generarea raportului.");
@@ -193,8 +212,20 @@ export default function ServicePage() {
           adaptat pe domeniul tău, de la imobiliare la service auto sau notariat.
         </p>
         <p className="mt-3 text-sm font-semibold text-brand-orangeLight">
-          Audit complet (valoare 299€) + promovare în 50 de ziare online (valoare 300€) — totul pentru 299 lei
+          Audit complet (valoare 299€) + promovare în 50 de ziare online (valoare 300€) — totul pentru{" "}
+          {promo ? (
+            <>
+              <span className="text-text-subtle line-through">{BASE_PRICE} lei</span> {price} lei
+            </>
+          ) : (
+            `${BASE_PRICE} lei`
+          )}
         </p>
+        {promo && (
+          <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1.5 text-xs font-bold text-green-300">
+            🎟️ {promo.kind === "partner" ? `Reducere ${promo.label} aplicată` : "Reducere prin recomandare aplicată"} — plătești {price} lei
+          </p>
+        )}
         <p className="mx-auto mt-2 max-w-2xl text-xs text-text-subtle">
           <span className="font-semibold text-text-muted">Coach-ul cu date al afacerii tale:</span>{" "}
           Google, ANAF, competiția din zona ta — pași concreți, cu costuri și impact,
@@ -479,7 +510,10 @@ export default function ServicePage() {
                   <h3 className="mt-4 font-display text-xl font-extrabold text-text sm:text-2xl">
                     Deblochează raportul complet
                   </h3>
-                  <p className="mt-3 font-display text-3xl font-extrabold text-brand-orange">299 lei</p>
+                  <p className="mt-3 font-display text-3xl font-extrabold text-brand-orange">
+                    {promo && <span className="mr-2 text-lg font-bold text-text-subtle line-through">{BASE_PRICE} lei</span>}
+                    {price} lei
+                  </p>
                   <ul className="mx-auto mt-4 max-w-sm space-y-2 text-left text-sm text-text-muted">
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
@@ -491,12 +525,12 @@ export default function ServicePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-                      Cei 299 lei se scad integral din orice pachet comanzi în 30 de zile
+                      Cei {price} lei se scad integral din orice pachet comanzi în 30 de zile
                     </li>
                   </ul>
                   <button type="button" onClick={unlock} disabled={unlocking} className="btn-primary mt-5 w-full justify-center">
                     {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                    {unlocking ? "Se încarcă..." : "Deblochează raportul — 299 lei"}
+                    {unlocking ? "Se încarcă..." : `Deblochează raportul — ${price} lei`}
                   </button>
                   <p className="mt-3 text-[11px] text-text-subtle">Plată securizată cu cardul · raportul rămâne al tău pe link permanent</p>
                   {error && (

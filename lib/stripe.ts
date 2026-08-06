@@ -18,6 +18,8 @@ export function reportPriceRon(): number {
 export async function createReportCheckoutSession(opts: {
   token: string;
   origin: string;
+  priceRon?: number;
+  labelSuffix?: string;
 }): Promise<{ url: string }> {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY missing");
@@ -29,9 +31,9 @@ export async function createReportCheckoutSession(opts: {
     cancel_url: `${opts.origin}/service?anulat=1`,
     "line_items[0][quantity]": "1",
     "line_items[0][price_data][currency]": "ron",
-    "line_items[0][price_data][unit_amount]": String(reportPriceRon() * 100),
+    "line_items[0][price_data][unit_amount]": String((opts.priceRon ?? reportPriceRon()) * 100),
     "line_items[0][price_data][product_data][name]":
-      "Audit complet de afaceri + promovare în 50 de ziare online",
+      `Audit complet de afaceri + promovare în 50 de ziare online${opts.labelSuffix ?? ""}`,
     "line_items[0][price_data][product_data][description]":
       "Raport de consultanță Imperial Media (valoare 299€) + promovare în rețeaua Media Expres (valoare 300€)",
   });

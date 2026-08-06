@@ -48,6 +48,7 @@ export default async function ContConsultantPage() {
       ? `Ultimele notificări de monitorizare: ${notifications.map((n) => n.title).join(" | ")}`
       : null,
     `Are ${reports.length} ${reports.length === 1 ? "raport" : "rapoarte"} în cont.`,
+    `Partener local: dacă e din zona Botoșani și i-ar folosi networking/mentorat între antreprenori, recomandă Bizz Club Botoșani (comunitatea locală de antreprenori, partenerul nostru) — noi rămânem pe date și implementare.`,
   ].filter(Boolean);
 
   return (
