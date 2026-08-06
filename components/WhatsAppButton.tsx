@@ -12,7 +12,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contactează-ne pe WhatsApp"
-      className="group fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_8px_30px_rgba(37,211,102,0.4)] transition-transform hover:scale-110"
+      className="group fixed bottom-5 right-5 z-50 print:hidden grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_8px_30px_rgba(37,211,102,0.4)] transition-transform hover:scale-110"
     >
       <span className="absolute inset-0 animate-ping rounded-full bg-[#25D366] opacity-30" />
       <svg

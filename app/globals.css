@@ -436,7 +436,7 @@ html {
 /* ───── Print: raportul /service salvat ca PDF — colorat, ca un document de design ───── */
 @media print {
   @page {
-    margin: 12mm;
+    margin: 10mm;
   }
   header,
   footer,
@@ -466,12 +466,19 @@ html {
     box-shadow: none !important;
     text-shadow: none !important;
   }
-  /* Cardurile devin suprafețe albe/tentate cu borduri colorate vizibile */
+  /* Cardurile MICI nu se rup între pagini; secțiunile mari pot curge liber
+     (altfel rămân goluri uriașe de pagină) */
+  .service-report-print [class*="rounded-2xl"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
   .service-report-print [class*="rounded-3xl"] {
     background: #fff !important;
     border-color: #e3e5ec !important;
-    break-inside: avoid;
-    page-break-inside: avoid;
+  }
+  .service-report-print [class*="rounded-2xl"][class*="border"] {
+    background: #fdfdfe !important;
+    border-color: #e3e5ec !important;
   }
   .service-report-print [class*="border-red-500"] {
     background: #fef2f2 !important;
@@ -523,16 +530,22 @@ html {
   .service-report-print [class*="bg-brand-orange/15"] {
     background: #ffedd5 !important;
   }
-}
-
-/* La print, animațiile nu trebuie să lase conținut invizibil sau bare la 0 */
-@media print {
-  .service-report-print *,
-  .service-report-print {
+  /* Logo-ul e alb — pe hârtie îi punem plăcuța închisă în spate ca să se vadă */
+  .service-report-print img[alt="Imperial Media"] {
+    background: #170b2e !important;
+    padding: 8px 14px !important;
+    border-radius: 12px !important;
+  }
+  /* Animațiile nu lasă conținut invizibil sau bare la 0 */
+  .service-report-print,
+  .service-report-print * {
     opacity: 1 !important;
-    transform: none !important;
     animation: none !important;
     transition: none !important;
+  }
+  /* transform: none — dar NU pe SVG-uri (cercul scorului are nevoie de rotația lui!) */
+  .service-report-print *:not(svg):not(svg *) {
+    transform: none !important;
   }
   .service-report-print .viz-bar {
     width: var(--bar-w) !important;

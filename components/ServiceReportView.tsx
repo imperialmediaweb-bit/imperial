@@ -203,21 +203,21 @@ export function ServiceReportView({
             const s = STATUS[d.status] ?? STATUS.warning;
             return (
               <motion.div key={d.area} {...fadeUp} transition={{ ...fadeUp.transition, delay: (i % 2) * 0.08 }}
-                className="rounded-2xl border border-bg-border bg-bg-card/60 p-5 transition hover:border-brand-orange/40">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="text-sm font-bold text-text">{d.emoji} {d.area}</p>
+                className="flex h-full flex-col rounded-2xl border border-bg-border bg-bg-card/60 p-5 transition hover:border-brand-orange/40">
+                <div className="flex min-h-[40px] items-start justify-between gap-2">
+                  <p className="text-sm font-bold leading-snug text-text">{d.emoji} {d.area}</p>
                   <span className={`inline-flex flex-shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold ${s.text}`}
                     style={{ background: `${s.color}1a`, border: `1px solid ${s.color}55` }}>
                     <s.Icon className="h-3 w-3" /> {s.label}
                   </span>
                 </div>
-                <div className="mt-3 h-[6px] overflow-hidden rounded-full bg-bg-soft/70">
+                <div className="mt-2 h-[6px] overflow-hidden rounded-full bg-bg-soft/70">
                   <motion.div className="viz-bar h-full rounded-full"
                     style={{ ["--bar-color" as any]: s.color, ["--bar-w" as any]: `${s.pct}%` }}
                     initial={{ width: 0 }} whileInView={{ width: `${s.pct}%` }} viewport={{ once: true }}
                     transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }} />
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-text-muted">{d.finding}</p>
+                <p className="mt-3 flex-1 text-xs leading-relaxed text-text-muted">{d.finding}</p>
               </motion.div>
             );
           })}
