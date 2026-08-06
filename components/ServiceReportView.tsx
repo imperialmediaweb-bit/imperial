@@ -288,6 +288,38 @@ export function ServiceReportView({
         </div>
       )}
 
+      {/* Planul de social media */}
+      {report.socialPlan && (
+        <div className="rounded-3xl border border-bg-border bg-bg-card/60 p-6">
+          <h3 className="font-display text-lg font-bold text-text">📱 Planul tău de social media</h3>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {report.socialPlan.reelsPerWeek > 0 && (
+              <span className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm font-bold text-text">
+                🎬 {report.socialPlan.reelsPerWeek} {report.socialPlan.reelsPerWeek === 1 ? "reel" : "reeluri"}/săptămână
+              </span>
+            )}
+            {report.socialPlan.postsPerWeek > 0 && (
+              <span className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm font-bold text-text">
+                🖼️ {report.socialPlan.postsPerWeek} {report.socialPlan.postsPerWeek === 1 ? "postare" : "postări"}/săptămână
+              </span>
+            )}
+            {report.socialPlan.storiesPerWeek > 0 && (
+              <span className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm font-bold text-text">
+                ⚡ {report.socialPlan.storiesPerWeek} story-uri/săptămână
+              </span>
+            )}
+          </div>
+          <p className="mt-4 text-xs font-bold uppercase tracking-wider text-text-subtle">Ce postezi, concret:</p>
+          <ul className="mt-2 space-y-2">
+            {report.socialPlan.ideas.map((idea, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-text-muted">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" /> {idea}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Planul de acțiune */}
       <div className="rounded-3xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/5 via-transparent to-brand-purple/5 p-6">
         <h3 className="font-display text-lg font-bold text-text">🎯 Planul tău de acțiune (12 luni)</h3>

@@ -62,6 +62,7 @@ const LOCKED_SECTIONS = [
   { emoji: "🏆", title: "Tu vs competiția", desc: "Comparație directă cu firmele reale din zona ta" },
   { emoji: "📈", title: "Proiecția economică", desc: "Cât investești vs cât scoți — pe 3 luni și pe 12 luni" },
   { emoji: "👑", title: "Ce fac liderii din domeniul tău", desc: "Practicile care îi țin în top + ce-ți lipsește ție" },
+  { emoji: "📱", title: "Planul tău de social media", desc: "Câte reeluri, postări și story-uri pe săptămână + idei concrete pentru domeniul tău" },
   { emoji: "🎯", title: "Planul de acțiune pe 12 luni", desc: "4 faze concrete, cu investiție și impact per fază" },
 ];
 

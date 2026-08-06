@@ -72,6 +72,12 @@ export type ServiceReport = {
     practices: string[];
     gap: string;
   };
+  socialPlan?: {
+    reelsPerWeek: number;
+    postsPerWeek: number;
+    storiesPerWeek: number;
+    ideas: string[];
+  };
   actionPlan: Array<{
     phase: string;
     title: string;
@@ -427,6 +433,7 @@ Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
   "topRecommendation": {"title":"<dacă face UN SINGUR lucru luna asta, care e? scurt, imperativ>","why":"<motivul în cifre, din datele lui reale>","firstStep":"<primul pas concret, de făcut azi>"},
   "projection": {"invest3m":<EUR investiție primele 3 luni>,"return3m":<EUR venit suplimentar estimat în primele 3 luni>,"invest12m":<EUR investiție totală 12 luni>,"return12m":<EUR venit suplimentar estimat pe 12 luni>,"breakEvenMonth":<luna 1-12 în care investiția e recuperată>,"newClientsPerMonth":<clienți în plus/lună la finalul planului>},
   "industryLeaders": {"practices":["<3-4 lucruri concrete pe care le fac liderii din domeniul lui ca să domine>"],"gap":"<diferența principală dintre el și lideri, o frază directă>"},
+  "socialPlan": {"reelsPerWeek":<nr realist de reels/săptămână pentru domeniul lui>,"postsPerWeek":<nr postări>,"storiesPerWeek":<nr story-uri>,"ideas":["<4-6 idei CONCRETE de conținut specifice domeniului — ce filmează/postează exact, nu generalități; ex salon: transformare înainte/după cu acordul clientei; restaurant: felul zilei filmat la 12:00">"]},
   "actionPlan": [
     {"phase":"FAZA 1 — URGENT (luna 1)","title":"...","actions":["acțiune specifică domeniului","..."],"investment":"X-Y€","impact":"+N clienți/lună estimat"},
     {"phase":"FAZA 2 — CREȘTERE (lunile 2-3)","title":"...","actions":["..."],"investment":"...","impact":"..."},
@@ -445,7 +452,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
   try {
     const resp = await client.messages.create({
       model: CLAUDE_MODEL,
-      max_tokens: 3000,
+      max_tokens: 3500,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -458,6 +465,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     const tr = parsed.topRecommendation;
     const pj = parsed.projection;
     const il = parsed.industryLeaders;
+    const sp = parsed.socialPlan;
 
     const report: ServiceReport = {
       companyName,
@@ -505,6 +513,15 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
           ? {
               practices: il.practices.map(String).slice(0, 4),
               gap: String(il.gap ?? "").slice(0, 300),
+            }
+          : undefined,
+      socialPlan:
+        sp && Array.isArray(sp.ideas) && sp.ideas.length > 0
+          ? {
+              reelsPerWeek: Math.max(0, Math.min(14, Number(sp.reelsPerWeek) || 0)),
+              postsPerWeek: Math.max(0, Math.min(14, Number(sp.postsPerWeek) || 0)),
+              storiesPerWeek: Math.max(0, Math.min(21, Number(sp.storiesPerWeek) || 0)),
+              ideas: sp.ideas.map(String).slice(0, 6),
             }
           : undefined,
       actionPlan: Array.isArray(parsed.actionPlan)
