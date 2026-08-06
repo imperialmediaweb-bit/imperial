@@ -15,6 +15,7 @@ import {
   Copy,
   Check,
 } from "lucide-react";
+import { AdminNav } from "@/components/admin/AdminNav";
 
 type Prospect = {
   name: string;
@@ -93,6 +94,7 @@ office@imperial-media.ro`;
 
   return (
     <main className="container-app py-10">
+      <AdminNav active="prospects" />
       <div className="mb-6">
         <h1 className="font-display text-2xl font-extrabold text-text">
           <Target className="mr-2 inline h-6 w-6 text-brand-orange" />

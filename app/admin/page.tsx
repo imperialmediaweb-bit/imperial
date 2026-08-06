@@ -6,6 +6,7 @@ import { hasDb } from "@/lib/db";
 import { listBriefs, STATUS_LABELS, type BriefStatus } from "@/lib/briefs";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { LogoutButton } from "@/components/admin/LogoutButton";
+import { AdminNav } from "@/components/admin/AdminNav";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,7 @@ export default async function AdminPage({
 
   return (
     <main className="container-app py-10">
+      <AdminNav active="leads" />
       {/* Header */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -58,10 +60,7 @@ export default async function AdminPage({
             {status ? ` · filtrate (${STATUS_LABELS[status as BriefStatus]})` : ""}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Link href="/admin/rapoarte" className="btn-ghost text-xs">📊 Rapoarte & abonați</Link>
-          <LogoutButton />
-        </div>
+        <LogoutButton />
       </div>
 
       {/* Stats */}

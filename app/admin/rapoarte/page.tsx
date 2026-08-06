@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FileText, Users, TrendingUp, ArrowLeft } from "lucide-react";
 import { isAdminConfigured, isAuthed } from "@/lib/admin-auth";
 import { getPool, ensureSchema, hasDb } from "@/lib/db";
+import { AdminNav } from "@/components/admin/AdminNav";
 
 export const dynamic = "force-dynamic";
 
@@ -47,10 +48,8 @@ export default async function AdminRapoartePage() {
   return (
     <main className="container-app py-10">
       <div className="mx-auto max-w-5xl">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="font-display text-2xl font-extrabold text-text">📊 Rapoarte & abonați</h1>
-          <Link href="/admin" className="btn-ghost text-xs"><ArrowLeft className="h-3.5 w-3.5" /> Înapoi la lead-uri</Link>
-        </div>
+        <AdminNav active="rapoarte" />
+        <h1 className="font-display text-2xl font-extrabold text-text">📊 Rapoarte & abonați</h1>
 
         {/* Cifrele */}
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
