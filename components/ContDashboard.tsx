@@ -331,6 +331,11 @@ export function ContDashboard({
               </button>
             </div>
           )}
+          {!subscription?.active && !subSent && (
+            <p className="mt-2 text-[10px] text-text-subtle">
+              Abonamentul se reînnoiește automat; îl poți anula oricând. Vezi <Link href="/termeni" className="underline">Termenii</Link>.
+            </p>
+          )}
         </div>
 
         {/* CTA */}

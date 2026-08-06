@@ -538,6 +538,10 @@ export default function ServicePage() {
                     {unlocking ? "Se încarcă..." : `Deblochează raportul — ${price} lei`}
                   </button>
                   <p className="mt-3 text-[11px] text-text-subtle">Plată securizată cu cardul · raportul rămâne al tău pe link permanent</p>
+                  <p className="mt-1.5 text-[10px] leading-snug text-text-subtle">
+                    Apăsând butonul ești de acord cu <a href="/termeni" target="_blank" className="underline">Termenii</a> și cu livrarea imediată
+                    a conținutului digital (renunți la dreptul de retragere de 14 zile).
+                  </p>
                   {error && (
                     <p className="mt-3 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs text-red-300">{error}</p>
                   )}

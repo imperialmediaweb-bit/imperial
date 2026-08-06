@@ -161,7 +161,13 @@ export function Footer() {
         </div>
 
         <div className="mt-14 border-t border-bg-border/60 pt-6">
-          <p className="text-center text-xs text-text-subtle">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-subtle">
+            <Link href="/termeni" className="transition hover:text-brand-orange">Termeni și condiții</Link>
+            <Link href="/confidentialitate" className="transition hover:text-brand-orange">Politica de confidențialitate</Link>
+            <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="noopener noreferrer" className="transition hover:text-brand-orange">ANPC — SAL</a>
+            <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="transition hover:text-brand-orange">Soluționarea online a litigiilor (SOL)</a>
+          </div>
+          <p className="mt-4 text-center text-xs text-text-subtle">
             Copyright Imperial Media © {new Date().getFullYear()}. Toate
             drepturile rezervate.
           </p>

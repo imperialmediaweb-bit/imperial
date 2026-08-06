@@ -58,7 +58,10 @@ export default async function AdminPage({
             {status ? ` · filtrate (${STATUS_LABELS[status as BriefStatus]})` : ""}
           </p>
         </div>
-        <LogoutButton />
+        <div className="flex items-center gap-2">
+          <Link href="/admin/rapoarte" className="btn-ghost text-xs">📊 Rapoarte & abonați</Link>
+          <LogoutButton />
+        </div>
       </div>
 
       {/* Stats */}
