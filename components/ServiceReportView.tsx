@@ -38,8 +38,6 @@ export function ServiceReportView({
 }) {
   const [email, setEmail] = useState(initialEmail);
   const [emailSent, setEmailSent] = useState(false);
-  const [subEmail, setSubEmail] = useState(initialEmail);
-  const [subSent, setSubSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function postLead(opts: { email: string; source: string; message: string }) {
@@ -77,22 +75,6 @@ export function ServiceReportView({
         message: `RAPORT SERVICE — Scor: ${report.overallScore}/100 | Pierderi: ~${report.lostClientsPerMonth} clienți/lună ≈ ${report.lostRevenuePerMonth}€/lună${report.topRecommendation ? `\nRecomandarea #1: ${report.topRecommendation.title}` : ""}${report.projection ? `\nProiecție 12 luni: +${report.projection.return12m}€` : ""}\nRezumat: ${report.summary}`,
       });
       setEmailSent(true);
-    } catch (err: any) {
-      setError(err?.message ?? "Eroare la trimitere.");
-    }
-  }
-
-  async function sendSubscribe(e: React.FormEvent) {
-    e.preventDefault();
-    if (!subEmail) return;
-    setError(null);
-    try {
-      await postLead({
-        email: subEmail,
-        source: "abonament-interes",
-        message: `Vrea ABONAMENT monitorizare lunară pentru ${report.companyName} (${report.city}). Scor actual: ${report.overallScore}/100.`,
-      });
-      setSubSent(true);
     } catch (err: any) {
       setError(err?.message ?? "Eroare la trimitere.");
     }
@@ -368,17 +350,10 @@ export function ServiceReportView({
         <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">
           Sau 990 lei/an — plătești 10 luni, primești 12.
         </p>
-        {subSent ? (
-          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
-            <CheckCircle2 className="h-4 w-4" /> Te-am notat! Te contactăm când pornim abonamentele.
-          </p>
-        ) : (
-          <form onSubmit={sendSubscribe} className="mx-auto mt-4 flex max-w-md flex-col gap-2 sm:flex-row">
-            <input type="email" required value={subEmail} onChange={(e) => setSubEmail(e.target.value)}
-              placeholder="email@firma-ta.ro" className="input flex-1" />
-            <button type="submit" className="btn-primary whitespace-nowrap">Vreau abonamentul</button>
-          </form>
-        )}
+        <Link href="/cont" className="btn-primary mt-4 inline-flex">
+          Activează din contul tău <ArrowRight className="h-4 w-4" />
+        </Link>
+        <p className="mt-2 text-[11px] text-text-subtle">Intri cu emailul, fără parolă — activezi cu cardul în 1 minut.</p>
       </div>
 
       {/* Email + CTA */}

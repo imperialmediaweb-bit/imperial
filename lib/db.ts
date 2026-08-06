@@ -107,6 +107,17 @@ export async function ensureSchema(): Promise<void> {
     );
     CREATE INDEX IF NOT EXISTS idx_monitor_snapshots_token ON monitor_snapshots(report_token, created_at DESC);
 
+    CREATE TABLE IF NOT EXISTS subscribers (
+      id SERIAL PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      active BOOLEAN NOT NULL DEFAULT FALSE,
+      plan TEXT,
+      stripe_subscription_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_subscribers_email ON subscribers(email);
+
     CREATE TABLE IF NOT EXISTS client_notifications (
       id SERIAL PRIMARY KEY,
       email TEXT NOT NULL,

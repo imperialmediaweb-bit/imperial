@@ -213,7 +213,7 @@ export default function ServicePage() {
           adaptat pe domeniul tău, de la imobiliare la service auto sau notariat.
         </p>
         <p className="mt-3 text-sm font-semibold text-brand-orangeLight">
-          Audit complet (valoare 299€) + promovare în 50 de ziare online (valoare 300€) — totul pentru{" "}
+          Audit complet (valoare 299€) + articol de promovare în presa online din orașul tău — totul pentru{" "}
           {promo ? (
             <>
               <span className="text-text-subtle line-through">{BASE_PRICE} lei</span> {price} lei
@@ -522,11 +522,15 @@ export default function ServicePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <Newspaper className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" />
-                      <span><b className="text-text">CADOU: promovarea afacerii tale în 50 de ziare online</b> (rețeaua Media Expres — valoare 300€)</span>
+                      <span><b className="text-text">CADOU: articol de promovare despre afacerea ta, publicat în presa online din orașul/județul tău</b> (rețeaua Media Expres)</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
                       Cei {price} lei se scad integral din orice pachet comanzi în 30 de zile
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
+                      <span>Iar la orice pachet de site: <b className="text-text">campania completă în toate cele 50 de ziare din rețea (300€) — GRATUITĂ</b></span>
                     </li>
                   </ul>
                   <button type="button" onClick={unlock} disabled={unlocking} className="btn-primary mt-5 w-full justify-center">

@@ -1,9 +1,14 @@
-// Webhook Stripe: la plata reușită deblochează raportul, notifică proprietarul
-// („trimite promovarea în 50 ziare") și trimite clientului linkul raportului.
+// Webhook Stripe — inima automatizării, zero intervenție umană:
+// · plată audit → deblochează raportul, emite factura AUTOMAT (Oblio, dacă e configurat),
+//   email client cu linkul, email proprietar cu datele de facturare + reminder articol local
+// · abonament monitorizare → activează abonatul automat + factură + notificări
+// · anulare abonament → dezactivare automată
 
 import { NextResponse } from "next/server";
 import { verifyStripeSignature } from "@/lib/stripe";
 import { markServiceReportPaid, getServiceReport } from "@/lib/service-reports";
+import { upsertSubscriber, deactivateBySubscriptionId } from "@/lib/subscribers";
+import { issueInvoice, invoicingEnabled } from "@/lib/invoicing";
 import { sendSimpleEmail, ownerEmail } from "@/lib/email";
 import { insertBrief } from "@/lib/briefs";
 import { hasDb } from "@/lib/db";
@@ -11,6 +16,21 @@ import { siteConfig } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// Datele de facturare culese de Stripe Checkout (custom_fields + adresă)
+function extractBilling(session: any) {
+  const fields: any[] = session.custom_fields ?? [];
+  const get = (key: string) =>
+    String(fields.find((f) => f?.key === key)?.text?.value ?? "").trim();
+  const addr = session.customer_details?.address ?? {};
+  return {
+    firmName: get("firma") || String(session.customer_details?.name ?? ""),
+    cui: get("cui"),
+    address: [addr.line1, addr.line2].filter(Boolean).join(", "),
+    city: String(addr.city ?? ""),
+    email: String(session.customer_details?.email ?? "").trim() || undefined,
+  };
+}
 
 export async function POST(req: Request) {
   const rawBody = await req.text();
@@ -27,13 +47,84 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid payload" }, { status: 400 });
   }
 
+  // ─── Anulare abonament → dezactivare automată ───
+  if (event?.type === "customer.subscription.deleted") {
+    const subId = String(event.data?.object?.id ?? "");
+    if (subId) {
+      try {
+        await deactivateBySubscriptionId(subId);
+      } catch (e) {
+        console.error("[stripe-webhook] deactivate failed:", e);
+        return NextResponse.json({ error: "db error" }, { status: 500 });
+      }
+    }
+    return NextResponse.json({ received: true });
+  }
+
   if (event?.type !== "checkout.session.completed") {
     return NextResponse.json({ received: true });
   }
 
   const session = event.data?.object ?? {};
+  const billing = extractBilling(session);
+  const amountRon = session.amount_total ? session.amount_total / 100 : 0;
+  const amount = amountRon ? `${amountRon.toFixed(0)} ${String(session.currency ?? "ron").toUpperCase()}` : "—";
+
+  const billingBlock = `<p style="background:#eef4ff;border:1px solid #bcd0f7;border-radius:8px;padding:12px;">
+    🧾 <b>Date facturare:</b> ${billing.firmName || "—"} · CUI: ${billing.cui || "— (persoană fizică)"}<br/>
+    ${billing.address || ""} ${billing.city || ""} · ${billing.email ?? "—"}</p>`;
+
+  // ═══ ABONAMENT monitorizare ═══
+  if (session.mode === "subscription") {
+    const email = billing.email ?? String(session.client_reference_id ?? "");
+    const plan = String(session.metadata?.plan ?? "lunar");
+    if (email) {
+      try {
+        await upsertSubscriber({
+          email,
+          plan,
+          stripeSubscriptionId: String(session.subscription ?? "") || undefined,
+        });
+      } catch (e) {
+        console.error("[stripe-webhook] subscriber upsert failed:", e);
+        return NextResponse.json({ error: "db error" }, { status: 500 });
+      }
+    }
+
+    let invoiceNote = "";
+    if (invoicingEnabled()) {
+      const inv = await issueInvoice({
+        client: { name: billing.firmName, cif: billing.cui, address: billing.address, city: billing.city, email },
+        productName: `Abonament monitorizare afacere Imperial Media (${plan})`,
+        priceRon: amountRon,
+      });
+      invoiceNote = inv.issued
+        ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin Oblio.</p>`
+        : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+    } else {
+      invoiceNote = `<p>🧾 Emite factura manual (Oblio neconfigurat).</p>`;
+    }
+
+    try {
+      await sendSimpleEmail({
+        to: ownerEmail(),
+        subject: `🔄 ABONAMENT NOU (${amount}/${plan}) — ${billing.firmName || email}`,
+        html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
+          <h2>✅ Abonament monitorizare activat automat</h2>
+          <p><b>Email:</b> ${email} · <b>Plan:</b> ${plan} · <b>Suma:</b> ${amount}</p>
+          ${billingBlock}${invoiceNote}
+          <p>Monitorizarea lunară îl include automat de la următoarea scanare. Nimic de făcut.</p>
+        </div>`,
+      });
+    } catch (e) {
+      console.error("[stripe-webhook] owner email failed:", e);
+    }
+    return NextResponse.json({ received: true });
+  }
+
+  // ═══ PLATĂ AUDIT ═══
   const token = String(session.client_reference_id ?? "").trim();
-  const email = String(session.customer_details?.email ?? "").trim() || undefined;
+  const email = billing.email;
 
   if (!/^[0-9a-f-]{36}$/i.test(token)) {
     console.error("[stripe-webhook] missing/invalid client_reference_id");
@@ -49,12 +140,25 @@ export async function POST(req: Request) {
   }
 
   const row = await getServiceReport(token).catch(() => null);
-  const companyName = row?.form_data?.companyName ?? "necunoscut";
-  const city = row?.form_data?.city ?? "";
+  const companyName = row?.form_data?.companyName ?? billing.firmName ?? "necunoscut";
+  const city = row?.form_data?.city ?? billing.city ?? "";
   const reportUrl = `${siteConfig.url}/service/raport/${token}`;
-  const amount = session.amount_total ? `${(session.amount_total / 100).toFixed(0)} ${String(session.currency ?? "ron").toUpperCase()}` : "—";
 
-  // Emailurile nu blochează confirmarea către Stripe.
+  // Factura — automată dacă Oblio e configurat
+  let invoiceNote = "";
+  if (invoicingEnabled()) {
+    const inv = await issueInvoice({
+      client: { name: billing.firmName || companyName, cif: billing.cui, address: billing.address, city: billing.city, email },
+      productName: "Audit complet de afaceri + articol de promovare în presa locală",
+      priceRon: amountRon,
+    });
+    invoiceNote = inv.issued
+      ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin Oblio.</p>`
+      : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+  } else {
+    invoiceNote = `<p>🧾 Emite factura manual (Oblio neconfigurat).</p>`;
+  }
+
   try {
     await sendSimpleEmail({
       to: ownerEmail(),
@@ -64,8 +168,9 @@ export async function POST(req: Request) {
         <p><b>Firma:</b> ${companyName}${city ? ` (${city})` : ""}<br/>
         <b>Email client:</b> ${email ?? "necunoscut"}<br/>
         <b>Raport:</b> <a href="${reportUrl}">${reportUrl}</a></p>
+        ${billingBlock}${invoiceNote}
         <p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">
-          🗞️ <b>DE FĂCUT:</b> trimite promovarea în cele 50 de ziare online (rețeaua Media Expres) — e inclusă în ce a plătit.
+          🗞️ <b>DE FĂCUT:</b> publică articolul de promovare în ziarele din ${city || "zona lui"} (rețeaua Media Expres) — e inclus în ce a plătit.
         </p>
       </div>`,
       replyTo: email,
@@ -83,7 +188,7 @@ export async function POST(req: Request) {
           <h2 style="margin:0 0 12px;">Mulțumim! Raportul tău e deblocat 🎉</h2>
           <p>Îl găsești oricând aici:</p>
           <p><a href="${reportUrl}" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Vezi raportul complet</a></p>
-          <p>În următoarele zile pornim și <b>promovarea afacerii tale în 50 de ziare online</b> (inclusă). Te contactăm pe acest email pentru detalii.</p>
+          <p>În următoarele zile publicăm și <b>articolul de promovare despre afacerea ta în presa online din zona ta</b> (inclus). Primești linkurile pe acest email.</p>
           <p>Ai și un <b>cont</b> cu toate rapoartele și notificările tale de monitorizare: <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a> — intri cu emailul ăsta, fără parolă.</p>
           <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
         </div>`,
@@ -100,7 +205,7 @@ export async function POST(req: Request) {
         email: email ?? "necunoscut@plata-stripe.ro",
         selected_package: "AUDIT PLĂTIT",
         industry: row?.form_data?.industry ?? "",
-        message: `✅ A PLĂTIT auditul (${amount}). DE FĂCUT: promovarea în 50 ziare online.\nRaport: ${reportUrl}`,
+        message: `✅ A PLĂTIT auditul (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: articolul de promovare în presa din ${city || "zona lui"}.\nRaport: ${reportUrl}`,
         source: "service-report-paid",
       });
     } catch (e) {

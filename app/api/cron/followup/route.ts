@@ -57,12 +57,22 @@ function emailForStage(stage: number, firm: string, reportUrl: string) {
   };
 }
 
+// Acceptă și GET cu ?key=SECRET (pentru UptimeRobot & alte pingere simple)
+export async function GET(req: Request) {
+  return handle(req);
+}
+
 export async function POST(req: Request) {
+  return handle(req);
+}
+
+async function handle(req: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret) {
     return NextResponse.json({ error: "CRON_SECRET not configured" }, { status: 503 });
   }
-  if (req.headers.get("authorization") !== `Bearer ${secret}`) {
+  const urlKey = new URL(req.url).searchParams.get("key");
+  if (req.headers.get("authorization") !== `Bearer ${secret}` && urlKey !== secret) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

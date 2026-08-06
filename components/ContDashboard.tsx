@@ -65,14 +65,17 @@ export function ContDashboard({
   notifications,
   refCode,
   referralCount = 0,
+  subscription,
 }: {
   email: string;
   reports: ReportItem[];
   notifications: NotificationItem[];
   refCode?: string;
   referralCount?: number;
+  subscription?: { active: boolean; plan: string | null };
 }) {
   const [subSent, setSubSent] = useState(false);
+  const [subLoading, setSubLoading] = useState<string | null>(null);
   const [refCopied, setRefCopied] = useState(false);
   const refLink = refCode ? `https://imperial-media.ro/service?ref=${refCode}` : "";
 
@@ -86,22 +89,25 @@ export function ContDashboard({
   const scores = reports.filter((r) => r.score > 0);
   const latest = reports[reports.length - 1];
 
-  async function requestSubscription() {
+  // Activare abonament self-service: cu Stripe → plată recurentă; fără → cerere în admin.
+  async function subscribe(plan: "lunar" | "anual") {
+    setSubLoading(plan);
     try {
-      await fetch("/api/lead", {
+      const res = await fetch("/api/subscribe-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: latest?.companyName || email,
-          email,
-          selectedPackage: "personalizat",
-          message: `Vrea ABONAMENT monitorizare lunară (din /cont). Firma: ${latest?.companyName ?? "?"} (${latest?.city ?? "?"}).`,
-          source: "abonament-interes",
-        }),
+        body: JSON.stringify({ plan }),
       });
-      setSubSent(true);
+      const data = await res.json();
+      if (data?.url) {
+        window.location.href = data.url;
+        return;
+      }
+      setSubSent(true); // mod lansare — cererea a ajuns în admin
     } catch {
-      setSubSent(true); // nu blocăm UX-ul pe eroare de rețea
+      setSubSent(true);
+    } finally {
+      setSubLoading(null);
     }
   }
 
@@ -305,16 +311,25 @@ export function ContDashboard({
             starea site-ului + notificări pe email. Afacerea ta, ținută în priză.
           </p>
           <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">
-            Sau 990 lei/an — plătești 10 luni, primești 12. Lunile câștigate din recomandări se scad din următoarea plată.
+            Lunile câștigate din recomandări se scad din următoarea plată.
           </p>
-          {subSent ? (
+          {subscription?.active ? (
             <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
-              <CheckCircle2 className="h-4 w-4" /> Te-am notat! Te contactăm când activăm abonamentele.
+              <CheckCircle2 className="h-4 w-4" /> Abonament ACTIV ({subscription.plan ?? "lunar"}) — afacerea ta e monitorizată
+            </p>
+          ) : subSent ? (
+            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
+              <CheckCircle2 className="h-4 w-4" /> Cererea ta e înregistrată! Activăm abonamentul și te anunțăm.
             </p>
           ) : (
-            <button type="button" onClick={requestSubscription} className="btn-primary mt-4">
-              Vreau abonamentul <ArrowRight className="h-4 w-4" />
-            </button>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <button type="button" disabled={!!subLoading} onClick={() => subscribe("lunar")} className="btn-primary">
+                {subLoading === "lunar" ? "Se încarcă..." : "Activează lunar — 99 lei/lună"}
+              </button>
+              <button type="button" disabled={!!subLoading} onClick={() => subscribe("anual")} className="btn-ghost">
+                {subLoading === "anual" ? "Se încarcă..." : "Anual — 990 lei (2 luni gratis)"}
+              </button>
+            </div>
           )}
         </div>
 

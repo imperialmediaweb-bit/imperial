@@ -15,6 +15,22 @@ export function reportPriceRon(): number {
   return Number.isFinite(v) && v > 0 ? Math.round(v) : 299;
 }
 
+// Date de facturare cerute la orice plată: adresă + denumire firmă + CUI.
+// Ajung în webhook (custom_fields + customer_details) → emailul către proprietar
+// conține tot ce trebuie pentru emiterea facturii.
+function billingParams(params: URLSearchParams) {
+  params.set("billing_address_collection", "required");
+  params.set("custom_fields[0][key]", "firma");
+  params.set("custom_fields[0][label][type]", "custom");
+  params.set("custom_fields[0][label][custom]", "Denumire firmă (pentru factură)");
+  params.set("custom_fields[0][type]", "text");
+  params.set("custom_fields[1][key]", "cui");
+  params.set("custom_fields[1][label][type]", "custom");
+  params.set("custom_fields[1][label][custom]", "CUI / CIF (pentru factură)");
+  params.set("custom_fields[1][type]", "text");
+  params.set("custom_fields[1][optional]", "true");
+}
+
 export async function createReportCheckoutSession(opts: {
   token: string;
   origin: string;
@@ -33,11 +49,47 @@ export async function createReportCheckoutSession(opts: {
     "line_items[0][price_data][currency]": "ron",
     "line_items[0][price_data][unit_amount]": String((opts.priceRon ?? reportPriceRon()) * 100),
     "line_items[0][price_data][product_data][name]":
-      `Audit complet de afaceri + promovare în 50 de ziare online${opts.labelSuffix ?? ""}`,
+      `Audit complet de afaceri + articol de promovare în presa locală${opts.labelSuffix ?? ""}`,
     "line_items[0][price_data][product_data][description]":
-      "Raport de consultanță Imperial Media (valoare 299€) + promovare în rețeaua Media Expres (valoare 300€)",
+      "Raport de consultanță Imperial Media (valoare 299€) + articol de promovare în presa online din zona ta (rețeaua Media Expres)",
   });
+  billingParams(params);
 
+  return createSession(key, params);
+}
+
+// Abonamentul de monitorizare — plată recurentă self-service (lunar 99 / anual 990).
+export async function createSubscriptionCheckoutSession(opts: {
+  email: string;
+  origin: string;
+  plan: "lunar" | "anual";
+}): Promise<{ url: string }> {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("STRIPE_SECRET_KEY missing");
+
+  const monthly = opts.plan !== "anual";
+  const params = new URLSearchParams({
+    mode: "subscription",
+    client_reference_id: opts.email,
+    customer_email: opts.email,
+    "metadata[plan]": opts.plan,
+    success_url: `${opts.origin}/cont?abonat=1`,
+    cancel_url: `${opts.origin}/cont`,
+    "line_items[0][quantity]": "1",
+    "line_items[0][price_data][currency]": "ron",
+    "line_items[0][price_data][unit_amount]": String((monthly ? 99 : 990) * 100),
+    "line_items[0][price_data][recurring][interval]": monthly ? "month" : "year",
+    "line_items[0][price_data][product_data][name]":
+      `Monitorizare afacere Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`,
+    "line_items[0][price_data][product_data][description]":
+      "Raport regenerat automat în fiecare lună + notificări (recenzii, competitori, site) + sfaturile lunii + consultant dedicat în cont",
+  });
+  billingParams(params);
+
+  return createSession(key, params);
+}
+
+async function createSession(key: string, params: URLSearchParams): Promise<{ url: string }> {
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",
     headers: {
