@@ -22,6 +22,7 @@ import {
   RefreshCw,
   Share2,
   Link2,
+  FileDown,
 } from "lucide-react";
 import type { ServiceReport } from "@/app/api/service-report/route";
 
@@ -97,7 +98,7 @@ export function ServiceReportView({
   }
 
   return (
-    <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mx-auto max-w-3xl space-y-5">
+    <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="service-report-print mx-auto max-w-3xl space-y-5">
       {/* Header raport — antet oficial Imperial Media */}
       <div className="rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-6 shadow-card sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-bg-border/60 pb-4">
@@ -365,7 +366,7 @@ export function ServiceReportView({
       </div>
 
       {/* Abonament monitorizare lunară */}
-      <div className="rounded-3xl border border-brand-purple/30 bg-brand-purple/5 p-6 text-center sm:p-7">
+      <div className="rounded-3xl border border-brand-purple/30 bg-brand-purple/5 p-6 text-center sm:p-7 print:hidden">
         <p className="inline-flex items-center gap-1.5 font-display text-lg font-bold text-text">
           <RefreshCw className="h-5 w-5 text-brand-purple" /> Monitorizare lunară — 99 lei/lună
         </p>
@@ -390,7 +391,7 @@ export function ServiceReportView({
       </div>
 
       {/* Email + CTA */}
-      <div className="rounded-3xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 text-center sm:p-8">
+      <div className="rounded-3xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 text-center sm:p-8 print:hidden">
         <h3 className="font-display text-xl font-bold text-text">Vrei să implementăm planul împreună?</h3>
         <p className="mt-2 text-sm text-text-muted">
           Lasă emailul și primești oferta noastră personalizată pentru Faza 1.
@@ -415,7 +416,7 @@ export function ServiceReportView({
         </p>
       </div>
 
-      <p className="text-center text-xs text-text-subtle">
+      <p className="text-center text-xs text-text-subtle print:hidden">
         Toate rapoartele + notificările tale de monitorizare:{" "}
         <Link href="/cont" className="text-brand-orange hover:underline">intră în contul tău</Link>
       </p>
@@ -461,7 +462,7 @@ function ShareRow({ score }: { score: number }) {
   }
 
   return (
-    <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-bg-border/60 pt-4">
+    <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-bg-border/60 pt-4 print:hidden">
       <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-muted">
         <Share2 className="h-3.5 w-3.5" /> Laudă-te cu scorul:
       </span>
@@ -476,6 +477,10 @@ function ShareRow({ score }: { score: number }) {
       <button type="button" onClick={copy}
         className="inline-flex items-center gap-1 rounded-full border border-bg-border bg-bg-soft/60 px-3.5 py-1.5 text-xs font-semibold text-text-muted transition hover:border-brand-orange/50">
         <Link2 className="h-3 w-3" /> {copied ? "Copiat ✓" : "Copiază"}
+      </button>
+      <button type="button" onClick={() => window.print()}
+        className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-brand-orange/50 bg-brand-orange/10 px-3.5 py-1.5 text-xs font-bold text-brand-orange transition hover:bg-brand-orange/20">
+        <FileDown className="h-3.5 w-3.5" /> Salvează PDF
       </button>
     </div>
   );

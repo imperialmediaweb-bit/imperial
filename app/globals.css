@@ -426,3 +426,36 @@ html {
   .animate-orbit,
   .animate-orbit-reverse { animation: none; }
 }
+
+/* ───── Print: raportul /service salvat ca PDF ───── */
+@media print {
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  main {
+    overflow: visible !important;
+  }
+  main > div[class*="bg-hero-gradient"] {
+    display: none !important;
+  }
+  .service-report-print,
+  .service-report-print * {
+    color: #111 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #ddd !important;
+    text-shadow: none !important;
+  }
+  .service-report-print {
+    max-width: 100% !important;
+  }
+  .service-report-print [class*="rounded-3xl"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
