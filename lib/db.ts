@@ -80,6 +80,20 @@ export async function ensureSchema(): Promise<void> {
 
     CREATE INDEX IF NOT EXISTS idx_briefs_created ON briefs(created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_briefs_status ON briefs(status);
+
+    CREATE TABLE IF NOT EXISTS service_reports (
+      id SERIAL PRIMARY KEY,
+      token TEXT NOT NULL UNIQUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      form_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+      report JSONB NOT NULL DEFAULT '{}'::jsonb,
+      email TEXT,
+      paid BOOLEAN NOT NULL DEFAULT FALSE,
+      paid_at TIMESTAMPTZ
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_service_reports_token ON service_reports(token);
+    CREATE INDEX IF NOT EXISTS idx_service_reports_created ON service_reports(created_at DESC);
   `;
 
   try {

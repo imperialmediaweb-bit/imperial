@@ -75,6 +75,22 @@ function escapeHtml(s: string) {
     .replace(/"/g, "&quot;");
 }
 
+// Email simplu, generic — folosit de fluxul de audit plătit (/service).
+export async function sendSimpleEmail(opts: {
+  to: string;
+  subject: string;
+  html: string;
+  replyTo?: string;
+}) {
+  const fromEmail =
+    process.env.FROM_EMAIL ?? "Imperial Media <noreply@imperial-media.ro>";
+  return send({ from: fromEmail, ...opts });
+}
+
+export function ownerEmail(): string {
+  return process.env.LEAD_EMAIL ?? siteConfig.email;
+}
+
 export async function sendLeadEmails(p: LeadPayload) {
   const fromEmail =
     process.env.FROM_EMAIL ?? "Imperial Media <noreply@imperial-media.ro>";

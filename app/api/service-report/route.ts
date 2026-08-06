@@ -3,9 +3,11 @@
 // raport complet: diagnostic, scoruri, pierderi estimate, plan de acțiune.
 
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { insertServiceReport } from "@/lib/service-reports";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,6 +37,7 @@ export type AnafData = {
 
 export type ServiceReport = {
   companyName: string;
+  city: string;
   overallScore: number;
   lostClientsPerMonth: number;
   lostRevenuePerMonth: number;
@@ -52,6 +55,23 @@ export type ServiceReport = {
     status: "good" | "warning" | "bad";
     finding: string;
   }>;
+  topRecommendation?: {
+    title: string;
+    why: string;
+    firstStep: string;
+  };
+  projection?: {
+    invest3m: number;
+    return3m: number;
+    invest12m: number;
+    return12m: number;
+    breakEvenMonth: number;
+    newClientsPerMonth: number;
+  };
+  industryLeaders?: {
+    practices: string[];
+    gap: string;
+  };
   actionPlan: Array<{
     phase: string;
     title: string;
@@ -61,6 +81,19 @@ export type ServiceReport = {
   }>;
   summary: string;
 };
+
+// Ce vede vizitatorul ÎNAINTE de plată — restul raportului rămâne pe server.
+export type ServiceReportPreview = Pick<
+  ServiceReport,
+  | "companyName"
+  | "city"
+  | "overallScore"
+  | "lostClientsPerMonth"
+  | "lostRevenuePerMonth"
+  | "googleData"
+  | "anafData"
+  | "summary"
+>;
 
 // ─── ANAF: registru TVA (nume legal, stare, TVA, CAEN) ───
 async function fetchAnafTva(cui: number): Promise<Partial<AnafData>> {
@@ -345,6 +378,9 @@ Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
   "diagnostics": [
     {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 1-2 fraze"}
   ],
+  "topRecommendation": {"title":"<dacă face UN SINGUR lucru luna asta, care e? scurt, imperativ>","why":"<motivul în cifre, din datele lui reale>","firstStep":"<primul pas concret, de făcut azi>"},
+  "projection": {"invest3m":<EUR investiție primele 3 luni>,"return3m":<EUR venit suplimentar estimat în primele 3 luni>,"invest12m":<EUR investiție totală 12 luni>,"return12m":<EUR venit suplimentar estimat pe 12 luni>,"breakEvenMonth":<luna 1-12 în care investiția e recuperată>,"newClientsPerMonth":<clienți în plus/lună la finalul planului>},
+  "industryLeaders": {"practices":["<3-4 lucruri concrete pe care le fac liderii din domeniul lui ca să domine>"],"gap":"<diferența principală dintre el și lideri, o frază directă>"},
   "actionPlan": [
     {"phase":"FAZA 1 — URGENT (luna 1)","title":"...","actions":["acțiune specifică domeniului","..."],"investment":"X-Y€","impact":"+N clienți/lună estimat"},
     {"phase":"FAZA 2 — CREȘTERE (lunile 2-3)","title":"...","actions":["..."],"investment":"...","impact":"..."},
@@ -353,6 +389,8 @@ Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
   ],
   "summary": "2-3 fraze sincere: starea actuală + ce se întâmplă dacă implementează planul${anafData.turnover != null ? " + raportează pierderile la cifra de afaceri reală" : ""}"
 }
+
+Reguli pentru projection: estimări REALISTE și CONSERVATOARE (mai bine sub-promiți decât să exagerezi), coerente cu investițiile din actionPlan și cu prețurile Imperial Media de mai jos.${anafData.turnover != null ? " Raportează return12m și la cifra de afaceri reală din bilanț." : ""}
 
 Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu funcții 1.400-2.500€, magazin 1.800-4.500€, promovare 50 ziare 300€ (GRATUIT la site nou), mentenanță 50€/lună, Google Business setup gratuit la orice comandă.`;
 
@@ -369,8 +407,13 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
     if (!jsonMatch) throw new Error("no json");
     const parsed = JSON.parse(jsonMatch[0]);
 
+    const tr = parsed.topRecommendation;
+    const pj = parsed.projection;
+    const il = parsed.industryLeaders;
+
     const report: ServiceReport = {
       companyName,
+      city,
       overallScore: Math.max(0, Math.min(100, Number(parsed.overallScore) || 40)),
       lostClientsPerMonth: Math.max(0, Number(parsed.lostClientsPerMonth) || 0),
       lostRevenuePerMonth: Math.max(0, Number(parsed.lostRevenuePerMonth) || 0),
@@ -390,6 +433,32 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
             finding: String(d.finding ?? ""),
           }))
         : [],
+      topRecommendation:
+        tr && tr.title
+          ? {
+              title: String(tr.title).slice(0, 160),
+              why: String(tr.why ?? "").slice(0, 400),
+              firstStep: String(tr.firstStep ?? "").slice(0, 300),
+            }
+          : undefined,
+      projection:
+        pj && Number.isFinite(Number(pj.return12m))
+          ? {
+              invest3m: Math.max(0, Number(pj.invest3m) || 0),
+              return3m: Math.max(0, Number(pj.return3m) || 0),
+              invest12m: Math.max(0, Number(pj.invest12m) || 0),
+              return12m: Math.max(0, Number(pj.return12m) || 0),
+              breakEvenMonth: Math.min(24, Math.max(1, Number(pj.breakEvenMonth) || 6)),
+              newClientsPerMonth: Math.max(0, Number(pj.newClientsPerMonth) || 0),
+            }
+          : undefined,
+      industryLeaders:
+        il && Array.isArray(il.practices) && il.practices.length > 0
+          ? {
+              practices: il.practices.map(String).slice(0, 4),
+              gap: String(il.gap ?? "").slice(0, 300),
+            }
+          : undefined,
       actionPlan: Array.isArray(parsed.actionPlan)
         ? parsed.actionPlan.slice(0, 4).map((p: any) => ({
             phase: String(p.phase ?? ""),
@@ -402,7 +471,35 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
       summary: String(parsed.summary ?? "").slice(0, 600),
     };
 
-    return NextResponse.json(report);
+    // ─── 4. Salvăm raportul complet cu token; vizitatorul primește doar preview-ul ───
+    const token = randomUUID();
+    let saved = false;
+    try {
+      saved = await insertServiceReport({
+        token,
+        formData: { companyName, city, industry, businessType, cui: cuiRaw, website, facebook, monthlyClients, avgValue, mainProblem },
+        report,
+      });
+    } catch (e) {
+      console.error("[service-report] DB save failed:", e);
+    }
+
+    if (!saved) {
+      // Fără DB — nu putem ține raportul „sub cheie", îl dăm direct (degradare grațioasă).
+      return NextResponse.json({ locked: false, report });
+    }
+
+    const preview: ServiceReportPreview = {
+      companyName: report.companyName,
+      city: report.city,
+      overallScore: report.overallScore,
+      lostClientsPerMonth: report.lostClientsPerMonth,
+      lostRevenuePerMonth: report.lostRevenuePerMonth,
+      googleData: report.googleData,
+      anafData: report.anafData,
+      summary: report.summary,
+    };
+    return NextResponse.json({ locked: true, token, preview });
   } catch (e) {
     console.error("[service-report] error:", e);
     return NextResponse.json(
