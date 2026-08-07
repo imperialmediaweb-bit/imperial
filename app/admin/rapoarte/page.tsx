@@ -6,6 +6,7 @@ import { FileText, Users, TrendingUp, ArrowLeft } from "lucide-react";
 import { isAdminConfigured, isAuthed } from "@/lib/admin-auth";
 import { getPool, ensureSchema, hasDb } from "@/lib/db";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { DeliverPagesForm } from "@/components/admin/DeliverPagesForm";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +77,11 @@ export default async function AdminRapoartePage() {
             <p className="text-[11px] text-text-subtle">din {subsRes.rows.length} totali</p>
           </div>
         </div>
+
+        {/* Livrarea paginilor create prin consultant */}
+        <DeliverPagesForm
+          emails={Array.from(new Set(reportsRes.rows.map((r: any) => r.email).filter(Boolean))) as string[]}
+        />
 
         {/* Rapoartele */}
         <div className="mt-8 rounded-3xl border border-bg-border bg-bg-card/60 p-5">
