@@ -9,7 +9,7 @@ import { getServiceReport, markServiceReportPaid, setServiceReportEmail } from "
 import { createReportCheckoutSession, stripeEnabled, reportPriceRon } from "@/lib/stripe";
 import { getPartner } from "@/lib/partners";
 import { sendSimpleEmail, ownerEmail } from "@/lib/email";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, publicOrigin } from "@/lib/site";
 
 // Prețul cu reducere de recomandare (link de afiliere al unui client)
 const REF_PRICE_RON = 249;
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     console.error("[service-checkout] email attach failed:", e);
   }
 
-  const origin = new URL(req.url).origin;
+  const origin = publicOrigin(req);
   const reportPath = `/service/raport/${token}`;
   const reportUrl = `${siteConfig.url}${reportPath}`;
 

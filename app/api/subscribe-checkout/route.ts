@@ -3,6 +3,7 @@
 // ca lead (mod lansare, îl contactează proprietarul).
 
 import { NextResponse } from "next/server";
+import { publicOrigin } from "@/lib/site";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { getClientEmail } from "@/lib/client-auth";
 import { createSubscriptionCheckoutSession, stripeEnabled } from "@/lib/stripe";
@@ -39,7 +40,7 @@ export async function POST(req: Request) {
 
   if (stripeEnabled()) {
     try {
-      const origin = new URL(req.url).origin;
+      const origin = publicOrigin(req);
       const { url } = await createSubscriptionCheckoutSession({ email, origin, plan });
       return NextResponse.json({ url });
     } catch (e) {

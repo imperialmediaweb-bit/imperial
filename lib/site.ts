@@ -22,3 +22,15 @@ export const siteConfig = {
     sources: "Google Reviews + Facebook",
   },
 };
+
+// Originea PUBLICĂ pentru linkuri de retur (Stripe success_url, redirecturi, emailuri).
+// În spatele proxy-ului (Railway), originea cererii e adresa internă (0.0.0.0:8080) —
+// în producție folosim întotdeauna domeniul canonic.
+export function publicOrigin(req: Request): string {
+  if (process.env.NODE_ENV === "production") return siteConfig.url;
+  try {
+    return new URL(req.url).origin;
+  } catch {
+    return siteConfig.url;
+  }
+}

@@ -3,6 +3,7 @@
 // Fără Stripe (mod lansare) → cererea se înregistrează și proprietarul e anunțat.
 
 import { NextResponse } from "next/server";
+import { publicOrigin } from "@/lib/site";
 import { createStartCheckoutSession, stripeEnabled, startPriceRon } from "@/lib/stripe";
 import { getClientEmail } from "@/lib/client-auth";
 import { insertBrief } from "@/lib/briefs";
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const origin = new URL(req.url).origin;
+  const origin = publicOrigin(req);
 
   if (stripeEnabled()) {
     try {

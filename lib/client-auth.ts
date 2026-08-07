@@ -6,7 +6,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 
 const COOKIE_NAME = "imperial_client";
-const LINK_TTL_SEC = 60 * 30; // linkul din email: 30 min
+const LINK_TTL_SEC = 60 * 60 * 24; // linkul din email: 24h — patronii nu deschid emailul în 30 de minute
 const SESSION_TTL_SEC = 60 * 60 * 24 * 30; // sesiunea: 30 zile
 
 function getSecret(): string {
