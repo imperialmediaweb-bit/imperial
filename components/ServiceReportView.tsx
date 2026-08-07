@@ -195,35 +195,48 @@ export function ServiceReportView({
         </motion.div>
       )}
 
-      {/* ═══ DIAGNOSTICUL — grid de carduri cu bare de progres ═══ */}
+      {/* ═══ DIAGNOSTICUL — dosare late: banda ariei în stânga, analiza + rezolvarea pe coloane ═══ */}
       <div>
         <motion.h3 {...fadeUp} className="mb-4 font-display text-xl font-extrabold text-text">📋 Diagnosticul complet</motion.h3>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-4">
           {report.diagnostics.map((d, i) => {
             const s = STATUS[d.status] ?? STATUS.warning;
             return (
-              <motion.div key={d.area} {...fadeUp} transition={{ ...fadeUp.transition, delay: (i % 2) * 0.08 }}
-                className="flex h-full flex-col rounded-2xl border border-bg-border bg-bg-card/60 p-5 transition hover:border-brand-orange/40">
-                <div className="flex min-h-[40px] items-start justify-between gap-2">
-                  <p className="text-sm font-bold leading-snug text-text">{d.emoji} {d.area}</p>
-                  <span className={`inline-flex flex-shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold ${s.text}`}
-                    style={{ background: `${s.color}1a`, border: `1px solid ${s.color}55` }}>
-                    <s.Icon className="h-3 w-3" /> {s.label}
-                  </span>
-                </div>
-                <div className="mt-2 h-[6px] overflow-hidden rounded-full bg-bg-soft/70">
-                  <motion.div className="viz-bar h-full rounded-full"
-                    style={{ ["--bar-color" as any]: s.color, ["--bar-w" as any]: `${s.pct}%` }}
-                    initial={{ width: 0 }} whileInView={{ width: `${s.pct}%` }} viewport={{ once: true }}
-                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }} />
-                </div>
-                <p className="mt-3 flex-1 text-xs leading-relaxed text-text-muted">{d.finding}</p>
-                {d.fix && (
-                  <div className="mt-3 rounded-xl border border-green-500/25 bg-green-500/[0.06] p-3">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-green-400">🔧 Cum o rezolvi</p>
-                    <p className="mt-1 text-xs leading-relaxed text-text-muted">{d.fix}</p>
+              <motion.div key={d.area} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.04 }}
+                className="overflow-hidden rounded-2xl border border-bg-border bg-bg-card/60 transition hover:border-brand-orange/40">
+                <div className="grid lg:grid-cols-[230px_minmax(0,1fr)]">
+                  {/* Banda ariei — nr, titlu, verdict, bara */}
+                  <div className="relative border-b border-bg-border/60 bg-bg-soft/30 p-5 lg:border-b-0 lg:border-r">
+                    <span aria-hidden className="absolute inset-y-0 left-0 w-[3px]" style={{ background: s.color }} />
+                    <p className="font-display text-[11px] font-bold tracking-widest text-text-subtle">
+                      {String(i + 1).padStart(2, "0")}<span className="opacity-50"> / {String(report.diagnostics.length).padStart(2, "0")}</span>
+                    </p>
+                    <p className="mt-1.5 text-sm font-bold leading-snug text-text">{d.emoji} {d.area}</p>
+                    <span className={`mt-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold ${s.text}`}
+                      style={{ background: `${s.color}1a`, border: `1px solid ${s.color}55` }}>
+                      <s.Icon className="h-3 w-3" /> {s.label}
+                    </span>
+                    <div className="mt-3 h-[6px] overflow-hidden rounded-full bg-bg-soft/70">
+                      <motion.div className="viz-bar h-full rounded-full"
+                        style={{ ["--bar-color" as any]: s.color, ["--bar-w" as any]: `${s.pct}%` }}
+                        initial={{ width: 0 }} whileInView={{ width: `${s.pct}%` }} viewport={{ once: true }}
+                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }} />
+                    </div>
                   </div>
-                )}
+                  {/* Analiza + rezolvarea — două coloane pe ecran lat, lățime de citit confortabilă */}
+                  <div className={`grid gap-4 p-5 ${d.fix ? "lg:grid-cols-2" : ""}`}>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">🔎 Ce am găsit</p>
+                      <p className="mt-1.5 text-[13px] leading-relaxed text-text-muted">{d.finding}</p>
+                    </div>
+                    {d.fix && (
+                      <div className="rounded-xl border border-green-500/25 bg-green-500/[0.06] p-4">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-green-400">🔧 Cum o rezolvi</p>
+                        <p className="mt-1.5 text-[13px] leading-relaxed text-text-muted">{d.fix}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             );
           })}
