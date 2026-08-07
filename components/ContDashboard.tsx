@@ -70,6 +70,7 @@ export function ContDashboard({
   referralCount = 0,
   subscription,
   photosEnabled = false,
+  reviewPlaceId = "",
 }: {
   email: string;
   reports: ReportItem[];
@@ -78,6 +79,7 @@ export function ContDashboard({
   referralCount?: number;
   subscription?: { active: boolean; plan: string | null };
   photosEnabled?: boolean;
+  reviewPlaceId?: string;
 }) {
   const [subSent, setSubSent] = useState(false);
   const [subLoading, setSubLoading] = useState<string | null>(null);
@@ -234,6 +236,33 @@ export function ContDashboard({
             <ArrowRight className="h-5 w-5 flex-shrink-0 text-brand-orange" />
           </div>
         </Link>
+
+        {/* QR-ul de recenzii — scanezi → aterizezi pe „Scrie o recenzie” la firma lui */}
+        {reviewPlaceId && (
+          <div className="rounded-3xl border border-yellow-500/30 bg-yellow-500/5 p-6">
+            <h2 className="inline-flex items-center gap-2 font-display text-lg font-bold text-text">
+              <Star className="h-5 w-5 text-yellow-400" /> QR-ul tău de recenzii Google
+            </h2>
+            <div className="mt-4 flex flex-col items-start gap-5 sm:flex-row">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/api/review-qr" alt="QR recenzii Google" className="h-40 w-40 flex-shrink-0 rounded-2xl bg-white p-2" />
+              <div className="text-sm text-text-muted">
+                <p>
+                  Clientul mulțumit scanează → aterizează direct pe <b className="text-text">„Scrie o recenzie"</b> la
+                  firma ta pe Google. Fără căutat, fără pași.
+                </p>
+                <p className="mt-2"><b className="text-text">Cum îl folosești:</b> printează-l și pune-l pe tejghea, pe masă, pe cutie,
+                  pe bonul fiscal — iar tu sau angajatul spuneți o singură frază: <i>„Dacă v-a plăcut, o recenzie ne ajută enorm — durează 30 de secunde."</i></p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <a href="/api/review-qr?d=1" className="btn-primary text-xs">Descarcă QR-ul (pentru print)</a>
+                  <a href={`https://search.google.com/local/writereview?placeid=${reviewPlaceId}`} target="_blank" rel="noopener noreferrer" className="btn-ghost text-xs">
+                    Testează linkul
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Pozele clientului — upload direct în Cloudinary */}
         {photosEnabled && <PhotoUpload />}

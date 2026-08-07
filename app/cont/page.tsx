@@ -49,12 +49,16 @@ export default async function ContPage({
   // Notificările devin „văzute" după ce le-a deschis pagina.
   markNotificationsSeen(email).catch(() => {});
 
+  // QR-ul de recenzii există dacă vreun raport are placeId-ul firmei (aleasă din lista Google)
+  const reviewPlaceId = [...reports].reverse().map((r) => String(r.form_data?.placeId ?? "")).find(Boolean) ?? "";
+
   return (
     <main className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
       <ContDashboard
         email={email}
         photosEnabled={cloudinaryEnabled()}
+        reviewPlaceId={reviewPlaceId}
         refCode={refCode}
         referralCount={referralCount}
         subscription={subscription ?? undefined}

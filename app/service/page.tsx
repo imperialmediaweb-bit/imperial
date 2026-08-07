@@ -92,7 +92,7 @@ export default function ServicePage() {
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState(1); // direcția tranziției între pași (1 înainte, -1 înapoi)
   const [form, setForm] = useState({
-    businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "",
+    businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "", zone: "",
     website: "", facebook: "",
     monthlyClients: "", avgValue: "", employees: "",
     mainProblem: "",
@@ -472,6 +472,19 @@ export default function ServicePage() {
                       </div>
                     )}
                   </div>
+                  {form.businessType !== "online" && (
+                    <div>
+                      <label className="label">Zona / cartierul punctului de lucru (opțional)</label>
+                      <div className="relative">
+                        <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
+                        <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: Centrul Vechi, lângă Piața Mare, cartier Grivița"
+                          value={form.zone} onChange={(e) => set("zone", e.target.value)} />
+                      </div>
+                      <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                        Analizăm potențialul zonei: ce clientelă trece pe acolo, cum profiți de vad, ce parteneriate ai la doi pași.
+                      </p>
+                    </div>
+                  )}
                   <div className="relative">
                     <label className="label">Numele afacerii *</label>
                     <div className="relative">

@@ -38,7 +38,8 @@ export default async function ContConsultantPage() {
   const f = latest?.form_data ?? {};
 
   const contextLines = [
-    `Firma: ${r.companyName ?? f.companyName ?? "?"} (${r.city ?? f.city ?? "?"}), domeniu: ${f.industry ?? "?"}, tip: ${f.businessType ?? "local"}`,
+    `Firma: ${r.companyName ?? f.companyName ?? "?"} (${r.city ?? f.city ?? "?"}${f.zone ? `, zona: ${f.zone}` : ""}), domeniu: ${f.industry ?? "?"}, tip: ${f.businessType ?? "local"}`,
+    f.placeId ? `Are QR de recenzii Google gata generat în cont (cardul galben ⭐) — când vrea mai multe recenzii, trimite-l acolo: descarcă, printează, pune pe tejghea.` : null,
     `Emailul lui de cont (folosește-l direct la comenzi/brief, nu i-l mai cere): ${email}`,
     `Site: ${f.website ? f.website : "NU ARE SITE"}`,
     `Facebook: ${f.facebook ? f.facebook : "NU ARE PAGINĂ DE FACEBOOK (sau nu a declarat-o)"}`,
