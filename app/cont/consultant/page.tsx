@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { getClientEmail } from "@/lib/client-auth";
 import { getServiceReportsByEmail } from "@/lib/service-reports";
 import { getNotifications } from "@/lib/monitoring";
+import { getSubscription } from "@/lib/subscribers";
 import { hasDb } from "@/lib/db";
 import { BriefChat } from "@/components/BriefChat";
 
@@ -26,9 +27,10 @@ export default async function ContConsultantPage() {
   }
   if (!email || !hasDb()) redirect("/cont");
 
-  const [reports, notifications] = await Promise.all([
+  const [reports, notifications, subscription] = await Promise.all([
     getServiceReportsByEmail(email).catch(() => []),
     getNotifications(email, 5).catch(() => []),
+    getSubscription(email).catch(() => null),
   ]);
 
   const latest = reports[reports.length - 1];
@@ -54,6 +56,9 @@ export default async function ContConsultantPage() {
       ? `Ultimele notificări de monitorizare: ${notifications.map((n) => n.title).join(" | ")}`
       : null,
     `Are ${reports.length} ${reports.length === 1 ? "raport" : "rapoarte"} în cont.`,
+    subscription?.active
+      ? `Abonament monitorizare: ACTIV (${subscription.plan ?? "lunar"}) — e client premium, răsfață-l.`
+      : `Abonament monitorizare: NU ARE — dacă se potrivește natural în discuție (vrea urmărire, întreabă des de evoluție), recomandă-i abonamentul de 99 lei/lună: se activează singur din /cont, butonul „Activează”.`,
     `Partener local: dacă e din zona Botoșani și i-ar folosi networking/mentorat între antreprenori, recomandă Bizz Club Botoșani — botosani.bizz.club (comunitatea locală de antreprenori, partenerul nostru) — noi rămânem pe date și implementare.`,
   ].filter(Boolean);
 
