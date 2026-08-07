@@ -101,6 +101,7 @@ export async function POST(req: Request) {
           <li>Monitorizarea ta vede de acum și paginile noi — urmărim lună de lună cum cresc.</li>
         </ol>
         <p><a href="${siteConfig.url}/cont" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Deschide contul tău</a></p>
+        <p><b>Vrei ceva schimbat?</b> Scrie-i consultantului din cont exact ce — <b>30 de zile de ajustări incluse</b>, fără costuri și fără telefoane.</p>
         <p style="color:#666;font-size:13px;">Totul prin cont și email — fără telefoane. Răspunzi direct la acest email dacă ai nevoie de ceva.<br/>Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
       </div>`,
     });
