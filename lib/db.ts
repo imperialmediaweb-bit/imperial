@@ -96,6 +96,7 @@ export async function ensureSchema(): Promise<void> {
     CREATE INDEX IF NOT EXISTS idx_service_reports_created ON service_reports(created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_service_reports_email ON service_reports(email);
     ALTER TABLE service_reports ADD COLUMN IF NOT EXISTS followup_stage INT NOT NULL DEFAULT 0;
+    ALTER TABLE service_reports ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'done';
 
     -- Monitorizare lunară: snapshot-uri de scanare per raport (firmă) + notificări per client
     CREATE TABLE IF NOT EXISTS monitor_snapshots (

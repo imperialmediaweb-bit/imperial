@@ -13,7 +13,36 @@ export type ServiceReportRow = {
   email: string | null;
   paid: boolean;
   paid_at: string | null;
+  status: "pending" | "done" | "error";
 };
+
+// Generarea rulează pe FUNDAL (proxy-urile taie conexiunile lungi — Cloudflare la 100s):
+// rândul se creează întâi "pending", apoi trece în "done" cu raportul, sau "error".
+export async function insertPendingServiceReport(opts: { token: string; formData: any }): Promise<boolean> {
+  const pool = getPool();
+  if (!pool) return false;
+  await ensureSchema();
+  await pool.query(
+    `INSERT INTO service_reports (token, form_data, status) VALUES ($1, $2, 'pending')`,
+    [opts.token, JSON.stringify(opts.formData)]
+  );
+  return true;
+}
+
+export async function completeServiceReport(token: string, report: any): Promise<void> {
+  const pool = getPool();
+  if (!pool) return;
+  await pool.query(`UPDATE service_reports SET report = $2, status = 'done' WHERE token = $1`, [
+    token,
+    JSON.stringify(report),
+  ]);
+}
+
+export async function failServiceReport(token: string): Promise<void> {
+  const pool = getPool();
+  if (!pool) return;
+  await pool.query(`UPDATE service_reports SET status = 'error' WHERE token = $1`, [token]);
+}
 
 export async function insertServiceReport(opts: {
   token: string;

@@ -7,7 +7,7 @@ import { randomUUID } from "crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
-import { insertServiceReport } from "@/lib/service-reports";
+import { insertPendingServiceReport, completeServiceReport, failServiceReport } from "@/lib/service-reports";
 import { safeExternalUrl } from "@/lib/url-guard";
 import { hasDb } from "@/lib/db";
 
@@ -256,8 +256,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Serviciul e temporar indisponibil." }, { status: 503 });
   }
 
+  let client: Anthropic;
+  try {
+    client = getAnthropic();
+  } catch {
+    return NextResponse.json({ error: "Serviciul e temporar indisponibil." }, { status: 503 });
+  }
+
   const placesKey = process.env.GOOGLE_PLACES_API_KEY;
 
+  // ─── PIPELINE-UL COMPLET — rulează pe FUNDAL. Browserul primește tokenul imediat
+  // și întreabă periodic /api/service-report-status; nicio conexiune lungă pe care
+  // proxy-urile (Cloudflare taie la 100s) s-o omoare cu pagina lor HTML de eroare.
+  const runPipeline = async (): Promise<ServiceReport> => {
   // ─── 1. Scanare Google (exactă cu place_id, altfel căutare text) ───
   let googleData: any = { found: false };
   if (placesKey) {
@@ -455,13 +466,7 @@ export async function POST(req: Request) {
     }
   }
 
-  // ─── 3. Claude generează raportul complet ───
-  let client: Anthropic;
-  try {
-    client = getAnthropic();
-  } catch {
-    return NextResponse.json({ error: "Serviciul e temporar indisponibil." }, { status: 503 });
-  }
+  // ─── 3. Claude generează raportul complet (clientul e inițializat înainte de pipeline) ───
 
   // ─── 2c. Vizibilitate în căutările AI — test REAL cu căutare web ───
   // Întrebăm un model cu web search dacă firma apare când cauți brandul și când
@@ -717,42 +722,44 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
       summary: String(parsed.summary ?? "").slice(0, 900),
     };
 
-    // ─── 4. Salvăm raportul complet cu token; vizitatorul primește doar preview-ul ───
-    const token = randomUUID();
-    let saved = false;
+    return report;
+  } catch (e) {
+    console.error("[service-report] generation error:", e);
+    throw new Error("Nu am putut genera raportul. Încearcă din nou.");
+  }
+  }; // ─── sfârșitul runPipeline ───
+
+  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, employees, mainProblem, ref, partner, photosCount: photos.length };
+  const token = randomUUID();
+
+  if (hasDb()) {
+    // Cu DB: rândul "pending" se creează ACUM, răspunsul pleacă imediat,
+    // iar pipeline-ul continuă pe fundal — frontend-ul întreabă de status.
+    let pending = false;
     try {
-      saved = await insertServiceReport({
-        token,
-        formData: { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, employees, mainProblem, ref, partner, photosCount: photos.length },
-        report,
-      });
+      pending = await insertPendingServiceReport({ token, formData });
     } catch (e) {
-      console.error("[service-report] DB save failed:", e);
+      console.error("[service-report] pending insert failed:", e);
     }
-
-    if (!saved) {
-      if (hasDb()) {
-        // DB configurat dar indisponibil temporar — NU dăm produsul plătit gratuit.
-        return NextResponse.json(
-          { error: "Sistemul e aglomerat momentan. Încearcă din nou în câteva minute." },
-          { status: 503 }
-        );
-      }
-      // Fără DATABASE_URL (mediu de dev) — raportul se dă direct, deblocat.
-      return NextResponse.json({ locked: false, report });
+    if (!pending) {
+      return NextResponse.json(
+        { error: "Sistemul e aglomerat momentan. Încearcă din nou în câteva minute." },
+        { status: 503 }
+      );
     }
+    runPipeline()
+      .then((report) => completeServiceReport(token, report))
+      .catch(async (e) => {
+        console.error("[service-report] background pipeline failed:", e);
+        await failServiceReport(token).catch(() => {});
+      });
+    return NextResponse.json({ pending: true, token });
+  }
 
-    const preview: ServiceReportPreview = {
-      companyName: report.companyName,
-      city: report.city,
-      overallScore: report.overallScore,
-      lostClientsPerMonth: report.lostClientsPerMonth,
-      lostRevenuePerMonth: report.lostRevenuePerMonth,
-      googleData: report.googleData,
-      anafData: report.anafData,
-      summary: report.summary,
-    };
-    return NextResponse.json({ locked: true, token, preview });
+  // Fără DATABASE_URL (mediu de dev) — sincron, raportul se dă direct, deblocat.
+  try {
+    const report = await runPipeline();
+    return NextResponse.json({ locked: false, report });
   } catch (e) {
     console.error("[service-report] error:", e);
     return NextResponse.json(

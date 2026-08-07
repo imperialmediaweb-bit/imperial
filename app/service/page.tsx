@@ -284,11 +284,41 @@ export default function ServicePage() {
     if (firmSugTimer.current) clearTimeout(firmSugTimer.current);
   }, []);
 
+  // Formularul se ține minte singur (localStorage) — o eroare sau un refresh
+  // nu te mai pune NICIODATĂ să completezi de la capăt.
+  const formRestored = useRef(false);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("service-form-v1");
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (saved && typeof saved === "object") setForm((f) => ({ ...f, ...saved }));
+      }
+    } catch {}
+    formRestored.current = true;
+  }, []);
+  useEffect(() => {
+    if (!formRestored.current) return;
+    try {
+      localStorage.setItem("service-form-v1", JSON.stringify(form));
+    } catch {}
+  }, [form]);
+
   const canNext =
     step === 0 ? form.businessType && form.companyName.trim() && form.city.trim() && form.industry
     : step === 1 ? true
     : step === 2 ? form.monthlyClients && form.avgValue
     : true;
+
+  // Răspunsurile se citesc DEFENSIV: un proxy care taie conexiunea trimite HTML,
+  // nu JSON — nu mai afișăm niciodată „Unexpected token <" utilizatorului.
+  async function safeJson(res: Response): Promise<any | null> {
+    try {
+      return JSON.parse(await res.text());
+    } catch {
+      return null;
+    }
+  }
 
   async function generate() {
     setLoading(true);
@@ -297,20 +327,43 @@ export default function ServicePage() {
     const interval = setInterval(() => {
       setLoadingStep((s) => Math.min(s + 1, SCAN_FEED.length - 1));
     }, 1400);
-    try {
-      const res = await fetch("/api/service-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, photos, partner: promo?.partner, ref: promo?.ref }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Eroare la generarea raportului.");
+    const finish = (data: any) => {
       if (data.locked) {
         setPreview({ token: data.token, data: data.preview });
       } else {
         setUnlockedReport(data.report);
       }
       setTimeout(() => reportRef.current?.scrollIntoView({ behavior: "smooth" }), 300);
+    };
+    try {
+      const res = await fetch("/api/service-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, photos, partner: promo?.partner, ref: promo?.ref }),
+      });
+      const data = await safeJson(res);
+      if (!res.ok || !data) {
+        throw new Error(data?.error || "Serverul n-a putut răspunde — datele tale sunt salvate în formular, mai apasă o dată.");
+      }
+      if (data.pending && data.token) {
+        // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~5 minute)
+        for (let i = 0; i < 100; i++) {
+          await new Promise((r) => setTimeout(r, 3000));
+          let sdata: any = null;
+          try {
+            const sres = await fetch(`/api/service-report-status?token=${data.token}`);
+            sdata = await safeJson(sres);
+          } catch {
+            continue; // hop de rețea — încercăm iar
+          }
+          if (!sdata || sdata.pending) continue;
+          if (sdata.error) throw new Error(sdata.error);
+          finish(sdata);
+          return;
+        }
+        throw new Error("Generarea durează neobișnuit de mult — reîncearcă în câteva minute.");
+      }
+      finish(data);
     } catch (e: any) {
       setError(e?.message ?? "Eroare. Încearcă din nou.");
     } finally {
