@@ -128,7 +128,7 @@ export function ServiceReportView({
 
         {/* Stat chips — datele reale, dintr-o privire */}
         <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          <StatChip label="Rating Google" value={report.googleData.found ? `${report.googleData.rating ?? "—"}★` : "Nu apari"} tone={report.googleData.found ? "good" : "bad"} />
+          <StatChip label="Rating Google" value={report.googleData.found ? `${report.googleData.rating ?? "—"}★` : "Negăsit la scanare"} tone={report.googleData.found ? "good" : "warn"} />
           <StatChip label="Recenzii" value={report.googleData.found ? String(report.googleData.reviewCount ?? 0) : "—"} tone={report.googleData.found && (report.googleData.reviewCount ?? 0) > 50 ? "good" : "warn"} />
           <StatChip label="Cifră de afaceri" value={report.anafData?.turnover != null ? `${Math.round(report.anafData.turnover / 1000)}k lei` : "—"} tone="neutral" />
           <StatChip label="Competitori scanați" value={String(report.competitors.length)} tone="neutral" />
@@ -204,7 +204,7 @@ export function ServiceReportView({
             return (
               <motion.div key={d.area} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.04 }}
                 className="overflow-hidden rounded-2xl border border-bg-border bg-bg-card/60 transition hover:border-brand-orange/40">
-                <div className="grid lg:grid-cols-[230px_minmax(0,1fr)]">
+                <div className="grid lg:grid-cols-[230px_minmax(0,1fr)] print:grid-cols-[160px_minmax(0,1fr)]">
                   {/* Banda ariei — nr, titlu, verdict, bara */}
                   <div className="relative border-b border-bg-border/60 bg-bg-soft/30 p-5 lg:border-b-0 lg:border-r">
                     <span aria-hidden className="absolute inset-y-0 left-0 w-[3px]" style={{ background: s.color }} />
@@ -224,7 +224,7 @@ export function ServiceReportView({
                     </div>
                   </div>
                   {/* Analiza + rezolvarea — două coloane pe ecran lat, lățime de citit confortabilă */}
-                  <div className={`grid gap-4 p-5 ${d.fix ? "lg:grid-cols-2" : ""}`}>
+                  <div className={`grid gap-4 p-5 ${d.fix ? "lg:grid-cols-2 print:grid-cols-2" : ""}`}>
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">🔎 Ce am găsit</p>
                       <p className="mt-1.5 text-[13px] leading-relaxed text-text-muted">{d.finding}</p>

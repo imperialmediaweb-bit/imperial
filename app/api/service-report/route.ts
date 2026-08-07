@@ -279,6 +279,9 @@ export async function POST(req: Request) {
           { signal: AbortSignal.timeout(8000) }
         );
         const data = await res.json();
+        if (data.status && data.status !== "OK") {
+          console.error("[service-report] Places details status:", data.status, data.error_message ?? "");
+        }
         const p = data?.result;
         if (p?.name) {
           googleData = {
@@ -299,6 +302,9 @@ export async function POST(req: Request) {
           { signal: AbortSignal.timeout(8000) }
         );
         const data = await res.json();
+        if (data.status && data.status !== "OK" && data.status !== "ZERO_RESULTS") {
+          console.error("[service-report] Places findplace status:", data.status, data.error_message ?? "");
+        }
         if (data.candidates?.length > 0) {
           const p = data.candidates[0];
           googleData = {
@@ -321,6 +327,9 @@ export async function POST(req: Request) {
           { signal: AbortSignal.timeout(8000) }
         );
         const data2 = await res2.json();
+        if (data2.status && data2.status !== "OK" && data2.status !== "ZERO_RESULTS") {
+          console.error("[service-report] Places textsearch status:", data2.status, data2.error_message ?? "");
+        }
         const firstWord = companyName.toLowerCase().split(/\s+/)[0];
         const hit = (data2.results ?? []).find((p: any) =>
           String(p.name ?? "").toLowerCase().includes(firstWord)
