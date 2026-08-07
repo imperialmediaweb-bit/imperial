@@ -15,6 +15,11 @@ export function reportPriceRon(): number {
   return Number.isFinite(v) && v > 0 ? Math.round(v) : 299;
 }
 
+export function startPriceRon(): number {
+  const v = Number(process.env.START_ONLINE_PRICE_RON);
+  return Number.isFinite(v) && v > 0 ? Math.round(v) : 500;
+}
+
 // Date de facturare cerute la orice plată: adresă + denumire firmă + CUI.
 // Ajung în webhook (custom_fields + customer_details) → emailul către proprietar
 // conține tot ce trebuie pentru emiterea facturii.
@@ -86,6 +91,33 @@ export async function createSubscriptionCheckoutSession(opts: {
     "line_items[0][price_data][product_data][description]":
       "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont",
   });
+  billingParams(params);
+
+  return createSession(key, params);
+}
+
+// Pachetul Start Online (500 lei) — comandat prin consultant, plătit cu cardul, fără telefoane.
+export async function createStartCheckoutSession(opts: {
+  origin: string;
+  email?: string;
+}): Promise<{ url: string }> {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("STRIPE_SECRET_KEY missing");
+
+  const params = new URLSearchParams({
+    mode: "payment",
+    "metadata[purpose]": "start-online",
+    success_url: `${opts.origin}/cont?start=platit`,
+    cancel_url: `${opts.origin}/cont`,
+    "line_items[0][quantity]": "1",
+    "line_items[0][price_data][currency]": "ron",
+    "line_items[0][price_data][unit_amount]": String(startPriceRon() * 100),
+    "line_items[0][price_data][product_data][name]":
+      "Pachet Start Online — profil Google Business + pagină Facebook",
+    "line_items[0][price_data][product_data][description]":
+      "Creare și optimizare completă, cu design (logo simplu inclus). Predare la cheie — paginile rămân ale tale.",
+  });
+  if (opts.email) params.set("customer_email", opts.email);
   billingParams(params);
 
   return createSession(key, params);

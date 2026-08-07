@@ -131,6 +131,91 @@ export async function POST(req: Request) {
     return NextResponse.json({ received: true });
   }
 
+  // ═══ PACHET START ONLINE (comandat prin consultant) ═══
+  if (session.metadata?.purpose === "start-online") {
+    const startEmail = billing.email ?? "";
+    // Idempotență: lead-ul plății conține id-ul sesiunii Stripe — dacă există deja, e retry.
+    if (hasDb()) {
+      try {
+        const { getPool } = await import("@/lib/db");
+        const dup = await getPool()!.query(`SELECT 1 FROM briefs WHERE message LIKE $1 LIMIT 1`, [
+          `%${session.id}%`,
+        ]);
+        if (dup.rows[0]) return NextResponse.json({ received: true, duplicate: true });
+      } catch {}
+    }
+
+    let invoiceNote = "";
+    if (invoicingEnabled()) {
+      const inv = await issueInvoice({
+        client: { name: billing.firmName, cif: billing.cui, address: billing.address, city: billing.city, email: startEmail },
+        productName: "Servicii creare și optimizare prezență online (profil Google Business + pagină Facebook)",
+        priceRon: amountRon,
+      });
+      invoiceNote = inv.issued
+        ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
+        : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+    } else {
+      invoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat).</p>`;
+    }
+
+    try {
+      await sendSimpleEmail({
+        to: ownerEmail(),
+        subject: `💰 START ONLINE PLĂTIT (${amount}) — ${billing.firmName || startEmail}`,
+        html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
+          <h2>✅ Pachet Start Online plătit — ${amount}</h2>
+          <p><b>Client:</b> ${startEmail || "necunoscut"}</p>
+          ${billingBlock}${invoiceNote}
+          <p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">
+            🛠️ <b>DE FĂCUT:</b> creează profilul Google Business + pagina de Facebook.
+            Datele comenzii (denumire, program, Gmail, profil FB, logo) sunt în lead-ul trimis de consultant,
+            pozele în Cloudinary. La final: /admin/rapoarte → „Livrează pagini create".
+          </p>
+        </div>`,
+        replyTo: startEmail || undefined,
+      });
+    } catch (e) {
+      console.error("[stripe-webhook] start owner email failed:", e);
+    }
+
+    if (startEmail) {
+      try {
+        await sendSimpleEmail({
+          to: startEmail,
+          subject: "🚀 Comanda ta e confirmată — Pachet Start Online",
+          html: `<div style="font-family:Inter,Arial,sans-serif;font-size:15px;color:#111;line-height:1.6;">
+            <h2 style="margin:0 0 12px;">Plata a reușit — ne apucăm de treabă! 🚀</h2>
+            <p>Îți creăm profilul Google Business + pagina de Facebook, cu design și optimizare completă.</p>
+            <p><b>Ce ne ajută să mergem repede:</b> dacă nu ai apucat, urcă pozele firmei (local, produse, echipă)
+            din contul tău — cardul „📸 Trimite-ne poze": <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a></p>
+            <p>Livrarea durează de regulă câteva zile — primești totul pe email + în cont, cu linkurile și accesul TĂU de proprietar. Fără telefoane.</p>
+            <p style="color:#666;font-size:13px;">Factura fiscală sosește separat pe email.<br/>Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
+          </div>`,
+        });
+      } catch (e) {
+        console.error("[stripe-webhook] start client email failed:", e);
+      }
+    }
+
+    if (hasDb()) {
+      try {
+        await insertBrief({
+          name: billing.firmName || startEmail || "necunoscut",
+          email: startEmail || "necunoscut@plata-stripe.ro",
+          selected_package: "Pachet Start Online — PLĂTIT",
+          industry: "",
+          message: `✅ A PLĂTIT Pachetul Start Online (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: creează paginile (datele în lead-ul consultantului, pozele în Cloudinary), apoi livrează din /admin/rapoarte. [stripe:${session.id}]`,
+          source: "start-online-paid",
+        });
+      } catch (e) {
+        console.error("[stripe-webhook] start lead insert failed:", e);
+      }
+    }
+
+    return NextResponse.json({ received: true });
+  }
+
   // ═══ PLATĂ AUDIT ═══
   const token = String(session.client_reference_id ?? "").trim();
   const email = billing.email;
