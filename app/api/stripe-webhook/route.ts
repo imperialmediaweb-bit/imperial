@@ -165,7 +165,7 @@ export async function POST(req: Request) {
   if (invoicingEnabled()) {
     const inv = await issueInvoice({
       client: { name: billing.firmName || companyName, cif: billing.cui, address: billing.address, city: billing.city, email },
-      productName: "Audit complet de afaceri + articol de promovare în presa locală",
+      productName: "Radiografia afacerii + promovare în 50 de ziare online (rețeaua Media Expres)",
       priceRon: amountRon,
     });
     invoiceNote = inv.issued
@@ -186,7 +186,7 @@ export async function POST(req: Request) {
         <b>Raport:</b> <a href="${reportUrl}">${reportUrl}</a></p>
         ${billingBlock}${invoiceNote}
         <p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">
-          🗞️ <b>DE FĂCUT:</b> publică articolul de promovare în ziarele din ${city || "zona lui"} (rețeaua Media Expres) — e inclus în ce a plătit.
+          🗞️ <b>DE FĂCUT:</b> publică articolul de promovare în TOATE cele 50 de ziare din rețeaua Media Expres (campania completă, 300€) — e inclusă în ce a plătit.
         </p>
       </div>`,
       replyTo: email,
@@ -204,7 +204,7 @@ export async function POST(req: Request) {
           <h2 style="margin:0 0 12px;">Mulțumim! Raportul tău e deblocat 🎉</h2>
           <p>Îl găsești oricând aici:</p>
           <p><a href="${reportUrl}" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Vezi raportul complet</a></p>
-          <p>În următoarele zile publicăm și <b>articolul de promovare despre afacerea ta în presa online din zona ta</b> (inclus). Primești linkurile pe acest email.</p>
+          <p>În următoarele zile publicăm și <b>articolul de promovare despre afacerea ta în cele 50 de ziare online din rețeaua Media Expres</b> (pachetul de publicare de 300€ — inclus). Primești linkurile pe acest email.</p>
           <p>Ai și un <b>cont</b> cu toate rapoartele și notificările tale de monitorizare: <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a> — intri cu emailul ăsta, fără parolă.</p>
           <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
         </div>`,
@@ -221,7 +221,7 @@ export async function POST(req: Request) {
         email: email ?? "necunoscut@plata-stripe.ro",
         selected_package: "AUDIT PLĂTIT",
         industry: row?.form_data?.industry ?? "",
-        message: `✅ A PLĂTIT auditul (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: articolul de promovare în presa din ${city || "zona lui"}.\nRaport: ${reportUrl}`,
+        message: `✅ A PLĂTIT auditul (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: campania de promovare în cele 50 de ziare (Media Expres).\nRaport: ${reportUrl}`,
         source: "service-report-paid",
       });
     } catch (e) {

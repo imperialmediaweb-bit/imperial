@@ -38,7 +38,7 @@ export default function TermeniPage() {
           <p><b className="text-text">a) Raportul de consultanță („Radiografia Afacerii")</b> — 299 lei (TVA inclus unde e cazul):
             analiză generată automat pe baza datelor publice (Google, ANAF — bilanțuri publice, site-ul și
             paginile firmei) și a datelor furnizate de client, livrată instant, online. Include un articol
-            de promovare publicat în presa online parteneră din zona clientului (rețeaua Media Expres),
+            de promovare publicat în rețeaua parteneră de 50 de ziare online (rețeaua Media Expres),
             în maximum 10 zile lucrătoare de la plată.</p>
           <p><b className="text-text">b) Abonamentul de monitorizare</b> — 99 lei/lună sau 990 lei/an: re-scanare periodică,
             notificări și recomandări lunare, acces la contul de client. Se reînnoiește automat; poate fi
@@ -60,6 +60,11 @@ export default function TermeniPage() {
             clientul își dă acordul expres pentru executarea imediată a contractului și confirmă că
             înțelege că își pierde astfel dreptul de retragere de 14 zile prevăzut de OUG 34/2014
             (art. 16 lit. m), conținutul fiind accesibil integral imediat.</p>
+          <p><b className="text-text">Garanția de satisfacție (voluntară):</b> independent de cele de mai sus, dacă în
+            raport nu găsești minim 3 informații concrete pe care nu le știai despre afacerea ta, îți
+            returnăm integral suma plătită — trimite o cerere la {siteConfig.email} în maximum 14 zile
+            de la plată. Garanția acoperă raportul; dacă articolul de promovare a fost deja publicat,
+            rambursarea se acordă proporțional.</p>
           <p>Pentru abonament, anularea se poate face oricând din contul Stripe/linkul din email sau
             printr-o cerere la {siteConfig.email}; accesul rămâne activ până la finalul perioadei plătite.</p>
         </S>

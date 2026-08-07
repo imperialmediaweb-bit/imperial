@@ -328,7 +328,8 @@ export default function ServicePage() {
           Radiografia <span className="text-gradient">afacerii tale</span>
         </h1>
         <p className="section-subtitle mx-auto max-w-xl text-center">
-          Date reale — Google, ANAF, competiția din zona ta — și planul tău pe 12 luni. În 60 de secunde.
+          Raport pe date reale — Google, ANAF, competiția, testul AI — cu planul tău de creștere pe 12 luni.
+          Plus <b className="text-text">articolul tău de promovare, publicat în 50 de ziare online</b> (pachetul de 300€, inclus).
         </p>
 
         {/* Prețul, compact */}
@@ -344,7 +345,7 @@ export default function ServicePage() {
                 <span className="font-display text-lg font-extrabold text-brand-orangeLight">{price} lei</span>
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-bg-border bg-bg-soft/60 px-4 py-2 text-xs font-semibold text-text-muted">
-                🗞️ + articol în presa din orașul tău, cadou
+                🗞️ + promovare în 50 de ziare online (300€), cadou
               </span>
               {promo && promo.kind === "partner" && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/40 bg-green-500/10 px-4 py-2 text-xs font-bold text-green-300">
@@ -358,6 +359,17 @@ export default function ServicePage() {
               )}
             </>
           )}
+        </div>
+
+        {/* Dovada + garanția — omoară frica de „cumpăr pe nevăzute" */}
+        <div className="mx-auto mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-text-subtle">
+          <a href="/service/exemplu" className="font-semibold text-text-muted underline decoration-brand-orange/60 underline-offset-4 hover:text-brand-orange">
+            📄 Vezi un raport-exemplu complet, înainte să dai un leu
+          </a>
+          {price !== 0 && (
+            <span>🛡️ Garanție: nu afli minim 3 lucruri noi despre firma ta? Banii înapoi.</span>
+          )}
+          {price !== 0 && <span>💰 Suma se scade din orice pachet, în 30 de zile</span>}
         </div>
 
         {/* Parteneriatul — DOAR pentru linkul Bizz Club, nu pentru VIP */}
@@ -780,7 +792,7 @@ export default function ServicePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <Newspaper className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-orange" />
-                      <span><b className="text-text">CADOU: articol de promovare despre afacerea ta, publicat în presa online din orașul/județul tău</b> (rețeaua Media Expres)</span>
+                      <span><b className="text-text">CADOU: articol de promovare despre afacerea ta, publicat în toate cele 50 de ziare online din rețeaua Media Expres</b> — pachetul de publicare de 300€, inclus</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
@@ -788,7 +800,7 @@ export default function ServicePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-                      <span>Iar la orice pachet de site: <b className="text-text">campania completă în toate cele 50 de ziare din rețea (300€) — GRATUITĂ</b></span>
+                      <span><b className="text-text">Garanție:</b> dacă nu afli minim 3 lucruri concrete pe care nu le știai despre afacerea ta — banii înapoi, fără întrebări</span>
                     </li>
                   </ul>
                   <div className="relative mt-5">

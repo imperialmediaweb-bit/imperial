@@ -50,9 +50,9 @@ export async function createReportCheckoutSession(opts: {
     "line_items[0][price_data][currency]": "ron",
     "line_items[0][price_data][unit_amount]": String((opts.priceRon ?? reportPriceRon()) * 100),
     "line_items[0][price_data][product_data][name]":
-      `Audit complet de afaceri + articol de promovare în presa locală${opts.labelSuffix ?? ""}`,
+      `Radiografia afacerii + promovare în 50 de ziare online${opts.labelSuffix ?? ""}`,
     "line_items[0][price_data][product_data][description]":
-      "Raport de consultanță Imperial Media (valoare 299€) + articol de promovare în presa online din zona ta (rețeaua Media Expres)",
+      "Raport de consultanță Imperial Media pe date oficiale + articol de promovare publicat în 50 de ziare online — rețeaua Media Expres (pachet de publicare în valoare de 300€)",
   });
   if (opts.customerEmail) params.set("customer_email", opts.customerEmail);
   billingParams(params);
