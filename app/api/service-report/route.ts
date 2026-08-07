@@ -747,12 +747,57 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
         { status: 503 }
       );
     }
-    runPipeline()
-      .then((report) => completeServiceReport(token, report))
-      .catch(async (e) => {
-        console.error("[service-report] background pipeline failed:", e);
+    // Pipeline pe fundal, cu RETRY AUTOMAT: la primul eșec sistemul mai încearcă o dată
+    // singur (multe erori sunt tranzitorii — ANAF picat, un timeout). Abia al doilea
+    // eșec devine „error" + alertă pur informativă către proprietar. Zero muncă manuală.
+    (async () => {
+      try {
+        const report = await runPipeline();
+        await completeServiceReport(token, report);
+        return;
+      } catch (e1) {
+        console.error("[service-report] pipeline attempt 1 failed, retrying:", e1);
+      }
+      try {
+        await new Promise((r) => setTimeout(r, 5000));
+        const report = await runPipeline();
+        await completeServiceReport(token, report);
+        return;
+      } catch (e) {
+        console.error("[service-report] pipeline attempt 2 failed:", e);
         await failServiceReport(token).catch(() => {});
-      });
+        // Alertă INFORMATIVĂ — nimic de făcut: clientul a primit mesaj prietenos,
+        // formularul lui e salvat local și e invitat să reîncerce cu un click.
+        try {
+          const { sendSimpleEmail, ownerEmail } = await import("@/lib/email");
+          await sendSimpleEmail({
+            to: ownerEmail(),
+            subject: `⚠️ Generare eșuată de 2 ori — ${companyName} (${city})`,
+            html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
+              <h2>⚠️ Generarea a eșuat (inclusiv reîncercarea automată)</h2>
+              <p><b>Firma:</b> ${companyName} (${city})${zone ? ` · zona ${zone}` : ""} · <b>Domeniu:</b> ${industry}</p>
+              <p><b>Eroarea:</b> ${String((e as any)?.message ?? e).slice(0, 300)}</p>
+              <p><b>Nimic de făcut din partea ta</b> — clientul a văzut un mesaj prietenos, formularul lui e salvat
+              și e invitat să reîncerce. Emailul ăsta e doar ca să VEZI dacă erorile se repetă
+              (dacă primești mai multe la rând, e semn de problemă de sistem — chei, ANAF, API-uri).</p>
+            </div>`,
+          });
+        } catch (mailErr) {
+          console.error("[service-report] failure alert email failed:", mailErr);
+        }
+        try {
+          const { insertBrief } = await import("@/lib/briefs");
+          await insertBrief({
+            name: companyName,
+            email: "necunoscut@eroare-generare.ro",
+            selected_package: "⚠️ GENERARE EȘUATĂ (x2)",
+            industry,
+            message: `Raportul NU s-a generat pentru ${companyName} (${city}), nici la retry automat. Eroare: ${String((e as any)?.message ?? e).slice(0, 200)}. Clientul a fost invitat să reîncerce singur — doar monitorizează frecvența erorilor.`,
+            source: "eroare-generare",
+          });
+        } catch {}
+      }
+    })();
     return NextResponse.json({ pending: true, token });
   }
 
