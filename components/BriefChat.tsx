@@ -480,6 +480,10 @@ Vreau ceva în aceeași direcție.`;
           ...prev,
           { role: "assistant", text: "✅ Comanda ta e înregistrată la echipă! Urmează pașii de mai sus — plata și pozele — și ne apucăm de treabă." },
         ]);
+        // Resetăm gărzile ca o A DOUA comandă în același chat (ex: modificări după livrare)
+        // să poată pleca și ea — altfel s-ar pierde în tăcere.
+        setBrief((prev) => ({ ...prev, readyToSubmit: false }));
+        autoSubmittedRef.current = false;
         setSubmitting(false);
         return;
       }

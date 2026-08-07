@@ -58,10 +58,15 @@ export async function POST(req: Request) {
         [email, JSON.stringify(patch)]
       );
       if (upd.rowCount === 0) {
-        return NextResponse.json(
-          { error: `Niciun raport pentru ${email} — verifică emailul (alege-l din listă).` },
-          { status: 404 }
-        );
+        // Fără raport — dar poate a cumpărat direct pe /plata-start (are lead).
+        // Blocăm doar dacă emailul nu apare NICĂIERI — aproape sigur o typo.
+        const known = await pool.query(`SELECT 1 FROM briefs WHERE LOWER(email) = $1 LIMIT 1`, [email]);
+        if (!known.rows[0]) {
+          return NextResponse.json(
+            { error: `${email} nu există nici la rapoarte, nici la lead-uri — verifică emailul.` },
+            { status: 404 }
+          );
+        }
       }
       await insertNotification(
         email,

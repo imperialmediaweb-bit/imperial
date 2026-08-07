@@ -75,8 +75,25 @@ export function premiumPriceRon(): number {
   return Number.isFinite(v) && v > 0 ? Math.round(v) : 199;
 }
 
-export function isPremiumPlan(plan: string | null | undefined): boolean {
-  return String(plan ?? "").startsWith("premium");
+export { isPremiumPlan } from "./plans";
+import { isPremiumPlan } from "./plans";
+
+// Anulează un abonament Stripe (folosit la upgrade: vechiul abonament se oprește,
+// ca să nu plătească clientul două abonamente în paralel).
+export async function cancelStripeSubscription(subscriptionId: string): Promise<boolean> {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key || !/^sub_[\w]+$/.test(subscriptionId)) return false;
+  try {
+    const res = await fetch(`https://api.stripe.com/v1/subscriptions/${subscriptionId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(10_000),
+    });
+    return res.ok;
+  } catch (e) {
+    console.error("[stripe] cancel subscription failed:", e);
+    return false;
+  }
 }
 
 export async function createSubscriptionCheckoutSession(opts: {

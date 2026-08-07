@@ -120,10 +120,12 @@ export default function ServicePage() {
   const firmReqId = useRef(0);
   // Poze cu vitrina/produsele — comprimate în browser, analizate de AI în raport
   const [photos, setPhotos] = useState<string[]>([]);
+  const [photoError, setPhotoError] = useState<string | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
 
   async function addPhotos(list: FileList | null) {
     if (!list) return;
+    setPhotoError(null);
     const room = 3 - photos.length;
     const picked = Array.from(list).slice(0, Math.max(0, room));
     const compressed: string[] = [];
@@ -140,6 +142,10 @@ export default function ServicePage() {
       } catch {}
     }
     if (compressed.length) setPhotos((p) => [...p, ...compressed].slice(0, 3));
+    else if (picked.length > 0) {
+      // ex: HEIC de pe iPhone — browserele nu-l pot decoda; fără feedback ar părea că butonul e stricat
+      setPhotoError("Formatul pozei nu e suportat de browser (probabil HEIC). Exportă-le ca JPG sau fă un screenshot pozei și urcă-l.");
+    }
     if (photoInputRef.current) photoInputRef.current.value = "";
   }
 
@@ -173,14 +179,16 @@ export default function ServicePage() {
     const digits = trimmed.replace(/\D/g, "");
     const hasLetters = /[a-zA-ZăâîșțĂÂÎȘȚ]{2}/.test(trimmed.replace(/^ro/i, ""));
     if (!hasLetters && digits.length >= 5) {
-      // A scris un CUI → verificare live la ANAF
+      // A scris un CUI → verificare live la ANAF (cu gardă anti-răspuns-învechit)
+      const reqId = firmReqId.current;
       cuiTimer.current = setTimeout(async () => {
         try {
           const res = await fetch(`/api/firm-lookup?cui=${digits}`);
           const data = await res.json();
+          if (reqId !== firmReqId.current) return;
           setFirmCheck(data?.found ? { name: data.name, active: !!data.active, verified: true } : "notfound");
         } catch {
-          setFirmCheck(null);
+          if (reqId === firmReqId.current) setFirmCheck(null);
         }
       }, 500);
     } else if (hasLetters && trimmed.length >= 3) {
@@ -206,17 +214,21 @@ export default function ServicePage() {
     setShowFirmSugs(false);
     setFirmCheck(null);
     firmReqId.current += 1;
+    const reqId = firmReqId.current;
     // Confirmare ANAF pe CUI-ul ales; dacă ANAF nu răspunde, afișăm doar completarea — fără pretenția „verificată"
     fetch(`/api/firm-lookup?cui=${s.cui}`)
       .then((r) => r.json())
-      .then((d) =>
+      .then((d) => {
+        if (reqId !== firmReqId.current) return;
         setFirmCheck(
           d?.found
             ? { name: d.name, active: !!d.active, verified: true }
             : { name: s.name, active: true, verified: false }
-        )
-      )
-      .catch(() => setFirmCheck({ name: s.name, active: true, verified: false }));
+        );
+      })
+      .catch(() => {
+        if (reqId === firmReqId.current) setFirmCheck({ name: s.name, active: true, verified: false });
+      });
   }
   const reportRef = useRef<HTMLDivElement>(null);
   // Reduceri din URL: ?partener=bizzclub (partener) sau ?ref=cod (recomandare client)
@@ -529,6 +541,7 @@ export default function ServicePage() {
                           </button>
                         )}
                       </div>
+                      {photoError && <p className="mt-1.5 text-[11px] font-semibold text-yellow-400">⚠️ {photoError}</p>}
                       <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
                         AI-ul le analizează în raport: cum arată vitrina pentru un trecător, expunerea mărfii și ce ofertă merită pusă pe geam.
                       </p>

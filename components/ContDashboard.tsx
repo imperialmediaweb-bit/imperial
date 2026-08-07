@@ -9,6 +9,7 @@ import Link from "next/link";
 import { NumberTicker } from "@/components/effects/NumberTicker";
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { PostGenerator } from "@/components/PostGenerator";
+import { isPremiumPlan } from "@/lib/plans";
 import {
   Bell,
   FileText,
@@ -239,7 +240,7 @@ export function ContDashboard({
         </Link>
 
         {/* Generatorul de postări — exclusiv Premium */}
-        {subscription?.active && String(subscription.plan ?? "").startsWith("premium") && <PostGenerator />}
+        {subscription?.active && isPremiumPlan(subscription.plan) && <PostGenerator />}
 
         {/* QR-ul de recenzii — scanezi → aterizezi pe „Scrie o recenzie” la firma lui */}
         {reviewPlaceId && (
@@ -387,7 +388,7 @@ export function ContDashboard({
               <p className="inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
                 <CheckCircle2 className="h-4 w-4" /> Abonament ACTIV ({subscription.plan ?? "lunar"})
               </p>
-              {!String(subscription.plan ?? "").startsWith("premium") && (
+              {!isPremiumPlan(subscription.plan) && (
                 <button type="button" disabled={!!subLoading} onClick={() => subscribe("premium")} className="btn-ghost text-xs">
                   {subLoading === "premium" ? "Se încarcă..." : "⭐ Treci pe Premium — 199 lei/lună (postări + analize foto)"}
                 </button>

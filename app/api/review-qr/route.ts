@@ -43,7 +43,8 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const headers: Record<string, string> = {
     "Content-Type": "image/svg+xml",
-    "Cache-Control": "private, max-age=3600",
+    // no-store: pe un calculator partajat, alt cont logat NU trebuie să primească QR-ul precedentului
+    "Cache-Control": "private, no-store",
   };
   if (searchParams.get("d") === "1") {
     headers["Content-Disposition"] = 'attachment; filename="qr-recenzii-google.svg"';

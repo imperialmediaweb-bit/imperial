@@ -30,12 +30,14 @@ export async function deactivateBySubscriptionId(stripeSubscriptionId: string): 
   );
 }
 
-export async function getSubscription(email: string): Promise<{ active: boolean; plan: string | null } | null> {
+export async function getSubscription(
+  email: string
+): Promise<{ active: boolean; plan: string | null; stripe_subscription_id: string | null } | null> {
   const pool = getPool();
   if (!pool) return null;
   await ensureSchema();
   const res = await pool.query(
-    `SELECT active, plan FROM subscribers WHERE email = LOWER($1) LIMIT 1`,
+    `SELECT active, plan, stripe_subscription_id FROM subscribers WHERE email = LOWER($1) LIMIT 1`,
     [email]
   );
   return res.rows[0] ?? null;

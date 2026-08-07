@@ -49,8 +49,13 @@ export default async function ContPage({
   // Notificările devin „văzute" după ce le-a deschis pagina.
   markNotificationsSeen(email).catch(() => {});
 
-  // QR-ul de recenzii există dacă vreun raport are placeId-ul firmei (aleasă din lista Google)
-  const reviewPlaceId = [...reports].reverse().map((r) => String(r.form_data?.placeId ?? "")).find(Boolean) ?? "";
+  // QR-ul de recenzii există dacă vreun raport are placeId-ul firmei (aleasă din lista Google).
+  // Aceeași validare ca în /api/review-qr — altfel cardul ar afișa un QR care dă 404.
+  const reviewPlaceId =
+    [...reports]
+      .reverse()
+      .map((r) => String(r.form_data?.placeId ?? ""))
+      .find((p) => /^[\w-]{10,200}$/.test(p)) ?? "";
 
   return (
     <main className="relative overflow-hidden">

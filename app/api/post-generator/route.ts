@@ -9,6 +9,7 @@ import { getServiceReportsByEmail } from "@/lib/service-reports";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { hasDb } from "@/lib/db";
 import { CLAUDE_MODEL } from "@/lib/ai";
+import { isPremiumPlan } from "@/lib/plans";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
   }
 
   const sub = await getSubscription(email).catch(() => null);
-  if (!sub?.active || !String(sub.plan ?? "").startsWith("premium")) {
+  if (!sub?.active || !isPremiumPlan(sub.plan)) {
     return NextResponse.json(
       { error: "Generatorul de postări e inclus în abonamentul Premium — îl activezi din cont, secțiunea Abonament.", upgrade: true },
       { status: 403 }

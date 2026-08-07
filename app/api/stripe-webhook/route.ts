@@ -78,13 +78,24 @@ export async function POST(req: Request) {
   if (session.mode === "subscription") {
     const email = billing.email ?? String(session.client_reference_id ?? "");
     const plan = String(session.metadata?.plan ?? "lunar");
-    // Idempotență: același eveniment relivrat → abonatul e deja activ cu același
-    // subscription id → nu mai emitem a doua factură / al doilea email.
+    // Idempotență vs UPGRADE: relivrarea aceluiași eveniment are ACELAȘI subscription id
+    // → duplicat, ieșim. Un id NOU la un abonat deja activ înseamnă upgrade/schimbare de plan
+    // → anulăm vechiul abonament Stripe (să nu plătească două în paralel) și continuăm normal.
+    let upgradeNote = "";
     if (email && session.subscription) {
       const { getSubscription } = await import("@/lib/subscribers");
       const cur = await getSubscription(email).catch(() => null);
       if (cur?.active) {
-        return NextResponse.json({ received: true, duplicate: true });
+        if (cur.stripe_subscription_id === String(session.subscription)) {
+          return NextResponse.json({ received: true, duplicate: true });
+        }
+        if (cur.stripe_subscription_id) {
+          const { cancelStripeSubscription } = await import("@/lib/stripe");
+          const cancelled = await cancelStripeSubscription(cur.stripe_subscription_id);
+          upgradeNote = cancelled
+            ? `<p>🔁 UPGRADE de la planul „${cur.plan ?? "?"}" — vechiul abonament Stripe a fost ANULAT automat.</p>`
+            : `<p>⚠️ UPGRADE de la planul „${cur.plan ?? "?"}" — anularea vechiului abonament Stripe A EȘUAT: anulează-l MANUAL din Stripe (${cur.stripe_subscription_id}), altfel clientul plătește dublu!</p>`;
+        }
       }
     }
     if (email) {
@@ -121,9 +132,9 @@ export async function POST(req: Request) {
         to: ownerEmail(),
         subject: `🔄 ABONAMENT NOU (${amount}/${plan}) — ${billing.firmName || email}`,
         html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
-          <h2>✅ Abonament monitorizare activat automat</h2>
+          <h2>✅ Abonament activat automat</h2>
           <p><b>Email:</b> ${email} · <b>Plan:</b> ${plan} · <b>Suma:</b> ${amount}</p>
-          ${billingBlock}${invoiceNote}
+          ${upgradeNote}${billingBlock}${invoiceNote}
           <p>Monitorizarea lunară îl include automat de la următoarea scanare. Nimic de făcut.</p>
         </div>`,
       });

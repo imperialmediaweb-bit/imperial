@@ -8,6 +8,7 @@ import { getClientEmail } from "@/lib/client-auth";
 import { getServiceReportsByEmail } from "@/lib/service-reports";
 import { getNotifications } from "@/lib/monitoring";
 import { getSubscription } from "@/lib/subscribers";
+import { isPremiumPlan } from "@/lib/plans";
 import { hasDb } from "@/lib/db";
 import { BriefChat } from "@/components/BriefChat";
 
@@ -58,7 +59,7 @@ export default async function ContConsultantPage() {
       : null,
     `Are ${reports.length} ${reports.length === 1 ? "raport" : "rapoarte"} în cont.`,
     subscription?.active
-      ? `Abonament: ACTIV (${subscription.plan ?? "lunar"}).${String(subscription.plan ?? "").startsWith("premium") ? " E pe PREMIUM: are generatorul de postări și analiza AI a pozelor în cont — trimite-l la ele când cere postări sau părerea pe vitrină." : " E pe Monitorizare (99): dacă cere des postări gata făcute sau analize pe poze, pomenește-i o singură dată Premium (199 lei/lună, generator de postări + analize foto nelimitate, upgrade din cont)."}`
+      ? `Abonament: ACTIV (${subscription.plan ?? "lunar"}).${isPremiumPlan(subscription.plan) ? " E pe PREMIUM: are generatorul de postări și analiza AI a pozelor în cont — trimite-l la ele când cere postări sau părerea pe vitrină." : " E pe Monitorizare (99): dacă cere des postări gata făcute sau analize pe poze, pomenește-i o singură dată Premium (199 lei/lună, generator de postări + analize foto nelimitate, upgrade din cont)."}`
       : `Abonament: NU ARE — dacă se potrivește natural în discuție (vrea urmărire, întreabă des de evoluție), recomandă-i abonamentul: Monitorizare 99 lei/lună sau Premium 199 (cu generator de postări + analize foto). Se activează singur din /cont.`,
     `Partener local: dacă e din zona Botoșani și i-ar folosi networking/mentorat între antreprenori, recomandă Bizz Club Botoșani — botosani.bizz.club (comunitatea locală de antreprenori, partenerul nostru) — noi rămânem pe date și implementare.`,
   ].filter(Boolean);

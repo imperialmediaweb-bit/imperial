@@ -112,7 +112,24 @@ export async function POST(req: Request) {
   try {
     const { getSubscription } = await import("@/lib/subscribers");
     const sub = await getSubscription(email).catch(() => null);
-    if (sub?.active && String(sub.plan ?? "").startsWith("premium") && process.env.ANTHROPIC_API_KEY && forAnalysis.length > 0) {
+    const { isPremiumPlan } = await import("@/lib/plans");
+    if (sub?.active && isPremiumPlan(sub.plan) && process.env.ANTHROPIC_API_KEY && forAnalysis.length > 0) {
+      // Pozele de telefon depășesc des limitele API-ului (5MB / 8000px) — le micșorăm cu sharp.
+      const { default: sharp } = await import("sharp");
+      const prepared: Array<{ media: "image/jpeg"; data: string }> = [];
+      for (const p of forAnalysis) {
+        try {
+          const resized = await sharp(Buffer.from(p.data, "base64"))
+            .rotate()
+            .resize({ width: 1568, height: 1568, fit: "inside", withoutEnlargement: true })
+            .jpeg({ quality: 80 })
+            .toBuffer();
+          prepared.push({ media: "image/jpeg", data: resized.toString("base64") });
+        } catch (e) {
+          console.error("[client-photos] resize failed, skipping one photo:", e);
+        }
+      }
+      if (prepared.length === 0) throw new Error("no photos prepared");
       const { default: Anthropic } = await import("@anthropic-ai/sdk");
       const { CLAUDE_MODEL } = await import("@/lib/ai");
       const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -123,11 +140,11 @@ export async function POST(req: Request) {
           {
             role: "user",
             content: [
-              ...forAnalysis.map((p) => ({
+              ...prepared.map((p) => ({
                 type: "image" as const,
                 source: {
                   type: "base64" as const,
-                  media_type: p.media as "image/jpeg" | "image/png" | "image/webp",
+                  media_type: p.media,
                   data: p.data,
                 },
               })),
