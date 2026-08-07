@@ -111,6 +111,10 @@ export default function ServicePage() {
   const [showCitySugs, setShowCitySugs] = useState(false);
   const [firmCheck, setFirmCheck] = useState<{ name: string; active: boolean } | "notfound" | null>(null);
   const cuiTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Căutare firmă după nume (openapi.ro): scrii „legio" → apar firmele → alegi → CUI completat
+  const [firmSugs, setFirmSugs] = useState<Array<{ name: string; cui: string; city: string }>>([]);
+  const [showFirmSugs, setShowFirmSugs] = useState(false);
+  const firmSugTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function onCityChange(v: string) {
     set("city", v);
@@ -131,21 +135,50 @@ export default function ServicePage() {
   }
 
   function onCuiChange(v: string) {
-    const clean = v.replace(/[^\dRrOo]/g, "");
-    set("cui", clean);
+    set("cui", v);
     setFirmCheck(null);
+    setFirmSugs([]);
+    setShowFirmSugs(false);
     if (cuiTimer.current) clearTimeout(cuiTimer.current);
-    const digits = clean.replace(/\D/g, "");
-    if (digits.length < 5) return;
-    cuiTimer.current = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/firm-lookup?cui=${digits}`);
-        const data = await res.json();
-        setFirmCheck(data?.found ? { name: data.name, active: !!data.active } : "notfound");
-      } catch {
-        setFirmCheck(null);
-      }
-    }, 500);
+    if (firmSugTimer.current) clearTimeout(firmSugTimer.current);
+    const trimmed = v.trim();
+    const digits = trimmed.replace(/\D/g, "");
+    const hasLetters = /[a-zA-ZăâîșțĂÂÎȘȚ]{2}/.test(trimmed.replace(/^ro/i, ""));
+    if (!hasLetters && digits.length >= 5) {
+      // A scris un CUI → verificare live la ANAF
+      cuiTimer.current = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/firm-lookup?cui=${digits}`);
+          const data = await res.json();
+          setFirmCheck(data?.found ? { name: data.name, active: !!data.active } : "notfound");
+        } catch {
+          setFirmCheck(null);
+        }
+      }, 500);
+    } else if (hasLetters && trimmed.length >= 3) {
+      // A scris numele firmei → căutăm în registrul firmelor și îi arătăm lista
+      firmSugTimer.current = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/firm-suggest?q=${encodeURIComponent(trimmed)}`);
+          const data = await res.json();
+          setFirmSugs(data.suggestions ?? []);
+          setShowFirmSugs((data.suggestions ?? []).length > 0);
+        } catch {
+          setFirmSugs([]);
+        }
+      }, 450);
+    }
+  }
+
+  function pickFirm(s: { name: string; cui: string; city: string }) {
+    set("cui", s.cui);
+    setFirmSugs([]);
+    setShowFirmSugs(false);
+    setFirmCheck(null);
+    fetch(`/api/firm-lookup?cui=${s.cui}`)
+      .then((r) => r.json())
+      .then((d) => setFirmCheck(d?.found ? { name: d.name, active: !!d.active } : { name: s.name, active: true }))
+      .catch(() => setFirmCheck({ name: s.name, active: true }));
   }
   const reportRef = useRef<HTMLDivElement>(null);
   // Reduceri din URL: ?partener=bizzclub (partener) sau ?ref=cod (recomandare client)
@@ -195,7 +228,11 @@ export default function ServicePage() {
     setShowSug(false);
   }
 
-  useEffect(() => () => { if (sugTimer.current) clearTimeout(sugTimer.current); }, []);
+  useEffect(() => () => {
+    if (sugTimer.current) clearTimeout(sugTimer.current);
+    if (cuiTimer.current) clearTimeout(cuiTimer.current);
+    if (firmSugTimer.current) clearTimeout(firmSugTimer.current);
+  }, []);
 
   const canNext =
     step === 0 ? form.businessType && form.companyName.trim() && form.city.trim() && form.industry
@@ -452,13 +489,29 @@ export default function ServicePage() {
                       ))}
                     </motion.div>
                   </div>
-                  <div>
-                    <label className="label">CUI / cod fiscal (opțional)</label>
+                  <div className="relative">
+                    <label className="label">CUI sau numele firmei (opțional)</label>
                     <div className="relative">
                       <Hash className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
-                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: 12345678 — analizăm firma pe datele oficiale ANAF" inputMode="numeric"
-                        value={form.cui} onChange={(e) => onCuiChange(e.target.value)} />
+                      <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: 12345678 sau scrie numele firmei și alege din listă"
+                        value={form.cui} onChange={(e) => onCuiChange(e.target.value)}
+                        onBlur={() => setTimeout(() => setShowFirmSugs(false), 200)}
+                        onFocus={() => firmSugs.length > 0 && setShowFirmSugs(true)} />
                     </div>
+                    {showFirmSugs && firmSugs.length > 0 && (
+                      <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-bg-border bg-bg-card shadow-card">
+                        {firmSugs.map((s) => (
+                          <button key={s.cui} type="button" onClick={() => pickFirm(s)}
+                            className="flex w-full items-start gap-2 px-3.5 py-2.5 text-left transition hover:bg-brand-orange/10">
+                            <Building2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-orange" />
+                            <span>
+                              <span className="block text-sm font-semibold text-text">{s.name}</span>
+                              <span className="block text-[11px] text-text-subtle">CUI {s.cui}{s.city ? ` · ${s.city}` : ""}</span>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     {firmCheck && firmCheck !== "notfound" && (
                       <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-green-400">
                         <CheckCircle2 className="h-3 w-3" /> {firmCheck.name} — {firmCheck.active ? "activă, verificată la ANAF" : "⚠️ INACTIVĂ la ANAF"}
@@ -471,7 +524,7 @@ export default function ServicePage() {
                     )}
                     {!firmCheck && (
                       <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
-                        Cu CUI-ul verificăm firma la ANAF: cifră de afaceri, profit, CAEN, TVA — raportul se calculează pe cifrele tale oficiale.
+                        Scrie CUI-ul sau numele firmei și alege-o din listă — verificăm firma la ANAF: cifră de afaceri, profit, CAEN, TVA. Raportul se calculează pe cifrele tale oficiale.
                       </p>
                     )}
                   </div>
