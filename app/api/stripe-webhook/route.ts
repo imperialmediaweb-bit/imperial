@@ -134,7 +134,9 @@ export async function POST(req: Request) {
   // ═══ PACHET START ONLINE (comandat prin consultant) ═══
   if (session.metadata?.purpose === "start-online") {
     const startEmail = billing.email ?? "";
-    // Idempotență: lead-ul plății conține id-ul sesiunii Stripe — dacă există deja, e retry.
+    // Idempotență: lead-ul plății conține id-ul sesiunii Stripe. Îl scriem ÎNAINTE de
+    // factură/emailuri — dacă marcajul nu poate fi scris, dăm 500 și Stripe reîncearcă,
+    // ca să nu riscăm două facturi fiscale la o relivrare de webhook.
     if (hasDb()) {
       try {
         const { getPool } = await import("@/lib/db");
@@ -142,7 +144,18 @@ export async function POST(req: Request) {
           `%${session.id}%`,
         ]);
         if (dup.rows[0]) return NextResponse.json({ received: true, duplicate: true });
-      } catch {}
+        await insertBrief({
+          name: billing.firmName || startEmail || "necunoscut",
+          email: startEmail || "necunoscut@plata-stripe.ro",
+          selected_package: "Pachet Start Online — PLĂTIT",
+          industry: "",
+          message: `✅ A PLĂTIT Pachetul Start Online (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: creează paginile (datele în lead-ul consultantului, pozele în Cloudinary), apoi livrează din /admin/rapoarte. [stripe:${session.id}]`,
+          source: "start-online-paid",
+        });
+      } catch (e) {
+        console.error("[stripe-webhook] start idempotency/lead failed:", e);
+        return NextResponse.json({ error: "db error" }, { status: 500 });
+      }
     }
 
     let invoiceNote = "";
@@ -198,19 +211,15 @@ export async function POST(req: Request) {
       }
     }
 
-    if (hasDb()) {
-      try {
-        await insertBrief({
-          name: billing.firmName || startEmail || "necunoscut",
-          email: startEmail || "necunoscut@plata-stripe.ro",
-          selected_package: "Pachet Start Online — PLĂTIT",
-          industry: "",
-          message: `✅ A PLĂTIT Pachetul Start Online (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: creează paginile (datele în lead-ul consultantului, pozele în Cloudinary), apoi livrează din /admin/rapoarte. [stripe:${session.id}]`,
-          source: "start-online-paid",
-        });
-      } catch (e) {
-        console.error("[stripe-webhook] start lead insert failed:", e);
-      }
+    // Comanda apare și în contul clientului — statusul „în lucru"
+    if (startEmail) {
+      const { insertNotification } = await import("@/lib/monitoring");
+      insertNotification(
+        startEmail,
+        "order",
+        "🚀 Comanda ta Start Online e confirmată — în lucru",
+        `Plata (${amount}) a intrat, factura sosește pe email. Creăm profilul Google Business + pagina de Facebook. Dacă nu ai apucat, urcă pozele firmei din cardul „📸 Trimite-ne poze”.`
+      ).catch(() => {});
     }
 
     return NextResponse.json({ received: true });

@@ -54,15 +54,25 @@ export async function POST(req: Request) {
   const uploaded: string[] = [];
   const failed: string[] = [];
 
-  for (const f of files) {
-    if (!f.type.startsWith("image/") || f.size > MAX_SIZE) {
-      failed.push(f.name);
-      continue;
+  // Loturi de câte 3 în paralel — de câteva ori mai rapid decât secvențial,
+  // fără să ținem toate cele 10 poze în memorie simultan.
+  const queue = [...files];
+  while (queue.length > 0) {
+    const batch = queue.splice(0, 3);
+    const results = await Promise.all(
+      batch.map(async (f) => {
+        if (!f.type.startsWith("image/") || f.size > MAX_SIZE) {
+          return { name: f.name, url: null as string | null };
+        }
+        const b64 = Buffer.from(await f.arrayBuffer()).toString("base64");
+        const result = await uploadImageToCloudinary(`data:${f.type};base64,${b64}`, folder);
+        return { name: f.name, url: result?.url ?? null };
+      })
+    );
+    for (const r of results) {
+      if (r.url) uploaded.push(r.url);
+      else failed.push(r.name);
     }
-    const b64 = Buffer.from(await f.arrayBuffer()).toString("base64");
-    const result = await uploadImageToCloudinary(`data:${f.type};base64,${b64}`, folder);
-    if (result?.url) uploaded.push(result.url);
-    else failed.push(f.name);
   }
 
   if (uploaded.length === 0) {

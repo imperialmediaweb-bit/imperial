@@ -474,6 +474,15 @@ Vreau ceva în aceeași direcție.`;
         const j = await res.json().catch(() => ({}));
         throw new Error(j?.error || "Nu am putut trimite. Sună la 0758 169 388.");
       }
+      if (mode === "consultanta") {
+        // NU navigăm — consultantul tocmai îi dă pașii de plată/poze; chatul rămâne deschis.
+        setUiMessages((prev) => [
+          ...prev,
+          { role: "assistant", text: "✅ Comanda ta e înregistrată la echipă! Urmează pașii de mai sus — plata și pozele — și ne apucăm de treabă." },
+        ]);
+        setSubmitting(false);
+        return;
+      }
       router.push("/multumim");
     } catch (e: any) {
       setError(e?.message ?? "Eroare.");

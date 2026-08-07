@@ -7,6 +7,7 @@ import { getNotifications, markNotificationsSeen } from "@/lib/monitoring";
 import { refCodeForEmail, countPaidReferrals } from "@/lib/referrals";
 import { getSubscription } from "@/lib/subscribers";
 import { hasDb } from "@/lib/db";
+import { cloudinaryEnabled } from "@/lib/cloudinary";
 import { ContLogin } from "@/components/ContLogin";
 import { ContDashboard } from "@/components/ContDashboard";
 
@@ -53,7 +54,7 @@ export default async function ContPage({
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
       <ContDashboard
         email={email}
-        photosEnabled={!!(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET)}
+        photosEnabled={cloudinaryEnabled()}
         refCode={refCode}
         referralCount={referralCount}
         subscription={subscription ?? undefined}

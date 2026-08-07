@@ -54,6 +54,8 @@ const KIND_ICON: Record<string, any> = {
   competitor: Swords,
   advice: Lightbulb,
   info: Info,
+  order: Wrench,
+  delivery: Gift,
 };
 
 function fmtDate(iso: string) {

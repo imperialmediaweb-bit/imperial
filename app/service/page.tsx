@@ -110,12 +110,14 @@ export default function ServicePage() {
   // Autocomplete oraș (lista locală) + verificare CUI live la ANAF
   const [citySugs, setCitySugs] = useState<string[]>([]);
   const [showCitySugs, setShowCitySugs] = useState(false);
-  const [firmCheck, setFirmCheck] = useState<{ name: string; active: boolean } | "notfound" | null>(null);
+  const [firmCheck, setFirmCheck] = useState<{ name: string; active: boolean; verified: boolean } | "notfound" | null>(null);
   const cuiTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Căutare firmă după nume (openapi.ro): scrii „legio" → apar firmele → alegi → CUI completat
   const [firmSugs, setFirmSugs] = useState<Array<{ name: string; cui: string; city: string }>>([]);
   const [showFirmSugs, setShowFirmSugs] = useState(false);
   const firmSugTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Anti-cursă: răspunsurile vechi de la /api/firm-suggest nu mai redeschid dropdown-ul
+  const firmReqId = useRef(0);
 
   function onCityChange(v: string) {
     set("city", v);
@@ -140,6 +142,7 @@ export default function ServicePage() {
     setFirmCheck(null);
     setFirmSugs([]);
     setShowFirmSugs(false);
+    firmReqId.current += 1;
     if (cuiTimer.current) clearTimeout(cuiTimer.current);
     if (firmSugTimer.current) clearTimeout(firmSugTimer.current);
     const trimmed = v.trim();
@@ -151,21 +154,23 @@ export default function ServicePage() {
         try {
           const res = await fetch(`/api/firm-lookup?cui=${digits}`);
           const data = await res.json();
-          setFirmCheck(data?.found ? { name: data.name, active: !!data.active } : "notfound");
+          setFirmCheck(data?.found ? { name: data.name, active: !!data.active, verified: true } : "notfound");
         } catch {
           setFirmCheck(null);
         }
       }, 500);
     } else if (hasLetters && trimmed.length >= 3) {
       // A scris numele firmei → căutăm în registrul firmelor și îi arătăm lista
+      const reqId = firmReqId.current;
       firmSugTimer.current = setTimeout(async () => {
         try {
           const res = await fetch(`/api/firm-suggest?q=${encodeURIComponent(trimmed)}`);
           const data = await res.json();
+          if (reqId !== firmReqId.current) return; // răspuns învechit — între timp a tastat/ales altceva
           setFirmSugs(data.suggestions ?? []);
           setShowFirmSugs((data.suggestions ?? []).length > 0);
         } catch {
-          setFirmSugs([]);
+          if (reqId === firmReqId.current) setFirmSugs([]);
         }
       }, 450);
     }
@@ -176,10 +181,18 @@ export default function ServicePage() {
     setFirmSugs([]);
     setShowFirmSugs(false);
     setFirmCheck(null);
+    firmReqId.current += 1;
+    // Confirmare ANAF pe CUI-ul ales; dacă ANAF nu răspunde, afișăm doar completarea — fără pretenția „verificată"
     fetch(`/api/firm-lookup?cui=${s.cui}`)
       .then((r) => r.json())
-      .then((d) => setFirmCheck(d?.found ? { name: d.name, active: !!d.active } : { name: s.name, active: true }))
-      .catch(() => setFirmCheck({ name: s.name, active: true }));
+      .then((d) =>
+        setFirmCheck(
+          d?.found
+            ? { name: d.name, active: !!d.active, verified: true }
+            : { name: s.name, active: true, verified: false }
+        )
+      )
+      .catch(() => setFirmCheck({ name: s.name, active: true, verified: false }));
   }
   const reportRef = useRef<HTMLDivElement>(null);
   // Reduceri din URL: ?partener=bizzclub (partener) sau ?ref=cod (recomandare client)
@@ -527,7 +540,7 @@ export default function ServicePage() {
                     )}
                     {firmCheck && firmCheck !== "notfound" && (
                       <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-green-400">
-                        <CheckCircle2 className="h-3 w-3" /> {firmCheck.name} — {firmCheck.active ? "activă, verificată la ANAF" : "⚠️ INACTIVĂ la ANAF"}
+                        <CheckCircle2 className="h-3 w-3" /> {firmCheck.name} — {firmCheck.verified ? (firmCheck.active ? "activă, verificată la ANAF" : "⚠️ INACTIVĂ la ANAF") : "CUI completat din registrul firmelor"}
                       </p>
                     )}
                     {firmCheck === "notfound" && (

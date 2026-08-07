@@ -90,6 +90,14 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+  // Comanda apare și în contul clientului
+  const { insertNotification } = await import("@/lib/monitoring");
+  insertNotification(
+    email,
+    "order",
+    "🚀 Comanda ta Start Online e înregistrată",
+    "Îți trimitem pe email factura și pașii următori. Între timp poți urca pozele firmei din cardul „📸 Trimite-ne poze”."
+  ).catch(() => {});
   return NextResponse.json({
     ok: true,
     offline: true,

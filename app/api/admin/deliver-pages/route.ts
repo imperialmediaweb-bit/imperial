@@ -42,7 +42,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Linkurile trebuie să înceapă cu https://" }, { status: 400 });
   }
 
-  // Actualizăm datele firmei pe ultimul raport — de aici citesc consultantul și monitorizarea
+  // Actualizăm datele firmei pe ultimul raport — de aici citesc consultantul și monitorizarea.
+  // Emailul TREBUIE să aibă un raport în sistem — altfel e aproape sigur o typo și oprim aici,
+  // înainte să plece emailul către o adresă greșită.
   if (hasDb()) {
     try {
       const pool = getPool()!;
@@ -50,11 +52,17 @@ export async function POST(req: Request) {
       const patch: Record<string, string> = {};
       if (facebookUrl) patch.facebook = facebookUrl;
       if (googleUrl) patch.googleProfileUrl = googleUrl;
-      await pool.query(
+      const upd = await pool.query(
         `UPDATE service_reports SET form_data = COALESCE(form_data, '{}'::jsonb) || $2::jsonb
          WHERE id = (SELECT id FROM service_reports WHERE LOWER(email) = $1 ORDER BY created_at DESC LIMIT 1)`,
         [email, JSON.stringify(patch)]
       );
+      if (upd.rowCount === 0) {
+        return NextResponse.json(
+          { error: `Niciun raport pentru ${email} — verifică emailul (alege-l din listă).` },
+          { status: 404 }
+        );
+      }
       await insertNotification(
         email,
         "delivery",
@@ -67,6 +75,10 @@ export async function POST(req: Request) {
       );
     } catch (e) {
       console.error("[deliver-pages] db update failed:", e);
+      return NextResponse.json(
+        { error: "Baza de date n-a răspuns — livrarea NU a plecat. Încearcă din nou." },
+        { status: 500 }
+      );
     }
   }
 
