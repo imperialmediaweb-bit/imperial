@@ -53,6 +53,7 @@ export default async function ContPage({
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
       <ContDashboard
         email={email}
+        photosEnabled={!!(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET)}
         refCode={refCode}
         referralCount={referralCount}
         subscription={subscription ?? undefined}

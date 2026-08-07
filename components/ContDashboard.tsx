@@ -7,6 +7,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { NumberTicker } from "@/components/effects/NumberTicker";
+import { PhotoUpload } from "@/components/PhotoUpload";
 import {
   Bell,
   FileText,
@@ -66,6 +67,7 @@ export function ContDashboard({
   refCode,
   referralCount = 0,
   subscription,
+  photosEnabled = false,
 }: {
   email: string;
   reports: ReportItem[];
@@ -73,6 +75,7 @@ export function ContDashboard({
   refCode?: string;
   referralCount?: number;
   subscription?: { active: boolean; plan: string | null };
+  photosEnabled?: boolean;
 }) {
   const [subSent, setSubSent] = useState(false);
   const [subLoading, setSubLoading] = useState<string | null>(null);
@@ -229,6 +232,9 @@ export function ContDashboard({
             <ArrowRight className="h-5 w-5 flex-shrink-0 text-brand-orange" />
           </div>
         </Link>
+
+        {/* Pozele clientului — upload direct în Cloudinary */}
+        {photosEnabled && <PhotoUpload />}
 
         {/* Notificări */}
         <div className="rounded-3xl border border-bg-border bg-bg-card/60 p-6">
