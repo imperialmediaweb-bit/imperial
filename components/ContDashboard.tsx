@@ -224,7 +224,7 @@ export function ContDashboard({
                 întreabă-l orice — online sau offline — și primești sfaturi pe afacerea TA.
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
-                {["🎯 Învață-mă reclame pe Facebook", "📱 Ce postez săptămâna asta?", "⭐ Cum răspund la o recenzie negativă?"].map((q) => (
+                {["🎯 Învață-mă reclame pe Facebook", "📱 Ce postez săptămâna asta?", "🏪 Cum aduc mai mulți clienți în locație?", "🤝 Ce parteneriate locale să fac?"].map((q) => (
                   <span key={q} className="rounded-full border border-brand-orange/30 bg-bg-soft/60 px-3 py-1 text-[11px] font-semibold text-text-muted">
                     {q}
                   </span>
