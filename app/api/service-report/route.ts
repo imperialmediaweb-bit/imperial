@@ -234,6 +234,13 @@ export async function POST(req: Request) {
   const employees = String(body?.employees ?? "").trim();
   const mainProblem = String(body?.mainProblem ?? "").trim();
   const zone = String(body?.zone ?? "").trim().slice(0, 120);
+  // Poze cu vitrina/produsele — comprimate în browser (max 3 × ~300KB), analizate vizual de AI
+  const photos: string[] = Array.isArray(body?.photos)
+    ? body.photos
+        .slice(0, 3)
+        .map(String)
+        .filter((p: string) => /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p) && p.length < 1_900_000)
+    : [];
   // Atribuire: cod de recomandare / partener (vin din URL, se salvează pe raport)
   const ref = /^[a-z0-9]{4,16}$/i.test(String(body?.ref ?? "")) ? String(body.ref).toLowerCase() : "";
   const partner = /^[a-z0-9-]{2,24}$/i.test(String(body?.partner ?? "")) ? String(body.partner).toLowerCase() : "";
@@ -529,6 +536,7 @@ REGULI ANTI-ȘABLON (obligatorii):
 - OFFLINE OBLIGATORIU: fiecare fază din actionPlan conține MINIM o acțiune offline pentru afacerea lui — procese, vânzare, oferte, fidelizarea clienților, organizare, upsell, promovare locală (presă locală, parteneriate cu alte firme din zonă, evenimente, materiale la punctul de lucru) — specifică domeniului (ex: service auto → sună clienții la 6 luni pentru revizie; salon → pachete de abonament pentru cliente fidele; restaurant → oferta de prânz pentru firmele din zonă). Nu doar digital.
 - AFACERILE CU PUNCT FIZIC (sediu, magazin, salon, cabinet, tarabă în piață/bazar): tratează punctul de vânzare ca pe un canal de marketing în sine. Include cel puțin UN diagnostic dedicat părții fizice (ex: „Punctul de vânzare & zona", „Fidelizare & revenire", „Recomandările din gură în gură") cu rezolvare concretă. Repertoriu de lucru (alege ce se potrivește domeniului, nu le înșira pe toate): vitrină/semnalistică care oprește trecătorul, cardul de fidelitate fizic simplu, oferta „adu un prieten", parteneriate încrucișate cu afaceri complementare din zonă (notarul ↔ agențiile imobiliare și băncile; salonul ↔ fotografii de nuntă și magazinele de rochii; taraba ↔ bundle-uri și degustări la orele de vârf), evenimente mici la punct de lucru, prezența la târgurile locale, materiale cu QR spre recenzii/meniu/programări, uniformă/ecuson care inspiră încredere, scriptul de 1 frază prin care angajatul cere recenzia sau revânzarea. Cifrele contează și aici: estimează cât aduce fiecare acțiune offline (clienți/lună), nu doar cele digitale.
 - ANALIZA ZONEI (dacă a dat zona/cartierul): judecă potențialul VADULUI ca un cunoscător al orașelor românești — ce fel de zonă e (centru comercial, cartier rezidențial, lângă piață/gară/școli/instituții), ce clientelă trece pe acolo și la ce ore, cum profită de trafic (vitrină, semnalistică, ofertă de „prins trecătorul") și ce parteneriate are la doi pași (firmele complementare tipice unei astfel de zone). Fii onest: cunoști zona doar din descriere — formulează ca ipoteze de verificat („dacă în zonă e X, atunci..."), nu ca fapte. Leagă recomandările de potențialul REAL al locului: o tarabă lângă piață se crește altfel decât un cabinet în cartier rezidențial.
+${photos.length > 0 ? `- POZELE ATAȘATE (${photos.length} — vitrina/produsele/localul lui, făcute de proprietar): analizează-le ca expert în merchandising și amenajare pentru domeniul lui. Include OBLIGATORIU un diagnostic dedicat (ex: „Vitrina & prima impresie" / „Prezentarea produselor") pe ce VEZI concret: prima impresie a trecătorului, lizibilitatea firmei, lumina, ordinea, prețurile vizibile, ce atrage și ce respinge. În fix: 1) ce schimbă AZI cu 0 lei, 2) ce schimbă cu buget mic, 3) O OFERTĂ CONCRETĂ DE PUS PE GEAM/AFARĂ — textul exact, gata de printat, calibrat pe marfa/serviciul lui din poze (ex: „2+1 la orice patiserie după ora 18" / „Verificare gratuită 10 puncte la orice schimb de ulei"). Fii sincer dar constructiv — descrii ce e în poze, nu inventezi ce nu se vede.` : ""}
 - Fii SINCER și DIRECT — cifrele contează mai mult decât politeța.
 - REGULA DE ONESTITATE (cea mai importantă): afirmă DOAR ce e susținut de datele scanate. Ce NU a putut fi verificat (Facebook blocat, pagini de site nescanate, Google negăsit sub numele dat) se raportează ca „nu am putut verifica" cu status "warning" — NU ca „zero" sau „nu există". Un patron care ARE recenzii și portofoliu și citește în raport că n-are NIMIC își pierde toată încrederea în analiză. Necunoscut ≠ absent.
 
@@ -600,10 +608,24 @@ Prețuri de referință Imperial Media: site prezentare 699-1.500€, site cu fu
 PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, mentoratul antreprenorial sau schimbul de experiență cu alți patroni, include în plan (o singură dată, unde se potrivește natural) recomandarea Bizz Club Botoșani (botosani.bizz.club) — partenerul nostru pentru dezvoltare, o comunitate de antreprenori de calitate din zonă, unde se leagă relații de business reale. Noi acoperim datele și implementarea, ei comunitatea.`;
 
   try {
+    // Pozele vitrinei/produselor intră ca imagini reale în analiză (vision)
+    const photoBlocks = photos.map((p) => {
+      const [meta, data] = p.split(",");
+      const mediaType = meta.match(/data:(image\/\w+);/)?.[1] ?? "image/jpeg";
+      return {
+        type: "image" as const,
+        source: { type: "base64" as const, media_type: mediaType as "image/jpeg" | "image/png" | "image/webp", data },
+      };
+    });
     const resp = await client.messages.create({
       model: CLAUDE_MODEL,
       max_tokens: 12000,
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "user",
+          content: photoBlocks.length > 0 ? [...photoBlocks, { type: "text" as const, text: prompt }] : prompt,
+        },
+      ],
     });
 
     const textBlock = resp.content.find((b) => b.type === "text");
@@ -701,7 +723,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     try {
       saved = await insertServiceReport({
         token,
-        formData: { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, employees, mainProblem, ref, partner },
+        formData: { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, employees, mainProblem, ref, partner, photosCount: photos.length },
         report,
       });
     } catch (e) {

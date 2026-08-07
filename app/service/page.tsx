@@ -118,6 +118,30 @@ export default function ServicePage() {
   const firmSugTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Anti-cursă: răspunsurile vechi de la /api/firm-suggest nu mai redeschid dropdown-ul
   const firmReqId = useRef(0);
+  // Poze cu vitrina/produsele — comprimate în browser, analizate de AI în raport
+  const [photos, setPhotos] = useState<string[]>([]);
+  const photoInputRef = useRef<HTMLInputElement>(null);
+
+  async function addPhotos(list: FileList | null) {
+    if (!list) return;
+    const room = 3 - photos.length;
+    const picked = Array.from(list).slice(0, Math.max(0, room));
+    const compressed: string[] = [];
+    for (const file of picked) {
+      if (!file.type.startsWith("image/")) continue;
+      try {
+        const bitmap = await createImageBitmap(file);
+        const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(bitmap.width * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        compressed.push(canvas.toDataURL("image/jpeg", 0.8));
+      } catch {}
+    }
+    if (compressed.length) setPhotos((p) => [...p, ...compressed].slice(0, 3));
+    if (photoInputRef.current) photoInputRef.current.value = "";
+  }
 
   function onCityChange(v: string) {
     set("city", v);
@@ -265,7 +289,7 @@ export default function ServicePage() {
       const res = await fetch("/api/service-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, partner: promo?.partner, ref: promo?.ref }),
+        body: JSON.stringify({ ...form, photos, partner: promo?.partner, ref: promo?.ref }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Eroare la generarea raportului.");
@@ -482,6 +506,31 @@ export default function ServicePage() {
                       </div>
                       <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
                         Analizăm potențialul zonei: ce clientelă trece pe acolo, cum profiți de vad, ce parteneriate ai la doi pași.
+                      </p>
+                    </div>
+                  )}
+                  {form.businessType !== "online" && (
+                    <div>
+                      <label className="label">Poze cu vitrina / produsele / localul (opțional, max 3)</label>
+                      <input ref={photoInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => addPhotos(e.target.files)} />
+                      <div className="flex flex-wrap items-center gap-2">
+                        {photos.map((p, i) => (
+                          <div key={i} className="relative">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={p} alt={`poza ${i + 1}`} className="h-16 w-16 rounded-xl border border-bg-border object-cover" />
+                            <button type="button" onClick={() => setPhotos((arr) => arr.filter((_, j) => j !== i))}
+                              className="absolute -right-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-red-500 text-[10px] font-bold text-white">✕</button>
+                          </div>
+                        ))}
+                        {photos.length < 3 && (
+                          <button type="button" onClick={() => photoInputRef.current?.click()}
+                            className="grid h-16 w-16 place-items-center rounded-xl border-2 border-dashed border-bg-border text-2xl text-text-subtle transition hover:border-brand-orange/60 hover:text-brand-orange">
+                            📷
+                          </button>
+                        )}
+                      </div>
+                      <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                        AI-ul le analizează în raport: cum arată vitrina pentru un trecător, expunerea mărfii și ce ofertă merită pusă pe geam.
                       </p>
                     </div>
                   )}
