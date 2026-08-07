@@ -37,7 +37,10 @@ export default async function ContConsultantPage() {
 
   const contextLines = [
     `Firma: ${r.companyName ?? f.companyName ?? "?"} (${r.city ?? f.city ?? "?"}), domeniu: ${f.industry ?? "?"}, tip: ${f.businessType ?? "local"}`,
+    `Emailul lui de cont (folosește-l direct la comenzi/brief, nu i-l mai cere): ${email}`,
     `Site: ${f.website ? f.website : "NU ARE SITE"}`,
+    `Facebook: ${f.facebook ? f.facebook : "NU ARE PAGINĂ DE FACEBOOK (sau nu a declarat-o)"}`,
+    `Profil Google Business: ${r.googleData?.found ? "există, găsit la scanare" : "NU a fost găsit la scanare"}`,
     `Scor la ultimul raport: ${r.overallScore ?? "?"}/100; pierderi estimate: ~${r.lostClientsPerMonth ?? "?"} clienți/lună (~${r.lostRevenuePerMonth ?? "?"}€/lună)`,
     r.anafData?.found
       ? `ANAF: ${r.anafData.legalName}, ${r.anafData.active ? "activă" : "INACTIVĂ"}${r.anafData.turnover != null ? `, cifră de afaceri ${r.anafData.turnover} lei (${r.anafData.balanceYear})` : ""}`

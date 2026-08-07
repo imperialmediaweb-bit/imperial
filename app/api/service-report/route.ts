@@ -569,7 +569,7 @@ Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
   "lostClientsPerMonth": <estimare realistă clienți pierduți lunar>,
   "lostRevenuePerMonth": <lostClients × valoarea medie (reală sau tipică industriei) în EUR>,
   "diagnostics": [
-    {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 3-5 fraze: ce am găsit, de ce se întâmplă asta în domeniul lui, cât îl costă","fix":"REZOLVAREA concretă, 2-4 fraze: exact ce face, cu ce unelte/pași, cine o face (el în X minute / noi / un angajat) și în cât timp se văd rezultatele. La status good: cum păstrează și crește avantajul."}
+    {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 3-5 fraze: ce am găsit, de ce se întâmplă asta în domeniul lui, cât îl costă","fix":"REZOLVAREA concretă, 2-4 fraze: exact ce face, cu ce unelte/pași, cine o face (el în X minute / noi / un angajat) și în cât timp se văd rezultatele. Dacă canalul lipsește complet (fără pagină Facebook / fără profil Google Business) menționează că i le putem face noi cap-coadă (Pachet Start Online 500 lei) — comandă direct din contul lui, în chatul consultantului, fără telefoane. La status good: cum păstrează și crește avantajul."}
   ],
   "firstMonthPlan": [
     {"week":"Săptămâna 1","focus":"<tema săptămânii>","tasks":["<3-4 sarcini concrete, cu detalii de execuție — cine, ce, cum>"],"result":"<ce e gata la finalul săptămânii>"},
