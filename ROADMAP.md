@@ -46,3 +46,9 @@ _Actualizat: august 2026. Ordinea recomandată — fiecare treaptă se construie
 - Recomandări: 1 firmă plătită = 1 lună monitorizare gratis; cumpărătorul prin link = 249 lei
 - Pachet Start Online (fără site): 500 lei — Google Business + Facebook cu design
 - Site-uri: 699–4.500€ conform grilei din lib/ai.ts; campania 50 ziare (300€) gratuită la site
+
+## Marketplace de servicii (gen Fiverr) — DE FĂCUT MAI TÂRZIU
+Pagină cu produse la comandă (postări făcute de noi, design-uri, articole, video etc.), cu preț fix,
+comandă self-service și plată Stripe — pentru clienții care nu vor să genereze/execute singuri nici cu
+generatorul din cont. Decis pe 2026-08-07: NU se construiește acum; abonamentele actuale acoperă nevoia
+(Monitorizare 99 / Premium 199 cu generator de postări + analize foto).

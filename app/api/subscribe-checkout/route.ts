@@ -34,7 +34,8 @@ export async function POST(req: Request) {
   } catch {
     body = {};
   }
-  const plan: "lunar" | "anual" = body?.plan === "anual" ? "anual" : "lunar";
+  const plan = (["lunar", "anual", "premium", "premium-anual"].includes(body?.plan) ? body.plan : "lunar") as
+    | "lunar" | "anual" | "premium" | "premium-anual";
 
   if (stripeEnabled()) {
     try {

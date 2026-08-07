@@ -65,16 +65,32 @@ export async function createReportCheckoutSession(opts: {
   return createSession(key, params);
 }
 
-// Abonamentul de monitorizare — plată recurentă self-service (lunar 99 / anual 990).
+// Abonamentele — plată recurentă self-service, două trepte:
+// Monitorizare (lunar 99 / anual 990) și Premium (lunar 199 / anual 1990, PREMIUM_PRICE_RON override)
+// — Premium = tot din Monitorizare + generatorul de postări + analiza pozelor la cerere.
+export type SubscriptionPlan = "lunar" | "anual" | "premium" | "premium-anual";
+
+export function premiumPriceRon(): number {
+  const v = Number(process.env.PREMIUM_PRICE_RON);
+  return Number.isFinite(v) && v > 0 ? Math.round(v) : 199;
+}
+
+export function isPremiumPlan(plan: string | null | undefined): boolean {
+  return String(plan ?? "").startsWith("premium");
+}
+
 export async function createSubscriptionCheckoutSession(opts: {
   email: string;
   origin: string;
-  plan: "lunar" | "anual";
+  plan: SubscriptionPlan;
 }): Promise<{ url: string }> {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY missing");
 
-  const monthly = opts.plan !== "anual";
+  const premium = isPremiumPlan(opts.plan);
+  const monthly = opts.plan === "lunar" || opts.plan === "premium";
+  const monthlyPrice = premium ? premiumPriceRon() : 99;
+  const amount = monthly ? monthlyPrice : monthlyPrice * 10; // anual = plătești 10 luni, primești 12
   const params = new URLSearchParams({
     mode: "subscription",
     client_reference_id: opts.email,
@@ -84,12 +100,14 @@ export async function createSubscriptionCheckoutSession(opts: {
     cancel_url: `${opts.origin}/cont`,
     "line_items[0][quantity]": "1",
     "line_items[0][price_data][currency]": "ron",
-    "line_items[0][price_data][unit_amount]": String((monthly ? 99 : 990) * 100),
+    "line_items[0][price_data][unit_amount]": String(amount * 100),
     "line_items[0][price_data][recurring][interval]": monthly ? "month" : "year",
-    "line_items[0][price_data][product_data][name]":
-      `Monitorizare afacere Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`,
-    "line_items[0][price_data][product_data][description]":
-      "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont",
+    "line_items[0][price_data][product_data][name]": premium
+      ? `Abonament Premium Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`
+      : `Monitorizare afacere Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`,
+    "line_items[0][price_data][product_data][description]": premium
+      ? "Tot din Monitorizare + generatorul de postări nelimitat + analiza AI a pozelor tale (vitrină, produse) la cerere"
+      : "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont",
   });
   billingParams(params);
 

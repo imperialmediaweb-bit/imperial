@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { NumberTicker } from "@/components/effects/NumberTicker";
 import { PhotoUpload } from "@/components/PhotoUpload";
+import { PostGenerator } from "@/components/PostGenerator";
 import {
   Bell,
   FileText,
@@ -98,7 +99,7 @@ export function ContDashboard({
   const latest = reports[reports.length - 1];
 
   // Activare abonament self-service: cu Stripe → plată recurentă; fără → cerere în admin.
-  async function subscribe(plan: "lunar" | "anual") {
+  async function subscribe(plan: "lunar" | "anual" | "premium" | "premium-anual") {
     setSubLoading(plan);
     setSubError(null);
     try {
@@ -237,6 +238,9 @@ export function ContDashboard({
           </div>
         </Link>
 
+        {/* Generatorul de postări — exclusiv Premium */}
+        {subscription?.active && String(subscription.plan ?? "").startsWith("premium") && <PostGenerator />}
+
         {/* QR-ul de recenzii — scanezi → aterizezi pe „Scrie o recenzie” la firma lui */}
         {reviewPlaceId && (
           <div className="rounded-3xl border border-yellow-500/30 bg-yellow-500/5 p-6">
@@ -354,22 +358,41 @@ export function ContDashboard({
           </div>
         )}
 
-        {/* Abonament */}
+        {/* Abonament — două trepte: Monitorizare 99 / Premium 199 */}
         <div className="rounded-3xl border border-brand-purple/30 bg-brand-purple/5 p-6 text-center">
           <p className="inline-flex items-center gap-1.5 font-display text-lg font-bold text-text">
-            <RefreshCw className="h-5 w-5 text-brand-purple" /> Monitorizare lunară — 99 lei/lună
+            <RefreshCw className="h-5 w-5 text-brand-purple" /> Abonamentul tău — de la 99 lei/lună
           </p>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-text-muted">
-            Afacerea ta monitorizată lună de lună: scorul, recenziile, competiția, site-ul + sfaturile
-            lunii + consultantul tău dedicat — care te învață inclusiv ce postări și reclame să faci pe Facebook.
-          </p>
-          <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">
+          <div className="mx-auto mt-4 grid max-w-2xl gap-3 text-left sm:grid-cols-2">
+            <div className="rounded-2xl border border-bg-border bg-bg-card/60 p-4">
+              <p className="font-display text-sm font-bold text-text">📊 Monitorizare — 99 lei/lună</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
+                Scorul, recenziile, competiția, site-ul urmărite lună de lună + sfaturile lunii +
+                consultantul tău dedicat (care te și învață postări și reclame).
+              </p>
+            </div>
+            <div className="rounded-2xl border border-brand-purple/40 bg-brand-purple/10 p-4">
+              <p className="font-display text-sm font-bold text-text">⭐ Premium — 199 lei/lună</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
+                Tot din Monitorizare + <b className="text-text">generatorul de postări nelimitat</b> +
+                <b className="text-text"> analiza AI a pozelor tale</b> (vitrina, produsele) de câte ori vrei.
+              </p>
+            </div>
+          </div>
+          <p className="mx-auto mt-3 max-w-xl text-xs font-semibold text-brand-purple">
             Lunile câștigate din recomandări se scad din următoarea plată.
           </p>
           {subscription?.active ? (
-            <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
-              <CheckCircle2 className="h-4 w-4" /> Abonament ACTIV ({subscription.plan ?? "lunar"}) — afacerea ta e monitorizată
-            </p>
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <p className="inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
+                <CheckCircle2 className="h-4 w-4" /> Abonament ACTIV ({subscription.plan ?? "lunar"})
+              </p>
+              {!String(subscription.plan ?? "").startsWith("premium") && (
+                <button type="button" disabled={!!subLoading} onClick={() => subscribe("premium")} className="btn-ghost text-xs">
+                  {subLoading === "premium" ? "Se încarcă..." : "⭐ Treci pe Premium — 199 lei/lună (postări + analize foto)"}
+                </button>
+              )}
+            </div>
           ) : subSent ? (
             <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/10 px-5 py-2.5 text-sm font-semibold text-green-300">
               <CheckCircle2 className="h-4 w-4" /> Cererea ta e înregistrată! Activăm abonamentul și te anunțăm.
@@ -377,10 +400,16 @@ export function ContDashboard({
           ) : (
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <button type="button" disabled={!!subLoading} onClick={() => subscribe("lunar")} className="btn-primary">
-                {subLoading === "lunar" ? "Se încarcă..." : "Activează lunar — 99 lei/lună"}
+                {subLoading === "lunar" ? "Se încarcă..." : "Monitorizare — 99 lei/lună"}
+              </button>
+              <button type="button" disabled={!!subLoading} onClick={() => subscribe("premium")} className="btn-primary">
+                {subLoading === "premium" ? "Se încarcă..." : "⭐ Premium — 199 lei/lună"}
               </button>
               <button type="button" disabled={!!subLoading} onClick={() => subscribe("anual")} className="btn-ghost">
-                {subLoading === "anual" ? "Se încarcă..." : "Anual — 990 lei (2 luni gratis)"}
+                {subLoading === "anual" ? "..." : "Monitorizare anual — 990 lei"}
+              </button>
+              <button type="button" disabled={!!subLoading} onClick={() => subscribe("premium-anual")} className="btn-ghost">
+                {subLoading === "premium-anual" ? "..." : "Premium anual — 1.990 lei"}
               </button>
             </div>
           )}

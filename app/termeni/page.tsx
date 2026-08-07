@@ -40,9 +40,11 @@ export default function TermeniPage() {
             paginile firmei) și a datelor furnizate de client, livrată instant, online. Include un articol
             de promovare publicat în rețeaua parteneră de 50 de ziare online (rețeaua Media Expres),
             în maximum 10 zile lucrătoare de la plată.</p>
-          <p><b className="text-text">b) Abonamentul de monitorizare</b> — 99 lei/lună sau 990 lei/an: re-scanare periodică,
-            notificări și recomandări lunare, acces la contul de client. Se reînnoiește automat; poate fi
-            anulat oricând, cu efect la finalul perioadei deja plătite.</p>
+          <p><b className="text-text">b) Abonamentele</b> — Monitorizare: 99 lei/lună sau 990 lei/an (re-scanare periodică,
+            notificări și recomandări lunare, acces la contul de client); Premium: 199 lei/lună sau 1.990 lei/an
+            (tot ce include Monitorizarea, plus generatorul de postări și analiza automată a fotografiilor
+            încărcate de client). Se reînnoiesc automat; pot fi anulate oricând, cu efect la finalul
+            perioadei deja plătite.</p>
           <p><b className="text-text">c) Servicii web</b> (site-uri, magazine online, prezență online) — pe bază de ofertă
             individuală transmisă pe email.</p>
         </S>

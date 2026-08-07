@@ -104,7 +104,9 @@ export async function POST(req: Request) {
     if (invoicingEnabled()) {
       const inv = await issueInvoice({
         client: { name: billing.firmName, cif: billing.cui, address: billing.address, city: billing.city, email },
-        productName: `Abonament monitorizare afacere Imperial Media (${plan})`,
+        productName: plan.startsWith("premium")
+          ? `Abonament premium monitorizare & social media Imperial Media (${plan})`
+          : `Abonament monitorizare afacere Imperial Media (${plan})`,
         priceRon: amountRon,
       });
       invoiceNote = inv.issued

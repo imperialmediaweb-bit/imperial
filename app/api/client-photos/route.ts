@@ -53,6 +53,8 @@ export async function POST(req: Request) {
   const folder = `clienti/${email.replace(/[^a-z0-9]/gi, "-").toLowerCase()}`;
   const uploaded: string[] = [];
   const failed: string[] = [];
+  // Păstrăm primele poze și ca base64 — pentru analiza AI (Premium), fără re-descărcare
+  const forAnalysis: Array<{ media: string; data: string }> = [];
 
   // Loturi de câte 3 în paralel — de câteva ori mai rapid decât secvențial,
   // fără să ținem toate cele 10 poze în memorie simultan.
@@ -66,6 +68,9 @@ export async function POST(req: Request) {
         }
         const b64 = Buffer.from(await f.arrayBuffer()).toString("base64");
         const result = await uploadImageToCloudinary(`data:${f.type};base64,${b64}`, folder);
+        if (result?.url && forAnalysis.length < 4 && ["image/jpeg", "image/png", "image/webp"].includes(f.type)) {
+          forAnalysis.push({ media: f.type, data: b64 });
+        }
         return { name: f.name, url: result?.url ?? null };
       })
     );
@@ -102,5 +107,47 @@ export async function POST(req: Request) {
     "Le folosim la paginile/site-ul tău. Dacă mai ai altele, urcă-le oricând de aici."
   ).catch(() => {});
 
-  return NextResponse.json({ ok: true, uploaded: uploaded.length, failed });
+  // PREMIUM: analiza AI a pozelor, pe loc — vitrina/produsele văzute cu ochi de expert
+  let analysis: string | null = null;
+  try {
+    const { getSubscription } = await import("@/lib/subscribers");
+    const sub = await getSubscription(email).catch(() => null);
+    if (sub?.active && String(sub.plan ?? "").startsWith("premium") && process.env.ANTHROPIC_API_KEY && forAnalysis.length > 0) {
+      const { default: Anthropic } = await import("@anthropic-ai/sdk");
+      const { CLAUDE_MODEL } = await import("@/lib/ai");
+      const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+      const resp = await client.messages.create({
+        model: CLAUDE_MODEL,
+        max_tokens: 900,
+        messages: [
+          {
+            role: "user",
+            content: [
+              ...forAnalysis.map((p) => ({
+                type: "image" as const,
+                source: {
+                  type: "base64" as const,
+                  media_type: p.media as "image/jpeg" | "image/png" | "image/webp",
+                  data: p.data,
+                },
+              })),
+              {
+                type: "text" as const,
+                text: "Ești expert în merchandising și amenajare pentru afaceri mici din România. Analizează pozele (vitrină/produse/local) SINCER și CONSTRUCTIV, în română: 1) prima impresie a unui trecător/client, 2) ce e bine, 3) top 3 schimbări concrete — întâi cele cu 0 lei, apoi cu buget mic, 4) o ofertă scurtă de pus pe geam, calibrată pe ce vezi. Compact, fără introduceri, max 200 de cuvinte.",
+              },
+            ],
+          },
+        ],
+      });
+      const block = resp.content.find((b) => b.type === "text");
+      if (block && block.type === "text" && block.text.trim()) {
+        analysis = block.text.trim();
+        insertNotification(email, "advice", "🔍 Analiza pozelor tale e gata", analysis).catch(() => {});
+      }
+    }
+  } catch (e) {
+    console.error("[client-photos] premium analysis failed:", e);
+  }
+
+  return NextResponse.json({ ok: true, uploaded: uploaded.length, failed, analysis });
 }

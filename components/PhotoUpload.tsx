@@ -11,6 +11,7 @@ export function PhotoUpload() {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(null);
+  const [analysis, setAnalysis] = useState<string | null>(null);
 
   function onPick(list: FileList | null) {
     if (!list) return;
@@ -32,6 +33,7 @@ export function PhotoUpload() {
           ok: true,
           text: `${data.uploaded} ${data.uploaded === 1 ? "poză urcată" : "poze urcate"} — echipa le-a primit!${data.failed?.length ? ` (nu au mers: ${data.failed.join(", ")})` : ""}`,
         });
+        setAnalysis(data.analysis ?? null);
         setFiles([]);
         if (inputRef.current) inputRef.current.value = "";
       } else {
@@ -81,6 +83,12 @@ export function PhotoUpload() {
           {result.ok && <CheckCircle2 className="h-4 w-4" />}
           {result.text}
         </p>
+      )}
+      {analysis && (
+        <div className="mt-4 rounded-2xl border border-brand-purple/30 bg-brand-purple/5 p-4">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-brand-purple">🔍 Analiza AI a pozelor tale (Premium)</p>
+          <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-text-muted">{analysis}</p>
+        </div>
       )}
     </div>
   );
