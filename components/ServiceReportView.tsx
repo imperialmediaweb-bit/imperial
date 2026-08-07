@@ -321,6 +321,42 @@ export function ServiceReportView({
         )}
       </div>
 
+      {/* ═══ PLANUL PRIMEI LUNI — săptămână cu săptămână ═══ */}
+      {report.firstMonthPlan && report.firstMonthPlan.length > 0 && (
+        <div>
+          <motion.h3 {...fadeUp} className="mb-1 font-display text-xl font-extrabold text-text">📆 Prima ta lună — săptămână cu săptămână</motion.h3>
+          <motion.p {...fadeUp} className="mb-4 text-xs text-text-subtle">Planul detaliat de execuție: ce faci concret în fiecare săptămână, ca luna 1 să nu rămână pe hârtie.</motion.p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {report.firstMonthPlan.map((w, i) => (
+              <motion.div key={i} {...fadeUp} transition={{ ...fadeUp.transition, delay: (i % 2) * 0.08 }}
+                className="flex flex-col rounded-2xl border border-brand-purple/25 bg-gradient-to-br from-brand-purple/[0.07] via-transparent to-brand-orange/[0.05] p-5">
+                <div className="flex items-center gap-2.5">
+                  <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-brand-purple/80 font-display text-sm font-extrabold text-white">
+                    S{i + 1}
+                  </span>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-brand-purple">{w.week}</p>
+                    <p className="font-display text-sm font-bold leading-tight text-text">{w.focus}</p>
+                  </div>
+                </div>
+                <ul className="mt-3 flex-1 space-y-1.5">
+                  {w.tasks.map((t, j) => (
+                    <li key={j} className="flex items-start gap-2 text-xs leading-relaxed text-text-muted">
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-purple" /> {t}
+                    </li>
+                  ))}
+                </ul>
+                {w.result && (
+                  <p className="mt-3 border-t border-bg-border/50 pt-3 text-[11px] font-semibold text-green-400">
+                    ✅ La final: {w.result}
+                  </p>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ═══ PLANUL PE 12 LUNI — carduri de fază ═══ */}
       <div>
         <motion.h3 {...fadeUp} className="mb-4 font-display text-xl font-extrabold text-text">🎯 Planul tău de acțiune (12 luni)</motion.h3>

@@ -17,7 +17,7 @@ const DEMO_REPORT: ServiceReport = {
   city: "Botoșani",
   overallScore: 38,
   lostClientsPerMonth: 46,
-  lostRevenuePerMonth: 5980,
+  lostRevenuePerMonth: 1200,
   googleData: { found: true, rating: 4.3, reviewCount: 87, hasWebsite: false },
   anafData: {
     found: true,
@@ -88,10 +88,10 @@ const DEMO_REPORT: ServiceReport = {
     firstStep: "Fotografiază 10 produse la lumină naturală și trimite-le împreună cu meniul actual — restul e treaba noastră.",
   },
   projection: {
-    invest3m: 3500,
-    return3m: 9800,
-    invest12m: 8900,
-    return12m: 54000,
+    invest3m: 700,
+    return3m: 1600,
+    invest12m: 1800,
+    return12m: 11500,
     breakEvenMonth: 4,
     newClientsPerMonth: 28,
   },
@@ -117,6 +117,52 @@ const DEMO_REPORT: ServiceReport = {
       "Postare: recenzia săptămânii, cu mulțumiri publice clientului",
     ],
   },
+  firstMonthPlan: [
+    {
+      week: "Săptămâna 1",
+      focus: "Materia primă: poze, meniu, acces la conturi",
+      tasks: [
+        "Fotografiază 10 produse la lumină naturală, lângă geam — cu telefonul, fără trepied, 1 oră",
+        "Trimite meniul actual cu prețele la zi (poza de pe perete e suficientă)",
+        "Recuperează accesul la profilul Google Business și la pagina de Facebook",
+        "Alege pizza-vedetă a casei — ea deschide site-ul, articolul de presă și primul reel",
+      ],
+      result: "Tot materialul pentru site și campanie e strâns — de aici lucrăm noi",
+    },
+    {
+      week: "Săptămâna 2",
+      focus: "Profilul Google renaște",
+      tasks: [
+        "Urcăm cele 10 poze noi + corectăm programul, telefonul și linkurile",
+        "Răspundem la ultimele 20 de recenzii (da, și la cele vechi — Google vede activitatea)",
+        "Prima postare Google Business: pizza-vedetă + ofertă de re-lansare",
+        "Tipărește QR-ul de recenzie și lipește-l pe cutiile de pizza — de acum se cere la fiecare livrare",
+      ],
+      result: "Profilul arată viu — primele recenzii noi încep să curgă",
+    },
+    {
+      week: "Săptămâna 3",
+      focus: "Site-ul cu meniu online intră în lucru",
+      tasks: [
+        "Validezi structura: meniu, comandă direct pe WhatsApp/telefon, pagina „despre noi” cu povestea locului",
+        "Scriem împreună articolul de presă: povestea pizzeriei + ce o face diferită",
+        "Primele 2 reels filmate după planul de social media (blatul + cuptorul)",
+        "OFFLINE: duci primele flyere cu QR spre meniu la cele 2 hoteluri partenere",
+      ],
+      result: "Site-ul e în construcție, articolul aprobat de tine, primele reels postate",
+    },
+    {
+      week: "Săptămâna 4",
+      focus: "Lansarea: site live + campania în 50 de ziare",
+      tasks: [
+        "Site-ul se lansează și se leagă la profilul Google",
+        "Articolul pleacă în rețeaua Media Expres — 50 de ziare online, cu link spre site-ul nou",
+        "Postare de lansare pe Facebook + primele 300 lei în Google Ads pe „pizza Botoșani”",
+        "Măsurăm săptămânal: apeluri, comenzi, recenzii noi — baza pentru luna 2",
+      ],
+      result: "Ești vizibil peste tot unde caută clientul nou — cu cifre de urmărit",
+    },
+  ],
   actionPlan: [
     {
       phase: "Luna 1",
@@ -127,7 +173,7 @@ const DEMO_REPORT: ServiceReport = {
         "Sistem de recenzii: QR pe fiecare cutie + mesaj după comandă",
         "OFFLINE: flyer cu QR spre meniu în fiecare comandă livrată + parteneriat cu 2 hoteluri din zonă pentru recomandări",
       ],
-      investment: "~3.500 lei",
+      investment: "~700€",
       impact: "Apari în căutări, comenzile nu mai depind de telefon",
     },
     {
@@ -139,7 +185,7 @@ const DEMO_REPORT: ServiceReport = {
         "Google Ads local pe „pizza Botoșani” — buget mic, 300 lei/lună, doar la orele de comenzi",
         "OFFLINE: seară de degustare pentru firmele din zonă (catering de birou = comenzi recurente)",
       ],
-      investment: "~1.800 lei + 300 lei/lună ads",
+      investment: "~400€ + 300 lei/lună ads",
       impact: "+15–20 comenzi/lună din clienți complet noi",
     },
     {
@@ -151,7 +197,7 @@ const DEMO_REPORT: ServiceReport = {
         "Catering pentru evenimente și birouri — pagină dedicată pe site",
         "OFFLINE: sponsorizare echipă locală de juniori — logo pe tricouri, comenzi de la părinți",
       ],
-      investment: "~1.200 lei",
+      investment: "~250€",
       impact: "Clientul ocazional devine abonatul tău neoficial",
     },
     {
@@ -163,7 +209,7 @@ const DEMO_REPORT: ServiceReport = {
         "Al doilea val de presă + topuri culinare locale — consolidezi poziția în AI",
         "OFFLINE: colaborare cu Bizz Club Botoșani — networking-ul local aduce evenimente private",
       ],
-      investment: "~2.400 lei",
+      investment: "~450€",
       impact: "De la „pizzeria de cartier” la primele 3 nume din oraș",
     },
   ],

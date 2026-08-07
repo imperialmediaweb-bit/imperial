@@ -80,6 +80,12 @@ export type ServiceReport = {
     storiesPerWeek: number;
     ideas: string[];
   };
+  firstMonthPlan?: Array<{
+    week: string;
+    focus: string;
+    tasks: string[];
+    result: string;
+  }>;
   actionPlan: Array<{
     phase: string;
     title: string;
@@ -514,7 +520,8 @@ IMPORTANT: calculează pierderile CA PROCENT din cifra de afaceri reală și exp
 
 REGULI ANTI-ȘABLON (obligatorii):
 - INTERZIS sfaturi generice ("e important să ai site", "fii activ pe social media"). Fiecare constatare pleacă de la DATELE REALE de mai jos: cifrele lor, ratingul lor vs competitori, site-ul lor scanat, problema descrisă de ei.
-- Ariile de diagnostic le ALEGI TU: 5-8 arii RELEVANTE pentru domeniul "${industry}" și tipul afacerii (ex: notariat → "Programări & accesibilitate", "Poziția pe «notar + oraș»"; imobiliare → "Calitatea anunțurilor", "Tururi virtuale"; service auto → "Recenzii & încredere", "Apeluri pierdute"; afacere online → "Funnel & conversie", "SEO național", "Încredere & dovezi sociale").
+- Scrie ca un consultant din INTERIORUL domeniului "${industry}": cunoști marjele tipice, sezonalitatea, cum vine clientul în acest domeniu, unde se pierde banul de obicei și greșelile clasice ale patronilor din branșă. Fiecare constatare leagă datele lui de mecanismul economic al domeniului („în domeniul ăsta clientul decide pe recenzii + poze, iar tu ai X…").
+- Ariile de diagnostic le ALEGI TU: 7-9 arii RELEVANTE pentru domeniul "${industry}" și tipul afacerii (ex: notariat → "Programări & accesibilitate", "Poziția pe «notar + oraș»"; imobiliare → "Calitatea anunțurilor", "Tururi virtuale"; service auto → "Recenzii & încredere", "Apeluri pierdute"; afacere online → "Funnel & conversie", "SEO național", "Încredere & dovezi sociale").
 - Folosește benchmarkuri din domeniu: câte recenzii are un lider local tipic, ce canale aduc clienți în acest domeniu, ticket mediu tipic — și compară-i direct ("ai 12 recenzii, un lider local are 200+").
 - Planul de acțiune = acțiuni SPECIFICE domeniului, cu cifrele lor, nu pași generici.
 - OFFLINE OBLIGATORIU: fiecare fază din actionPlan conține MINIM o acțiune offline pentru afacerea lui — procese, vânzare, oferte, fidelizarea clienților, organizare, upsell, promovare locală (presă locală, parteneriate cu alte firme din zonă, evenimente, materiale la punctul de lucru) — specifică domeniului (ex: service auto → sună clienții la 6 luni pentru revizie; salon → pachete de abonament pentru cliente fidele; restaurant → oferta de prânz pentru firmele din zonă). Nu doar digital.
@@ -553,7 +560,7 @@ ${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu:
 
 REGULĂ CANALE LIPSĂ: pentru FIECARE canal absent sau slab (site, Google Business Profile, pagină Facebook), planul de acțiune TREBUIE să includă crearea/refacerea lui la nivel profesionist — concret ce să conțină ca să arate mai bine decât al competitorilor (nu doar „fă-ți pagină").
 
-IMPORTANT — CONCIZIE: scrie compact (constatări de 1-2 fraze, acțiuni de max 12-15 cuvinte), ca răspunsul să încapă COMPLET. Un raport complet și concis bate unul lung și tăiat.
+IMPORTANT — PROFUNZIME: acesta e un raport PLĂTIT — patronul trebuie să simtă că cineva chiar i-a studiat afacerea. Constatările au 3-5 fraze cu substanță (ce am găsit → de ce se întâmplă în domeniul lui → cât îl costă concret), acțiunile sunt specifice și explicate scurt (nu liste telegrafice). NU te repeta între secțiuni și NU umple cu vată — lungimea vine din adâncime, nu din repetiție. Ai spațiu suficient; termină întotdeauna JSON-ul complet.
 
 Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
 {
@@ -561,7 +568,13 @@ Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
   "lostClientsPerMonth": <estimare realistă clienți pierduți lunar>,
   "lostRevenuePerMonth": <lostClients × valoarea medie (reală sau tipică industriei) în EUR>,
   "diagnostics": [
-    {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 1-2 fraze"}
+    {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 3-5 fraze: ce am găsit, de ce se întâmplă asta în domeniul lui, cât îl costă"}
+  ],
+  "firstMonthPlan": [
+    {"week":"Săptămâna 1","focus":"<tema săptămânii>","tasks":["<3-4 sarcini concrete, cu detalii de execuție — cine, ce, cum>"],"result":"<ce e gata la finalul săptămânii>"},
+    {"week":"Săptămâna 2","focus":"...","tasks":["..."],"result":"..."},
+    {"week":"Săptămâna 3","focus":"...","tasks":["..."],"result":"..."},
+    {"week":"Săptămâna 4","focus":"...","tasks":["..."],"result":"..."}
   ],
   "topRecommendation": {"title":"<dacă face UN SINGUR lucru luna asta, care e? scurt, imperativ>","why":"<motivul în cifre, din datele lui reale>","firstStep":"<primul pas concret, de făcut azi>"},
   "projection": {"invest3m":<EUR investiție primele 3 luni>,"return3m":<EUR venit suplimentar estimat în primele 3 luni>,"invest12m":<EUR investiție totală 12 luni>,"return12m":<EUR venit suplimentar estimat pe 12 luni>,"breakEvenMonth":<luna 1-12 în care investiția e recuperată>,"newClientsPerMonth":<clienți în plus/lună la finalul planului>},
@@ -585,7 +598,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
   try {
     const resp = await client.messages.create({
       model: CLAUDE_MODEL,
-      max_tokens: 6000,
+      max_tokens: 12000,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -615,7 +628,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
       anafData,
       competitors,
       diagnostics: Array.isArray(parsed.diagnostics)
-        ? parsed.diagnostics.slice(0, 8).map((d: any) => ({
+        ? parsed.diagnostics.slice(0, 9).map((d: any) => ({
             area: String(d.area ?? ""),
             emoji: String(d.emoji ?? "📊"),
             status: ["good", "warning", "bad"].includes(d.status) ? d.status : "warning",
@@ -626,8 +639,8 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
         tr && tr.title
           ? {
               title: String(tr.title).slice(0, 160),
-              why: String(tr.why ?? "").slice(0, 400),
-              firstStep: String(tr.firstStep ?? "").slice(0, 300),
+              why: String(tr.why ?? "").slice(0, 700),
+              firstStep: String(tr.firstStep ?? "").slice(0, 400),
             }
           : undefined,
       projection:
@@ -657,16 +670,24 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
               ideas: sp.ideas.map(String).slice(0, 6),
             }
           : undefined,
+      firstMonthPlan: Array.isArray(parsed.firstMonthPlan)
+        ? parsed.firstMonthPlan.slice(0, 5).map((w: any, i: number) => ({
+            week: String(w.week ?? `Săptămâna ${i + 1}`),
+            focus: String(w.focus ?? ""),
+            tasks: Array.isArray(w.tasks) ? w.tasks.map(String).slice(0, 5) : [],
+            result: String(w.result ?? ""),
+          })).filter((w: any) => w.tasks.length > 0)
+        : undefined,
       actionPlan: Array.isArray(parsed.actionPlan)
         ? parsed.actionPlan.slice(0, 4).map((p: any) => ({
             phase: String(p.phase ?? ""),
             title: String(p.title ?? ""),
-            actions: Array.isArray(p.actions) ? p.actions.map(String).slice(0, 5) : [],
+            actions: Array.isArray(p.actions) ? p.actions.map(String).slice(0, 6) : [],
             investment: String(p.investment ?? ""),
             impact: String(p.impact ?? ""),
           }))
         : [],
-      summary: String(parsed.summary ?? "").slice(0, 600),
+      summary: String(parsed.summary ?? "").slice(0, 900),
     };
 
     // ─── 4. Salvăm raportul complet cu token; vizitatorul primește doar preview-ul ───

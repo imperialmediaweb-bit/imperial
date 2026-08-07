@@ -79,11 +79,12 @@ const chipItemV = {
 // Secțiunile din raportul complet, arătate blurat până la deblocare.
 const LOCKED_SECTIONS = [
   { emoji: "⭐", title: "Recomandarea #1", desc: "Dacă faci un singur lucru luna asta — care e și de ce" },
-  { emoji: "📋", title: "Diagnosticul complet", desc: "5-8 arii analizate, specifice domeniului tău" },
+  { emoji: "📋", title: "Diagnosticul complet", desc: "7-9 arii analizate în detaliu, specifice domeniului tău" },
   { emoji: "🏆", title: "Tu vs competiția", desc: "Comparație directă cu firmele reale din zona ta" },
   { emoji: "📈", title: "Proiecția economică", desc: "Cât investești vs cât scoți — pe 3 luni și pe 12 luni" },
   { emoji: "👑", title: "Ce fac liderii din domeniul tău", desc: "Practicile care îi țin în top + ce-ți lipsește ție" },
   { emoji: "📱", title: "Planul tău de social media", desc: "Câte reeluri, postări și story-uri pe săptămână + idei concrete pentru domeniul tău" },
+  { emoji: "📆", title: "Prima ta lună, săptămână cu săptămână", desc: "Plan de execuție detaliat: ce faci concret în fiecare din cele 4 săptămâni" },
   { emoji: "🎯", title: "Planul de acțiune pe 12 luni", desc: "4 faze concrete, cu investiție și impact per fază" },
 ];
 
