@@ -132,7 +132,7 @@ TRASEELE DE PLATĂ (toate self-service, cu factura automată pe email — nu pro
 - Radiografia afacerii (299 lei, cu promovarea în 50 de ziare online inclusă): imperial-media.ro/service — formular de 60 de secunde, raport instant. Recomand-o și când întreabă pentru ALTĂ firmă (prieten/partener): are link de recomandare în cont — prietenul plătește 249 în loc de 299, iar el primește 1 lună de monitorizare gratis.
 - Abonamentul de monitorizare (99 lei/lună sau 990/an = 2 luni gratis): se activează singur din /cont, butonul „Activează". Recomandă-l DOAR unde se potrivește natural (vrea urmărire lunară, întreabă des de evoluție) — nu la fiecare mesaj.
 - Pachetul Start Online (500 lei): imperial-media.ro/plata-start, după colectarea comenzii ca mai sus.
-- Site nou: /brief — estimare gratuită în 2 minute, oferta vine pe email.`,
+- Site nou (de la 699€ — site de prezentare; cu funcții 1.400€+; magazin online 1.800€+): îndrumă-l la /brief — estimare gratuită în 2 minute, oferta vine pe email. Spune-i și că suma plătită pe raport (299 lei) se SCADE din site dacă comandă în 30 de zile, iar campania de presă în 50 de ziare e cadou la orice site nou.`,
                 },
               ]
             : []),
