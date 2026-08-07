@@ -84,7 +84,7 @@ export async function createSubscriptionCheckoutSession(opts: {
     "line_items[0][price_data][product_data][name]":
       `Monitorizare afacere Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`,
     "line_items[0][price_data][product_data][description]":
-      "Raport regenerat automat în fiecare lună + notificări (recenzii, competitori, site) + sfaturile lunii + consultant dedicat în cont",
+      "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont",
   });
   billingParams(params);
 

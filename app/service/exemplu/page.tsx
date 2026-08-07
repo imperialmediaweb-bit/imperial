@@ -45,6 +45,7 @@ const DEMO_REPORT: ServiceReport = {
       status: "warning",
       finding:
         "Profilul există și are 4.3★ din 87 de recenzii — o bază bună. Dar lipsesc fotografiile recente (ultimele sunt de acum 2 ani), programul nu e actualizat pentru sărbători și nu răspunzi la recenzii. Google promovează profilurile active — al tău arată abandonat.",
+      fix: "O oră, o singură dată: urci 10 poze noi făcute cu telefonul la lumină naturală, corectezi programul și telefonul. Apoi 15 minute pe săptămână: răspunzi la fiecare recenzie nouă și publici o postare (oferta săptămânii). În 3-4 săptămâni Google te urcă vizibil în hărți.",
     },
     {
       area: "Site și comenzi online",
@@ -52,6 +53,7 @@ const DEMO_REPORT: ServiceReport = {
       status: "bad",
       finding:
         "Nu ai site. Meniul tău există doar pe hârtie și în poze vechi pe Facebook. Clientul care caută „pizza Botoșani” la ora 20:00 ajunge pe site-ul Bella Napoli, vede meniul, comandă în 2 minute. Tu primești doar telefoanele celor care te știu deja — zero clienți noi din căutări.",
+      fix: "Site simplu cu meniul, pozele și comandă pe WhatsApp/telefon — îl facem noi în 2 săptămâni, tu dai doar pozele și meniul. Se leagă la profilul Google și la articolul de presă, ca tot ce publici să ducă spre el. Primele comenzi de la străini vin de regulă în prima lună.",
     },
     {
       area: "Recenzii vs. competiție",
@@ -59,6 +61,7 @@ const DEMO_REPORT: ServiceReport = {
       status: "warning",
       finding:
         "87 de recenzii e onorabil, dar liderii pieței au 298–412. La volum egal de clienți mulțumiți, diferența vine din SISTEM: ei cer recenzia la fiecare livrare (QR pe cutie, mesaj după comandă). Tu le primești doar pe cele spontane.",
+      fix: "Tipărești QR-ul de recenzie (ți-l generăm noi) și îl lipești pe fiecare cutie de pizza, iar livratorul spune o singură frază: „dacă v-a plăcut, un review ne ajută enorm”. La 30-40 comenzi pe zi, și doar 1 din 20 lasă recenzie — +40-50 pe lună. În 4-5 luni ești în liga liderilor.",
     },
     {
       area: "Social media",
@@ -66,6 +69,7 @@ const DEMO_REPORT: ServiceReport = {
       status: "warning",
       finding:
         "Pagina de Facebook are 2.400 de urmăritori, dar ultima postare e de acum 3 săptămâni și nu ai niciun reel. În food, video-ul scurt (blatul întins, mozzarella trasă, cuptorul cu lemne) e cel mai ieftin generator de pofte — și de comenzi. Competiția ta postează zilnic.",
+      fix: "Urmezi planul de social media de mai jos: 3 reels pe săptămână, filmate cu telefonul în bucătărie, 20 de minute pe zi — ideile concrete le ai în raport, iar consultantul tău din cont îți scrie textele gata de publicat și te învață pas cu pas și reclamele plătite (15-30 lei/zi, țintite pe Botoșani).",
     },
     {
       area: "Vizibilitate în AI (ChatGPT, Google AI)",
@@ -73,6 +77,7 @@ const DEMO_REPORT: ServiceReport = {
       status: "bad",
       finding:
         "Am testat: la întrebarea „unde mănânc o pizza bună în Botoșani?”, AI-urile recomandă Bella Napoli și Il Forno — pe tine nu te menționează. Motivul: ele apar în articole, topuri locale și au site indexabil. Tot mai mulți clienți întreabă AI-ul înainte să aleagă — iar tu nu exiști acolo.",
+      fix: "AI-urile citează surse: presă, topuri, directoare, site-uri. Campania ta din 50 de ziare (inclusă aici) + site-ul nou + înscrierea în topurile culinare locale te bagă exact în sursele lor. La următoarea scanare lunară retestăm întrebarea și vezi negru pe alb dacă ai intrat în recomandări.",
     },
     {
       area: "Prezența în presă și topuri locale",
@@ -80,6 +85,7 @@ const DEMO_REPORT: ServiceReport = {
       status: "bad",
       finding:
         "Zero apariții în presa locală sau în topurile „cele mai bune pizzerii din Botoșani”. Astea sunt exact sursele din care se hrănesc și Google, și AI-urile când decid pe cine recomandă. Un singur articol bun îți schimbă poziția în ambele.",
+      fix: "Rezolvată din start: articolul tău de promovare — scris cu tine, pe povestea pizzeriei — se publică în toate cele 50 de ziare din rețeaua Media Expres (inclus în acest raport). 50 de linkuri către site-ul tău, din publicații pe care Google și AI-urile le citesc zilnic.",
     },
   ],
   topRecommendation: {

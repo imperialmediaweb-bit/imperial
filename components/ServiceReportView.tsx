@@ -218,6 +218,12 @@ export function ServiceReportView({
                     transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }} />
                 </div>
                 <p className="mt-3 flex-1 text-xs leading-relaxed text-text-muted">{d.finding}</p>
+                {d.fix && (
+                  <div className="mt-3 rounded-xl border border-green-500/25 bg-green-500/[0.06] p-3">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-green-400">🔧 Cum o rezolvi</p>
+                    <p className="mt-1 text-xs leading-relaxed text-text-muted">{d.fix}</p>
+                  </div>
+                )}
               </motion.div>
             );
           })}
@@ -401,8 +407,9 @@ export function ServiceReportView({
           <RefreshCw className="h-5 w-5 text-brand-purple" /> Monitorizare lunară — 99 lei/lună
         </p>
         <p className="mx-auto mt-2 max-w-xl text-sm text-text-muted">
-          Raportul tău, regenerat automat în fiecare lună: evoluția scorului, recenziile noi ale
-          competitorilor, starea site-ului și acțiunile lunii. Afacerea ta, ținută în priză.
+          Afacerea ta monitorizată lună de lună: scorul, recenziile, competiția, site-ul + sfaturile
+          lunii + <b className="text-text">consultantul tău dedicat</b>, care îți știe firma și te învață
+          inclusiv ce postări și reclame să faci pe Facebook.
         </p>
         <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">Sau 990 lei/an — plătești 10 luni, primești 12.</p>
         <Link href="/cont" className="btn-primary mt-4 inline-flex">

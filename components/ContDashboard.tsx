@@ -218,6 +218,13 @@ export function ContDashboard({
                 Îți știe firma, scorul, cifrele și notificările. Spune-i cum ți-a mers luna,
                 întreabă-l orice — online sau offline — și primești sfaturi pe afacerea TA.
               </p>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {["🎯 Învață-mă reclame pe Facebook", "📱 Ce postez săptămâna asta?", "⭐ Cum răspund la o recenzie negativă?"].map((q) => (
+                  <span key={q} className="rounded-full border border-brand-orange/30 bg-bg-soft/60 px-3 py-1 text-[11px] font-semibold text-text-muted">
+                    {q}
+                  </span>
+                ))}
+              </div>
             </div>
             <ArrowRight className="h-5 w-5 flex-shrink-0 text-brand-orange" />
           </div>
@@ -316,8 +323,8 @@ export function ContDashboard({
             <RefreshCw className="h-5 w-5 text-brand-purple" /> Monitorizare lunară — 99 lei/lună
           </p>
           <p className="mx-auto mt-2 max-w-xl text-sm text-text-muted">
-            Scanare automată în fiecare lună: raport nou, evoluția scorului, recenziile competitorilor,
-            starea site-ului + notificări pe email. Afacerea ta, ținută în priză.
+            Afacerea ta monitorizată lună de lună: scorul, recenziile, competiția, site-ul + sfaturile
+            lunii + consultantul tău dedicat — care te învață inclusiv ce postări și reclame să faci pe Facebook.
           </p>
           <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">
             Lunile câștigate din recomandări se scad din următoarea plată.

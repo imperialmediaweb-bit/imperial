@@ -43,6 +43,9 @@ export default async function ContConsultantPage() {
       ? `ANAF: ${r.anafData.legalName}, ${r.anafData.active ? "activă" : "INACTIVĂ"}${r.anafData.turnover != null ? `, cifră de afaceri ${r.anafData.turnover} lei (${r.anafData.balanceYear})` : ""}`
       : null,
     r.topRecommendation?.title ? `Recomandarea #1 din raport: ${r.topRecommendation.title}` : null,
+    r.socialPlan
+      ? `Planul lui de social media din raport: ${r.socialPlan.reelsPerWeek ?? 0} reels + ${r.socialPlan.postsPerWeek ?? 0} postări + ${r.socialPlan.storiesPerWeek ?? 0} story-uri/săpt.${Array.isArray(r.socialPlan.ideas) && r.socialPlan.ideas.length ? ` Idei din raport: ${r.socialPlan.ideas.slice(0, 2).join("; ")}` : ""}`
+      : null,
     f.mainProblem ? `Problema declarată de el: ${f.mainProblem}` : null,
     notifications.length > 0
       ? `Ultimele notificări de monitorizare: ${notifications.map((n) => n.title).join(" | ")}`

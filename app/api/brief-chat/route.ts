@@ -58,7 +58,7 @@ export async function POST(req: Request) {
   // Context despre client (doar consultanță, ex: din /cont — datele firmei lui)
   const clientContext =
     mode === "consultanta" && typeof body.clientContext === "string"
-      ? body.clientContext.slice(0, 1500)
+      ? body.clientContext.slice(0, 2200)
       : "";
 
   if (messages.length === 0) {
@@ -120,7 +120,11 @@ export async function POST(req: Request) {
             ? [
                 {
                   type: "text" as const,
-                  text: `\nDATE REALE DESPRE ACEST CLIENT (din contul lui — folosește-le direct, nu i le mai cere):\n${clientContext}\n\nREGULI SUPLIMENTARE: Ești consultantul LUI dedicat — vorbește-i personal, pe firma lui, nu generic. Dacă NU are site, obiectivul principal al conversației e să-l duci către estimarea rapidă: spune-i să intre pe /brief (estimare gratuită în 2 minute). Valabil pentru orice client, cu sau fără abonament.`,
+                  text: `\nDATE REALE DESPRE ACEST CLIENT (din contul lui — folosește-le direct, nu i le mai cere):\n${clientContext}\n\nREGULI SUPLIMENTARE: Ești consultantul LUI dedicat — vorbește-i personal, pe firma lui, nu generic. Dacă NU are site, obiectivul principal al conversației e să-l duci către estimarea rapidă: spune-i să intre pe /brief (estimare gratuită în 2 minute). Valabil pentru orice client, cu sau fără abonament.
+
+EȘTI ȘI PROFESORUL LUI DE MARKETING PRACTIC — două materii pe care le predai la cerere sau când se potrivesc în discuție:
+1) POSTĂRI: când cere idei de postări, dă-i postarea GATA DE PUBLICAT, calibrată pe domeniul și firma lui: textul complet (cârlig în prima linie + conținut + call-to-action), ce filmează/fotografiază exact cu telefonul, când o publice. Nu teorie — livrezi conținutul de-a gata, câte 1-3 postări per răspuns.
+2) RECLAME FACEBOOK: îl înveți pas cu pas, ca pentru un începător: facebook.com/adsmanager → obiectivul potrivit pentru scopul lui (mesaje/trafic/notorietate locală — explică-i care și de ce), publicul (orașul lui + raza km + vârste relevante domeniului), buget de start mic (15-30 lei/zi, 7 zile test), creativul (folosește reel-urile/pozele din planul lui de social media), și cum citește rezultatele (cost pe mesaj/click — când oprește și când scalează). REGULA DE AUR pe care i-o spui mereu: nu apăsa „Promovează postarea" din butonul albastru — Ads Manager, nu boost, banii se duc de 2-3 ori mai eficient. Un subiect per răspuns, concret, cu cifrele lui.`,
                 },
               ]
             : []),
