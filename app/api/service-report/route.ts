@@ -335,9 +335,10 @@ export async function POST(req: Request) {
           placesError = String(data2.status);
           console.error("[service-report] Places textsearch status:", data2.status, data2.error_message ?? "");
         }
-        const firstWord = companyName.toLowerCase().split(/\s+/)[0];
+        const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+        const firstWord = norm(companyName).split(/\s+/)[0];
         const hit = (data2.results ?? []).find((p: any) =>
-          String(p.name ?? "").toLowerCase().includes(firstWord)
+          norm(String(p.name ?? "")).includes(firstWord)
         );
         if (hit) {
           googleData = {
@@ -349,6 +350,43 @@ export async function POST(req: Request) {
             hasWebsite: false,
             website: null,
           };
+        }
+      }
+      // A treia încercare — motorul de AUTOCOMPLETE (cel mai bun la potriviri aproximative:
+      // nume incomplete, diacritice, ordinea cuvintelor), apoi confirmăm exact pe place_id.
+      if (!googleData.found) {
+        const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+        const firstWord = norm(companyName).split(/\s+/)[0];
+        const res3 = await fetch(
+          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(`${companyName} ${city}`)}&types=establishment&components=country:ro&language=ro&key=${placesKey}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const data3 = await res3.json();
+        if (data3.status && data3.status !== "OK" && data3.status !== "ZERO_RESULTS") {
+          placesError = String(data3.status);
+          console.error("[service-report] Places autocomplete status:", data3.status, data3.error_message ?? "");
+        }
+        const pred = (data3.predictions ?? []).find((p: any) =>
+          norm(String(p.structured_formatting?.main_text ?? p.description ?? "")).includes(firstWord)
+        );
+        if (pred?.place_id) {
+          const res4 = await fetch(
+            `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(pred.place_id)}&fields=name,rating,user_ratings_total,website&language=ro&key=${placesKey}`,
+            { signal: AbortSignal.timeout(8000) }
+          );
+          const data4 = await res4.json();
+          const p4 = data4?.result;
+          if (p4?.name) {
+            googleData = {
+              found: true,
+              exact: false,
+              name: p4.name,
+              rating: p4.rating ?? null,
+              reviewCount: p4.user_ratings_total ?? 0,
+              hasWebsite: !!p4.website,
+              website: p4.website ?? null,
+            };
+          }
         }
       }
     } catch (e) {

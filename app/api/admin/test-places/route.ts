@@ -62,10 +62,29 @@ export async function GET(req: Request) {
     out.textsearch = { exceptie: String(e?.message ?? e) };
   }
 
+  try {
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&types=establishment&components=country:ro&language=ro&key=${key}`,
+      { signal: AbortSignal.timeout(8000) }
+    );
+    const data = await res.json();
+    out.autocomplete = {
+      status: data.status,
+      eroare: data.error_message ?? null,
+      sugestii: (data.predictions ?? []).slice(0, 5).map((p: any) => ({
+        nume: p.structured_formatting?.main_text ?? p.description,
+        detaliu: p.structured_formatting?.secondary_text ?? "",
+        place_id: p.place_id,
+      })),
+    };
+  } catch (e: any) {
+    out.autocomplete = { exceptie: String(e?.message ?? e) };
+  }
+
   out.interpretare =
     out.findplace?.status === "REQUEST_DENIED" || out.textsearch?.status === "REQUEST_DENIED"
       ? "❌ Cheia e refuzată de Google — de obicei: facturarea (billing) nu e activată pe proiectul Google Cloud, sau Places API nu e activat, sau cheia are restricții. Intră în console.cloud.google.com → APIs & Services."
-      : out.findplace?.candidati?.length || out.textsearch?.rezultate?.length
+      : out.findplace?.candidati?.length || out.textsearch?.rezultate?.length || out.autocomplete?.sugestii?.length
         ? "✅ Google răspunde și găsește rezultate — dacă raportul tot nu vede firma, problema e potrivirea numelui (folosește autocomplete-ul din formular)."
         : "⚠️ Google răspunde dar nu găsește nimic pe căutarea asta — încearcă alt nume/oraș în parametrii ?q= și ?city=";
 
