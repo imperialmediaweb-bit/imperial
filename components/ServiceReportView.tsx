@@ -210,7 +210,7 @@ export function ServiceReportView({
 
       {/* ═══ RECOMANDAREA #1 ═══ */}
       {report.topRecommendation && (
-        <motion.div {...fadeUp}>
+        <motion.div {...fadeUp} className="print-avoid-break">
           <ShineCard className="rounded-3xl border-2 border-brand-orange/50 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 sm:p-8">
             <p className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-orange">
               <Star className="h-4 w-4 fill-brand-orange" /> Recomandarea #1 — dacă faci un singur lucru luna asta

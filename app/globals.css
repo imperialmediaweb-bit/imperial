@@ -472,6 +472,11 @@ html {
     break-inside: avoid;
     page-break-inside: avoid;
   }
+  /* Carduri mari marcate explicit să rămână întregi (ex: Recomandarea #1) */
+  .service-report-print .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
   .service-report-print [class*="rounded-3xl"] {
     background: #fff !important;
     border-color: #e3e5ec !important;
