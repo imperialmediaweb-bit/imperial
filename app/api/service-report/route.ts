@@ -9,6 +9,7 @@ import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { insertPendingServiceReport, completeServiceReport, failServiceReport } from "@/lib/service-reports";
 import { safeExternalUrl } from "@/lib/url-guard";
+import { scanSite } from "@/lib/site-scan";
 import { hasDb } from "@/lib/db";
 
 export const runtime = "nodejs";
@@ -271,6 +272,7 @@ export async function POST(req: Request) {
   const runPipeline = async (): Promise<ServiceReport> => {
   // ─── 1. Scanare Google (exactă cu place_id, altfel căutare text) ───
   let googleData: any = { found: false };
+  let placesError: string | null = null; // eroare TEHNICĂ (cheie/quota) ≠ firma nu există
   if (placesKey) {
     try {
       if (placeId) {
@@ -280,6 +282,7 @@ export async function POST(req: Request) {
         );
         const data = await res.json();
         if (data.status && data.status !== "OK") {
+          placesError = String(data.status);
           console.error("[service-report] Places details status:", data.status, data.error_message ?? "");
         }
         const p = data?.result;
@@ -303,6 +306,7 @@ export async function POST(req: Request) {
         );
         const data = await res.json();
         if (data.status && data.status !== "OK" && data.status !== "ZERO_RESULTS") {
+          placesError = String(data.status);
           console.error("[service-report] Places findplace status:", data.status, data.error_message ?? "");
         }
         if (data.candidates?.length > 0) {
@@ -328,6 +332,7 @@ export async function POST(req: Request) {
         );
         const data2 = await res2.json();
         if (data2.status && data2.status !== "OK" && data2.status !== "ZERO_RESULTS") {
+          placesError = String(data2.status);
           console.error("[service-report] Places textsearch status:", data2.status, data2.error_message ?? "");
         }
         const firstWord = companyName.toLowerCase().split(/\s+/)[0];
@@ -353,12 +358,14 @@ export async function POST(req: Request) {
 
   // ─── 1b. Verificare ANAF pe CUI: firmă + CAEN + cifră de afaceri ───
   let anafData: AnafData = { found: false };
+  let anafDown = false; // ANAF picat tehnic ≠ firma nu există
   if (cuiRaw.length >= 2 && cuiRaw.length <= 10) {
     const cui = Number(cuiRaw);
     try {
       const tva = await fetchAnafTva(cui);
       anafData = { ...anafData, ...tva };
     } catch (e) {
+      anafDown = true;
       console.warn("[service-report] ANAF TVA failed:", e);
     }
     if (anafData.found) {
@@ -402,38 +409,11 @@ export async function POST(req: Request) {
     }
   }
 
-  // ─── 2. Scanare site (dacă a dat URL) — doar URL-uri publice (anti-SSRF) ───
+  // ─── 2. Scanare site MULTI-PAGINĂ (homepage + subpagini cu dovezi) — anti-SSRF ───
   let siteData: any = null;
   const siteUrl = website || googleData.website;
-  const safeSiteUrl = siteUrl ? safeExternalUrl(String(siteUrl)) : null;
-  if (safeSiteUrl) {
-    try {
-      const withProto = safeSiteUrl;
-      const start = Date.now();
-      const res = await fetch(withProto, {
-        signal: AbortSignal.timeout(10000),
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
-        },
-      });
-      const loadMs = Date.now() - start;
-      const html = (await res.text()).slice(0, 60000);
-      siteData = {
-        reachable: res.ok,
-        loadTimeMs: loadMs,
-        isHttps: withProto.startsWith("https"),
-        hasViewport: /name=["']viewport["']/i.test(html),
-        hasMetaDesc: /name=["']description["']/i.test(html),
-        hasH1: /<h1[\s>]/i.test(html),
-        // Semnale euristice din homepage — indicii, nu verdicte
-        hasPortfolioHint: /portofoli|proiecte|portfolio|lucr[aă]ri(le)? noastre|case stud/i.test(html),
-        hasTestimonialsHint: /testimonial|recenzi|p[aă]reri(le)? clien/i.test(html),
-        hasContactHint: /contact|tel:|wa\.me|whatsapp/i.test(html),
-      };
-    } catch {
-      siteData = { reachable: false };
-    }
+  if (siteUrl) {
+    siteData = await scanSite(String(siteUrl));
   }
 
   // ─── 2b. Scanare Facebook (există pagina? ce semnale are?) ───
@@ -537,7 +517,9 @@ export async function POST(req: Request) {
 - Înregistrată din: ${anafData.regYear ?? "necunoscut"}
 ${anafData.turnover != null ? `- BILANȚ ${anafData.balanceYear}: cifră de afaceri ${anafData.turnover.toLocaleString("ro-RO")} lei · ${anafData.profit != null ? `profit net ${anafData.profit.toLocaleString("ro-RO")} lei` : "profit necunoscut"} · ${anafData.employees != null ? `${anafData.employees} salariați` : "salariați necunoscut"}
 IMPORTANT: calculează pierderile CA PROCENT din cifra de afaceri reală și exprimă-le și în lei/an (1 EUR ≈ 5 lei).` : "- Bilanț: nedepus / indisponibil"}`
-    : "DATE ANAF: nu s-a dat CUI sau firma nu a fost găsită — lucrează cu cifrele declarate de proprietar.";
+    : anafDown
+      ? "DATE ANAF: serverele ANAF au fost INDISPONIBILE TEHNIC la momentul scanării — NU e vina firmei și NU concluziona nimic din lipsa datelor financiare. Lucrează cu cifrele declarate de proprietar, fără să pomenești ANAF ca lipsă a firmei."
+      : "DATE ANAF: nu s-a dat CUI sau firma nu a fost găsită — lucrează cu cifrele declarate de proprietar.";
 
   const prompt = `Ești un consultant de afaceri cu 10+ ani de experiență STRICT în domeniul "${industry}" din România. Cunoști în detaliu cum funcționează acest tip de afacere: canalele reale de achiziție de clienți, marjele tipice, sezonalitatea, greșelile clasice ale patronilor din domeniu și ce fac liderii pieței diferit. Generează un raport de consultanță pentru afacerea de mai jos.
 
@@ -571,12 +553,12 @@ DATE FIRMĂ (de la proprietar):
 ${anafBlock}
 
 DATE REALE GOOGLE (scanate acum):
-${googleData.found ? `- Găsit pe Google Maps: DA${googleData.exact ? " (profil confirmat de utilizator — date exacte)" : ""}\n- Nume profil: ${googleData.name}\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : businessType === "online" ? `- Nu are profil Google Maps (normal pentru afacere online — nu penaliza)` : `- NU a fost găsit pe Google Maps sub numele "${companyName}" în ${city} → fie nu are Google Business Profile (problemă gravă), fie e listat sub alt nume. Formulează constatarea prudent.`}
+${googleData.found ? `- Găsit pe Google Maps: DA${googleData.exact ? " (profil confirmat de utilizator — date exacte)" : ""}\n- Nume profil: ${googleData.name}\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : placesError ? `- SCANAREA GOOGLE A EȘUAT TEHNIC (${placesError}) — NU e dovadă că firma lipsește de pe Google! INTERZIS să afirmi că nu are profil, rating sau recenzii. Dacă atingi subiectul Google, spune DOAR că verificarea automată nu a fost posibilă de data asta (status "warning") și tratează prezența pe Google ca necunoscută.` : businessType === "online" ? `- Nu are profil Google Maps (normal pentru afacere online — nu penaliza)` : `- NU a fost găsit pe Google Maps sub numele "${companyName}" în ${city} → fie nu are Google Business Profile (problemă gravă), fie e listat sub alt nume. Formulează constatarea prudent.`}
 
 ${competitors.length > 0 ? `COMPETIȚIA LOCALĂ REALĂ (scanată acum — top firme din "${industry} ${city}" pe Google):\n${competitors.map((c) => `- ${c.name}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n")}` : ""}
 
-DATE REALE SITE (scanate acum — DOAR homepage-ul):
-${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}\n- Semnale în homepage (euristic): portofoliu/proiecte menționate: ${siteData.hasPortfolioHint ? "DA" : "nu am detectat"}; testimoniale/recenzii menționate: ${siteData.hasTestimonialsHint ? "DA" : "nu am detectat"}; contact vizibil: ${siteData.hasContactHint ? "DA" : "nu am detectat"}\n- ATENȚIE: am scanat DOAR homepage-ul — site-ul poate avea pagini de portofoliu/recenzii pe care nu le-am parcurs` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
+DATE REALE SITE (scanate acum — homepage + subpaginile relevante):
+${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}\n- Pagini scanate: ${siteData.pagesScanned ?? 1}${siteData.subpages?.length ? ` (homepage + ${siteData.subpages.map((s: any) => s.path).join(", ")})` : " (doar homepage — nu am găsit linkuri interne relevante)"}\n${siteData.subpages?.length ? siteData.subpages.map((s: any) => `  · ${s.path}: ${[s.portfolio ? "PORTOFOLIU/proiecte prezente" : null, s.testimonials ? "TESTIMONIALE/recenzii prezente" : null, `${s.imgCount} imagini`].filter(Boolean).join(", ")}`).join("\n") + "\n" : ""}- Concluzie pe TOATE paginile scanate: portofoliu/proiecte: ${siteData.hasPortfolioHint ? "DA, EXISTĂ — recunoaște-le și evaluează-le calitativ, NU spune că lipsesc" : "nu am detectat în paginile scanate"}; testimoniale/recenzii pe site: ${siteData.hasTestimonialsHint ? "DA, EXISTĂ — recunoaște-le, NU spune că lipsesc" : "nu am detectat în paginile scanate"}; contact vizibil: ${siteData.hasContactHint ? "DA" : "nu am detectat"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
 
 VIZIBILITATE ÎN CĂUTĂRILE AI (test REAL făcut acum — am întrebat un AI cu căutare web, exact cum ar face ChatGPT/Perplexity):
 ${aiVisibility ? `- Găsit la căutarea după numele firmei: ${aiVisibility.brandVisible ? "DA" : "NU"}\n- Recomandat la căutări GENERICE („${industry} ${city}", fără nume): ${aiVisibility.genericVisible ? "DA — apare, avantaj rar!" : "NU — clienții care întreabă AI-ul primesc COMPETITORII"}\n- Constatare: ${aiVisibility.note}\nInclude OBLIGATORIU un diagnostic cu area "Vizibilitate în AI (ChatGPT, Perplexity)" pe baza testului. Dacă NU apare la căutări generice, planul include acțiuni GEO concrete: prezența în topuri/directoare locale (ex: necesit.ro), articole în presa online, date structurate și pagini locale pe site.` : "- Testul nu a putut rula de data asta — nu inventa rezultate; poți menționa vizibilitatea AI ca arie de verificat."}
