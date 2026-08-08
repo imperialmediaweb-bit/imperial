@@ -346,8 +346,9 @@ export default function ServicePage() {
         throw new Error(data?.error || "Serverul n-a putut răspunde — datele tale sunt salvate în formular, mai apasă o dată.");
       }
       if (data.pending && data.token) {
-        // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~5 minute)
-        for (let i = 0; i < 100; i++) {
+        // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~8 minute;
+        // cu modelul mare + pasul de control al calității, un raport durează 3-5 minute)
+        for (let i = 0; i < 160; i++) {
           await new Promise((r) => setTimeout(r, 3000));
           let sdata: any = null;
           try {

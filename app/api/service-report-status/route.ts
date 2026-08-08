@@ -9,7 +9,7 @@ import type { ServiceReport, ServiceReportPreview } from "@/app/api/service-repo
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const STALE_MS = 10 * 60_000; // pending mai vechi de 10 min = ceva a murit pe fundal
+const STALE_MS = 15 * 60_000; // pending mai vechi de 15 min = ceva a murit pe fundal (raport + retry ≈ max 10 min)
 
 export async function GET(req: Request) {
   if (!hasDb()) {

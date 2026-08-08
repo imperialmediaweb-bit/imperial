@@ -5,7 +5,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import Anthropic from "@anthropic-ai/sdk";
-import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
+import { CLAUDE_MODEL, REPORT_MODEL, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { insertPendingServiceReport, completeServiceReport, failServiceReport } from "@/lib/service-reports";
 import { safeExternalUrl } from "@/lib/url-guard";
@@ -651,29 +651,44 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
         source: { type: "base64" as const, media_type: mediaType as "image/jpeg" | "image/png" | "image/webp", data },
       };
     });
-    const resp = await client.messages.create({
-      model: CLAUDE_MODEL,
-      max_tokens: 12000,
-      messages: [
-        {
-          role: "user",
-          content: photoBlocks.length > 0 ? [...photoBlocks, { type: "text" as const, text: prompt }] : prompt,
-        },
-      ],
-    });
 
-    const textBlock = resp.content.find((b) => b.type === "text");
-    if (!textBlock || textBlock.type !== "text") throw new Error("empty");
-    const jsonMatch = textBlock.text.match(/\{[\s\S]*\}/);
+    // Modelul MARE pentru raportul plătit; dacă nu e disponibil pe cont (404), cădem pe cel mic.
+    const callModel = async (content: any): Promise<string> => {
+      for (const model of [REPORT_MODEL, CLAUDE_MODEL]) {
+        try {
+          const resp = await client.messages.create({
+            model,
+            max_tokens: 12000,
+            messages: [{ role: "user", content }],
+          });
+          const tb = resp.content.find((b) => b.type === "text");
+          if (!tb || tb.type !== "text") throw new Error("empty");
+          return tb.text;
+        } catch (e: any) {
+          if (e?.status === 404 && model !== CLAUDE_MODEL) {
+            console.warn(`[service-report] model ${model} indisponibil — fallback pe ${CLAUDE_MODEL}`);
+            continue;
+          }
+          throw e;
+        }
+      }
+      throw new Error("no model available");
+    };
+
+    const text1 = await callModel(
+      photoBlocks.length > 0 ? [...photoBlocks, { type: "text" as const, text: prompt }] : prompt
+    );
+    const jsonMatch = text1.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("no json");
     const parsed = parseReportJson(jsonMatch[0]);
 
+    const toReport = (parsed: any): ServiceReport => {
     const tr = parsed.topRecommendation;
     const pj = parsed.projection;
     const il = parsed.industryLeaders;
     const sp = parsed.socialPlan;
 
-    const report: ServiceReport = {
+    return {
       companyName,
       city,
       overallScore: Math.max(0, Math.min(100, Number(parsed.overallScore) || 40)),
@@ -750,6 +765,51 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
         : [],
       summary: String(parsed.summary ?? "").slice(0, 900),
     };
+    }; // ─── sfârșitul toReport ───
+
+    let report = toReport(parsed);
+
+    // ─── PASUL 2: CONTROLUL DE CALITATE — redactorul-șef verifică raportul contra datelor ───
+    // A doua trecere: fiecare afirmație confruntată cu datele scanate, sfaturile generice
+    // înlocuite cu practica exactă a domeniului, cifrele aduse la coerență. Fail-open:
+    // dacă pasul eșuează, livrăm prima versiune (tot validă), nu blocăm raportul.
+    try {
+      const digest = `DATE SCANATE (adevărul de referință — nimic din raport nu are voie să le contrazică):
+- Google: ${googleData.found ? `${googleData.name} — rating ${googleData.rating ?? "?"}, ${googleData.reviewCount} recenzii` : placesError ? `verificare EȘUATĂ TEHNIC (${placesError}) — prezența pe Google e NECUNOSCUTĂ, interzise afirmații negative` : "negăsit la scanare"}
+- ANAF: ${anafData.found ? `${anafData.legalName}, ${anafData.active ? "activă" : "INACTIVĂ"}${anafData.turnover != null ? `, CA ${anafData.turnover} lei (${anafData.balanceYear}), profit ${anafData.profit ?? "?"}, ${anafData.employees ?? "?"} salariați` : ""}` : anafDown ? "indisponibil TEHNIC — fără concluzii din lipsa datelor" : "fără CUI / negăsit"}
+- Site: ${siteData?.reachable ? `${siteData.pagesScanned} pagini scanate; portofoliu: ${siteData.hasPortfolioHint ? "EXISTĂ — trebuie recunoscut" : "nedetectat"}; testimoniale: ${siteData.hasTestimonialsHint ? "EXISTĂ — trebuie recunoscute" : "nedetectate"}` : siteData ? "site picat" : "fără site"}
+- Facebook: ${fbData ? (fbData.reachable ? "pagina există" : "NEVERIFICABILĂ tehnic — nu afirma absența") : "nedeclarat"}
+- Vizibilitate AI: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}` : "netestat — nu inventa rezultate"}
+- Competitori scanați: ${competitors.length ? competitors.map((c) => `${c.name} (${c.rating ?? "?"}★/${c.reviewCount})`).join(", ") : "niciunul"}
+- Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"}, ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}`;
+
+      const criticPrompt = `Ești REDACTORUL-ȘEF al rapoartelor și un consultant senior cu 15 ani STRICT în domeniul "${industry}" din România. Ai mai jos (A) datele reale scanate și (B) raportul scris de un consultant junior, ca JSON.
+
+MISIUNE — fă-l de 10 ori mai bun, păstrând EXACT aceeași structură JSON:
+1) ADEVĂR: verifică FIECARE afirmație contra (A). Ce nu e susținut de date → rescrie onest („nu am putut verifica" ≠ „nu are"). Ce EXISTĂ în date (portofoliu, testimoniale, recenzii, rating) → recunoscut explicit, nu ignorat.
+2) PRECIZIE DE BRANȘĂ: zero sfaturi generice. Fiecare recomandare = practica exactă a domeniului "${industry}" în România: cifre tipice, unelte cu nume, pași de făcut săptămâna asta, la cifrele LUI.
+3) COERENȚĂ NUMERICĂ: pierderile × valoarea medie, proiecția, break-even și scorul să fie consistente între ele și cu CA reală.
+4) Fiecare "fix" să fie o rezolvare executabilă, nu reformularea problemei.
+5) Taie umplutura; păstrează adâncimea.
+
+(A) ${digest}
+
+(B) ${JSON.stringify(report)}
+
+Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).`;
+
+      const text2 = await callModel(criticPrompt);
+      const m2 = text2.match(/\{[\s\S]*\}/);
+      if (m2) {
+        const improved = toReport(parseReportJson(m2[0]));
+        // Gardă anti-regres: nu acceptăm o versiune ciuntită
+        if (improved.diagnostics.length >= Math.min(4, report.diagnostics.length) && improved.actionPlan.length >= 3 && improved.summary) {
+          report = improved;
+        }
+      }
+    } catch (e) {
+      console.warn("[service-report] critic pass skipped:", e);
+    }
 
     return report;
   } catch (e) {

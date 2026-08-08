@@ -5,7 +5,7 @@
 // pagina permanentă /service/raport/[token]. Clasa service-report-print + print:hidden
 // controlează varianta PDF (globals.css).
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -65,6 +65,24 @@ export function ServiceReportView({
   const [email, setEmail] = useState(initialEmail);
   const [emailSent, setEmailSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Meniul raportului — secțiunile se citesc una câte una, nu ca un cearșaf.
+  // La print/PDF toate secțiunile apar (print:block), meniul dispare (print:hidden).
+  const [tab, setTab] = useState("rezumat");
+  const navRef = useRef<HTMLDivElement>(null);
+  const TABS = [
+    { id: "rezumat", label: "📊 Rezumat & pierderi" },
+    { id: "diagnostic", label: `📋 Diagnostic (${report.diagnostics.length})` },
+    ...(report.competitors.length > 0 || report.projection ? [{ id: "competitie", label: "🏆 Competiție & proiecție" }] : []),
+    ...(report.industryLeaders || report.socialPlan ? [{ id: "strategie", label: "👑 Lideri & social" }] : []),
+    ...(report.firstMonthPlan?.length || report.actionPlan.length ? [{ id: "plan", label: "🎯 Planul tău" }] : []),
+  ];
+  const secCls = (id: string) => `${tab === id ? "block" : "hidden"} print:block space-y-6`;
+  function goTab(id: string) {
+    setTab(id);
+    const top = (navRef.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 8;
+    window.scrollTo({ top, behavior: "smooth" });
+  }
 
   async function sendOffer(e: React.FormEvent) {
     e.preventDefault();
@@ -137,6 +155,19 @@ export function ServiceReportView({
         <ShareRow score={report.overallScore} />
       </motion.div>
 
+      {/* ═══ MENIUL RAPORTULUI — sticky, dispare la print ═══ */}
+      <nav ref={navRef} className="sticky top-2 z-30 print:hidden">
+        <div className="flex gap-1.5 overflow-x-auto rounded-2xl border border-bg-border bg-bg-card/95 p-1.5 shadow-card backdrop-blur">
+          {TABS.map((t) => (
+            <button key={t.id} type="button" onClick={() => goTab(t.id)}
+              className={`whitespace-nowrap rounded-xl px-3.5 py-2 text-xs font-bold transition ${tab === t.id ? "bg-orange-gradient text-white shadow-glow-orange" : "text-text-muted hover:bg-bg-soft/60 hover:text-text"}`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      <section className={secCls("rezumat")}>
       {/* ═══ PIERDERI + ANAF — una lângă alta ═══ */}
       <div className="grid gap-6 lg:grid-cols-2">
         {report.lostClientsPerMonth > 0 && (
@@ -195,6 +226,9 @@ export function ServiceReportView({
         </motion.div>
       )}
 
+      </section>
+
+      <section className={secCls("diagnostic")}>
       {/* ═══ DIAGNOSTICUL — dosare late: banda ariei în stânga, analiza + rezolvarea pe coloane ═══ */}
       <div>
         <motion.h3 {...fadeUp} className="mb-4 font-display text-xl font-extrabold text-text">📋 Diagnosticul complet</motion.h3>
@@ -243,6 +277,9 @@ export function ServiceReportView({
         </div>
       </div>
 
+      </section>
+
+      <section className={secCls("competitie")}>
       {/* ═══ COMPETIȚIA + PROIECȚIA — una lângă alta ═══ */}
       <div className="grid gap-6 lg:grid-cols-2">
         {report.competitors.length > 0 && (
@@ -298,6 +335,9 @@ export function ServiceReportView({
         )}
       </div>
 
+      </section>
+
+      <section className={secCls("strategie")}>
       {/* ═══ LIDERII + SOCIAL — una lângă alta ═══ */}
       <div className="grid gap-6 lg:grid-cols-2">
         {report.industryLeaders && (
@@ -340,6 +380,9 @@ export function ServiceReportView({
         )}
       </div>
 
+      </section>
+
+      <section className={secCls("plan")}>
       {/* ═══ PLANUL PRIMEI LUNI — săptămână cu săptămână ═══ */}
       {report.firstMonthPlan && report.firstMonthPlan.length > 0 && (
         <div>
@@ -413,6 +456,8 @@ export function ServiceReportView({
           ))}
         </div>
       </div>
+
+      </section>
 
       {/* ═══ ABONAMENT ═══ */}
       <motion.div {...fadeUp} className="rounded-3xl border border-brand-purple/30 bg-brand-purple/5 p-6 text-center sm:p-7 print:hidden">

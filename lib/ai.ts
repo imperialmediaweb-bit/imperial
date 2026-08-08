@@ -5,6 +5,9 @@ import Anthropic from "@anthropic-ai/sdk";
 import { briefToolsJsonSchema } from "./brief-schema";
 
 export const CLAUDE_MODEL = "claude-haiku-4-5-20251001";
+// Modelul MARE pentru raportul plătit — calitatea analizei justifică costul (~1-2 lei/raport).
+// Override cu env REPORT_MODEL; dacă modelul nu e disponibil pe cont, codul cade înapoi pe CLAUDE_MODEL.
+export const REPORT_MODEL = process.env.REPORT_MODEL || "claude-sonnet-5";
 
 let _client: Anthropic | null = null;
 export function getAnthropic(): Anthropic {
