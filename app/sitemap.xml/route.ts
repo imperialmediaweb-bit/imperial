@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { LOCATIONS } from "@/lib/locations";
 import { getAllArticles } from "@/lib/blog-articles";
+import { importedProjects } from "@/lib/projects-data";
 import { siteConfig } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -12,11 +13,17 @@ export async function GET() {
   const staticPages = [
     { url: base, priority: "1.0", freq: "weekly" },
     { url: `${base}/brief`, priority: "0.9", freq: "weekly" },
+    { url: `${base}/service`, priority: "0.9", freq: "weekly" },
+    { url: `${base}/service/exemplu`, priority: "0.7", freq: "monthly" },
     { url: `${base}/servicii`, priority: "0.8", freq: "monthly" },
     { url: `${base}/proiecte`, priority: "0.7", freq: "weekly" },
+    { url: `${base}/audit`, priority: "0.6", freq: "monthly" },
+    { url: `${base}/consultanta`, priority: "0.6", freq: "monthly" },
     { url: `${base}/despre`, priority: "0.6", freq: "monthly" },
     { url: `${base}/blog`, priority: "0.6", freq: "weekly" },
     { url: `${base}/contact`, priority: "0.5", freq: "monthly" },
+    { url: `${base}/termeni`, priority: "0.2", freq: "yearly" },
+    { url: `${base}/confidentialitate`, priority: "0.2", freq: "yearly" },
   ];
 
   const locationPages = LOCATIONS.map((loc) => ({
@@ -31,7 +38,13 @@ export async function GET() {
     freq: "monthly",
   }));
 
-  const allPages = [...staticPages, ...locationPages, ...blogPages];
+  const projectPages = importedProjects.map((p) => ({
+    url: `${base}/proiecte/${p.slug}`,
+    priority: "0.5",
+    freq: "monthly",
+  }));
+
+  const allPages = [...staticPages, ...locationPages, ...blogPages, ...projectPages];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -34,9 +34,13 @@ export function generateMetadata({
   return {
     title: `Creare Site Web ${loc.name} — Web Design ${loc.county} | Imperial Media`,
     description: `Căutați o echipă de web design în ${loc.name}? Imperial Media creează site-uri custom, magazine online și campanii de promovare pentru afaceri din ${loc.name}, ${loc.county}. Estimare gratuită în 2 minute.`,
+    alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
       title: `Creare Site Web ${loc.name} | Imperial Media`,
       description: `Site-uri custom și magazine online pentru afaceri din ${loc.name}. 10+ ani experiență, 200+ clienți. Estimare gratuită.`,
+      url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
+      locale: "ro_RO",
+      type: "website",
     },
   };
 }
@@ -346,30 +350,64 @@ export default function LocationPage({
         </div>
       </section>
 
-      {/* ─── Schema.org LocalBusiness (JSON-LD) ─── */}
+      {/* ─── Schema.org (JSON-LD @graph): ProfessionalService + FAQPage + Breadcrumb ───
+           Arsenalul complet pentru Google (rich results) și LLM-uri (răspunsuri citabile) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "ProfessionalService",
-            name: `Imperial Media — Web Design ${loc.name}`,
-            description: `Creare site web și magazine online pentru afaceri din ${loc.name}, ${loc.county}.`,
-            url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
-            telephone: siteConfig.phone,
-            email: siteConfig.email,
-            address: {
-              "@type": "PostalAddress",
-              addressCountry: "RO",
-            },
-            areaServed: {
-              "@type": "City",
-              name: loc.name,
-            },
-            priceRange: "699€ - 5000€",
-            sameAs: [
-              siteConfig.social.facebook,
-              siteConfig.social.instagram,
+            "@graph": [
+              {
+                "@type": "ProfessionalService",
+                "@id": `${siteConfig.url}/creare-site-web/${loc.slug}#business`,
+                name: `Imperial Media — Web Design ${loc.name}`,
+                description: `Creare site web custom, magazine online și promovare în presă pentru afaceri din ${loc.name}, ${loc.county}. 10+ ani experiență, 200+ clienți.`,
+                url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
+                image: `${siteConfig.url}/logo.png`,
+                logo: `${siteConfig.url}/logo.png`,
+                telephone: siteConfig.phone,
+                email: siteConfig.email,
+                address: { "@type": "PostalAddress", addressCountry: "RO", addressRegion: loc.county },
+                areaServed: [
+                  { "@type": "City", name: loc.name },
+                  { "@type": "AdministrativeArea", name: loc.county },
+                ],
+                priceRange: "699€ - 5000€",
+                aggregateRating: {
+                  "@type": "AggregateRating",
+                  ratingValue: siteConfig.reviews.ratingValue,
+                  reviewCount: siteConfig.reviews.reviewCount,
+                },
+                hasOfferCatalog: {
+                  "@type": "OfferCatalog",
+                  name: `Servicii web design ${loc.name}`,
+                  itemListElement: services.map((s) => ({
+                    "@type": "Offer",
+                    itemOffered: { "@type": "Service", name: s.title, description: s.text },
+                    priceSpecification: { "@type": "PriceSpecification", price: s.price, priceCurrency: "EUR" },
+                  })),
+                },
+                sameAs: [siteConfig.social.facebook, siteConfig.social.instagram],
+              },
+              {
+                "@type": "FAQPage",
+                "@id": `${siteConfig.url}/creare-site-web/${loc.slug}#faq`,
+                mainEntity: faqs.map((f) => ({
+                  "@type": "Question",
+                  name: f.q,
+                  acceptedAnswer: { "@type": "Answer", text: f.a },
+                })),
+              },
+              {
+                "@type": "BreadcrumbList",
+                "@id": `${siteConfig.url}/creare-site-web/${loc.slug}#breadcrumb`,
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Acasă", item: siteConfig.url },
+                  { "@type": "ListItem", position: 2, name: "Creare site web", item: `${siteConfig.url}/servicii` },
+                  { "@type": "ListItem", position: 3, name: loc.name, item: `${siteConfig.url}/creare-site-web/${loc.slug}` },
+                ],
+              },
             ],
           }),
         }}
