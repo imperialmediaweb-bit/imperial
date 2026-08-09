@@ -324,6 +324,31 @@ export default function LocationPage({
         </div>
       </section>
 
+      {/* ─── GHIDURILE ORAȘULUI — linkuri interne oraș ↔ articole (SEO) ─── */}
+      {loc.isCountySeat && (
+        <section className="border-t border-bg-border/40 py-12">
+          <div className="container-app">
+            <h3 className="text-center text-xs font-bold uppercase tracking-wider text-text-subtle">
+              Ghiduri gratuite pentru {loc.name}
+            </h3>
+            <div className="mx-auto mt-4 grid max-w-3xl gap-3 sm:grid-cols-3">
+              <Link href={`/blog/cat-costa-site-web-${loc.slug}`}
+                className="rounded-2xl border border-bg-border bg-white/5 p-4 text-sm font-semibold text-text transition hover:border-brand-orange/60">
+                💰 Cât costă un site web în {loc.name} în 2026?
+              </Link>
+              <Link href={`/blog/promovare-afacere-online-${loc.slug}`}
+                className="rounded-2xl border border-bg-border bg-white/5 p-4 text-sm font-semibold text-text transition hover:border-brand-orange/60">
+                📣 Cum să-ți promovezi afacerea online în {loc.name}
+              </Link>
+              <Link href="/service"
+                className="rounded-2xl border border-brand-orange/40 bg-brand-orange/5 p-4 text-sm font-semibold text-text transition hover:border-brand-orange">
+                🔍 Radiografia Afacerii — raport pe datele reale ale firmei tale din {loc.name}
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ─── ALTE LOCAȚII ─── */}
       <section className="border-t border-bg-border/40 py-12">
         <div className="container-app">
