@@ -9,6 +9,7 @@ import {
   generatePromoContent,
   generateGeneralContent,
 } from "@/lib/blog-articles";
+import { siteConfig } from "@/lib/site";
 
 export function generateStaticParams() {
   return getAllArticles().map((a) => ({ slug: a.slug }));
@@ -20,11 +21,14 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return {
     title: article.title,
     description: article.description,
+    alternates: { canonical: `${siteConfig.url}/blog/${article.slug}` },
     openGraph: {
       title: article.title,
       description: article.description,
       type: "article",
       publishedTime: article.date,
+      url: `${siteConfig.url}/blog/${article.slug}`,
+      locale: "ro_RO",
     },
   };
 }
@@ -104,6 +108,43 @@ export default function BlogArticlePage({ params }: { params: { slug: string } }
           </div>
         </div>
       </article>
+
+      {/* Schema.org: Article + Breadcrumb — eligibil pentru rich results și citare LLM */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Article",
+                "@id": `${siteConfig.url}/blog/${article.slug}#article`,
+                headline: article.title,
+                description: article.description,
+                datePublished: article.date,
+                dateModified: article.date,
+                inLanguage: "ro-RO",
+                mainEntityOfPage: `${siteConfig.url}/blog/${article.slug}`,
+                author: { "@type": "Organization", name: "Imperial Media", url: siteConfig.url },
+                publisher: {
+                  "@type": "Organization",
+                  name: "Imperial Media",
+                  url: siteConfig.url,
+                  logo: { "@type": "ImageObject", url: `${siteConfig.url}/logo.png` },
+                },
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Acasă", item: siteConfig.url },
+                  { "@type": "ListItem", position: 2, name: "Blog", item: `${siteConfig.url}/blog` },
+                  { "@type": "ListItem", position: 3, name: article.title, item: `${siteConfig.url}/blog/${article.slug}` },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
     </main>
   );
 }
