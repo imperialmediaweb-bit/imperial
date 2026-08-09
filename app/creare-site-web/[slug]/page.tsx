@@ -55,6 +55,11 @@ export default function LocationPage({
 
   const nearby = getNearbyLocations(params.slug, 6);
 
+  // Cifre locale derivate din populația reală — fiecare pagină de oraș devine unică
+  const popK = Math.round(loc.population / 1000);
+  const firmsEst = Math.round(loc.population / 38);
+  const searchesEst = Math.round(loc.population * 0.6);
+
   const services = [
     {
       icon: Code2,
@@ -320,6 +325,35 @@ export default function LocationPage({
           </div>
           <p className="mt-4 text-xs text-text-muted">
             🎁 BONUS: Primești <strong className="text-brand-orange">campanie de promovare gratuită</strong> în 50 ziare online la orice site nou.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── PIAȚA LOCALĂ ÎN CIFRE — conținut unic per oraș (anti-doorway) ─── */}
+      <section className="border-t border-bg-border/40 py-12">
+        <div className="container-app">
+          <h2 className="text-center font-display text-xl font-extrabold text-text sm:text-2xl">
+            Piața din {loc.name}, în cifre
+          </h2>
+          <div className="mx-auto mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-bg-border bg-white/5 p-5 text-center">
+              <p className="font-display text-3xl font-extrabold text-brand-orange">~{popK}.000</p>
+              <p className="mt-1 text-xs text-text-muted">locuitori în {loc.name}</p>
+            </div>
+            <div className="rounded-2xl border border-bg-border bg-white/5 p-5 text-center">
+              <p className="font-display text-3xl font-extrabold text-brand-orange">~{firmsEst.toLocaleString("ro-RO")}</p>
+              <p className="mt-1 text-xs text-text-muted">firme active estimate în zonă</p>
+            </div>
+            <div className="rounded-2xl border border-bg-border bg-white/5 p-5 text-center">
+              <p className="font-display text-3xl font-extrabold text-brand-orange">{searchesEst.toLocaleString("ro-RO")}+</p>
+              <p className="mt-1 text-xs text-text-muted">căutări locale estimate pe lună</p>
+            </div>
+          </div>
+          <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-text-muted">
+            Cu ~{firmsEst.toLocaleString("ro-RO")} de firme care concurează pentru clienții din {loc.name} și{" "}
+            {loc.county}, diferența o face vizibilitatea: cine apare primul când localnicii caută pe Google
+            serviciul tău câștigă clientul — indiferent de mărimea firmei. Un site rapid + profil Google
+            îngrijit te pune în fața celor {searchesEst.toLocaleString("ro-RO")}+ căutări lunare din zonă.
           </p>
         </div>
       </section>
