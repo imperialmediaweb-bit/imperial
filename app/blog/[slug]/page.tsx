@@ -10,6 +10,17 @@ import {
   generateGeneralContent,
 } from "@/lib/blog-articles";
 import { siteConfig } from "@/lib/site";
+import { getStockPhoto } from "@/lib/stock-photo";
+
+// Interogarea de poză per tip de articol — generic business, mereu relevant
+function photoQueryFor(article: { template: string; slug: string }): string {
+  if (article.template === "cost") return "web designer laptop modern office";
+  if (article.template === "promovare") return "social media marketing smartphone business";
+  if (article.slug.includes("restaurant")) return "restaurant owner tablet menu";
+  if (article.slug.includes("medical")) return "medical clinic reception modern";
+  if (article.slug.includes("magazin")) return "online shopping ecommerce laptop";
+  return "small business owner laptop working";
+}
 
 export function generateStaticParams() {
   return getAllArticles().map((a) => ({ slug: a.slug }));
@@ -33,9 +44,14 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function BlogArticlePage({ params }: { params: { slug: string } }) {
+export default async function BlogArticlePage({ params }: { params: { slug: string } }) {
   const article = getArticleBySlug(params.slug);
   if (!article) notFound();
+
+  // Poza hero: Pexels (dacă e configurată cheia) sau coperta generată automat
+  const heroAlt = `${article.title} — ghid Imperial Media`;
+  const stock = await getStockPhoto(photoQueryFor(article), heroAlt);
+  const heroSrc = stock?.url ?? `/blog/${article.slug}/opengraph-image`;
 
   let content: string;
   if (article.template === "cost" && article.location) {
@@ -83,6 +99,17 @@ export default function BlogArticlePage({ params }: { params: { slug: string } }
 
         <div className="mt-2 h-1 w-20 rounded-full bg-orange-gradient" />
 
+        {/* Imaginea hero — Pexels sau coperta branduită; Google și LLM-urile preferă articole cu imagini */}
+        <figure className="mt-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={heroSrc} alt={heroAlt} className="aspect-[1200/630] w-full rounded-2xl border border-bg-border object-cover" loading="eager" />
+          {stock && (
+            <figcaption className="mt-1.5 text-right text-[10px] text-text-subtle">
+              Foto: <a href={stock.photographerUrl} target="_blank" rel="noopener noreferrer" className="underline">{stock.photographer}</a> / Pexels
+            </figcaption>
+          )}
+        </figure>
+
         <div
           className="project-content mt-8"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
@@ -121,6 +148,7 @@ export default function BlogArticlePage({ params }: { params: { slug: string } }
                 "@id": `${siteConfig.url}/blog/${article.slug}#article`,
                 headline: article.title,
                 description: article.description,
+                image: stock?.url ?? `${siteConfig.url}/blog/${article.slug}/opengraph-image`,
                 datePublished: article.date,
                 dateModified: article.date,
                 inLanguage: "ro-RO",

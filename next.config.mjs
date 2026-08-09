@@ -11,6 +11,7 @@ const nextConfig = {
       { protocol: "https", hostname: "s.wordpress.com" },
       { protocol: "https", hostname: "s0.wp.com" },
       { protocol: "https", hostname: "image.thum.io" },
+      { protocol: "https", hostname: "images.pexels.com" },
     ],
   },
   async rewrites() {
