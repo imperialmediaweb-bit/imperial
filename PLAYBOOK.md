@@ -68,3 +68,14 @@ Reguli de joc cu Alina:
 ## Prețuri viitoare (decizii amânate, din ROADMAP)
 - Raport: test 399 după 20-30 de vânzări
 - Marketplace gen Fiverr (postări/design la comandă): NU acum — abonamentele acoperă nevoia
+
+## Optimizarea Google Business Profile (Imperial Media) — checklist
+0. **PINUL** (blocant): Edit profile → Location → Botoșani, România (era plasat în Asia!); sau Service area: Botoșani + județ + Suceava/Iași
+1. Categorii: Website designer (principală) + Marketing agency, Advertising agency, Internet marketing service, E-commerce service
+2. Descriere: textul din chat/PLAYBOOK (custom, 10+ ani, 200+ clienți, Rețeaua Media Expres, Radiografia, estimare AI)
+3. Servicii cu prețuri: site 699€ · magazin 1.200€ · Radiografia 299 lei · promovare 50 ziare 300€ · Start Online 500 lei · mentenanță 50€/lună · branding
+4. Poze: minim 10 la start (logo, cover, 6-8 proiecte, echipa), apoi 2-3/lună
+5. Postări: 1/săptămână (consultantul din /cont le scrie); prima = Radiografia cu link ?utm_source=gbp
+6. Recenzii: QR-ul din /cont la 10-15 clienți vechi pe WhatsApp; țintă 20+; răspuns la toate
+7. Q&A seed (3 întrebări proprii) · program real (nu „Closed") · TELEFON ALINIAT site↔profil (0746 vs 0758!)
+După fix pin: test-places + raport regenerat — profilul cu cele 5 recenzii trebuie să apară.
