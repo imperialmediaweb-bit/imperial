@@ -21,6 +21,51 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    // 1) Un singur domeniu canonic: www.* și tools.* trimit 301 către imperial-media.ro
+    //    (Search Console arăta 94 de duplicate pe tools.* și 46 de 404-uri pe www.*)
+    const hostRedirects = ["www.imperial-media.ro", "tools.imperial-media.ro"].map((host) => ({
+      source: "/:path*",
+      has: [{ type: "host", value: host }],
+      destination: "https://imperial-media.ro/:path*",
+      permanent: true,
+    }));
+
+    // 2) URL-urile vechiului site WordPress → paginile echivalente din site-ul nou
+    const legacyMap = [
+      ["/despre-noi", "/despre"],
+      ["/cere-oferta", "/brief"],
+      ["/creare-magazin-online", "/servicii"],
+      ["/website-uri-de-prezentare", "/servicii"],
+      ["/mentenanta-web", "/servicii"],
+      ["/dezvoltare-web", "/servicii"],
+      ["/graphic-design", "/servicii"],
+      ["/pr-marketing-digital", "/servicii"],
+      ["/services-01", "/servicii"],
+      ["/our-mission", "/despre"],
+      ["/faqs", "/despre"],
+      ["/team-01", "/despre"],
+      ["/team-02", "/despre"],
+      ["/team-details", "/despre"],
+      ["/testimonials-01", "/despre"],
+      ["/testimonials-02", "/despre"],
+      ["/projects-list", "/proiecte"],
+      ["/elementor-widgets", "/"],
+      ["/homepage", "/"],
+    ].map(([source, destination]) => ({ source, destination, permanent: true }));
+
+    const legacyPatterns = [
+      { source: "/projects-item/:slug*", destination: "/proiecte", permanent: true },
+      { source: "/projects-category/:slug*", destination: "/proiecte", permanent: true },
+      { source: "/portfolio/:slug*", destination: "/proiecte", permanent: true },
+      { source: "/landing/:slug*", destination: "/", permanent: true },
+      { source: "/news-:slug*", destination: "/blog", permanent: true },
+      { source: "/home-layout:slug*", destination: "/", permanent: true },
+      { source: "/author/:slug*", destination: "/blog", permanent: true },
+    ];
+
+    return [...hostRedirects, ...legacyMap, ...legacyPatterns];
+  },
   async headers() {
     return [
       {
