@@ -6,9 +6,13 @@ import { siteConfig } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
+// lastmod STABIL — Google ignoră sitemap-urile care mint că totul s-a schimbat „acum".
+// Actualizează data la release-uri mari de conținut.
+const CONTENT_UPDATED = "2026-08-09";
+
 export async function GET() {
   const base = siteConfig.url;
-  const now = new Date().toISOString();
+  const now = CONTENT_UPDATED;
 
   const staticPages = [
     { url: base, priority: "1.0", freq: "weekly" },
@@ -36,6 +40,7 @@ export async function GET() {
     url: `${base}/blog/${a.slug}`,
     priority: "0.6",
     freq: "monthly",
+    lastmod: a.date,
   }));
 
   const projectPages = importedProjects.map((p) => ({
@@ -52,7 +57,7 @@ ${allPages
   .map(
     (p) => `  <url>
     <loc>${p.url}</loc>
-    <lastmod>${now}</lastmod>
+    <lastmod>${(p as any).lastmod ?? now}</lastmod>
     <changefreq>${p.freq}</changefreq>
     <priority>${p.priority}</priority>
   </url>`

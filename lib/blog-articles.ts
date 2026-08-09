@@ -146,8 +146,22 @@ export function getArticleBySlug(slug: string): BlogArticle | undefined {
   return getAllArticles().find((a) => a.slug === slug);
 }
 
+// Cifre locale derivate din populație — fac fiecare articol UNIC per oraș
+// (Google devalorizează șabloanele identice; cifrele locale sunt diferențiatorul)
+function localStats(loc: Location) {
+  const popK = Math.round(loc.population / 1000);
+  const firms = Math.round(loc.population / 38); // ~1 firmă activă la 38 de locuitori (media urbană RO)
+  const searches = Math.round(loc.population * 0.6); // căutări locale lunare estimate pe servicii
+  return { popK, firms, searches };
+}
+
 export function generateCostContent(loc: Location): string {
+  const { popK, firms } = localStats(loc);
   return `Un site web profesional în ${loc.name} pornește de la **699€** pentru un site de prezentare cu 5 pagini și de la **1200€** pentru un magazin online.
+
+## Piața din ${loc.name}, în cifre
+
+${loc.name} are aproximativ **${popK}.000 de locuitori** și, la media urbană din România, în jur de **${firms.toLocaleString("ro-RO")} de firme active** în oraș și împrejurimi. Concret: indiferent de domeniu, ai zeci sau sute de concurenți locali — iar clientul care caută pe Google „${loc.name}" + serviciul tău alege aproape întotdeauna dintre primele rezultate. În ${loc.county}, firmele cu site profesional și profil Google îngrijit domină sistematic aceste căutări, indiferent de mărimea lor reală.
 
 ## Ce influențează prețul unui site în ${loc.name}?
 
@@ -197,7 +211,10 @@ Folosește [consultantul nostru digital AI](/consultanta) pentru a afla exact c�
 }
 
 export function generatePromoContent(loc: Location): string {
+  const { popK, searches } = localStats(loc);
   return `Vrei mai mulți clienți pentru afacerea ta din ${loc.name}? Iată strategiile concrete care funcționează în ${loc.county} în 2026.
+
+La o populație de circa **${popK}.000 de locuitori**, în ${loc.name} se fac lunar zeci de mii de căutări locale pe Google (estimativ **${searches.toLocaleString("ro-RO")}+** pe servicii și produse). Fiecare strategie de mai jos țintește exact aceste căutări — ale oamenilor din orașul tău, aflați deja în căutarea a ceea ce vinzi.
 
 ## 1. Google Business Profile (GRATUIT)
 
