@@ -42,9 +42,18 @@ export function NumberTicker({
 
   return (
     <span ref={ref} className={className}>
-      {prefix}
-      {display.toLocaleString("ro-RO")}
-      {suffix}
+      {/* Pe ecran: numărul animat. La PRINT: valoarea finală — altfel PDF-ul
+          arată „0" pentru tot ce n-a intrat în viewport înainte de tipărire. */}
+      <span className="print:hidden">
+        {prefix}
+        {display.toLocaleString("ro-RO")}
+        {suffix}
+      </span>
+      <span className="hidden print:inline">
+        {prefix}
+        {value.toLocaleString("ro-RO")}
+        {suffix}
+      </span>
     </span>
   );
 }
