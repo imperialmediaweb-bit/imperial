@@ -16,6 +16,8 @@ import {
   Gift,
 } from "lucide-react";
 import { LOCATIONS, getLocationBySlug, getNearbyLocations } from "@/lib/locations";
+import { cityEconomyProfile } from "@/lib/city-economy";
+import { importedProjects } from "@/lib/projects-data";
 import { siteConfig } from "@/lib/site";
 import { packages } from "@/lib/packages";
 
@@ -59,6 +61,11 @@ export default function LocationPage({
   const popK = Math.round(loc.population / 1000);
   const firmsEst = Math.round(loc.population / 38);
   const searchesEst = Math.round(loc.population * 0.6);
+  // Profilul economic scris de mână + proiectele reale livrate în zonă — conținut de necopiat
+  const economy = cityEconomyProfile(loc.slug, loc.region);
+  const localProjects = importedProjects
+    .filter((p) => p.slug.includes(loc.slug) || p.title.toLowerCase().includes(loc.name.toLowerCase()))
+    .slice(0, 3);
 
   const services = [
     {
@@ -349,14 +356,42 @@ export default function LocationPage({
               <p className="mt-1 text-xs text-text-muted">căutări locale estimate pe lună</p>
             </div>
           </div>
-          <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-text-muted">
-            Cu ~{firmsEst.toLocaleString("ro-RO")} de firme care concurează pentru clienții din {loc.name} și{" "}
-            {loc.county}, diferența o face vizibilitatea: cine apare primul când localnicii caută pe Google
-            serviciul tău câștigă clientul — indiferent de mărimea firmei. Un site rapid + profil Google
-            îngrijit te pune în fața celor {searchesEst.toLocaleString("ro-RO")}+ căutări lunare din zonă.
-          </p>
+          {/* Potențialul orașului — profil economic scris de mână, unic per oraș */}
+          <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-brand-orange/25 bg-gradient-to-br from-brand-orange/[0.07] via-transparent to-brand-purple/[0.06] p-6">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-orange">
+              💡 Potențialul pieței din {loc.name}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-text-muted">{economy}</p>
+            <p className="mt-3 border-t border-bg-border/50 pt-3 text-sm leading-relaxed text-text-muted">
+              <strong className="text-text">Cum te ajută concret un site aici:</strong> cele{" "}
+              {searchesEst.toLocaleString("ro-RO")}+ căutări lunare din zonă sunt oameni care VOR ceva acum
+              — iar Google le arată primele 3-5 firme. Un site rapid, cu profil Google îngrijit, te mută în
+              fața lor: pentru multe firme din {loc.name}, asta înseamnă primii clienți noi din altă sursă
+              decât „din auzite" — măsurabili, lună de lună.
+            </p>
+          </div>
         </div>
       </section>
+
+      {/* ─── PROIECTE REALE DIN ZONĂ — dovada de necopiat (doar unde există) ─── */}
+      {localProjects.length > 0 && (
+        <section className="border-t border-bg-border/40 py-12">
+          <div className="container-app">
+            <h2 className="text-center font-display text-xl font-extrabold text-text sm:text-2xl">
+              Proiecte livrate pentru clienți din zona {loc.county}
+            </h2>
+            <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
+              {localProjects.map((p) => (
+                <Link key={p.slug} href={`/proiecte/${p.slug}`}
+                  className="rounded-2xl border border-bg-border bg-white/5 p-4 text-sm font-semibold text-text transition hover:border-brand-orange/60">
+                  {p.title}
+                  <span className="mt-1 block text-[11px] font-normal text-text-subtle">vezi proiectul →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── GHIDURILE ORAȘULUI — linkuri interne oraș ↔ articole (SEO) ─── */}
       {loc.isCountySeat && (
