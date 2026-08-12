@@ -477,6 +477,11 @@ html {
     break-inside: avoid;
     page-break-inside: avoid;
   }
+  /* Titlurile de secțiune nu rămân orfane la finalul paginii — merg cu conținutul lor */
+  .service-report-print h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
   .service-report-print [class*="rounded-3xl"] {
     background: #fff !important;
     border-color: #e3e5ec !important;

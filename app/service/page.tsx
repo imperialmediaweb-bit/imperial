@@ -846,7 +846,12 @@ export default function ServicePage() {
                   ) : (
                     <>
                       <p className="text-xs font-semibold text-text">
-                        📩 Durează câteva minute — lasă emailul și îți trimitem raportul când e gata:
+                        ⏱️ Analiza completă durează de regulă <b className="text-brand-orangeLight">3-5 minute</b> — scanăm surse
+                        reale (Google, ANAF, site, competiție), nu dăm din șablon.
+                      </p>
+                      <p className="mt-1 text-xs text-text-muted">
+                        📩 Nu trebuie să stai aici: lasă emailul și primești linkul raportului când e gata —
+                        îl poți deschide de pe telefon, mai târziu, de oriunde.
                       </p>
                       <div className="mt-2 flex flex-col gap-2 sm:flex-row">
                         <input type="email" value={scanEmail} onChange={(e) => setScanEmail(e.target.value)}
