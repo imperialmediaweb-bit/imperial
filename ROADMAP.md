@@ -52,3 +52,11 @@ Pagină cu produse la comandă (postări făcute de noi, design-uri, articole, v
 comandă self-service și plată Stripe — pentru clienții care nu vor să genereze/execute singuri nici cu
 generatorul din cont. Decis pe 2026-08-07: NU se construiește acum; abonamentele actuale acoperă nevoia
 (Monitorizare 99 / Premium 199 cu generator de postări + analize foto).
+
+## Următoarele funcții șmechere (după primele 10 vânzări — decis 2026-08-12)
+Prioritate: #1 și #3 împreună (~o zi de lucru, cel mai bun raport efect/efort).
+1. **🥷 Radiografia Concurentului** — add-on 149 lei sau beneficiu Premium: raport pe orice competitor (date publice; scanarea există deja). Unic pe piață, se povestește singur.
+2. **🛡️ Garda de recenzii (Premium)** — verificare ZILNICĂ; la recenzie negativă: răspuns gata scris de AI în cont, în aceeași zi.
+3. **🏅 Insigna de scor** — badge „Scor Imperial X/100 — verificat" pe site-ul clientului = backlink + buclă virală („eu ce scor am?").
+4. **⏰ Re-scanarea aniversară** — la 3 luni după raport plătit fără abonament: re-scan gratuit automat + email „scorul tău a scăzut de la X la Y" → vinde monitorizarea singură.
+5. **📊 GA4 pe funnel** — evenimente pe fiecare pas (vizită → formular → generare → plată); obligatoriu când vine traficul din ziare.
