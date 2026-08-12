@@ -45,6 +45,14 @@ const DEMO_REPORT: ServiceReport = {
   ],
   diagnostics: [
     {
+      area: "Sănătatea financiară & trendul",
+      emoji: "💰",
+      status: "warning",
+      finding:
+        "Cifra de afaceri crește sănătos: 522k → 574k → 612k lei (+6,7% în ultimul an). Dar marja netă a SCĂZUT de la 8,9% la 8,0% — vinzi mai mult și câștigi proporțional mai puțin, semn că ori costurile cresc mai repede decât prețurile, ori vinzi prea mult din produsele slabe. Productivitatea e de ~102.000 lei/angajat/an, decentă pentru fast-food, dar sub liderii care trec de 130.000.",
+      fix: "Două mișcări care ridică marja fără să sperie clienții: 1) meniul online scoate în față produsele cu marjă mare (combo-uri, băuturi) — vânzarea ghidată crește bonul mediu cu 10-15% fără efort; 2) +1 leu pe produsele vedetă (nimeni nu pleacă pentru 1 leu) = ~30.000 lei/an direct în profit la volumul tău. Țintă realistă 12 luni: CA de la 612k la ~700k lei cu marja înapoi peste 9%.",
+    },
+    {
       area: "Profilul Google Business",
       emoji: "📍",
       status: "warning",
