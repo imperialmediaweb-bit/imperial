@@ -224,6 +224,8 @@ TRASEELE DE PLATĂ (toate self-service, cu factura automată pe email — nu pro
     }
   } catch (e: any) {
     console.error("[/api/brief-chat] Claude error:", e);
+    const { maybeAlertCreditIssue } = await import("@/lib/credit-alert");
+    maybeAlertCreditIssue(e, "consultantul / asistentul de brief").catch(() => {});
     const msg =
       e?.status === 401
         ? "Cheia API nu e validă."

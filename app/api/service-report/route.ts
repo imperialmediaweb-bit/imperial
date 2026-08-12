@@ -911,6 +911,9 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
       } catch (e) {
         console.error("[service-report] pipeline attempt 2 failed:", e);
         await failServiceReport(token).catch(() => {});
+        // Creditul Anthropic epuizat = alertă DEDICATĂ, imposibil de ratat
+        const { maybeAlertCreditIssue } = await import("@/lib/credit-alert");
+        await maybeAlertCreditIssue(e, `generarea raportului pentru ${companyName} (${city})`).catch(() => {});
         // Alertă INFORMATIVĂ — nimic de făcut: clientul a primit mesaj prietenos,
         // formularul lui e salvat local și e invitat să reîncerce cu un click.
         try {
