@@ -227,6 +227,27 @@ export function ServiceReportView({
               {report.anafData.employees != null && <MiniStat label="Angajați" value={String(report.anafData.employees)} />}
               {report.anafData.caen && <MiniStat label="CAEN" value={report.anafData.caen} />}
             </div>
+            {/* Evoluția CA pe ani — trendul e analiza, nu poza de moment */}
+            {(report.anafData.history?.length ?? 0) > 1 && (
+              <div className="mt-4 border-t border-green-500/20 pt-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Evoluția cifrei de afaceri</p>
+                <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold text-text">
+                  {[...report.anafData.history!].sort((a, b) => a.year - b.year).map((h, i, arr) => {
+                    const prev = arr[i - 1];
+                    const up = prev?.turnover != null && h.turnover != null ? h.turnover >= prev.turnover : null;
+                    return (
+                      <span key={h.year} className="inline-flex items-center gap-2">
+                        {i > 0 && <span className={up == null ? "text-text-subtle" : up ? "text-green-400" : "text-red-400"}>{up == null ? "→" : up ? "↗" : "↘"}</span>}
+                        <span>
+                          <span className="text-[10px] text-text-subtle">{h.year}: </span>
+                          {h.turnover != null ? `${Math.round(h.turnover / 1000).toLocaleString("ro-RO")}k lei` : "—"}
+                        </span>
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
       </div>

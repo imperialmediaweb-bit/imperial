@@ -31,6 +31,11 @@ const DEMO_REPORT: ServiceReport = {
     turnover: 612400,
     profit: 48900,
     employees: 6,
+    history: [
+      { year: 2024, turnover: 612400, profit: 48900, employees: 6 },
+      { year: 2023, turnover: 574200, profit: 51300, employees: 6 },
+      { year: 2022, turnover: 521800, profit: 46100, employees: 5 },
+    ],
   },
   competitors: [
     { name: "Kebab Galactic", rating: 4.7, reviewCount: 412, hasWebsite: true },

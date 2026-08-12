@@ -36,6 +36,8 @@ export type AnafData = {
   turnover?: number;
   profit?: number;
   employees?: number;
+  // Istoricul bilanțurilor (până la 3 ani) — trendul e analiza, nu poza de moment
+  history?: Array<{ year: number; turnover?: number; profit?: number; employees?: number }>;
 };
 
 export type ServiceReport = {
@@ -407,18 +409,23 @@ export async function POST(req: Request) {
       console.warn("[service-report] ANAF TVA failed:", e);
     }
     if (anafData.found) {
+      // Istoricul pe până la 3 ani — trendul CA/profit/angajați e adevărata analiză financiară
       const lastYear = new Date().getFullYear() - 1;
-      for (const year of [lastYear, lastYear - 1]) {
+      const history: NonNullable<AnafData["history"]> = [];
+      for (const year of [lastYear, lastYear - 1, lastYear - 2]) {
         try {
           const bilant = await fetchAnafBilant(cui, year);
-          if (bilant) {
-            anafData = { ...anafData, ...bilant };
-            break;
+          if (bilant?.turnover != null || bilant?.profit != null) {
+            history.push({ year, turnover: bilant.turnover, profit: bilant.profit, employees: bilant.employees });
+            if (history.length === 1) {
+              anafData = { ...anafData, ...bilant }; // cel mai recent an rămâne „principalul"
+            }
           }
         } catch (e) {
           console.warn(`[service-report] ANAF bilant ${year} failed:`, e);
         }
       }
+      if (history.length > 0) anafData.history = history;
     }
   }
 
@@ -546,6 +553,27 @@ export async function POST(req: Request) {
         ? "AFACERE MIXTĂ (punct fizic + vânzare/clienți online)"
         : "AFACERE LOCALĂ (punct fizic — clienții vin din zonă)";
 
+  // Metrici financiare CALCULATE (deterministe — AI-ul le interpretează, nu le inventează)
+  const finLines: string[] = [];
+  const hist = anafData.history ?? [];
+  if (hist.length > 0) {
+    for (const h of hist) {
+      finLines.push(`  · ${h.year}: CA ${h.turnover?.toLocaleString("ro-RO") ?? "?"} lei · profit ${h.profit?.toLocaleString("ro-RO") ?? "?"} lei · ${h.employees ?? "?"} salariați`);
+    }
+    const latest = hist[0];
+    const prev = hist[1];
+    if (latest?.turnover && prev?.turnover) {
+      const yoy = ((latest.turnover - prev.turnover) / prev.turnover) * 100;
+      finLines.push(`- TREND CA (calculat): ${yoy >= 0 ? "+" : ""}${yoy.toFixed(1)}% față de anul precedent ${yoy < 0 ? "— DECLIN, tratează-l ca prioritate" : yoy < 5 ? "— stagnare practic" : "— creștere"}`);
+    }
+    if (latest?.turnover && latest?.profit != null) {
+      finLines.push(`- MARJĂ NETĂ (calculată): ${((latest.profit / latest.turnover) * 100).toFixed(1)}% — compar-o cu marja tipică domeniului "${industry}" și spune-i dacă lasă bani pe masă`);
+    }
+    if (latest?.turnover && latest?.employees) {
+      finLines.push(`- PRODUCTIVITATE (calculată): ${Math.round(latest.turnover / latest.employees).toLocaleString("ro-RO")} lei CA/angajat/an — raporteaz-o la tipicul domeniului`);
+    }
+  }
+
   const anafBlock = anafData.found
     ? `DATE OFICIALE ANAF (verificate acum pe CUI):
 - Denumire legală: ${anafData.legalName}
@@ -553,8 +581,9 @@ export async function POST(req: Request) {
 - Plătitor TVA: ${anafData.vatPayer ? "DA" : "NU"}
 - CAEN: ${anafData.caen ?? "necunoscut"}${anafData.caenLabel ? ` (${anafData.caenLabel})` : ""}
 - Înregistrată din: ${anafData.regYear ?? "necunoscut"}
-${anafData.turnover != null ? `- BILANȚ ${anafData.balanceYear}: cifră de afaceri ${anafData.turnover.toLocaleString("ro-RO")} lei · ${anafData.profit != null ? `profit net ${anafData.profit.toLocaleString("ro-RO")} lei` : "profit necunoscut"} · ${anafData.employees != null ? `${anafData.employees} salariați` : "salariați necunoscut"}
-IMPORTANT: calculează pierderile CA PROCENT din cifra de afaceri reală și exprimă-le și în lei/an (1 EUR ≈ 5 lei).` : "- Bilanț: nedepus / indisponibil"}`
+${hist.length > 0 ? `- ISTORIC BILANȚURI (${hist.length} ${hist.length === 1 ? "an" : "ani"}):
+${finLines.join("\n")}
+DIRECTIVĂ FINANCIARĂ (obligatorie când există bilanț): include un diagnostic dedicat FINANȚELOR (ex: „Sănătatea financiară & trendul") construit pe cifrele de mai sus — trendul CA, marja, productivitatea pe angajat, raportate la tipicul domeniului. Apoi leagă TOT planul de creșterea cifrei de afaceri: proiecția să spună explicit „de la ${anafData.turnover?.toLocaleString("ro-RO") ?? "?"} lei CA la ~X lei în 12 luni" cu un target realist (nu peste +30% fără motive solide). Pierderile lunare exprimă-le și ca procent din CA reală (1 EUR ≈ 5 lei).` : "- Bilanț: nedepus / indisponibil"}`
     : anafDown
       ? "DATE ANAF: serverele ANAF au fost INDISPONIBILE TEHNIC la momentul scanării — NU e vina firmei și NU concluziona nimic din lipsa datelor financiare. Lucrează cu cifrele declarate de proprietar, fără să pomenești ANAF ca lipsă a firmei."
       : "DATE ANAF: nu s-a dat CUI sau firma nu a fost găsită — lucrează cu cifrele declarate de proprietar.";
@@ -776,7 +805,7 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     try {
       const digest = `DATE SCANATE (adevărul de referință — nimic din raport nu are voie să le contrazică):
 - Google: ${googleData.found ? `${googleData.name} — rating ${googleData.rating ?? "?"}, ${googleData.reviewCount} recenzii` : placesError ? `verificare EȘUATĂ TEHNIC (${placesError}) — prezența pe Google e NECUNOSCUTĂ, interzise afirmații negative` : "negăsit la scanare"}
-- ANAF: ${anafData.found ? `${anafData.legalName}, ${anafData.active ? "activă" : "INACTIVĂ"}${anafData.turnover != null ? `, CA ${anafData.turnover} lei (${anafData.balanceYear}), profit ${anafData.profit ?? "?"}, ${anafData.employees ?? "?"} salariați` : ""}` : anafDown ? "indisponibil TEHNIC — fără concluzii din lipsa datelor" : "fără CUI / negăsit"}
+- ANAF: ${anafData.found ? `${anafData.legalName}, ${anafData.active ? "activă" : "INACTIVĂ"}${anafData.turnover != null ? `, CA ${anafData.turnover} lei (${anafData.balanceYear}), profit ${anafData.profit ?? "?"}, ${anafData.employees ?? "?"} salariați` : ""}${(anafData.history?.length ?? 0) > 1 ? `; istoric CA: ${anafData.history!.map((h) => `${h.year}:${h.turnover ?? "?"}`).join(", ")}` : ""}` : anafDown ? "indisponibil TEHNIC — fără concluzii din lipsa datelor" : "fără CUI / negăsit"}
 - Site: ${siteData?.reachable ? `${siteData.pagesScanned} pagini scanate; portofoliu: ${siteData.hasPortfolioHint ? "EXISTĂ — trebuie recunoscut" : "nedetectat"}; testimoniale: ${siteData.hasTestimonialsHint ? "EXISTĂ — trebuie recunoscute" : "nedetectate"}` : siteData ? "site picat" : "fără site"}
 - Facebook: ${fbData ? (fbData.reachable ? "pagina există" : "NEVERIFICABILĂ tehnic — nu afirma absența") : "nedeclarat"}
 - Vizibilitate AI: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}` : "netestat — nu inventa rezultate"}
