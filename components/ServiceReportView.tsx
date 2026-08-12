@@ -144,12 +144,35 @@ export function ServiceReportView({
           </div>
         </div>
 
-        {/* Stat chips — datele reale, dintr-o privire */}
+        {/* Stat chips ADAPTIVE — arătăm doar ce AVEM; un antet plin de liniuțe nu vinde.
+            Sursele goale nu dispar din raport (diagnosticul le explică onest), dar vitrina
+            afișează întotdeauna date, nu absențe. */}
         <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          <StatChip label="Rating Google" value={report.googleData.found ? `${report.googleData.rating ?? "—"}★` : "Negăsit la scanare"} tone={report.googleData.found ? "good" : "warn"} />
-          <StatChip label="Recenzii" value={report.googleData.found ? String(report.googleData.reviewCount ?? 0) : "—"} tone={report.googleData.found && (report.googleData.reviewCount ?? 0) > 50 ? "good" : "warn"} />
-          <StatChip label="Cifră de afaceri" value={report.anafData?.turnover != null ? `${Math.round(report.anafData.turnover / 1000)}k lei` : "—"} tone="neutral" />
-          <StatChip label="Competitori scanați" value={String(report.competitors.length)} tone="neutral" />
+          {(() => {
+            const chips: Array<{ label: string; value: string; tone: "good" | "warn" | "bad" | "neutral" }> = [];
+            if (report.googleData.found) {
+              chips.push({ label: "Rating Google", value: `${report.googleData.rating ?? "—"}★`, tone: "good" });
+              chips.push({ label: "Recenzii", value: String(report.googleData.reviewCount ?? 0), tone: (report.googleData.reviewCount ?? 0) > 50 ? "good" : "warn" });
+            }
+            if (report.anafData?.turnover != null) {
+              chips.push({ label: `Cifră de afaceri ${report.anafData.balanceYear ?? ""}`, value: `${Math.round(report.anafData.turnover / 1000)}k lei`, tone: "neutral" });
+            }
+            if (report.competitors.length > 0) {
+              chips.push({ label: "Competitori scanați", value: String(report.competitors.length), tone: "neutral" });
+            }
+            // Umplem vitrina cu ce e mereu adevărat despre raport
+            if (chips.length < 4) chips.push({ label: "Arii analizate", value: String(report.diagnostics.length), tone: "neutral" });
+            if (chips.length < 4 && report.projection?.return12m) {
+              chips.push({ label: "Potențial estimat / 12 luni", value: `+${report.projection.return12m.toLocaleString("ro-RO")}€`, tone: "good" });
+            }
+            if (chips.length < 4 && report.actionPlan.length > 0) {
+              chips.push({ label: "Plan de acțiune", value: `${report.actionPlan.length} faze · 12 luni`, tone: "neutral" });
+            }
+            if (chips.length < 4 && report.socialPlan) {
+              chips.push({ label: "Plan social media", value: `${report.socialPlan.reelsPerWeek + report.socialPlan.postsPerWeek}/săpt.`, tone: "neutral" });
+            }
+            return chips.slice(0, 4).map((c) => <StatChip key={c.label} label={c.label} value={c.value} tone={c.tone} />);
+          })()}
         </div>
 
         <ShareRow score={report.overallScore} />

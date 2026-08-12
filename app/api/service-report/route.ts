@@ -839,10 +839,36 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
     // Pipeline pe fundal, cu RETRY AUTOMAT: la primul eșec sistemul mai încearcă o dată
     // singur (multe erori sunt tranzitorii — ANAF picat, un timeout). Abia al doilea
     // eșec devine „error" + alertă pur informativă către proprietar. Zero muncă manuală.
+    // După finalizare: cine a lăsat emailul în timpul scanării primește linkul raportului
+    // (pagina lui arată preview + deblocare — leadul poate plăti oricând, de oriunde)
+    const notifyReady = async () => {
+      try {
+        const { getServiceReport } = await import("@/lib/service-reports");
+        const row = await getServiceReport(token);
+        if (!row?.email || row.paid) return;
+        const { sendSimpleEmail } = await import("@/lib/email");
+        const { siteConfig } = await import("@/lib/site");
+        await sendSimpleEmail({
+          to: row.email,
+          subject: `${companyName}: radiografia ta e gata — scor și pierderi calculate`,
+          html: `<div style="font-family:Inter,Arial,sans-serif;font-size:15px;color:#111;line-height:1.6;">
+            <h2 style="margin:0 0 12px;">Radiografia pentru ${companyName} e gata 🔍</h2>
+            <p>Am scanat datele reale — Google, ANAF, site, competiția — și raportul te așteaptă:</p>
+            <p><a href="${siteConfig.url}/service/raport/${token}" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Vezi scorul și deblochează raportul</a></p>
+            <p style="font-size:13px;color:#666;">Linkul e personal și rămâne valabil — poți reveni oricând. Garanție: minim 3 lucruri noi aflate despre firma ta, sau banii înapoi.</p>
+            <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
+          </div>`,
+        });
+      } catch (e) {
+        console.error("[service-report] ready email failed:", e);
+      }
+    };
+
     (async () => {
       try {
         const report = await runPipeline();
         await completeServiceReport(token, report);
+        await notifyReady();
         return;
       } catch (e1) {
         console.error("[service-report] pipeline attempt 1 failed, retrying:", e1);
@@ -851,6 +877,7 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
         await new Promise((r) => setTimeout(r, 5000));
         const report = await runPipeline();
         await completeServiceReport(token, report);
+        await notifyReady();
         return;
       } catch (e) {
         console.error("[service-report] pipeline attempt 2 failed:", e);

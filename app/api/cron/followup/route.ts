@@ -91,6 +91,41 @@ async function handle(req: Request) {
     LIMIT 200
   `);
 
+  // NEPLĂTIȚII cu email (au lăsat emailul la scanare dar nu au deblocat):
+  // O SINGURĂ reamintire după ~1 zi, apoi îi lăsăm în pace. Marcaj: followup_stage = -1
+  // (negativ nu încurcă dripul plătit: dacă plătesc ulterior, -1 < 1 și dripul pornește normal).
+  const unpaidRes = await pool.query(`
+    SELECT token, email, form_data
+    FROM service_reports
+    WHERE paid = FALSE AND email IS NOT NULL AND email <> '' AND followup_stage = 0
+      AND status = 'done' AND created_at <= NOW() - INTERVAL '20 hours'
+      AND COALESCE(form_data->>'partner', '') <> 'vip-imperial'
+    ORDER BY created_at ASC
+    LIMIT 100
+  `);
+  let sentUnpaid = 0;
+  for (const row of unpaidRes.rows) {
+    const firm = String(row.form_data?.companyName ?? "afacerea ta");
+    const reportUrl = `${siteConfig.url}/service/raport/${row.token}`;
+    try {
+      await sendSimpleEmail({
+        to: row.email,
+        subject: `${firm}: raportul tău stă deblocat la un pas — nu-l lăsa să expire în sertar`,
+        html: WRAP(`
+          <h2 style="margin:0 0 12px;">Radiografia pentru ${firm} e generată și te așteaptă.</h2>
+          <p>Ai văzut scorul și pierderile estimate — partea cu adevărat valoroasă e DUPĂ deblocare: diagnosticul complet cu rezolvări pas cu pas, planul primei luni și articolul tău de promovare în <b>50 de ziare online</b> (inclus).</p>
+          <p><b>Fără riscuri:</b> dacă nu afli minim 3 lucruri noi despre firma ta — banii înapoi. Iar suma se scade integral din orice pachet comanzi în 30 de zile.</p>
+          <p>${BTN(reportUrl, "Deschide raportul tău")}</p>
+          <p style="font-size:13px;color:#666;">E singurul reminder pe care ți-l trimitem — linkul rămâne valabil oricând.</p>
+        `),
+      });
+      sentUnpaid++;
+      await pool.query(`UPDATE service_reports SET followup_stage = -1 WHERE token = $1`, [row.token]);
+    } catch (e) {
+      console.error(`[cron/followup] unpaid reminder failed for ${row.email}:`, e);
+    }
+  }
+
   let sent = 0;
   for (const row of res.rows) {
     const days = (Date.now() - new Date(row.paid_at).getTime()) / 86_400_000;
@@ -121,5 +156,5 @@ async function handle(req: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, candidates: res.rows.length, sent });
+  return NextResponse.json({ ok: true, candidates: res.rows.length, sent, unpaidReminders: sentUnpaid });
 }

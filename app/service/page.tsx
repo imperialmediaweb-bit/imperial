@@ -106,6 +106,28 @@ export default function ServicePage() {
   const [unlockedReport, setUnlockedReport] = useState<ServiceReport | null>(null);
   const [unlocking, setUnlocking] = useState(false);
   const [unlockEmail, setUnlockEmail] = useState("");
+  // Emailul lăsat în timpul scanării — leadul rămâne contactabil chiar dacă nu plătește
+  const [scanEmail, setScanEmail] = useState("");
+  const [scanEmailSent, setScanEmailSent] = useState(false);
+  const pendingTokenRef = useRef<string | null>(null);
+
+  async function sendScanEmail() {
+    const email = scanEmail.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return;
+    setScanEmailSent(true);
+    setUnlockEmail((prev) => prev || email);
+    // Tokenul există la ~1s după pornirea generării; reîncercăm scurt dacă nu e încă
+    for (let i = 0; i < 20; i++) {
+      if (pendingTokenRef.current) break;
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    if (!pendingTokenRef.current) return;
+    fetch("/api/service-report/attach-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: pendingTokenRef.current, email }),
+    }).catch(() => {});
+  }
   const [error, setError] = useState<string | null>(null);
   // Autocomplete oraș (lista locală) + verificare CUI live la ANAF
   const [citySugs, setCitySugs] = useState<string[]>([]);
@@ -346,6 +368,7 @@ export default function ServicePage() {
         throw new Error(data?.error || "Serverul n-a putut răspunde — datele tale sunt salvate în formular, mai apasă o dată.");
       }
       if (data.pending && data.token) {
+        pendingTokenRef.current = data.token;
         // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~8 minute;
         // cu modelul mare + pasul de control al calității, un raport durează 3-5 minute)
         for (let i = 0; i < 160; i++) {
@@ -813,6 +836,30 @@ export default function ServicePage() {
                     animate={{ width: `${Math.min(97, ((loadingStep + 1) / SCAN_FEED.length) * 100)}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }} />
                 </div>
+
+                {/* Emailul în timpul așteptării — leadul nu se mai pierde dacă pleacă */}
+                <div className="mt-5 rounded-2xl border border-bg-border bg-bg-soft/40 p-4">
+                  {scanEmailSent ? (
+                    <p className="inline-flex items-center gap-1.5 text-sm font-semibold text-green-400">
+                      <CheckCircle2 className="h-4 w-4" /> Primești linkul raportului pe {scanEmail} — poți închide liniștit pagina.
+                    </p>
+                  ) : (
+                    <>
+                      <p className="text-xs font-semibold text-text">
+                        📩 Durează câteva minute — lasă emailul și îți trimitem raportul când e gata:
+                      </p>
+                      <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+                        <input type="email" value={scanEmail} onChange={(e) => setScanEmail(e.target.value)}
+                          placeholder="emailul tău" className="input flex-1 rounded-xl py-2.5 text-sm" />
+                        <button type="button" onClick={sendScanEmail}
+                          disabled={!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(scanEmail.trim())}
+                          className="btn-primary whitespace-nowrap text-sm">
+                          Trimite-mi raportul
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </motion.div>
             )}
 
@@ -839,6 +886,17 @@ export default function ServicePage() {
                   </Magnetic>
                 )}
               </div>
+            )}
+
+            {/* Nudge de completitudine — mai multe date reale = raport mai valoros = conversie */}
+            {!loading && step === 3 && (!form.cui.trim() || !form.placeId) && (
+              <p className="mt-3 rounded-xl border border-yellow-500/30 bg-yellow-500/5 px-4 py-2.5 text-[11px] leading-relaxed text-yellow-300/90">
+                💡 Raportul e mult mai puternic cu date oficiale:{" "}
+                {!form.cui.trim() && <b>adaugă CUI-ul la pasul 1 (cifra ta de afaceri reală de la ANAF intră în calcule)</b>}
+                {!form.cui.trim() && !form.placeId && " și "}
+                {!form.placeId && <b>alege-ți firma din lista Google la „Numele afacerii" (ratingul și recenziile tale reale)</b>}.
+                Poți genera și fără — dar cu ele, raportul lucrează pe cifrele TALE.
+              </p>
             )}
             </ShineCard>
           </div>

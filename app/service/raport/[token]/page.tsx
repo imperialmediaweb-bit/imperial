@@ -5,6 +5,9 @@ import { notFound, redirect } from "next/navigation";
 import { getServiceReport } from "@/lib/service-reports";
 import { hasDb } from "@/lib/db";
 import { ServiceReportView } from "@/components/ServiceReportView";
+import { UnlockInline } from "@/components/UnlockInline";
+import { getPartner } from "@/lib/partners";
+import { reportPriceRon } from "@/lib/stripe";
 import type { ServiceReport } from "@/app/api/service-report/route";
 
 export const dynamic = "force-dynamic";
@@ -55,7 +58,41 @@ export default async function ReportPage({
     );
   }
 
-  if (!row.paid) redirect("/service");
+  // Neplătit dar generat: PREVIEW + deblocare — linkul din email rămâne mereu valabil,
+  // leadul se poate întoarce și plăti oricând (nu-l mai aruncăm înapoi la formular).
+  if (!row.paid) {
+    if (row.status && row.status !== "done") redirect("/service");
+    const r = row.report as ServiceReport;
+    if (!r?.companyName) redirect("/service");
+    const partner = getPartner(String(row.form_data?.partner ?? ""));
+    const price = partner ? partner.priceRon : /^[a-z0-9]{4,16}$/i.test(String(row.form_data?.ref ?? "")) ? 249 : reportPriceRon();
+    return (
+      <main className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
+        <section className="container-app py-14 sm:py-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="chip">🔍 Radiografia Afacerii</span>
+            <h1 className="mt-3 font-display text-3xl font-extrabold text-text">{r.companyName}</h1>
+            <p className="mt-1 text-sm text-text-subtle">{r.city} · raport generat pe date reale — te așteaptă deblocat</p>
+            <div className="mx-auto mt-6 grid max-w-lg grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-bg-border bg-bg-card/60 p-5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Scorul firmei</p>
+                <p className={`mt-1 font-display text-4xl font-extrabold ${r.overallScore >= 70 ? "text-green-400" : r.overallScore >= 40 ? "text-yellow-400" : "text-red-400"}`}>{r.overallScore}<span className="text-lg text-text-subtle">/100</span></p>
+              </div>
+              <div className="rounded-2xl border border-red-500/30 bg-red-500/5 p-5">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-subtle">Clienți pierduți / lună</p>
+                <p className="mt-1 font-display text-4xl font-extrabold text-red-400">~{r.lostClientsPerMonth}</p>
+              </div>
+            </div>
+            {r.summary && <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-text-muted">{r.summary}</p>}
+            <div className="mt-8">
+              <UnlockInline token={token} price={price} initialEmail={row.email ?? ""} />
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   const report = row.report as ServiceReport;
 
