@@ -369,9 +369,9 @@ export default function ServicePage() {
       }
       if (data.pending && data.token) {
         pendingTokenRef.current = data.token;
-        // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~8 minute;
-        // cu modelul mare + pasul de control al calității, un raport durează 3-5 minute)
-        for (let i = 0; i < 160; i++) {
+        // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~14 minute;
+        // modelul mare + controlul de calitate pot lua 7-10 min, plus retry-ul automat)
+        for (let i = 0; i < 280; i++) {
           await new Promise((r) => setTimeout(r, 3000));
           let sdata: any = null;
           try {
@@ -385,7 +385,11 @@ export default function ServicePage() {
           finish(sdata);
           return;
         }
-        throw new Error("Generarea durează neobișnuit de mult — reîncearcă în câteva minute.");
+        throw new Error(
+          scanEmailSent
+            ? "Analiza încă lucrează — nu s-a pierdut nimic! Primești linkul raportului pe email imediat ce e gata."
+            : "Analiza încă lucrează pe fundal — nu s-a pierdut nimic. Revino în câteva minute și apasă din nou Generează (datele tale sunt salvate), sau lasă emailul data viitoare și primești linkul automat."
+        );
       }
       finish(data);
     } catch (e: any) {
