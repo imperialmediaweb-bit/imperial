@@ -643,7 +643,9 @@ export default function ServicePage() {
                       </p>
                     ) : (
                       <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
-                        Scrie numele sub care te știu clienții și alege-l din listă. Dacă brandul diferă de firma de la ANAF, scrie brandul.
+                        Scrie minim 3 litere și așteaptă o secundă — apare lista firmelor de pe Google Maps.{" "}
+                        <b className="text-text-muted">Alege-ți firma din listă</b> (așa analizăm profilul tău EXACT, cu ratingul și recenziile reale).
+                        Nu apare? Fie nu are profil Google, fie e sub alt nume — poți continua și fără, doar scrie numele brandului.
                       </p>
                     )}
                     {showSug && suggestions.length > 0 && (
@@ -721,6 +723,9 @@ export default function ServicePage() {
                       <Globe className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
                       <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="ex: firma-mea.ro — sau lasă gol" value={form.website} onChange={(e) => set("website", e.target.value)} />
                     </div>
+                    <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                      Adresa site-ului, cu sau fără „https://". Îl scanăm pagină cu pagină: viteză, portofoliu, testimoniale, contact.
+                    </p>
                   </div>
                   <div>
                     <label className="label">Pagina de Facebook (dacă ai)</label>
@@ -728,13 +733,19 @@ export default function ServicePage() {
                       <Facebook className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-subtle" />
                       <input className="input rounded-2xl py-3.5 pl-11 text-[15px]" placeholder="link sau nume — sau lasă gol" value={form.facebook} onChange={(e) => set("facebook", e.target.value)} />
                     </div>
+                    <p className="mt-1.5 text-[11px] leading-snug text-text-subtle">
+                      Linkul paginii (ex: facebook.com/firma-ta) sau doar numele ei de pe Facebook.
+                    </p>
                   </div>
-                  <p className="text-xs text-text-subtle">Nu ai? Nicio problemă — exact asta analizăm.</p>
+                  <p className="text-xs text-text-subtle">Nu le ai? Nicio problemă — fix asta analizăm: cât te costă lipsa lor și cum le faci corect.</p>
                 </motion.div>
               )}
 
               {step === 2 && (
                 <motion.div key="s2" {...stepAnim} className="grid gap-5">
+                  <p className="text-[11px] leading-snug text-text-subtle">
+                    Estimări din capul tău — nu trebuie să fie exacte. Din ele calculăm cât pierzi lunar și cât ai de câștigat. (Dacă ai dat CUI-ul, folosim și cifrele oficiale de la ANAF.)
+                  </p>
                   <div>
                     <label className="label">Câți clienți ai pe lună? *</label>
                     <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
