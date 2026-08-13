@@ -464,6 +464,8 @@ export function ServiceReportView({
       )}
 
       {/* ═══ PLANUL PE 12 LUNI — carduri de fază ═══ */}
+      {/* Titlul apare DOAR dacă planul există — niciodată un heading peste o secțiune goală */}
+      {report.actionPlan.length > 0 && (
       <div>
         <motion.h3 {...fadeUp} className="mb-4 font-display text-xl font-extrabold text-text">🎯 Planul tău de acțiune (12 luni)</motion.h3>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -500,6 +502,7 @@ export function ServiceReportView({
           ))}
         </div>
       </div>
+      )}
 
       </section>
 

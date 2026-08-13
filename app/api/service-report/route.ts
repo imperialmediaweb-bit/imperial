@@ -691,9 +691,14 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     const callOnce = async (model: string, content: any): Promise<string> => {
       const resp = await client.messages.create({
         model,
-        max_tokens: 12000,
+        max_tokens: 16000,
         messages: [{ role: "user", content }],
       });
+      if (resp.stop_reason === "max_tokens") {
+        // Răspuns TĂIAT la limită — JSON-ul e trunchiat și secțiunile de la coadă
+        // (actionPlan) dispar. Logăm ca să vedem în Railway când se întâmplă.
+        console.error(`[service-report] ${model}: răspuns TĂIAT la max_tokens — JSON probabil incomplet`);
+      }
       const tb = resp.content.find((b) => b.type === "text");
       if (!tb || tb.type !== "text") throw new Error("empty response");
       return tb.text;
@@ -716,7 +721,21 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
     // apoi modelul mic (format dovedit stabil). Un răspuns care nu se poate parsa
     // NU mai omoară raportul — trecem la următoarea încercare, cu log de diagnoză.
     const genContent = photoBlocks.length > 0 ? [...photoBlocks, { type: "text" as const, text: prompt }] : prompt;
+
+    // Raport COMPLET = are diagnostice, plan pe 12 luni și rezumat. Un JSON căruia
+    // îi lipsește planul (tăiat la max_tokens și „reparat" de repairJson) nu mai
+    // trece tăcut — declanșează următoarea încercare. (Bug-ul din 13 aug: raport
+    // livrat cu secțiunea „Planul tău de acțiune (12 luni)" complet goală.)
+    const sectiuniLipsa = (p: any): string[] => {
+      const lipsa: string[] = [];
+      if (!Array.isArray(p?.diagnostics) || p.diagnostics.length < 4) lipsa.push("diagnostics");
+      if (!Array.isArray(p?.actionPlan) || p.actionPlan.length < 3) lipsa.push("actionPlan");
+      if (!p?.summary) lipsa.push("summary");
+      return lipsa;
+    };
+
     let parsed: any = null;
+    let bestPartial: any = null; // plasa de siguranță: cel mai bogat răspuns incomplet
     const attempts = [REPORT_MODEL, REPORT_MODEL, CLAUDE_MODEL];
     for (let i = 0; i < attempts.length; i++) {
       const model = attempts[i];
@@ -727,14 +746,61 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
           console.error(`[service-report] ${model} încercarea ${i + 1}: FĂRĂ JSON. Început răspuns: ${text.slice(0, 300)}`);
           throw new Error("no json in output");
         }
-        parsed = parseReportJson(match[0]);
+        const candidate = parseReportJson(match[0]);
+        const lipsa = sectiuniLipsa(candidate);
+        if (lipsa.length > 0) {
+          if ((candidate?.diagnostics?.length ?? 0) > (bestPartial?.diagnostics?.length ?? 0)) bestPartial = candidate;
+          console.error(`[service-report] ${model} încercarea ${i + 1}: JSON INCOMPLET — lipsesc: ${lipsa.join(", ")}. Reîncerc.`);
+          throw new Error(`incomplete report: ${lipsa.join(", ")}`);
+        }
+        parsed = candidate;
         break;
       } catch (e: any) {
         console.error(`[service-report] generare ${model} încercarea ${i + 1} a eșuat:`, e?.message ?? e);
-        if (i === attempts.length - 1) throw e;
+        if (i === attempts.length - 1) {
+          // Ultima încercare: decât să pice tot raportul, mai bine cel mai bun
+          // răspuns parțial — secțiunea lipsă se completează țintit mai jos.
+          if (bestPartial && Array.isArray(bestPartial.diagnostics) && bestPartial.diagnostics.length >= 4) {
+            console.warn("[service-report] toate încercările incomplete — folosesc cel mai bun parțial + completare țintită");
+            parsed = bestPartial;
+          } else {
+            throw e;
+          }
+        }
       }
     }
     if (!parsed) throw new Error("no parsed report");
+
+    // COMPLETARE ȚINTITĂ: dacă (și numai dacă) planul pe 12 luni tot lipsește,
+    // un apel scurt îl scrie separat, pe baza diagnosticelor deja generate —
+    // mult mai ieftin și mai sigur decât regenerarea întregului raport.
+    if (!Array.isArray(parsed.actionPlan) || parsed.actionPlan.length < 3) {
+      try {
+        const bazaPlan = {
+          summary: parsed.summary,
+          diagnostics: (parsed.diagnostics ?? []).map((d: any) => ({ area: d.area, finding: d.finding, fix: d.fix })),
+          projection: parsed.projection,
+        };
+        const miniPrompt = `Ești consultantul senior care a scris raportul de mai jos pentru firma "${companyName}" (${industry}, ${city}). Raportului îi lipsește planul de acțiune pe 12 luni. Scrie-l ACUM, în 4 faze (0-3 luni, 3-6 luni, 6-9 luni, 9-12 luni), fiecare cu 3-5 acțiuni concrete derivate direct din diagnosticele raportului, investiție estimată și impact așteptat.
+
+RAPORTUL: ${JSON.stringify(bazaPlan)}
+
+REGULĂ ABSOLUTĂ DE FORMAT: răspunde DOAR cu JSON valid, fără text în jur. Primul caracter: { Ultimul: }
+Format exact:
+{"actionPlan":[{"phase":"Luna 1-3","title":"...","actions":["..."],"investment":"...","impact":"..."}]}`;
+        const planText = await callModel(miniPrompt);
+        const planMatch = planText.match(/\{[\s\S]*\}/);
+        if (planMatch) {
+          const planParsed = parseReportJson(planMatch[0]);
+          if (Array.isArray(planParsed?.actionPlan) && planParsed.actionPlan.length >= 3) {
+            parsed.actionPlan = planParsed.actionPlan;
+            console.log("[service-report] planul pe 12 luni completat prin apel țintit");
+          }
+        }
+      } catch (e: any) {
+        console.error("[service-report] completarea planului a eșuat:", e?.message ?? e);
+      }
+    }
 
     const toReport = (parsed: any): ServiceReport => {
     const tr = parsed.topRecommendation;
