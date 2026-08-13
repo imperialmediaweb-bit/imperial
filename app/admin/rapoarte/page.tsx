@@ -121,7 +121,10 @@ export default async function AdminRapoartePage() {
                     <td className="py-2">
                       <Link href={`/service/raport/${r.token}`} className="text-brand-orange hover:underline">deschide</Link>
                       {(r.status === "error" || r.status === "pending") && (
-                        <a href={`/api/admin/regenerate?token=${r.token}`} target="_blank" className="ml-2 text-yellow-400 hover:underline">🔄 regen</a>
+                        <>
+                          <a href={`/api/admin/regenerate?token=${r.token}`} target="_blank" className="ml-2 text-yellow-400 hover:underline">🔄 regen</a>
+                          <a href={`/api/admin/delete-report?token=${r.token}`} target="_blank" className="ml-2 text-red-400 hover:underline">🗑</a>
+                        </>
                       )}
                     </td>
                   </tr>
