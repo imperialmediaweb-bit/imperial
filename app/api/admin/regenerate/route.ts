@@ -21,9 +21,13 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const token = String(searchParams.get("token") ?? "");
-  if (!/^[0-9a-f-]{36}$/i.test(token)) {
-    return NextResponse.json({ folosire: "adaugă ?token=TOKENUL din linkul „deschide” al rândului" });
+  // Acceptăm orice formă: tokenul gol sau LINKUL „deschide” întreg, lipit direct
+  const rawToken = String(searchParams.get("token") ?? "");
+  const token = rawToken.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0] ?? "";
+  if (!token) {
+    return NextResponse.json({
+      folosire: "adaugă ?token= și lipește ORICE: tokenul sau chiar linkul „deschide” întreg (ex: ?token=https://imperial-media.ro/service/raport/xxxx-...)",
+    });
   }
 
   const row = await getServiceReport(token).catch(() => null);
