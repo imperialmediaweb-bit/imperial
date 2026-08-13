@@ -643,7 +643,7 @@ REGULĂ CANALE LIPSĂ: pentru FIECARE canal absent sau slab (site, Google Busine
 
 IMPORTANT — PROFUNZIME: acesta e un raport PLĂTIT — patronul trebuie să simtă că cineva chiar i-a studiat afacerea. Constatările au 3-5 fraze cu substanță (ce am găsit → de ce se întâmplă în domeniul lui → cât îl costă concret), acțiunile sunt specifice și explicate scurt (nu liste telegrafice). NU te repeta între secțiuni și NU umple cu vată — lungimea vine din adâncime, nu din repetiție. Ai spațiu suficient; termină întotdeauna JSON-ul complet.
 
-Generează raportul ca JSON EXACT în acest format (doar JSON, nimic altceva):
+Generează raportul ca JSON EXACT în acest format. REGULĂ ABSOLUTĂ DE FORMAT: răspunsul tău e DOAR obiectul JSON — fără niciun text înainte, fără text după, fără backticks/markdown, fără comentarii. Primul caracter al răspunsului: { . Ultimul: } .
 {
   "overallScore": <0-100, sănătatea digitală+comercială generală>,
   "lostClientsPerMonth": <estimare realistă clienți pierduți lunar>,
@@ -687,35 +687,54 @@ PARTENER: dacă firma e din Botoșani sau județ și i-ar folosi networking-ul, 
       };
     });
 
-    // Modelul MARE pentru raportul plătit; dacă nu e disponibil pe cont (404), cădem pe cel mic.
-    const callModel = async (content: any): Promise<string> => {
-      for (const model of [REPORT_MODEL, CLAUDE_MODEL]) {
-        try {
-          const resp = await client.messages.create({
-            model,
-            max_tokens: 12000,
-            messages: [{ role: "user", content }],
-          });
-          const tb = resp.content.find((b) => b.type === "text");
-          if (!tb || tb.type !== "text") throw new Error("empty");
-          return tb.text;
-        } catch (e: any) {
-          if (e?.status === 404 && model !== CLAUDE_MODEL) {
-            console.warn(`[service-report] model ${model} indisponibil — fallback pe ${CLAUDE_MODEL}`);
-            continue;
-          }
-          throw e;
-        }
-      }
-      throw new Error("no model available");
+    // Un singur apel către un model anume
+    const callOnce = async (model: string, content: any): Promise<string> => {
+      const resp = await client.messages.create({
+        model,
+        max_tokens: 12000,
+        messages: [{ role: "user", content }],
+      });
+      const tb = resp.content.find((b) => b.type === "text");
+      if (!tb || tb.type !== "text") throw new Error("empty response");
+      return tb.text;
     };
 
-    const text1 = await callModel(
-      photoBlocks.length > 0 ? [...photoBlocks, { type: "text" as const, text: prompt }] : prompt
-    );
-    const jsonMatch = text1.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("no json");
-    const parsed = parseReportJson(jsonMatch[0]);
+    // Pentru pasul de calitate: modelul mare, cu fallback pe cel mic la 404
+    const callModel = async (content: any): Promise<string> => {
+      try {
+        return await callOnce(REPORT_MODEL, content);
+      } catch (e: any) {
+        if (e?.status === 404) {
+          console.warn(`[service-report] model ${REPORT_MODEL} indisponibil — fallback pe ${CLAUDE_MODEL}`);
+          return await callOnce(CLAUDE_MODEL, content);
+        }
+        throw e;
+      }
+    };
+
+    // GENERAREA PRINCIPALĂ — 3 încercări în lanț: modelul mare, iar modelul mare,
+    // apoi modelul mic (format dovedit stabil). Un răspuns care nu se poate parsa
+    // NU mai omoară raportul — trecem la următoarea încercare, cu log de diagnoză.
+    const genContent = photoBlocks.length > 0 ? [...photoBlocks, { type: "text" as const, text: prompt }] : prompt;
+    let parsed: any = null;
+    const attempts = [REPORT_MODEL, REPORT_MODEL, CLAUDE_MODEL];
+    for (let i = 0; i < attempts.length; i++) {
+      const model = attempts[i];
+      try {
+        const text = await callOnce(model, genContent);
+        const match = text.match(/\{[\s\S]*\}/);
+        if (!match) {
+          console.error(`[service-report] ${model} încercarea ${i + 1}: FĂRĂ JSON. Început răspuns: ${text.slice(0, 300)}`);
+          throw new Error("no json in output");
+        }
+        parsed = parseReportJson(match[0]);
+        break;
+      } catch (e: any) {
+        console.error(`[service-report] generare ${model} încercarea ${i + 1} a eșuat:`, e?.message ?? e);
+        if (i === attempts.length - 1) throw e;
+      }
+    }
+    if (!parsed) throw new Error("no parsed report");
 
     const toReport = (parsed: any): ServiceReport => {
     const tr = parsed.topRecommendation;
