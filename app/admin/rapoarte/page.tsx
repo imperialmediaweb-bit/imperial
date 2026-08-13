@@ -118,7 +118,12 @@ export default async function AdminRapoartePage() {
                     <td className="py-2 pr-3 text-text-muted">{r.email ?? "—"}</td>
                     <td className="py-2 pr-3">{r.paid ? <span className="font-bold text-green-400">DA{r.paid_at ? ` · ${fmt(r.paid_at)}` : ""}</span> : <span className="text-text-subtle">nu</span>}</td>
                     <td className="py-2 pr-3 text-text-subtle">{r.partner ? `partener:${r.partner}` : r.ref ? `ref:${r.ref}` : "direct"}</td>
-                    <td className="py-2"><Link href={`/service/raport/${r.token}`} className="text-brand-orange hover:underline">deschide</Link></td>
+                    <td className="py-2">
+                      <Link href={`/service/raport/${r.token}`} className="text-brand-orange hover:underline">deschide</Link>
+                      {(r.status === "error" || r.status === "pending") && (
+                        <a href={`/api/admin/regenerate?token=${r.token}`} target="_blank" className="ml-2 text-yellow-400 hover:underline">🔄 regen</a>
+                      )}
+                    </td>
                   </tr>
                 ))}
                 {reportsRes.rows.length === 0 && (
