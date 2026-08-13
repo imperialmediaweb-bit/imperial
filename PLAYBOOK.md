@@ -79,3 +79,12 @@ Reguli de joc cu Alina:
 6. Recenzii: QR-ul din /cont la 10-15 clienți vechi pe WhatsApp; țintă 20+; răspuns la toate
 7. Q&A seed (3 întrebări proprii) · program real (nu „Closed") · TELEFON ALINIAT site↔profil (0746 vs 0758!)
 După fix pin: test-places + raport regenerat — profilul cu cele 5 recenzii trebuie să apară.
+
+## Sistemul de promovare (2 ore/săptămână — UN produs, UN link)
+Regula de aur: promovezi DOAR Radiografia (imperial-media.ro/service). Site-urile, abonamentele și Start Online se vând SINGURE prin funnel (deducere, follow-up, consultant). Nu vinde „facem site-uri" — vinde „află adevărul despre afacerea ta".
+- **Luni (30')**: articolul săptămânii într-un ziar din rețea (presa/articole-orase.md; 4/lună)
+- **Marți (20')**: postare GBP + Facebook — scrise de consultantul din /cont
+- **Miercuri (20')**: 3 mesaje WhatsApp personale la patroni cunoscuți, cu linkul
+- **Joi (20')**: răspuns la recenzii + QR-ul de recenzii la un client mulțumit
+- **Vineri (15')**: /admin/rapoarte + Search Console — doar citit, ce a mers
+Până la 10 vânzări: NIMIC altceva (fără ads, fără canale noi). Postarea de lansare FB: în chat/istoricul din 13 aug.
