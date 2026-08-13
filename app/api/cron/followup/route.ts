@@ -91,6 +91,29 @@ async function handle(req: Request) {
     LIMIT 200
   `);
 
+  // GENERĂRILE BLOCATE: un restart de server (deploy) omoară pipeline-urile în zbor,
+  // iar rândul rămâne „pending" pe veci, fără alertă. Le închidem și anunțăm proprietarul.
+  let stuckClosed = 0;
+  try {
+    const stuck = await pool.query(`
+      UPDATE service_reports SET status = 'error'
+      WHERE status = 'pending' AND created_at < NOW() - INTERVAL '30 minutes'
+      RETURNING form_data->>'companyName' AS company, email
+    `);
+    stuckClosed = stuck.rowCount ?? 0;
+    if (stuckClosed > 0) {
+      const list = stuck.rows.map((r: any) => `${r.company ?? "?"}${r.email ? ` (${r.email})` : ""}`).join(", ");
+      sendSimpleEmail({
+        to: (await import("@/lib/email")).ownerEmail(),
+        subject: `⚠️ ${stuckClosed} generări blocate au fost închise — probabil un deploy le-a întrerupt`,
+        html: `<p>Rapoartele astea au rămas „în lucru" peste 30 min și au fost marcate eșuate: <b>${list}</b>.</p>
+          <p>Cauza tipică: un redeploy în timpul generării. Clienții respectivi pot apăsa din nou „Generează" — formularul lor e salvat. Dacă ai emailul lor, scrie-le o frază.</p>`,
+      }).catch(() => {});
+    }
+  } catch (e) {
+    console.error("[cron/followup] stuck sweep failed:", e);
+  }
+
   // NEPLĂTIȚII cu email (au lăsat emailul la scanare dar nu au deblocat):
   // O SINGURĂ reamintire după ~1 zi, apoi îi lăsăm în pace. Marcaj: followup_stage = -1
   // (negativ nu încurcă dripul plătit: dacă plătesc ulterior, -1 < 1 și dripul pornește normal).
