@@ -4,7 +4,7 @@
 
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
-import { getServiceReport } from "@/lib/service-reports";
+import { getServiceReport, setServiceReportEmail } from "@/lib/service-reports";
 import { hasDb } from "@/lib/db";
 import { publicOrigin, siteConfig } from "@/lib/site";
 
@@ -52,13 +52,23 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: data?.error ?? `Repornirea a eșuat (${res.status}).` }, { status: 500 });
     }
     const newToken = data.token;
+
+    // Cu ?email= : emailul se leagă de raport ACUM, iar la finalul generării
+    // clientul primește AUTOMAT linkul raportului pe acea adresă (notifyReady).
+    const email = String(searchParams.get("email") ?? "").trim().toLowerCase();
+    let emailNote = "Fără ?email= — trimiți tu linkul manual când apare scorul.";
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      await setServiceReportEmail(newToken, email).catch(() => {});
+      emailNote = `📩 La final, ${email} primește AUTOMAT emailul cu linkul raportului — nu mai faci nimic.`;
+    }
+
     return NextResponse.json({
       ok: true,
       firma: f.companyName,
       mesaj: `🔄 Generarea a REPORNIT pe datele salvate ale firmei „${f.companyName}". Durează 3-10 minute.`,
+      email: emailNote,
       urmareste: `${siteConfig.url}/admin/rapoarte — rândul nou apare cu ⏳, apoi cu scor`,
       linkRaport: `${siteConfig.url}/service/raport/${newToken}`,
-      deTrimisClientului: `Când rândul are scor, trimite-i linkul de mai sus — îl deschide direct, vede scorul și deblochează.`,
     });
   } catch (e: any) {
     return NextResponse.json({ error: String(e?.message ?? e) }, { status: 500 });
