@@ -22,7 +22,7 @@ export default async function AdminRapoartePage() {
 
   const [reportsRes, subsRes, statsRes] = await Promise.all([
     pool.query(`
-      SELECT token, created_at, email, paid, paid_at, followup_stage,
+      SELECT token, created_at, email, paid, paid_at, followup_stage, status,
              form_data->>'companyName' AS company, form_data->>'city' AS city,
              form_data->>'industry' AS industry, form_data->>'ref' AS ref,
              form_data->>'partner' AS partner,
@@ -106,7 +106,15 @@ export default async function AdminRapoartePage() {
                   <tr key={r.token}>
                     <td className="py-2 pr-3 text-text-subtle whitespace-nowrap">{fmt(r.created_at)}</td>
                     <td className="py-2 pr-3 font-semibold text-text">{r.company}{r.city ? <span className="text-text-subtle"> · {r.city}</span> : ""}</td>
-                    <td className="py-2 pr-3 text-text-muted">{r.score ?? "—"}</td>
+                    <td className="py-2 pr-3">
+                      {r.status === "pending" ? (
+                        <span className="font-semibold text-yellow-400">⏳ în lucru</span>
+                      ) : r.status === "error" ? (
+                        <span className="font-semibold text-red-400">❌ eșuat</span>
+                      ) : (
+                        <span className="text-text-muted">{r.score ?? "—"}</span>
+                      )}
+                    </td>
                     <td className="py-2 pr-3 text-text-muted">{r.email ?? "—"}</td>
                     <td className="py-2 pr-3">{r.paid ? <span className="font-bold text-green-400">DA{r.paid_at ? ` · ${fmt(r.paid_at)}` : ""}</span> : <span className="text-text-subtle">nu</span>}</td>
                     <td className="py-2 pr-3 text-text-subtle">{r.partner ? `partener:${r.partner}` : r.ref ? `ref:${r.ref}` : "direct"}</td>
