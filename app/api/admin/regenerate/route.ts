@@ -21,13 +21,20 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  // Acceptăm orice formă: tokenul gol sau LINKUL „deschide” întreg, lipit direct
+  // Cu ?token= (sau linkul „deschide” întreg) → rândul ăla. FĂRĂ token → automat
+  // cel mai recent raport eșuat/blocat. Zero copiat de coduri.
   const rawToken = String(searchParams.get("token") ?? "");
-  const token = rawToken.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0] ?? "";
+  let token = rawToken.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0] ?? "";
+
   if (!token) {
-    return NextResponse.json({
-      folosire: "adaugă ?token= și lipește ORICE: tokenul sau chiar linkul „deschide” întreg (ex: ?token=https://imperial-media.ro/service/raport/xxxx-...)",
-    });
+    const { getPool } = await import("@/lib/db");
+    const latest = await getPool()!.query(
+      `SELECT token FROM service_reports WHERE status IN ('error','pending') ORDER BY created_at DESC LIMIT 1`
+    );
+    token = latest.rows[0]?.token ?? "";
+    if (!token) {
+      return NextResponse.json({ mesaj: "Niciun raport eșuat sau blocat de regenerat. Totul e verde." });
+    }
   }
 
   const row = await getServiceReport(token).catch(() => null);
