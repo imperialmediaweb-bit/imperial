@@ -66,7 +66,8 @@ export async function GET(req: Request) {
 
     // Cu ?email= : emailul se leagă de raport ACUM, iar la finalul generării
     // clientul primește AUTOMAT linkul raportului pe acea adresă (notifyReady).
-    const email = String(searchParams.get("email") ?? "").trim().toLowerCase();
+    // Fără ?email=, moștenim emailul rândului vechi (dacă avea).
+    const email = String(searchParams.get("email") ?? row.email ?? "").trim().toLowerCase();
     let emailNote = "Fără ?email= — trimiți tu linkul manual când apare scorul.";
     if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
       await setServiceReportEmail(newToken, email).catch(() => {});
