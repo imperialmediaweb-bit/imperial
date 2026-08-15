@@ -21,6 +21,7 @@ export type Competitor = {
   rating: number | null;
   reviewCount: number;
   hasWebsite: boolean;
+  declared?: boolean; // numit chiar de patron în formular — competitor cert, nu ghicit
 };
 
 export type AnafData = {
@@ -238,6 +239,9 @@ export async function POST(req: Request) {
   // „Abonament / cotizație anuală" | „Proiect / contract unic" — schimbă complet
   // matematica pierderilor (un membru cu cotizație anuală ≠ un client la casă).
   const valueModel = String(body?.valueModel ?? "").trim().slice(0, 60);
+  // Competitorii numiți chiar de patron (opțional, separați prin virgulă) —
+  // îi scanăm pe NUME, nu ghicim după domeniu.
+  const competitorNames = String(body?.competitorNames ?? "").trim().slice(0, 300);
   const employees = String(body?.employees ?? "").trim();
   const mainProblem = String(body?.mainProblem ?? "").trim();
   const zone = String(body?.zone ?? "").trim().slice(0, 120);
@@ -433,28 +437,85 @@ export async function POST(req: Request) {
     }
   }
 
-  // ─── 1c. Competiția locală (doar pentru afaceri cu punct fizic) ───
+  // ─── 1c. Competiția locală — căutare ȚINTITĂ, nu „domeniu + oraș" pe orb ───
+  // Căutarea brută („educație Botoșani") scoate instituții publice și firme înrudite
+  // doar cu numele, nu competitori reali. Doi pași: (1) competitorii NUMIȚI de patron
+  // se scanează pe nume, cu prioritate; (2) un apel ieftin de AI transformă domeniul
+  // în 2-3 căutări pe modelul REAL de business (club de afaceri → „networking
+  // antreprenori", nu „educație") și abia alea merg la Google Maps.
   let competitors: Competitor[] = [];
   if (placesKey && businessType !== "online") {
+    const seen = new Set<string>();
+    const ownName = (googleData.name ?? companyName).toLowerCase();
+    const addResult = (p: any, declared = false) => {
+      const nm = String(p.name ?? "").trim();
+      const key = nm.toLowerCase();
+      if (!nm || key === ownName || seen.has(key)) return;
+      seen.add(key);
+      competitors.push({
+        name: nm,
+        rating: p.rating ?? null,
+        reviewCount: p.user_ratings_total ?? 0,
+        hasWebsite: false, // detaliul website cere Place Details; estimăm din prezența pe Maps
+        ...(declared ? { declared: true } : {}),
+      });
+    };
+
+    // (1) Competitorii declarați de patron — certitudine, nu ghicit
+    for (const raw of competitorNames.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean).slice(0, 4)) {
+      try {
+        const q = encodeURIComponent(`${raw} ${city}`);
+        const res = await fetch(
+          `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${q}&inputtype=textquery&fields=name,rating,user_ratings_total&language=ro&key=${placesKey}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const data = await res.json();
+        if (data.candidates?.[0]) addResult(data.candidates[0], true);
+        else addResult({ name: raw }, true); // negăsit pe Maps, dar patronul îl știe — intră în analiză
+      } catch {}
+    }
+
+    // (2) Interogările țintite scrise de AI pe modelul real de business
+    let queries: string[] = [];
     try {
-      const cq = encodeURIComponent(`${industry} ${city}`);
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${cq}&language=ro&key=${placesKey}`,
-        { signal: AbortSignal.timeout(8000) }
+      const qResp = await client.messages.create(
+        {
+          model: CLAUDE_MODEL,
+          max_tokens: 300,
+          messages: [{
+            role: "user",
+            content: `Firma "${companyName}" din ${city}, domeniul "${industry}".${mainProblem ? ` Context de la patron: ${mainProblem.slice(0, 200)}.` : ""} Cine sunt competitorii ei REALI — același model de business, care se bat pe ACEIAȘI clienți? Scrie 2-3 interogări de căutare Google Maps care găsesc exact astfel de competitori în ${city}. NU instituții publice, NU domenii doar înrudite ca nume (ex: pentru un club de afaceri → "club de afaceri ${city}" și "networking antreprenori ${city}", NU "educație ${city}"). Răspunde DOAR cu JSON: {"queries":["...","..."]}`,
+          }],
+        },
+        { timeout: 20_000 }
       );
-      const data = await res.json();
-      const ownName = (googleData.name ?? companyName).toLowerCase();
-      competitors = (data.results ?? [])
-        .filter((p: any) => p.name?.toLowerCase() !== ownName)
-        .slice(0, 4)
-        .map((p: any) => ({
-          name: String(p.name ?? ""),
-          rating: p.rating ?? null,
-          reviewCount: p.user_ratings_total ?? 0,
-          hasWebsite: false, // detaliul website cere Place Details; estimăm din prezența pe Maps
-        }));
+      const qtb = qResp.content.find((b) => b.type === "text");
+      const qm = qtb && qtb.type === "text" ? qtb.text.match(/\{[\s\S]*\}/) : null;
+      if (qm) {
+        const qp = JSON.parse(qm[0]);
+        if (Array.isArray(qp.queries)) queries = qp.queries.map(String).filter(Boolean).slice(0, 3);
+      }
     } catch (e) {
-      console.warn("[service-report] competitor scan failed:", e);
+      console.warn("[service-report] competitor query gen failed:", e);
+    }
+    if (queries.length === 0) queries = [`${industry} ${city}`];
+
+    for (const q of queries) {
+      if (competitors.length >= 6) break;
+      try {
+        const cq = encodeURIComponent(q);
+        const res = await fetch(
+          `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${cq}&language=ro&key=${placesKey}`,
+          { signal: AbortSignal.timeout(8000) }
+        );
+        const data = await res.json();
+        for (const p of (data.results ?? []).slice(0, 4)) {
+          if (competitors.length >= 6) break;
+          addResult(p);
+        }
+      } catch (e) {
+        console.warn("[service-report] competitor scan failed:", e);
+      }
     }
   }
 
@@ -611,6 +672,7 @@ REGULI ANTI-ȘABLON (obligatorii):
 - ANALIZA ZONEI (dacă a dat zona/cartierul): judecă potențialul VADULUI ca un cunoscător al orașelor românești — ce fel de zonă e (centru comercial, cartier rezidențial, lângă piață/gară/școli/instituții), ce clientelă trece pe acolo și la ce ore, cum profită de trafic (vitrină, semnalistică, ofertă de „prins trecătorul") și ce parteneriate are la doi pași (firmele complementare tipice unei astfel de zone). Fii onest: cunoști zona doar din descriere — formulează ca ipoteze de verificat („dacă în zonă e X, atunci..."), nu ca fapte. Leagă recomandările de potențialul REAL al locului: o tarabă lângă piață se crește altfel decât un cabinet în cartier rezidențial.
 ${photos.length > 0 ? `- POZELE ATAȘATE (${photos.length} — vitrina/produsele/localul lui, făcute de proprietar): analizează-le ca expert în merchandising și amenajare pentru domeniul lui. Include OBLIGATORIU un diagnostic dedicat (ex: „Vitrina & prima impresie" / „Prezentarea produselor") pe ce VEZI concret: prima impresie a trecătorului, lizibilitatea firmei, lumina, ordinea, prețurile vizibile, ce atrage și ce respinge. În fix: 1) ce schimbă AZI cu 0 lei, 2) ce schimbă cu buget mic, 3) O OFERTĂ CONCRETĂ DE PUS PE GEAM/AFARĂ — textul exact, gata de printat, calibrat pe marfa/serviciul lui din poze (ex: „2+1 la orice patiserie după ora 18" / „Verificare gratuită 10 puncte la orice schimb de ulei"). Fii sincer dar constructiv — descrii ce e în poze, nu inventezi ce nu se vede.` : ""}
 - Fii SINCER și DIRECT — cifrele contează mai mult decât politeța.
+- CLARITATE (obligatorie, în TOT raportul): scrii pentru un patron ocupat, nu pentru alți consultanți. Prima frază a fiecărui finding = concluzia, cu cifra („Ai 7 recenzii; liderul local are 38 — la volumul ăsta Google te afișează sub el."). Fraze scurte, fiecare aduce informație NOUĂ. INTERZIS jargonul („proxy", „ponderează algoritmic", „funnel", „conversie" fără explicație) — spune pe românește ce se întâmplă și cât costă. Zero teorie generală care nu e legată de o cifră de-a lui.
 - REGULA DE ONESTITATE (cea mai importantă): afirmă DOAR ce e susținut de datele scanate. Ce NU a putut fi verificat (Facebook blocat, pagini de site nescanate, Google negăsit sub numele dat) se raportează ca „nu am putut verifica" cu status "warning" — NU ca „zero" sau „nu există". Un patron care ARE recenzii și portofoliu și citește în raport că n-are NIMIC își pierde toată încrederea în analiză. Necunoscut ≠ absent.
 
 TIP AFACERE: ${typeLabel}
@@ -640,7 +702,7 @@ ${anafBlock}
 DATE REALE GOOGLE (scanate acum):
 ${googleData.found ? `- Găsit pe Google Maps: DA${googleData.exact ? " (profil confirmat de utilizator — date exacte)" : ""}\n- Nume profil: ${googleData.name}\n- Rating: ${googleData.rating ?? "fără rating"} (${googleData.reviewCount} recenzii)\n- Are site listat: ${googleData.hasWebsite ? "DA" : "NU"}` : placesError ? `- SCANAREA GOOGLE A EȘUAT TEHNIC (${placesError}) — NU e dovadă că firma lipsește de pe Google! INTERZIS să afirmi că nu are profil, rating sau recenzii. Dacă atingi subiectul Google, spune DOAR că verificarea automată nu a fost posibilă de data asta (status "warning") și tratează prezența pe Google ca necunoscută.` : businessType === "online" ? `- Nu are profil Google Maps (normal pentru afacere online — nu penaliza)` : `- NU a fost găsit pe Google Maps sub numele "${companyName}" în ${city} → fie nu are Google Business Profile (problemă gravă), fie e listat sub alt nume. Formulează constatarea prudent.`}
 
-${competitors.length > 0 ? `COMPETIȚIA LOCALĂ REALĂ (scanată acum — top firme din "${industry} ${city}" pe Google):\n${competitors.map((c) => `- ${c.name}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n")}` : ""}
+${competitors.length > 0 ? `COMPETIȚIA LOCALĂ (căutare țintită pe Google Maps${competitorNames ? " + competitorii numiți chiar de patron" : ""}):\n${competitors.map((c) => `- ${c.name}${c.declared ? " ← NUMIT DE PATRON (competitor cert)" : ""}: ${c.rating ?? "fără"} rating, ${c.reviewCount} recenzii`).join("\n")}\nREGULĂ DE RELEVANȚĂ: lista vine dintr-o căutare automată — înainte să compari, judecă fiecare nume: e chiar un competitor (același model de business, se bate pe aceiași clienți)? Instituțiile publice, ONG-urile de alt profil sau firmele cu alt obiect NU sunt repere de comparație — nu le folosi deloc. Competitorii numiți de patron sunt cei mai relevanți. Dacă din scanare nu rămâne niciun competitor real, spune sincer asta și raportează-te la categoriile reale de competiție ale domeniului lui (cine se mai bate pe timpul și banii acelorași clienți).` : ""}
 
 DATE REALE SITE (scanate acum — homepage + subpaginile relevante):
 ${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}\n- Pagini scanate: ${siteData.pagesScanned ?? 1}${siteData.subpages?.length ? ` (homepage + ${siteData.subpages.map((s: any) => s.path).join(", ")})` : " (doar homepage — nu am găsit linkuri interne relevante)"}\n${siteData.subpages?.length ? siteData.subpages.map((s: any) => `  · ${s.path}: ${[s.portfolio ? "PORTOFOLIU/proiecte prezente" : null, s.testimonials ? "TESTIMONIALE/recenzii prezente" : null, `${s.imgCount} imagini`].filter(Boolean).join(", ")}`).join("\n") + "\n" : ""}- Concluzie pe TOATE paginile scanate: portofoliu/proiecte: ${siteData.hasPortfolioHint ? "DA, EXISTĂ — recunoaște-le și evaluează-le calitativ, NU spune că lipsesc" : "nu am detectat în paginile scanate"}; testimoniale/recenzii pe site: ${siteData.hasTestimonialsHint ? "DA, EXISTĂ — recunoaște-le, NU spune că lipsesc" : "nu am detectat în paginile scanate"}; contact vizibil: ${siteData.hasContactHint ? "DA" : "nu am detectat"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
@@ -912,7 +974,7 @@ Format exact:
 - Site: ${siteData?.reachable ? `${siteData.pagesScanned} pagini scanate; portofoliu: ${siteData.hasPortfolioHint ? "EXISTĂ — trebuie recunoscut" : "nedetectat"}; testimoniale: ${siteData.hasTestimonialsHint ? "EXISTĂ — trebuie recunoscute" : "nedetectate"}` : siteData ? "site picat" : "fără site"}
 - Facebook: ${fbData ? (fbData.reachable ? "pagina există" : "NEVERIFICABILĂ tehnic — nu afirma absența") : "nedeclarat"}
 - Vizibilitate AI: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}${aiVisibility.mentions ? `; mențiuni: ${aiVisibility.mentions}` : ""}` : "netestat — nu inventa rezultate"}
-- Competitori scanați: ${competitors.length ? competitors.map((c) => `${c.name} (${c.rating ?? "?"}★/${c.reviewCount})`).join(", ") : "niciunul"}
+- Competitori scanați (căutare țintită; cei „numiți de patron" sunt cerți, restul îi validezi tu ca relevanți): ${competitors.length ? competitors.map((c) => `${c.name}${c.declared ? " [numit de patron]" : ""} (${c.rating ?? "?"}★/${c.reviewCount})`).join(", ") : "niciunul"}
 - Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"} (mod de încasare: ${valueModel || "nespecificat"}), ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}
 - REGULĂ FINANCIARĂ: dacă modul de încasare e abonament/cotizație ANUALĂ, valoarea clientului e PE AN — pierderile NU se calculează ca vizite lunare; formula pierderilor trebuie scrisă explicit în raport și să fie coerentă cu modelul de încasare.`;
 
@@ -924,6 +986,8 @@ MISIUNE — fă-l de 10 ori mai bun, păstrând EXACT aceeași structură JSON:
 3) COERENȚĂ NUMERICĂ: pierderile × valoarea medie, proiecția, break-even și scorul să fie consistente între ele și cu CA reală.
 4) Fiecare "fix" să fie o rezolvare executabilă, nu reformularea problemei.
 5) Taie umplutura; păstrează adâncimea.
+6) CLARITATE: prima frază a fiecărui finding = concluzia cu cifra; fraze scurte și directe; scoate jargonul („proxy", „ponderează algoritmic") și spune pe românește.
+7) COMPETITORI: compară-l DOAR cu competitori reali (același model de business). Dacă în raport apare ca reper o instituție publică sau o firmă cu alt obiect, scoate-o și înlocuiește comparația cu competiția reală a domeniului.
 
 (A) ${digest}
 
@@ -951,7 +1015,7 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
   }
   }; // ─── sfârșitul runPipeline ───
 
-  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, valueModel, employees, mainProblem, ref, partner, photosCount: photos.length };
+  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, valueModel, competitorNames, employees, mainProblem, ref, partner, photosCount: photos.length };
   const token = randomUUID();
 
   if (hasDb()) {

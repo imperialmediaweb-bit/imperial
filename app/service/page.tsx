@@ -108,7 +108,7 @@ export default function ServicePage() {
   const [form, setForm] = useState({
     businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "", zone: "",
     website: "", facebook: "",
-    monthlyClients: "", avgValue: "", valueModel: "", employees: "",
+    monthlyClients: "", avgValue: "", valueModel: "", competitorNames: "", employees: "",
     mainProblem: "",
   });
   const [suggestions, setSuggestions] = useState<Array<{ placeId: string; name: string; detail: string }>>([]);
@@ -815,6 +815,15 @@ export default function ServicePage() {
 
               {step === 3 && (
                 <motion.div key="s3" {...stepAnim} className="grid gap-4">
+                  <div>
+                    <label className="label">Cine sunt competitorii tăi principali? (opțional)</label>
+                    <input className="input rounded-2xl py-3.5 text-[15px]" maxLength={300}
+                      placeholder="ex: Firma X, Firma Y — desparte prin virgulă"
+                      value={form.competitorNames} onChange={(e) => set("competitorNames", e.target.value)} />
+                    <p className="mt-2 text-[11px] text-text-subtle">
+                      Tu îți cunoști concurența cel mai bine — pe cei numiți de tine îi scanăm pe nume, cu recenziile și ratingul lor real.
+                    </p>
+                  </div>
                   <div>
                     <label className="label">Care e cea mai mare problemă a afacerii tale acum?</label>
                     <textarea className="input min-h-[130px] resize-y rounded-2xl py-3.5 text-[15px]" maxLength={1000}
