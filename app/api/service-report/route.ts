@@ -234,6 +234,10 @@ export async function POST(req: Request) {
   const facebook = String(body?.facebook ?? "").trim();
   const monthlyClients = String(body?.monthlyClients ?? "").trim();
   const avgValue = String(body?.avgValue ?? "").trim();
+  // CUM plătește un client: „Pe vizită / comandă" | „Abonament lunar" |
+  // „Abonament / cotizație anuală" | „Proiect / contract unic" — schimbă complet
+  // matematica pierderilor (un membru cu cotizație anuală ≠ un client la casă).
+  const valueModel = String(body?.valueModel ?? "").trim().slice(0, 60);
   const employees = String(body?.employees ?? "").trim();
   const mainProblem = String(body?.mainProblem ?? "").trim();
   const zone = String(body?.zone ?? "").trim().slice(0, 120);
@@ -620,8 +624,16 @@ DATE FIRMĂ (de la proprietar):
 - Facebook declarat: ${facebook || "NU ARE / nu a dat"}
 - Clienți pe lună: ${monthlyClients || "necunoscut"}
 - Valoare medie per client: ${avgValue || "necunoscut"}
+- Cum plătește un client: ${valueModel || "nespecificat — DEDUCE modelul tipic al domeniului (ex: club/asociație → cotizație anuală; abonament sală/software → lunar; restaurant/frizerie → pe vizită; construcții/web design → proiect unic) și spune în raport ce model ai presupus"}
 - Angajați: ${employees || "necunoscut"}
 - Problema principală (în cuvintele lui): ${mainProblem || "nespecificată"}
+
+MATEMATICA BANILOR — REGULĂ OBLIGATORIE, după modelul de încasare de mai sus (formula APARE EXPLICIT în raport, în summary sau în diagnosticul financiar, ca să înțeleagă exact de unde vine cifra):
+- „Pe vizită / comandă": valoarea declarată e PE TRANZACȚIE. Pierderea lunară = clienți pierduți × valoarea per vizită × frecvența realistă de revenire din domeniu (un client de frizerie revine lunar, unul de service auto de 1-2 ori pe an — folosește frecvența brațului tău de domeniu).
+- „Abonament lunar": valoarea declarată e PE LUNĂ. Un client pierdut = valoarea lunară × retenția tipică domeniului în luni (spune ce retenție ai folosit). Pierderea lunară raportată = clienți neconvertiți/lună × valoarea lunară, dar explică și valoarea pe durata de viață.
+- „Abonament / cotizație anuală": valoarea declarată e PE AN — INTERZIS s-o tratezi ca încasare lunară sau per vizită. Un membru/client pierdut = întreaga valoare anuală. Exprimă pierderea ca VALOARE ANUALĂ DE CONTRACTE pierdută (ex: „2 membri neconvertiți pe lună × 600€/an = 1.200€ valoare anuală de contracte pierdută în fiecare lună") și seteaz-o pe lostRevenuePerMonth ca membri pierduți/lună × valoarea anuală. Formula scrisă negru pe alb.
+- „Proiect / contract unic": pierderea = proiecte/contracte ratate pe lună × valoarea medie a proiectului; menționează și pipeline-ul (câte oferte trebuie date pentru un contract în domeniul lui).
+Toate proiecțiile (projection, actionPlan impact) folosesc ACEEAȘI logică — coerență totală între cifre, iar dacă există CA reală de la ANAF, pierderile trebuie să fie plauzibile față de ea.
 
 ${anafBlock}
 
@@ -647,7 +659,7 @@ Generează raportul ca JSON EXACT în acest format. REGULĂ ABSOLUTĂ DE FORMAT:
 {
   "overallScore": <0-100, sănătatea digitală+comercială generală>,
   "lostClientsPerMonth": <estimare realistă clienți pierduți lunar>,
-  "lostRevenuePerMonth": <lostClients × valoarea medie (reală sau tipică industriei) în EUR>,
+  "lostRevenuePerMonth": <în EUR, calculat STRICT după MATEMATICA BANILOR de mai sus, pe modelul lui de încasare>,
   "diagnostics": [
     {"area":"<arie aleasă de tine, specifică domeniului>","emoji":"<emoji potrivit>","status":"good|warning|bad","finding":"constatare concretă cu cifre, 3-5 fraze: ce am găsit, de ce se întâmplă asta în domeniul lui, cât îl costă","fix":"REZOLVAREA concretă, 2-4 fraze: exact ce face, cu ce unelte/pași, cine o face (el în X minute / noi / un angajat) și în cât timp se văd rezultatele. Dacă canalul lipsește complet (fără pagină Facebook / fără profil Google Business) menționează că i le putem face noi cap-coadă (Pachet Start Online 500 lei) — comandă direct din contul lui, în chatul consultantului, fără telefoane. La status good: cum păstrează și crește avantajul."}
   ],
@@ -901,7 +913,8 @@ Format exact:
 - Facebook: ${fbData ? (fbData.reachable ? "pagina există" : "NEVERIFICABILĂ tehnic — nu afirma absența") : "nedeclarat"}
 - Vizibilitate AI: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}${aiVisibility.mentions ? `; mențiuni: ${aiVisibility.mentions}` : ""}` : "netestat — nu inventa rezultate"}
 - Competitori scanați: ${competitors.length ? competitors.map((c) => `${c.name} (${c.rating ?? "?"}★/${c.reviewCount})`).join(", ") : "niciunul"}
-- Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"}, ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}`;
+- Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"} (mod de încasare: ${valueModel || "nespecificat"}), ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}
+- REGULĂ FINANCIARĂ: dacă modul de încasare e abonament/cotizație ANUALĂ, valoarea clientului e PE AN — pierderile NU se calculează ca vizite lunare; formula pierderilor trebuie scrisă explicit în raport și să fie coerentă cu modelul de încasare.`;
 
       const criticPrompt = `Ești REDACTORUL-ȘEF al rapoartelor și un consultant senior cu 15 ani STRICT în domeniul "${industry}" din România. Ai mai jos (A) datele reale scanate și (B) raportul scris de un consultant junior, ca JSON.
 
@@ -938,7 +951,7 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
   }
   }; // ─── sfârșitul runPipeline ───
 
-  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, employees, mainProblem, ref, partner, photosCount: photos.length };
+  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, valueModel, employees, mainProblem, ref, partner, photosCount: photos.length };
   const token = randomUUID();
 
   if (hasDb()) {

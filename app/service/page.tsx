@@ -51,6 +51,20 @@ const BUSINESS_TYPES = [
 const CLIENTS_OPTS = ["Sub 20 / lună", "20-50 / lună", "50-100 / lună", "Peste 100 / lună"];
 const VALUE_OPTS = ["Sub 50€", "50-200€", "200-500€", "Peste 500€"];
 const EMPLOYEE_OPTS = ["Doar eu", "2-5", "6-15", "Peste 15"];
+// Modelul de încasare schimbă complet matematica raportului: un membru de club cu
+// cotizație anuală nu e „un client pe vizită" — pierderile se calculează pe modelul LUI.
+const PAY_MODEL_OPTS = ["Pe vizită / comandă", "Abonament lunar", "Abonament / cotizație anuală", "Proiect / contract unic"];
+const PAY_MODEL_HINT: Record<string, string> = {
+  "Pe vizită / comandă": "cât lasă un client la O vizită sau comandă",
+  "Abonament lunar": "valoarea abonamentului PE LUNĂ",
+  "Abonament / cotizație anuală": "valoarea abonamentului / cotizației PE AN (ex: 600€/an)",
+  "Proiect / contract unic": "valoarea medie a UNUI proiect / contract",
+};
+// La cotizații anuale și proiecte, sumele sunt alt ordin de mărime decât la o vizită
+const valueOptsFor = (model: string) =>
+  model === "Abonament / cotizație anuală" || model === "Proiect / contract unic"
+    ? ["Sub 500€", "500-1.500€", "1.500-3.000€", "Peste 3.000€"]
+    : VALUE_OPTS;
 
 // Fluxul „scanner live" — spectacolul e procesul: omul VEDE sistemul lucrând.
 const SCAN_FEED = [
@@ -94,7 +108,7 @@ export default function ServicePage() {
   const [form, setForm] = useState({
     businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "", zone: "",
     website: "", facebook: "",
-    monthlyClients: "", avgValue: "", employees: "",
+    monthlyClients: "", avgValue: "", valueModel: "", employees: "",
     mainProblem: "",
   });
   const [suggestions, setSuggestions] = useState<Array<{ placeId: string; name: string; detail: string }>>([]);
@@ -329,7 +343,7 @@ export default function ServicePage() {
   const canNext =
     step === 0 ? form.businessType && form.companyName.trim() && form.city.trim() && form.industry
     : step === 1 ? true
-    : step === 2 ? form.monthlyClients && form.avgValue
+    : step === 2 ? form.monthlyClients && form.valueModel && form.avgValue
     : true;
 
   // Răspunsurile se citesc DEFENSIV: un proxy care taie conexiunea trimite HTML,
@@ -757,9 +771,29 @@ export default function ServicePage() {
                     </motion.div>
                   </div>
                   <div>
-                    <label className="label">Cât valorează în medie un client? *</label>
+                    <label className="label">Cum plătește un client de-al tău? *</label>
                     <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
-                      {VALUE_OPTS.map((o) => (
+                      {PAY_MODEL_OPTS.map((o) => (
+                        <motion.button key={o} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button"
+                          onClick={() => setForm((f) => ({ ...f, valueModel: o, avgValue: valueOptsFor(o).includes(f.avgValue) ? f.avgValue : "" }))}
+                          className={chipCls(form.valueModel === o)}>
+                          {o}
+                        </motion.button>
+                      ))}
+                    </motion.div>
+                    <p className="mt-2 text-[11px] text-text-subtle">
+                      De aici pornește toată matematica raportului — un membru cu cotizație anuală se calculează altfel decât un client la casă.
+                    </p>
+                  </div>
+                  <div>
+                    <label className="label">Cât valorează în medie un client? *</label>
+                    {form.valueModel && (
+                      <p className="mb-2 text-[11px] font-semibold text-brand-orange">
+                        → {PAY_MODEL_HINT[form.valueModel] ?? "valoarea medie a unui client"}
+                      </p>
+                    )}
+                    <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
+                      {valueOptsFor(form.valueModel).map((o) => (
                         <motion.button key={o} variants={chipItemV} whileTap={{ scale: 0.95 }} type="button" onClick={() => set("avgValue", o)} className={chipCls(form.avgValue === o)}>
                           {o}
                         </motion.button>
