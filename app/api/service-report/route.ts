@@ -567,35 +567,47 @@ export async function POST(req: Request) {
 
   // ─── 3. Claude generează raportul complet (clientul e inițializat înainte de pipeline) ───
 
-  // ─── 2c. Vizibilitate în căutările AI — test REAL cu căutare web ───
-  // Întrebăm un model cu web search dacă firma apare când cauți brandul și când
-  // cauți generic în domeniu+oraș (cum ar face ChatGPT/Perplexity). Fail-silent.
-  let aiVisibility: { brandVisible: boolean; genericVisible: boolean; note: string; mentions?: string } | null = null;
+  // ─── 2c. CERCETARE PE INTERNET „LA SÂNGE" — căutare web REALĂ, indiferent de domeniu ───
+  // Nu doar testul de vizibilitate AI: presă, platforme sociale, recenzii de pe orice
+  // site, semnale pozitive/negative — tot ce există despre firmă online, cu surse.
+  // Fail-silent: fără internet ≠ fără raport.
+  let aiVisibility: {
+    brandVisible: boolean; genericVisible: boolean; note: string; mentions?: string; network?: string;
+    press?: string[]; platforms?: string[]; reviewsElsewhere?: string[]; signals?: string[]; negative?: string[];
+  } | null = null;
   try {
-    const visTools: any = [{ type: "web_search_20250305", name: "web_search", max_uses: 3 }];
+    const visTools: any = [{ type: "web_search_20250305", name: "web_search", max_uses: 8 }];
     let visMessages: Anthropic.MessageParam[] = [
       {
         role: "user",
-        content: `Fă două căutări web: 1) "${industry} ${city} recomandare firmă" și 2) "${companyName} ${city}".
+        content: `Ești un detectiv de reputație online. Fă o cercetare COMPLETĂ pe internet despre firma "${companyName}" din ${city} (domeniul: ${industry}${website ? `, site: ${website}` : ""}). Rulează căutările astea (adaptează formulările dacă ajută):
+1) "${industry} ${city} recomandare" — apare firma la căutări generice, fără nume?
+2) "${companyName} ${city}" — ce iese la căutarea după nume?
+3) "${companyName}" recenzii / păreri / forum
+4) "${companyName}" ${city} presă / știri / articol
+5) "${companyName}" pe rețele: Facebook, Instagram, LinkedIn, TikTok, YouTube
+6) "${companyName}" în alte orașe / rețea / franciză — e cumva FILIALA LOCALĂ a unui brand mai mare (un club dintr-o rețea națională, un service dintr-un lanț, o agenție dintr-o franciză)? Verifică dacă site-ul/brandul central aparține rețelei, nu firmei locale.
+7) pentru afaceri cu punct FIZIC (service, magazin, salon...): urma lor practică pe internet — listări în directoare locale, program afișat, poze cu locația, cum îi găsește un client care caută unde să meargă
+8) orice altceva promițător ai zărit în rezultate (evenimente, premii, parteneriate, anunțuri de angajare, reclamații)
 
-ATENȚIE LA DEZAMBIGUIZARE: pot exista MAI MULTE branduri cu numele "${companyName}" (în alte orașe/țări). Numără ca relevante DOAR rezultatele care se leagă clar de ACEASTĂ firmă prin: orașul ${city}${website ? `, site-ul ${website}` : ""}, domeniul "${industry}" sau România. Rezultatele despre alte firme omonime se IGNORĂ.
+ATENȚIE LA DEZAMBIGUIZARE: pot exista MAI MULTE branduri cu numele "${companyName}" (în alte orașe/țări). Numără ca relevante DOAR rezultatele legate clar de ACEASTĂ firmă prin: orașul ${city}${website ? `, site-ul ${website}` : ""}, domeniul "${industry}" sau România. Omonimele se IGNORĂ (dar dacă domină rezultatele, spune asta — e o problemă de brand în sine).
 
-Apoi răspunde DOAR cu JSON:
-{"brandVisible": true/false (firma ACEASTA apare la căutarea după nume), "genericVisible": true/false (apare și la căutarea GENERICĂ domeniu+oraș, fără nume), "note": "o frază concretă despre ce ai găsit", "mentions": "unde e menționat brandul ĂSTA pe internet, dincolo de site-ul propriu: presă/directoare/topuri/forumuri — enumeră sursele găsite; dacă nu e nicăieri, spune «doar site-ul propriu» ; dacă rezultatele sunt dominate de firme omonime, spune explicit că brandul e greu de distins de omonime"}`,
+Apoi răspunde DOAR cu JSON (liste goale unde chiar n-ai găsit nimic — nu inventa):
+{"brandVisible": true/false, "genericVisible": true/false, "note": "o frază concretă: ce imagine își face un străin care caută firma asta pe internet", "mentions": "sursele unde e menționat brandul dincolo de site-ul propriu, pe scurt; «doar site-ul propriu» dacă nu e nicăieri", "network": "dacă e filiala/extensia locală a unui brand mai mare: numele rețelei + ce vine de la centru (site, brand, metodologie); altfel string gol", "press": ["publicație — despre ce era articolul (și anul, dacă se vede)"], "platforms": ["Facebook: ce ai găsit (pagină activă? urmăritori?)", "Instagram/LinkedIn/TikTok/YouTube: la fel, doar ce EXISTĂ"], "reviewsElsewhere": ["platformă: nota/nr recenzii — orice recenzii găsite în afara Google Maps"], "signals": ["semnale pozitive: premii, evenimente, parteneriate, prezență în topuri/directoare, listări locale utile"], "negative": ["semnale negative cu sursa: reclamații, recenzii proaste, articole negative — doar ce ai VĂZUT efectiv"]}`,
       },
     ];
     let visResp = await client.messages.create(
-      { model: CLAUDE_MODEL, max_tokens: 700, tools: visTools, messages: visMessages },
-      { timeout: 30_000 }
+      { model: CLAUDE_MODEL, max_tokens: 2500, tools: visTools, messages: visMessages },
+      { timeout: 60_000 }
     );
     // Server tools pot întoarce pause_turn — continuăm bucla serverului
     // (cast: versiunea SDK-ului nu are încă "pause_turn" în tipul stop_reason)
     let visLoops = 0;
-    while ((visResp.stop_reason as string) === "pause_turn" && visLoops < 3) {
+    while ((visResp.stop_reason as string) === "pause_turn" && visLoops < 6) {
       visMessages = [...visMessages, { role: "assistant", content: visResp.content as any }];
       visResp = await client.messages.create(
-        { model: CLAUDE_MODEL, max_tokens: 700, tools: visTools, messages: visMessages },
-        { timeout: 30_000 }
+        { model: CLAUDE_MODEL, max_tokens: 2500, tools: visTools, messages: visMessages },
+        { timeout: 60_000 }
       );
       visLoops++;
     }
@@ -606,15 +618,22 @@ Apoi răspunde DOAR cu JSON:
     const visMatch = visText.match(/\{[\s\S]*\}/);
     if (visMatch) {
       const vp = JSON.parse(visMatch[0]);
+      const lst = (v: any, max = 6) => (Array.isArray(v) ? v.map(String).map((s) => s.slice(0, 200)).slice(0, max) : undefined);
       aiVisibility = {
         brandVisible: !!vp.brandVisible,
         genericVisible: !!vp.genericVisible,
         note: String(vp.note ?? "").slice(0, 300),
         mentions: vp.mentions ? String(vp.mentions).slice(0, 400) : undefined,
+        network: vp.network ? String(vp.network).slice(0, 300) : undefined,
+        press: lst(vp.press),
+        platforms: lst(vp.platforms),
+        reviewsElsewhere: lst(vp.reviewsElsewhere),
+        signals: lst(vp.signals),
+        negative: lst(vp.negative),
       };
     }
   } catch (e) {
-    console.warn("[service-report] AI visibility scan failed:", e);
+    console.warn("[service-report] deep web research failed:", e);
   }
 
   const typeLabel =
@@ -707,8 +726,11 @@ ${competitors.length > 0 ? `COMPETIȚIA LOCALĂ (căutare țintită pe Google Ma
 DATE REALE SITE (scanate acum — homepage + subpaginile relevante):
 ${siteData ? (siteData.reachable ? `- Site funcțional: DA\n- Timp răspuns: ${siteData.loadTimeMs}ms\n- HTTPS: ${siteData.isHttps ? "DA" : "NU"}\n- Mobile viewport: ${siteData.hasViewport ? "DA" : "NU"}\n- Meta description: ${siteData.hasMetaDesc ? "DA" : "NU"}\n- H1: ${siteData.hasH1 ? "DA" : "NU"}\n- Pagini scanate: ${siteData.pagesScanned ?? 1}${siteData.subpages?.length ? ` (homepage + ${siteData.subpages.map((s: any) => s.path).join(", ")})` : " (doar homepage — nu am găsit linkuri interne relevante)"}\n${siteData.subpages?.length ? siteData.subpages.map((s: any) => `  · ${s.path}: ${[s.portfolio ? "PORTOFOLIU/proiecte prezente" : null, s.testimonials ? "TESTIMONIALE/recenzii prezente" : null, `${s.imgCount} imagini`].filter(Boolean).join(", ")}`).join("\n") + "\n" : ""}- Concluzie pe TOATE paginile scanate: portofoliu/proiecte: ${siteData.hasPortfolioHint ? "DA, EXISTĂ — recunoaște-le și evaluează-le calitativ, NU spune că lipsesc" : "nu am detectat în paginile scanate"}; testimoniale/recenzii pe site: ${siteData.hasTestimonialsHint ? "DA, EXISTĂ — recunoaște-le, NU spune că lipsesc" : "nu am detectat în paginile scanate"}; contact vizibil: ${siteData.hasContactHint ? "DA" : "nu am detectat"}` : "- Site-ul NU răspunde / e picat") : "- Nu are site de scanat"}
 
-VIZIBILITATE ÎN CĂUTĂRILE AI (test REAL făcut acum — am întrebat un AI cu căutare web, exact cum ar face ChatGPT/Perplexity):
-${aiVisibility ? `- Găsit la căutarea după numele firmei: ${aiVisibility.brandVisible ? "DA" : "NU"}\n- Recomandat la căutări GENERICE („${industry} ${city}", fără nume): ${aiVisibility.genericVisible ? "DA — apare, avantaj rar!" : "NU — clienții care întreabă AI-ul primesc COMPETITORII"}\n- Constatare: ${aiVisibility.note}${aiVisibility.mentions ? `\n- MENȚIUNI PE INTERNET (dezambiguizate — doar despre ACEASTĂ firmă, nu omonime): ${aiVisibility.mentions}\nDacă mențiunile sunt sărace („doar site-ul propriu"), tratează asta în diagnostic: fără mențiuni externe, nici Google, nici AI-urile n-au motive să recomande brandul — iar campania de presă din 50 de ziare (inclusă) e fix prima rezolvare. Dacă brandul e greu de distins de omonime, recomandă întărirea semnalelor de identitate: numele+orașul consecvent peste tot, date structurate, profil Google complet.` : ""}\nInclude OBLIGATORIU un diagnostic cu area "Vizibilitate în AI (ChatGPT, Perplexity)" pe baza testului. Dacă NU apare la căutări generice, planul include acțiuni GEO concrete: prezența în topuri/directoare locale (ex: necesit.ro), articole în presa online, date structurate și pagini locale pe site.` : "- Testul nu a putut rula de data asta — nu inventa rezultate; poți menționa vizibilitatea AI ca arie de verificat."}
+CERCETARE PE INTERNET (căutare web REALĂ făcută acum — presă, platforme, recenzii, tot ce există despre firmă online):
+${aiVisibility ? `- Găsit la căutarea după numele firmei: ${aiVisibility.brandVisible ? "DA" : "NU"}\n- Recomandat la căutări GENERICE („${industry} ${city}", fără nume): ${aiVisibility.genericVisible ? "DA — apare, avantaj rar!" : "NU — clienții care întreabă AI-ul primesc COMPETITORII"}\n- Constatare: ${aiVisibility.note}${aiVisibility.mentions ? `\n- MENȚIUNI PE INTERNET (dezambiguizate — doar despre ACEASTĂ firmă, nu omonime): ${aiVisibility.mentions}` : ""}${aiVisibility.network ? `\n- REȚEA/FILIALĂ: ${aiVisibility.network}` : ""}${aiVisibility.press?.length ? `\n- PRESĂ (articole găsite): ${aiVisibility.press.join(" · ")}` : ""}${aiVisibility.platforms?.length ? `\n- PLATFORME SOCIALE (găsite la căutare): ${aiVisibility.platforms.join(" · ")}` : ""}${aiVisibility.reviewsElsewhere?.length ? `\n- RECENZII ÎN AFARA GOOGLE MAPS: ${aiVisibility.reviewsElsewhere.join(" · ")}` : ""}${aiVisibility.signals?.length ? `\n- SEMNALE POZITIVE: ${aiVisibility.signals.join(" · ")}` : ""}${aiVisibility.negative?.length ? `\n- SEMNALE NEGATIVE (cu sursă — tratează-le OBLIGATORIU într-un diagnostic, cu rezolvare): ${aiVisibility.negative.join(" · ")}` : ""}
+FOLOSEȘTE cercetarea asta în tot raportul: ce EXISTĂ (presă, platforme, semnale pozitive) se recunoaște explicit — e muncă de-a lui care merită văzută; ce lipsește devine diagnostic cu rezolvare. Dacă mențiunile sunt sărace („doar site-ul propriu"), tratează asta: fără mențiuni externe, nici Google, nici AI-urile n-au motive să recomande brandul — iar campania de presă din 50 de ziare (inclusă) e fix prima rezolvare. Dacă brandul e greu de distins de omonime, recomandă întărirea semnalelor de identitate: numele+orașul consecvent peste tot, date structurate, profil Google complet.
+${aiVisibility.network ? `REGULĂ DE FILIALĂ/EXTENSIE (obligatorie): firma e parte a unei rețele/brand mai mare — analiza se face LA NIVEL LOCAL, corect: NU o penaliza pentru ce vine de la centru (site-ul central, brandul, metodologia rețelei — alea nu-s „lipsurile" ei și nici nu le poate schimba). Evaluează ce ține de EA local: profilul Google Business propriu al filialei, pagina/secțiunea locală, socialul local, recenziile locale, vizibilitatea pe „${city}". Spune explicit în raport ce pârghii are local și ce ține de centru, ca patronul să știe unde poate acționa.` : ""}
+Include OBLIGATORIU un diagnostic cu area "Vizibilitate în AI (ChatGPT, Perplexity)" pe baza testului. Dacă NU apare la căutări generice, planul include acțiuni GEO concrete: prezența în topuri/directoare locale (ex: necesit.ro), articole în presa online, date structurate și pagini locale pe site.` : "- Cercetarea nu a putut rula de data asta — nu inventa rezultate; poți menționa vizibilitatea online ca arie de verificat."}
 
 PREZENȚA PE FACEBOOK (scanată acum):
 ${fbData ? (fbData.reachable ? `- Pagina există: DA${fbData.title ? `\n- Titlu: ${fbData.title}` : ""}${fbData.followers ? `\n- Urmăritori/aprecieri: ~${fbData.followers}` : ""}${fbData.description ? `\n- Descriere: ${fbData.description}` : ""}` : `- Pagina declarată NU a putut fi VERIFICATĂ automat (Facebook blochează des accesul roboților). NU concluziona că pagina nu există sau că e inactivă — spune doar că nu a putut fi verificată, cu status "warning".`) : "- NU are pagină de Facebook declarată de proprietar"}
@@ -973,7 +995,7 @@ Format exact:
 - ANAF: ${anafData.found ? `${anafData.legalName}, ${anafData.active ? "activă" : "INACTIVĂ"}${anafData.turnover != null ? `, CA ${anafData.turnover} lei (${anafData.balanceYear}), profit ${anafData.profit ?? "?"}, ${anafData.employees ?? "?"} salariați` : ""}${(anafData.history?.length ?? 0) > 1 ? `; istoric CA: ${anafData.history!.map((h) => `${h.year}:${h.turnover ?? "?"}`).join(", ")}` : ""}` : anafDown ? "indisponibil TEHNIC — fără concluzii din lipsa datelor" : "fără CUI / negăsit"}
 - Site: ${siteData?.reachable ? `${siteData.pagesScanned} pagini scanate; portofoliu: ${siteData.hasPortfolioHint ? "EXISTĂ — trebuie recunoscut" : "nedetectat"}; testimoniale: ${siteData.hasTestimonialsHint ? "EXISTĂ — trebuie recunoscute" : "nedetectate"}` : siteData ? "site picat" : "fără site"}
 - Facebook: ${fbData ? (fbData.reachable ? "pagina există" : "NEVERIFICABILĂ tehnic — nu afirma absența") : "nedeclarat"}
-- Vizibilitate AI: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}${aiVisibility.mentions ? `; mențiuni: ${aiVisibility.mentions}` : ""}` : "netestat — nu inventa rezultate"}
+- Cercetare internet: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}${aiVisibility.mentions ? `; mențiuni: ${aiVisibility.mentions}` : ""}${aiVisibility.network ? `; FILIALĂ A REȚELEI: ${aiVisibility.network} — nu penaliza ce vine de la centru, evaluează doar pârghiile locale` : ""}${aiVisibility.press?.length ? `; presă: ${aiVisibility.press.join(" | ")}` : ""}${aiVisibility.platforms?.length ? `; platforme: ${aiVisibility.platforms.join(" | ")}` : ""}${aiVisibility.negative?.length ? `; NEGATIVE: ${aiVisibility.negative.join(" | ")}` : ""}` : "netestat — nu inventa rezultate"}
 - Competitori scanați (căutare țintită; cei „numiți de patron" sunt cerți, restul îi validezi tu ca relevanți): ${competitors.length ? competitors.map((c) => `${c.name}${c.declared ? " [numit de patron]" : ""} (${c.rating ?? "?"}★/${c.reviewCount})`).join(", ") : "niciunul"}
 - Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"} (mod de încasare: ${valueModel || "nespecificat"}), ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}
 - REGULĂ FINANCIARĂ: dacă modul de încasare e abonament/cotizație ANUALĂ, valoarea clientului e PE AN — pierderile NU se calculează ca vizite lunare; formula pierderilor trebuie scrisă explicit în raport și să fie coerentă cu modelul de încasare.`;
