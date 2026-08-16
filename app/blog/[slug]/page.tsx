@@ -44,6 +44,79 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
+// Plasa de linkuri interne: fiecare articol împinge autoritate spre paginile care
+// trebuie să urce în Google — paginile de oraș și articolele-frate. Ancore exacte.
+function relatedLinks(article: { slug: string; template: string; location?: { slug: string; name: string } }) {
+  if (article.location) {
+    const loc = article.location;
+    const sibling =
+      article.template === "cost"
+        ? { href: `/blog/promovare-afacere-online-${loc.slug}`, label: `Cum să-ți promovezi afacerea online în ${loc.name}` }
+        : { href: `/blog/cat-costa-site-web-${loc.slug}`, label: `Cât costă un site web în ${loc.name} în 2026` };
+    return [
+      { href: `/creare-site-web/${loc.slug}`, label: `Creare site web ${loc.name} — servicii, prețuri, proiecte locale` },
+      sibling,
+      { href: "/blog/seo-local-ghid-romania", label: "SEO local: cum ajungi pe prima pagină Google în orașul tău" },
+    ];
+  }
+  const MAP: Record<string, Array<{ href: string; label: string }>> = {
+    "cat-costa-magazin-online-romania": [
+      { href: "/blog/magazin-online-ghid-complet", label: "Cum să deschizi un magazin online — ghid pas cu pas" },
+      { href: "/blog/wordpress-vs-custom", label: "WordPress vs site custom — comparație sinceră" },
+      { href: "/creare-site-web/bucuresti", label: "Creare site web București — prețuri și proiecte" },
+    ],
+    "magazin-online-ghid-complet": [
+      { href: "/blog/cat-costa-magazin-online-romania", label: "Preț magazin online 2026: cât costă real în România" },
+      { href: "/blog/seo-local-ghid-romania", label: "SEO local — strategia completă pentru România" },
+      { href: "/creare-site-web/cluj-napoca", label: "Creare site web Cluj-Napoca — servicii și prețuri" },
+    ],
+    "seo-local-ghid-romania": [
+      { href: "/blog/google-business-profile-ghid", label: "Google Business Profile — ghid complet 2026" },
+      { href: "/creare-site-web/iasi", label: "Creare site web Iași — servicii, prețuri, proiecte" },
+      { href: "/creare-site-web/timisoara", label: "Creare site web Timișoara — servicii și prețuri" },
+    ],
+    "google-business-profile-ghid": [
+      { href: "/blog/seo-local-ghid-romania", label: "SEO local: cum ajungi pe prima pagină în orașul tău" },
+      { href: "/service", label: "Radiografia Afacerii — vezi cum stă firma ta pe Google" },
+      { href: "/creare-site-web/constanta", label: "Creare site web Constanța — servicii și prețuri" },
+    ],
+    "site-web-pentru-restaurant": [
+      { href: "/blog/google-business-profile-ghid", label: "Google Business Profile pentru afaceri locale" },
+      { href: "/blog/seo-local-ghid-romania", label: "SEO local — cum te găsesc clienții din orașul tău" },
+      { href: "/creare-site-web/brasov", label: "Creare site web Brașov — servicii și prețuri" },
+    ],
+    "site-web-pentru-cabinet-medical": [
+      { href: "/blog/google-business-profile-ghid", label: "Google Business Profile — ghid complet" },
+      { href: "/blog/greseli-site-web-firme", label: "Top 10 greșeli pe care le fac firmele cu site-ul" },
+      { href: "/creare-site-web/bucuresti", label: "Creare site web București — servicii și prețuri" },
+    ],
+    "site-web-pentru-salon-beauty": [
+      { href: "/blog/google-business-profile-ghid", label: "Google Business Profile pentru afaceri locale" },
+      { href: "/blog/seo-local-ghid-romania", label: "SEO local — strategia completă" },
+      { href: "/creare-site-web/oradea", label: "Creare site web Oradea — servicii și prețuri" },
+    ],
+    "wordpress-vs-custom": [
+      { href: "/blog/cat-costa-magazin-online-romania", label: "Preț magazin online 2026 — cât costă real" },
+      { href: "/blog/greseli-site-web-firme", label: "Top 10 greșeli pe care le fac firmele cu site-ul" },
+      { href: "/creare-site-web/sibiu", label: "Creare site web Sibiu — servicii și prețuri" },
+    ],
+    "de-ce-ai-nevoie-de-site-web": [
+      { href: "/blog/greseli-site-web-firme", label: "Top 10 greșeli pe care le fac firmele cu site-ul" },
+      { href: "/blog/seo-local-ghid-romania", label: "SEO local — cum apari primul în orașul tău" },
+      { href: "/creare-site-web/craiova", label: "Creare site web Craiova — servicii și prețuri" },
+    ],
+    "greseli-site-web-firme": [
+      { href: "/audit", label: "Audit gratuit al site-ului tău — 30 de secunde" },
+      { href: "/blog/wordpress-vs-custom", label: "WordPress vs site custom — comparație sinceră" },
+      { href: "/creare-site-web/ploiesti", label: "Creare site web Ploiești — servicii și prețuri" },
+    ],
+  };
+  return MAP[article.slug] ?? [
+    { href: "/blog/seo-local-ghid-romania", label: "SEO local — strategia completă pentru România" },
+    { href: "/service", label: "Radiografia Afacerii — analiza completă a firmei tale" },
+  ];
+}
+
 export default async function BlogArticlePage({ params }: { params: { slug: string } }) {
   const article = getArticleBySlug(params.slug);
   if (!article) notFound();
@@ -114,6 +187,21 @@ export default async function BlogArticlePage({ params }: { params: { slug: stri
           className="project-content mt-8"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
+
+        {/* Citește și — plasa de linkuri interne care împinge paginile de oraș */}
+        <div className="mt-10 rounded-2xl border border-bg-border bg-bg-card/60 p-5">
+          <h2 className="font-display text-base font-bold text-text">Citește și</h2>
+          <ul className="mt-3 space-y-2">
+            {relatedLinks(article).map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="inline-flex items-start gap-2 text-sm text-brand-orange hover:underline">
+                  <ArrowRight className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* CTA */}
         <div className="mt-12 rounded-3xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/10 via-transparent to-brand-purple/10 p-6 text-center sm:p-8">

@@ -80,15 +80,22 @@ export function Footer() {
             </h4>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">
-              {["Despre", "Contact", "Servicii", "Proiecte"].map((s) => (
-                <li key={s}>
-                  <a
-                    href="#"
+              {[
+                { label: "Despre", href: "/despre" },
+                { label: "Servicii", href: "/servicii" },
+                { label: "Proiecte", href: "/proiecte" },
+                { label: "Radiografia Afacerii", href: "/service" },
+                { label: "Blog & ghiduri", href: "/blog" },
+                { label: "Contact", href: "/contact" },
+              ].map((s) => (
+                <li key={s.href}>
+                  <Link
+                    href={s.href}
                     className="inline-flex items-center gap-2 text-sm text-text-muted transition hover:text-brand-orange"
                   >
                     <span className="text-brand-orange">›</span>
-                    {s}
-                  </a>
+                    {s.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -160,7 +167,38 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-bg-border/60 pt-6">
+        {/* Orașele — linkuri interne de pe TOATE paginile spre landingurile de oraș (SEO) */}
+        <div className="mt-12 border-t border-bg-border/60 pt-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-text-subtle">
+            Creare site web în orașul tău
+          </p>
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-text-muted">
+            {[
+              { slug: "bucuresti", name: "București" },
+              { slug: "cluj-napoca", name: "Cluj-Napoca" },
+              { slug: "iasi", name: "Iași" },
+              { slug: "timisoara", name: "Timișoara" },
+              { slug: "constanta", name: "Constanța" },
+              { slug: "brasov", name: "Brașov" },
+              { slug: "craiova", name: "Craiova" },
+              { slug: "oradea", name: "Oradea" },
+              { slug: "galati", name: "Galați" },
+              { slug: "ploiesti", name: "Ploiești" },
+              { slug: "sibiu", name: "Sibiu" },
+              { slug: "botosani", name: "Botoșani" },
+              { slug: "suceava", name: "Suceava" },
+              { slug: "bacau", name: "Bacău" },
+              { slug: "arad", name: "Arad" },
+              { slug: "alba-iulia", name: "Alba Iulia" },
+            ].map((c) => (
+              <Link key={c.slug} href={`/creare-site-web/${c.slug}`} className="transition hover:text-brand-orange">
+                Creare site web {c.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 border-t border-bg-border/60 pt-6">
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-subtle">
             <Link href="/termeni" className="transition hover:text-brand-orange">Termeni și condiții</Link>
             <Link href="/confidentialitate" className="transition hover:text-brand-orange">Politica de confidențialitate</Link>
