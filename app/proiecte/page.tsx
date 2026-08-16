@@ -18,7 +18,7 @@ export default function ProiectePage() {
   const liveCount = importedProjects.filter((p) => p.externalUrl).length;
 
   return (
-    <>
+    <main>
       {/* HERO */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         <Aurora />
@@ -84,6 +84,6 @@ export default function ProiectePage() {
           </Link>
         </div>
       </section>
-    </>
+    </main>
   );
 }

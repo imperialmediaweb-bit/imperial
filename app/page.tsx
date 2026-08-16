@@ -14,7 +14,7 @@ import { FAQ } from "@/components/FAQ";
 
 export default function HomePage() {
   return (
-    <>
+    <main>
       <Hero />
       <ToolsSection />
       <Services />
@@ -28,6 +28,6 @@ export default function HomePage() {
       <Testimonials />
       <BlogPreview />
       <FAQ />
-    </>
+    </main>
   );
 }

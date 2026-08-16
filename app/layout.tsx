@@ -151,7 +151,7 @@ export default function RootLayout({
         <NoiseOverlay />
         <ScrollProgress />
         <Header />
-        <main>{children}</main>
+        <div>{children}</div>
         <Footer />
         <WhatsAppButton />
       </body>

@@ -103,7 +103,7 @@ export default function ProjectDetailPage({
   if (study.teamSize) metaItems.push({ icon: Users, label: "Echipă", value: study.teamSize });
 
   return (
-    <>
+    <main>
       {/* HERO */}
       <section className="relative overflow-hidden pb-20 pt-10 sm:pt-16">
         <Aurora />
@@ -837,6 +837,6 @@ export default function ProjectDetailPage({
           </Link>
         </div>
       </section>
-    </>
+    </main>
   );
 }

@@ -9,7 +9,6 @@ import {
   Globe,
   Facebook,
   Instagram,
-  Twitter,
   ArrowRight,
 } from "lucide-react";
 import { Logo } from "./Logo";
@@ -150,7 +149,6 @@ export function Footer() {
             <div className="mt-5 flex gap-2">
               {[
                 { href: siteConfig.social.facebook, Icon: Facebook },
-                { href: "#", Icon: Twitter },
                 { href: siteConfig.social.instagram, Icon: Instagram },
               ].map(({ href, Icon }, i) => (
                 <Link

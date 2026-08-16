@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function MultumimPage() {
   return (
-    <section className="section">
+    <main className="section">
       <div className="container-app max-w-2xl text-center">
         <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-orange-gradient shadow-glow-orange">
           <CheckCircle2 className="h-10 w-10 text-white" strokeWidth={2.5} />
@@ -55,6 +55,6 @@ export default function MultumimPage() {
           Înapoi la pagina principală
         </Link>
       </div>
-    </section>
+    </main>
   );
 }
