@@ -24,6 +24,8 @@ import {
   Hash,
   Facebook,
   Radar,
+  Mic,
+  Square,
 } from "lucide-react";
 import type { ServiceReport, ServiceReportPreview } from "@/app/api/service-report/route";
 import { ServiceReportView, ScoreCircle } from "@/components/ServiceReportView";
@@ -65,6 +67,54 @@ const valueOptsFor = (model: string) =>
   model === "Abonament / cotizație anuală" || model === "Proiect / contract unic"
     ? ["Sub 500€", "500-1.500€", "1.500-3.000€", "Peste 3.000€"]
     : VALUE_OPTS;
+
+// Dictare vocală (Web Speech API, ro-RO) — patronul POVESTEȘTE în loc să scrie.
+// Chrome/Edge/Android o au nativ; unde lipsește (iPhone Safari), butonul nu apare
+// (acolo microfonul de pe tastatura telefonului face același lucru).
+function VoiceButton({ onText }: { onText: (t: string) => void }) {
+  const recRef = useRef<any>(null);
+  const [listening, setListening] = useState(false);
+  const [supported, setSupported] = useState(false);
+  useEffect(() => {
+    setSupported(!!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition));
+  }, []);
+  useEffect(() => () => { try { recRef.current?.stop(); } catch {} }, []);
+  if (!supported) return null;
+  const toggle = () => {
+    if (listening) {
+      try { recRef.current?.stop(); } catch {}
+      setListening(false);
+      return;
+    }
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const rec = new SR();
+    rec.lang = "ro-RO";
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.onresult = (e: any) => {
+      let t = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) t += e.results[i][0].transcript + " ";
+      }
+      if (t.trim()) onText(t.trim());
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recRef.current = rec;
+    try { rec.start(); setListening(true); } catch {}
+  };
+  return (
+    <button type="button" onClick={toggle}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold transition ${
+        listening
+          ? "animate-pulse border-red-500/60 bg-red-500/15 text-red-400"
+          : "border-brand-orange/40 bg-brand-orange/10 text-brand-orange hover:bg-brand-orange/20"
+      }`}>
+      {listening ? <Square className="h-3 w-3" /> : <Mic className="h-3 w-3" />}
+      {listening ? "Oprește — te ascult..." : "🎙 Zi cu vocea"}
+    </button>
+  );
+}
 
 // Fluxul „scanner live" — spectacolul e procesul: omul VEDE sistemul lucrând.
 const SCAN_FEED = [
@@ -108,7 +158,7 @@ export default function ServicePage() {
   const [form, setForm] = useState({
     businessType: "", companyName: "", city: "", industry: "", cui: "", placeId: "", zone: "",
     website: "", facebook: "",
-    monthlyClients: "", avgValue: "", valueModel: "", competitorNames: "", employees: "",
+    monthlyClients: "", avgValue: "", valueModel: "", businessDesc: "", competitorNames: "", employees: "",
     mainProblem: "",
   });
   const [suggestions, setSuggestions] = useState<Array<{ placeId: string; name: string; detail: string }>>([]);
@@ -761,6 +811,18 @@ export default function ServicePage() {
                     Estimări din capul tău — nu trebuie să fie exacte. Din ele calculăm cât pierzi lunar și cât ai de câștigat. (Dacă ai dat CUI-ul, folosim și cifrele oficiale de la ANAF.)
                   </p>
                   <div>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <label className="label !mb-0">Povestește-ne afacerea ta (recomandat)</label>
+                      <VoiceButton onText={(t) => setForm((f) => ({ ...f, businessDesc: (f.businessDesc ? f.businessDesc + " " : "") + t }))} />
+                    </div>
+                    <textarea className="input mt-2 min-h-[90px] resize-y rounded-2xl py-3 text-[15px]" maxLength={800}
+                      placeholder="Cu cuvintele tale: ce faci, cine îți sunt clienții, cum plătesc. Ex: club de afaceri — membrii sunt patroni din oraș, plătesc cotizație anuală și se întâlnesc lunar. Sau: service auto — reparații și revizii, clienți din zonă, plătesc pe lucrare."
+                      value={form.businessDesc} onChange={(e) => set("businessDesc", e.target.value)} />
+                    <p className="mt-1.5 text-[11px] text-text-subtle">
+                      🎙 Nu-ți place scrisul? Apasă „Zi cu vocea" și povestește — se scrie singur. Cu cât înțelegem mai bine modelul tău, cu atât analiza lovește mai precis.
+                    </p>
+                  </div>
+                  <div>
                     <label className="label">Câți clienți ai pe lună? *</label>
                     <motion.div variants={chipGroupV} initial="hidden" animate="show" className="flex flex-wrap gap-2">
                       {CLIENTS_OPTS.map((o) => (
@@ -825,8 +887,11 @@ export default function ServicePage() {
                     </p>
                   </div>
                   <div>
-                    <label className="label">Care e cea mai mare problemă a afacerii tale acum?</label>
-                    <textarea className="input min-h-[130px] resize-y rounded-2xl py-3.5 text-[15px]" maxLength={1000}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <label className="label !mb-0">Care e cea mai mare problemă a afacerii tale acum?</label>
+                      <VoiceButton onText={(t) => setForm((f) => ({ ...f, mainProblem: (f.mainProblem ? f.mainProblem + " " : "") + t }))} />
+                    </div>
+                    <textarea className="input mt-2 min-h-[130px] resize-y rounded-2xl py-3.5 text-[15px]" maxLength={1000}
                       placeholder="ex: Am clienți puțini, concurența e peste tot, nu mă găsește nimeni online..."
                       value={form.mainProblem} onChange={(e) => set("mainProblem", e.target.value)} />
                     <p className="mt-2 text-[11px] text-text-subtle">

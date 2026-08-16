@@ -48,7 +48,7 @@ export async function GET(req: Request) {
     companyName: f.companyName, city: f.city, zone: f.zone, industry: f.industry,
     businessType: f.businessType, cui: f.cui, placeId: f.placeId, website: f.website,
     facebook: f.facebook, monthlyClients: f.monthlyClients, avgValue: f.avgValue,
-    valueModel: f.valueModel, competitorNames: f.competitorNames,
+    valueModel: f.valueModel, businessDesc: f.businessDesc, competitorNames: f.competitorNames,
     employees: f.employees, mainProblem: f.mainProblem,
     ref: f.ref, partner: f.partner,
   };

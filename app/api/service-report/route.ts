@@ -242,6 +242,9 @@ export async function POST(req: Request) {
   // Competitorii numiți chiar de patron (opțional, separați prin virgulă) —
   // îi scanăm pe NUME, nu ghicim după domeniu.
   const competitorNames = String(body?.competitorNames ?? "").trim().slice(0, 300);
+  // Afacerea POVESTITĂ de patron (scris sau dictat cu vocea): ce face, cine-s
+  // clienții, cum plătesc — sursa cea mai bună pentru modelul de business.
+  const businessDesc = String(body?.businessDesc ?? "").trim().slice(0, 800);
   const employees = String(body?.employees ?? "").trim();
   const mainProblem = String(body?.mainProblem ?? "").trim();
   const zone = String(body?.zone ?? "").trim().slice(0, 120);
@@ -484,7 +487,7 @@ export async function POST(req: Request) {
           max_tokens: 300,
           messages: [{
             role: "user",
-            content: `Firma "${companyName}" din ${city}, domeniul "${industry}".${mainProblem ? ` Context de la patron: ${mainProblem.slice(0, 200)}.` : ""} Cine sunt competitorii ei REALI — același model de business, care se bat pe ACEIAȘI clienți? Scrie 2-3 interogări de căutare Google Maps care găsesc exact astfel de competitori în ${city}. NU instituții publice, NU domenii doar înrudite ca nume (ex: pentru un club de afaceri → "club de afaceri ${city}" și "networking antreprenori ${city}", NU "educație ${city}"). Răspunde DOAR cu JSON: {"queries":["...","..."]}`,
+            content: `Firma "${companyName}" din ${city}, domeniul "${industry}".${businessDesc ? ` Afacerea, descrisă de patron: ${businessDesc.slice(0, 300)}.` : ""}${mainProblem ? ` Context de la patron: ${mainProblem.slice(0, 200)}.` : ""} Cine sunt competitorii ei REALI — același model de business, care se bat pe ACEIAȘI clienți? Scrie 2-3 interogări de căutare Google Maps care găsesc exact astfel de competitori în ${city}. NU instituții publice, NU domenii doar înrudite ca nume (ex: pentru un club de afaceri → "club de afaceri ${city}" și "networking antreprenori ${city}", NU "educație ${city}"). Răspunde DOAR cu JSON: {"queries":["...","..."]}`,
           }],
         },
         { timeout: 20_000 }
@@ -703,6 +706,7 @@ DATE FIRMĂ (de la proprietar):
 - Domeniu: ${industry}
 - Site declarat: ${website || "NU ARE / nu a dat"}
 - Facebook declarat: ${facebook || "NU ARE / nu a dat"}
+${businessDesc ? `- AFACEREA, POVESTITĂ DE PATRON (sursa cea mai de încredere pentru modelul de business — ia-o ca reper principal): "${businessDesc}"` : ""}
 - Clienți pe lună: ${monthlyClients || "necunoscut"}
 - Valoare medie per client: ${avgValue || "necunoscut"}
 - Cum plătește un client: ${valueModel || "nespecificat — DEDUCE modelul tipic al domeniului (ex: club/asociație → cotizație anuală; abonament sală/software → lunar; restaurant/frizerie → pe vizită; construcții/web design → proiect unic) și spune în raport ce model ai presupus"}
@@ -997,7 +1001,7 @@ Format exact:
 - Facebook: ${fbData ? (fbData.reachable ? "pagina există" : "NEVERIFICABILĂ tehnic — nu afirma absența") : "nedeclarat"}
 - Cercetare internet: ${aiVisibility ? `după nume: ${aiVisibility.brandVisible ? "DA" : "NU"}; generic: ${aiVisibility.genericVisible ? "DA" : "NU"}${aiVisibility.mentions ? `; mențiuni: ${aiVisibility.mentions}` : ""}${aiVisibility.network ? `; FILIALĂ A REȚELEI: ${aiVisibility.network} — nu penaliza ce vine de la centru, evaluează doar pârghiile locale` : ""}${aiVisibility.press?.length ? `; presă: ${aiVisibility.press.join(" | ")}` : ""}${aiVisibility.platforms?.length ? `; platforme: ${aiVisibility.platforms.join(" | ")}` : ""}${aiVisibility.negative?.length ? `; NEGATIVE: ${aiVisibility.negative.join(" | ")}` : ""}` : "netestat — nu inventa rezultate"}
 - Competitori scanați (căutare țintită; cei „numiți de patron" sunt cerți, restul îi validezi tu ca relevanți): ${competitors.length ? competitors.map((c) => `${c.name}${c.declared ? " [numit de patron]" : ""} (${c.rating ?? "?"}★/${c.reviewCount})`).join(", ") : "niciunul"}
-- Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"} (mod de încasare: ${valueModel || "nespecificat"}), ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}
+- Declarat de patron: ~${monthlyClients || "?"} clienți/lună, valoare medie ${avgValue || "?"} (mod de încasare: ${valueModel || "nespecificat"}), ${employees || "?"} angajați${zone ? `, zona: ${zone}` : ""}; problema lui: ${mainProblem || "—"}${businessDesc ? `; afacerea în cuvintele lui: "${businessDesc}"` : ""}
 - REGULĂ FINANCIARĂ: dacă modul de încasare e abonament/cotizație ANUALĂ, valoarea clientului e PE AN — pierderile NU se calculează ca vizite lunare; formula pierderilor trebuie scrisă explicit în raport și să fie coerentă cu modelul de încasare.`;
 
       const criticPrompt = `Ești REDACTORUL-ȘEF al rapoartelor și un consultant senior cu 15 ani STRICT în domeniul "${industry}" din România. Ai mai jos (A) datele reale scanate și (B) raportul scris de un consultant junior, ca JSON.
@@ -1037,7 +1041,7 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
   }
   }; // ─── sfârșitul runPipeline ───
 
-  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, valueModel, competitorNames, employees, mainProblem, ref, partner, photosCount: photos.length };
+  const formData = { companyName, city, zone, industry, businessType, cui: cuiRaw, placeId, website, facebook, monthlyClients, avgValue, valueModel, businessDesc, competitorNames, employees, mainProblem, ref, partner, photosCount: photos.length };
   const token = randomUUID();
 
   if (hasDb()) {
