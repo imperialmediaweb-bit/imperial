@@ -6,6 +6,7 @@ import { getServiceReport } from "@/lib/service-reports";
 import { hasDb } from "@/lib/db";
 import { ServiceReportView } from "@/components/ServiceReportView";
 import { UnlockInline } from "@/components/UnlockInline";
+import { PurchasePing } from "@/components/PurchasePing";
 import { getPartner } from "@/lib/partners";
 import { reportPriceRon } from "@/lib/stripe";
 import type { ServiceReport } from "@/app/api/service-report/route";
@@ -98,6 +99,8 @@ export default async function ReportPage({
 
   return (
     <main className="relative overflow-hidden">
+      {/* Purchase se trimite la Meta doar la sosirea de după plată (?platit=1), o dată */}
+      {searchParams?.platit === "1" && <PurchasePing token={token} value={reportPriceRon()} />}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
       <section className="container-app pb-20 pt-14 sm:pt-20">
         <ServiceReportView report={report} initialEmail={row.email ?? ""} token={token} />

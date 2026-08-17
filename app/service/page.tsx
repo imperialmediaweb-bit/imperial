@@ -33,6 +33,7 @@ import { ShineCard } from "@/components/effects/ShineCard";
 import { Magnetic } from "@/components/effects/MagneticButton";
 import { getPartner } from "@/lib/partners";
 import { LOCATIONS } from "@/lib/locations";
+import { fbTrack } from "@/lib/fbq";
 
 const BASE_PRICE = 299;
 const REF_PRICE = 249;
@@ -432,6 +433,7 @@ export default function ServicePage() {
         throw new Error(data?.error || "Serverul n-a putut răspunde — datele tale sunt salvate în formular, mai apasă o dată.");
       }
       if (data.pending && data.token) {
+        fbTrack("Lead"); // conversia de sus a pâlniei: raport pornit
         pendingTokenRef.current = data.token;
         // Generarea rulează pe fundal — întrebăm la 3 secunde „e gata?" (max ~14 minute;
         // modelul mare + controlul de calitate pot lua 7-10 min, plus retry-ul automat)
@@ -472,6 +474,7 @@ export default function ServicePage() {
     }
     setUnlocking(true);
     setError(null);
+    fbTrack("InitiateCheckout", { currency: "RON" });
     try {
       const res = await fetch("/api/service-checkout", {
         method: "POST",

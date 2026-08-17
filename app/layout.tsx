@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { NoiseOverlay } from "@/components/effects/NoiseOverlay";
+import { MetaPixel } from "@/components/MetaPixel";
 import { ScrollProgress } from "@/components/effects/ScrollProgress";
 import { siteConfig } from "@/lib/site";
 
@@ -148,6 +149,7 @@ export default function RootLayout({
         `}
       </Script>
       <body className="min-h-screen bg-bg text-text antialiased">
+        <MetaPixel />
         <NoiseOverlay />
         <ScrollProgress />
         <Header />

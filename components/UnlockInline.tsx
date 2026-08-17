@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import { CheckCircle2, Newspaper } from "lucide-react";
+import { fbTrack } from "@/lib/fbq";
 
 export function UnlockInline({ token, price, initialEmail = "" }: { token: string; price: number; initialEmail?: string }) {
   const [email, setEmail] = useState(initialEmail);
@@ -19,6 +20,7 @@ export function UnlockInline({ token, price, initialEmail = "" }: { token: strin
     }
     setBusy(true);
     setError(null);
+    fbTrack("InitiateCheckout", { value: price, currency: "RON" });
     try {
       const res = await fetch("/api/service-checkout", {
         method: "POST",
