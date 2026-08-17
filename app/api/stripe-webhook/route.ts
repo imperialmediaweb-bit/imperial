@@ -312,6 +312,7 @@ export async function POST(req: Request) {
           <p>Îl găsești oricând aici:</p>
           <p><a href="${reportUrl}" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Vezi raportul complet</a></p>
           <p>În următoarele zile publicăm și <b>articolul de promovare despre afacerea ta în cele 50 de ziare online din rețeaua Media Expres</b> (pachetul de publicare de 300€ — inclus). Primești linkurile pe acest email.</p>
+          <p>📸 <b>Ca articolul să arate excelent:</b> urcă 1-3 poze cu afacerea ta (fațada, produsele, echipa) în contul tău, la secțiunea de poze — le folosim în articol. 2 minute, direct de pe telefon.</p>
           <p>Ai și un <b>cont</b> cu toate rapoartele și notificările tale de monitorizare: <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a> — intri cu emailul ăsta, fără parolă.</p>
           <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
         </div>`,
@@ -335,6 +336,52 @@ export async function POST(req: Request) {
       console.error("[stripe-webhook] lead insert failed:", e);
     }
   }
+
+  // ─── CIORNA ARTICOLULUI DE PROMOVARE — se scrie SINGURĂ din raport, pe fundal ───
+  // Livrarea celor 50 de ziare devine: deschizi emailul → iei pozele → publish.
+  // Fire-and-forget: webhook-ul răspunde imediat, Stripe nu așteaptă după AI.
+  (async () => {
+    try {
+      const report: any = row?.report;
+      if (!report?.companyName || !process.env.ANTHROPIC_API_KEY) return;
+      const { getAnthropic, REPORT_MODEL, CLAUDE_MODEL } = await import("@/lib/ai");
+      const ai = getAnthropic();
+      const bune = (report.diagnostics ?? [])
+        .filter((d: any) => d.status === "good")
+        .map((d: any) => `${d.area}: ${d.finding}`)
+        .slice(0, 4);
+      const f = row?.form_data ?? {};
+      const artPrompt = `Ești jurnalist economic român. Scrie ARTICOLUL DE PROMOVARE (350-450 de cuvinte) pentru firma "${report.companyName}" din ${report.city ?? city}, domeniul "${f.industry ?? ""}", care va fi publicat în 50 de ziare online românești (rețeaua Media Expres).
+
+DATE REALE (folosește DOAR ce e aici — nimic inventat, FĂRĂ citate atribuite cuiva):
+- Rezumatul analizei firmei: ${report.summary ?? "—"}
+- Puncte forte găsite la scanare: ${bune.join(" | ") || "—"}
+- Afacerea, descrisă de patron: ${f.businessDesc || f.mainProblem || "—"}
+${f.website ? `- Site: ${f.website}` : ""}${f.zone ? `\n- Zona punctului de lucru: ${f.zone}` : ""}
+
+Reguli: ton pozitiv de prezentare (e articol de promovare, nu analiză critică) — ce face firma, pentru cine, ce o diferențiază; localizat în oraș; numele firmei + orașul apar natural de 2-3 ori (SEO); fără superlative goale („cel mai bun") — concret și credibil; ultima frază: cum o găsesc clienții (site/oraș). Răspunde DOAR cu articolul: prima linie = titlul, apoi corpul.`;
+      const resp = await ai.messages
+        .create({ model: REPORT_MODEL, max_tokens: 1500, messages: [{ role: "user", content: artPrompt }] })
+        .catch(() => ai.messages.create({ model: CLAUDE_MODEL, max_tokens: 1500, messages: [{ role: "user", content: artPrompt }] }));
+      const tb = resp.content.find((b) => b.type === "text");
+      const art = tb && tb.type === "text" ? tb.text.trim() : "";
+      if (!art) return;
+      await sendSimpleEmail({
+        to: ownerEmail(),
+        subject: `🗞️ Ciorna articolului de promovare — ${report.companyName} (gata de publicat)`,
+        html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;line-height:1.6;">
+          <p><b>Scrisă automat din raportul plătit.</b> Pașii tăi: 1) citește-o pe diagonală, 2) ia pozele clientului
+          (emailurile „📸 a urcat poze" / folderul lui din Cloudinary — i-am cerut pozele automat pe email),
+          3) publică în rețeaua Media Expres, în toate cele 50 de ziare.</p>
+          <hr/>
+          <pre style="white-space:pre-wrap;font-family:Georgia,serif;font-size:15px;">${art.replace(/</g, "&lt;")}</pre>
+        </div>`,
+        replyTo: email ?? undefined,
+      });
+    } catch (e) {
+      console.error("[stripe-webhook] article draft failed:", e);
+    }
+  })();
 
   return NextResponse.json({ received: true });
 }
