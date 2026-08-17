@@ -137,7 +137,7 @@ async function handle(req: Request) {
         html: WRAP(`
           <h2 style="margin:0 0 12px;">Radiografia pentru ${firm} e generată și te așteaptă.</h2>
           <p>Ai văzut scorul și pierderile estimate — partea cu adevărat valoroasă e DUPĂ deblocare: diagnosticul complet cu rezolvări pas cu pas, planul primei luni și articolul tău de promovare în <b>50 de ziare online</b> (inclus).</p>
-          <p><b>Fără riscuri:</b> dacă nu afli minim 3 lucruri noi despre firma ta — banii înapoi. Iar suma se scade integral din orice pachet comanzi în 30 de zile.</p>
+          <p><b>Bonus:</b> suma se scade integral din orice pachet comanzi în 30 de zile — practic raportul devine gratuit dacă implementezi cu noi.</p>
           <p>${BTN(reportUrl, "Deschide raportul tău")}</p>
           <p style="font-size:13px;color:#666;">E singurul reminder pe care ți-l trimitem — linkul rămâne valabil oricând.</p>
         `),

@@ -262,7 +262,7 @@ export default function ExempluRaportPage() {
           <h2 className="font-display text-2xl font-extrabold text-text">Așa arată și al tău — pe cifrele tale.</h2>
           <p className="mx-auto mt-2 max-w-xl text-sm text-text-muted">
             Raportul complet + articolul de promovare publicat în 50 de ziare online (pachetul de publicare de 300€, inclus).
-            Dacă nu afli minim 3 lucruri concrete pe care nu le știai despre afacerea ta — banii înapoi.
+            Iar suma plătită se scade integral din orice pachet comanzi în 30 de zile.
           </p>
           <Link href="/service" className="btn-primary mt-5 inline-flex justify-center">
             Vreau radiografia firmei mele

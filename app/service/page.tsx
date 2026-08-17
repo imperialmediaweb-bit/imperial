@@ -564,10 +564,8 @@ export default function ServicePage() {
           <a href="/service/exemplu" className="font-semibold text-text-muted underline decoration-brand-orange/60 underline-offset-4 hover:text-brand-orange">
             📄 Vezi un raport-exemplu complet, înainte să dai un leu
           </a>
-          {price !== 0 && (
-            <span>🛡️ Garanție: nu afli minim 3 lucruri noi despre firma ta? Banii înapoi.</span>
-          )}
-          {price !== 0 && <span>💰 Suma se scade din orice pachet, în 30 de zile</span>}
+          <span>🗞️ Include articolul tău de promovare în 50 de ziare online (300€)</span>
+          {price !== 0 && <span>💰 Suma se scade integral din orice pachet, în 30 de zile</span>}
         </div>
 
         {/* Parteneriatul — DOAR pentru linkul Bizz Club, nu pentru VIP */}
@@ -1128,11 +1126,7 @@ export default function ServicePage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-                      Cei {price} lei se scad integral din orice pachet comanzi în 30 de zile
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-                      <span><b className="text-text">Garanție:</b> dacă nu afli minim 3 lucruri concrete pe care nu le știai despre afacerea ta — banii înapoi, fără întrebări</span>
+                      <span><b className="text-text">Cei {price} lei se scad integral</b> din orice pachet comanzi în 30 de zile — practic raportul devine gratuit</span>
                     </li>
                   </ul>
                   <div className="relative mt-5">

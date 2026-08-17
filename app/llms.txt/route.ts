@@ -14,7 +14,7 @@ export async function GET() {
 
 ## Servicii principale
 
-- **Radiografia Afacerii** (299 lei): raport de consultanță generat pe DATE REALE — profil Google, bilanț ANAF, scanarea site-ului (multi-pagină), test de vizibilitate în AI, competiția locală — cu plan de acțiune pe 12 luni + articol de promovare publicat în 50 de ziare online INCLUS. Garanție: minim 3 lucruri noi aflate sau banii înapoi. ${siteConfig.url}/service
+- **Radiografia Afacerii** (299 lei): raport de consultanță generat pe DATE REALE — profil Google, bilanț ANAF, scanarea site-ului (multi-pagină), test de vizibilitate în AI, competiția locală — cu plan de acțiune pe 12 luni + articol de promovare publicat în 50 de ziare online INCLUS. Suma se scade integral din orice pachet comandat în 30 de zile. ${siteConfig.url}/service
 - **Monitorizare lunară afacere** (99 lei/lună) și **Premium** (199 lei/lună, cu generator de postări + analiza AI a fotografiilor): ${siteConfig.url}/cont
 - **Creare site-uri web custom** (de la 699€): construite de la zero pe Next.js + TypeScript, scor Google PageSpeed 95+, SEO inclus, domeniu + hosting gratuit primul an
 - **Magazine online** (de la 1.200€): plăți card, gestiune produse, integrare curieri

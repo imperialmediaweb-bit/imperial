@@ -55,7 +55,7 @@ export function UnlockInline({ token, price, initialEmail = "" }: { token: strin
         </li>
         <li className="flex items-start gap-2">
           <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-          Garanție: minim 3 lucruri noi aflate sau banii înapoi · suma se scade din orice pachet în 30 de zile
+          Suma se scade integral din orice pachet comanzi în 30 de zile — practic raportul devine gratuit
         </li>
       </ul>
       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}

@@ -12,7 +12,7 @@ Sistemul scanează automat profilul Google al firmei cu recenziile, bilanțurile
 
 Noutatea absolută e însă alta: raportul verifică dacă firma apare în recomandările motoarelor de căutare cu inteligență artificială — ChatGPT, Perplexity — acolo unde tot mai mulți clienți își caută astăzi furnizorii. „Am testat sute de firme: patronul are recenzii bune, muncește corect, dar când clientul întreabă AI-ul «ce firmă recomanzi în orașul meu», el nu există acolo. Nici măcar nu știa că se poate verifica asta", spune Ionuț, fondatorul Imperial Media.
 
-Raportul costă 299 de lei și vine cu o garanție neobișnuită pe piața românească de consultanță: dacă proprietarul nu află minimum trei lucruri concrete pe care nu le știa despre propria afacere, primește banii înapoi. În preț este inclus și un articol de promovare a firmei analizate, publicat într-o rețea de 50 de ziare online din toată țara.
+Raportul costă 299 de lei, iar în preț este inclus și un articol de promovare a firmei analizate, publicat într-o rețea de 50 de ziare online din toată țara — un pachet de publicare care, cumpărat separat, valorează 300 de euro. În plus, suma plătită se scade integral din orice serviciu comandat ulterior, în primele 30 de zile.
 
 După raport, fiecare firmă primește un cont propriu cu monitorizare lunară — scorul, recenziile, competiția și site-ul, urmărite automat — și un consultant AI dedicat, care cunoaște toate cifrele firmei și răspunde la orice întrebare practică: ce să posteze săptămâna aceasta, cum să răspundă la o recenzie negativă, cum să-și facă primele reclame online.
 

@@ -1078,7 +1078,7 @@ Răspunde DOAR cu JSON-ul complet îmbunătățit, exact același format ca (B).
             <h2 style="margin:0 0 12px;">Radiografia pentru ${companyName} e gata 🔍</h2>
             <p>Am scanat datele reale — Google, ANAF, site, competiția — și raportul te așteaptă:</p>
             <p><a href="${siteConfig.url}/service/raport/${token}" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Vezi scorul și deblochează raportul</a></p>
-            <p style="font-size:13px;color:#666;">Linkul e personal și rămâne valabil — poți reveni oricând. Garanție: minim 3 lucruri noi aflate despre firma ta, sau banii înapoi.</p>
+            <p style="font-size:13px;color:#666;">Linkul e personal și rămâne valabil — poți reveni oricând. Suma se scade integral din orice pachet comanzi în 30 de zile.</p>
             <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
           </div>`,
         });

@@ -7,7 +7,7 @@
 - Fraza-cheie: *„Radiografia Afacerii — extensia cu date a întâlnirilor tale de la Bizz Club: la club îți iei direcția, noi îți ținem scorul între întâlniri."*
 
 ## Oferta (v. curentă)
-- **Radiografia Afacerii — 299 lei**: raport complet pe date reale (Google, ANAF, site, Facebook, test de vizibilitate AI, poze vitrină, zona/vadul) + **CADOU campania de promovare în toate cele 50 de ziare online (Media Expres, valoare 300€)**. Banii se scad din orice pachet în 30 de zile. **Garanție**: minim 3 lucruri noi aflate sau banii înapoi (14 zile; dacă articolul s-a publicat, rambursare proporțională).
+- **Radiografia Afacerii — 299 lei**: raport complet pe date reale (Google, ANAF, site, Facebook, test de vizibilitate AI, poze vitrină, zona/vadul) + **CADOU campania de promovare în toate cele 50 de ziare online (Media Expres, valoare 300€)**. Banii se scad din orice pachet în 30 de zile (argumentul principal de vânzare — „practic raportul devine gratuit"). Fără garanție „banii înapoi" în ofertă (decizie 17 aug — prea birocratic de administrat); refund-urile se fac totuși elegant, la cerere, din Stripe + storno StartCo.
 - Reduceri: membru Bizz Club (link /bizzclub) — 199 · recomandare (?ref=) — 249 · VIP (/vip) — gratuit (fiecare deblocare VIP îți vine pe email).
 - **Abonamente**: Monitorizare — 99 lei/lună / 990 pe an · **Premium — 199 lei/lună / 1.990 pe an** (tot din Monitorizare + generator de postări nelimitat + analiza AI a pozelor la cerere). Preț Premium: env `PREMIUM_PRICE_RON`.
 - **Pachet Start Online — 500 lei**: profil Google Business + pagină Facebook, cu design (logo simplu inclus). Comandă prin chatul consultantului, plată la **/plata-start**.
