@@ -123,8 +123,8 @@ export async function createSubscriptionCheckoutSession(opts: {
       ? `Abonament Premium Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`
       : `Monitorizare afacere Imperial Media (${monthly ? "lunar" : "anual — 2 luni gratis"})`,
     "line_items[0][price_data][product_data][description]": premium
-      ? "Tot din Monitorizare + generatorul de postări nelimitat + analiza AI a pozelor tale (vitrină, produse) la cerere"
-      : "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont",
+      ? "Tot din Monitorizare (inclusiv articolul lunar de presă în ziarul local) + generatorul de postări nelimitat + analiza AI a pozelor tale (vitrină, produse) la cerere"
+      : "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont + 1 articol de presă/lună despre afacerea ta în ziarul local din județ (rețeaua Media Expres)",
   });
   billingParams(params);
 

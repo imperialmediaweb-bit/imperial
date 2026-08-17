@@ -370,6 +370,8 @@ export function ContDashboard({
               <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
                 Scorul, recenziile, competiția, site-ul urmărite lună de lună + sfaturile lunii +
                 consultantul tău dedicat (care te și învață postări și reclame).
+                {" "}<b className="text-text">+ 1 articol de presă/lună despre afacerea ta în ziarul
+                local din județul tău</b> (rețeaua Media Expres).
               </p>
             </div>
             <div className="rounded-2xl border border-brand-purple/40 bg-brand-purple/10 p-4">

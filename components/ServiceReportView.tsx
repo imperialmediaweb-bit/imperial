@@ -515,6 +515,8 @@ export function ServiceReportView({
           Afacerea ta monitorizată lună de lună: scorul, recenziile, competiția, site-ul + sfaturile
           lunii + <b className="text-text">consultantul tău dedicat</b>, care îți știe firma și te învață
           inclusiv ce postări și reclame să faci pe Facebook.
+          {" "}Plus, în fiecare lună: <b className="text-text">un articol de presă despre afacerea ta,
+          publicat în ziarul online local din județul tău</b> (rețeaua Media Expres).
         </p>
         <p className="mx-auto mt-2 max-w-xl text-xs font-semibold text-brand-purple">Sau 990 lei/an — plătești 10 luni, primești 12. Iar pe <b>Premium (199 lei/lună)</b> ai și generatorul de postări + analiza AI a pozelor tale, nelimitat.</p>
         <Link href="/cont" className="btn-primary mt-4 inline-flex">

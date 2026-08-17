@@ -114,6 +114,50 @@ async function handle(req: Request) {
     console.error("[cron/followup] stuck sweep failed:", e);
   }
 
+  // REMINDER LUNAR CĂTRE PROPRIETAR: abonamentul include 1 articol de presă/lună
+  // în ziarul local al fiecărui abonat — pe 1 ale lunii primești lista de publicat.
+  // Marker în DB ca emailul să plece O SINGURĂ DATĂ pe lună, oricâte pinguri vin.
+  try {
+    const monthKey = new Date().toISOString().slice(0, 7); // ex: "2026-09"
+    await pool.query(`CREATE TABLE IF NOT EXISTS ops_markers (key TEXT PRIMARY KEY, value TEXT)`);
+    const claimed = await pool.query(
+      `INSERT INTO ops_markers (key, value) VALUES ('press-monthly', $1)
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value WHERE ops_markers.value IS DISTINCT FROM EXCLUDED.value
+       RETURNING key`,
+      [monthKey]
+    );
+    if ((claimed.rowCount ?? 0) > 0) {
+      const subs = await pool.query(`SELECT email, plan FROM subscribers WHERE active = TRUE ORDER BY created_at ASC`);
+      if (subs.rows.length > 0) {
+        // Firma și orașul fiecărui abonat — din cel mai recent raport pe emailul lui
+        const emails = subs.rows.map((s: any) => String(s.email).toLowerCase());
+        const firms = await pool.query(
+          `SELECT DISTINCT ON (LOWER(email)) LOWER(email) AS email,
+                  form_data->>'companyName' AS company, form_data->>'city' AS city
+           FROM service_reports WHERE LOWER(email) = ANY($1)
+           ORDER BY LOWER(email), created_at DESC`,
+          [emails]
+        );
+        const byEmail = new Map(firms.rows.map((r: any) => [r.email, r]));
+        const rowsHtml = subs.rows
+          .map((s: any) => {
+            const f = byEmail.get(String(s.email).toLowerCase());
+            return `<li><b>${f?.company ?? "?"}</b>${f?.city ? ` — ${f.city}` : ""} · ${s.email} · plan: ${s.plan ?? "lunar"}</li>`;
+          })
+          .join("");
+        sendSimpleEmail({
+          to: (await import("@/lib/email")).ownerEmail(),
+          subject: `🗞️ Articolele de presă ale lunii — ${subs.rows.length} ${subs.rows.length === 1 ? "abonat" : "abonați"} de publicat`,
+          html: `<p>Abonamentul include 1 articol de presă pe lună în ziarul local al fiecărui abonat. De publicat luna asta:</p>
+            <ul>${rowsHtml}</ul>
+            <p style="font-size:13px;color:#666;">Publici articolul în ziarul județului fiecăruia (rețeaua Media Expres) cu link spre site-ul/profilul firmei. Reminder automat, 1/lună.</p>`,
+        }).catch(() => {});
+      }
+    }
+  } catch (e) {
+    console.error("[cron/followup] press reminder failed:", e);
+  }
+
   // NEPLĂTIȚII cu email (au lăsat emailul la scanare dar nu au deblocat):
   // O SINGURĂ reamintire după ~1 zi, apoi îi lăsăm în pace. Marcaj: followup_stage = -1
   // (negativ nu încurcă dripul plătit: dacă plătesc ulterior, -1 < 1 și dripul pornește normal).
