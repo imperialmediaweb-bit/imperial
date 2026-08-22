@@ -34,8 +34,8 @@ export function generateMetadata({
   const loc = getLocationBySlug(params.slug);
   if (!loc) return {};
   return {
-    title: `Creare Site Web ${loc.name} — Web Design ${loc.county} | Imperial Media`,
-    description: `Căutați o echipă de web design în ${loc.name}? Imperial Media creează site-uri custom, magazine online și campanii de promovare pentru afaceri din ${loc.name}, ${loc.county}. Estimare gratuită în 2 minute.`,
+    title: `Creare Site Web ${loc.name} — Web Design, Magazine Online, Promovare | Imperial Media`,
+    description: `Creare site web în ${loc.name} de la 699€, magazine online de la 1.200€, promovare în 50 de ziare. Web design custom pentru afaceri din ${loc.name}, ${loc.county} — estimare gratuită în 2 minute.`,
     alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
       title: `Creare Site Web ${loc.name} | Imperial Media`,
@@ -110,6 +110,18 @@ export default function LocationPage({
     {
       q: `Lucrați doar cu firme din ${loc.name}?`,
       a: `Nu — lucrăm cu clienți din toată România și diaspora. Dar avem experiență directă cu piața din ${loc.county} și ${loc.region}, ceea ce ne ajută să înțelegem mai bine nevoile locale.`,
+    },
+    {
+      q: `Cât costă un magazin online în ${loc.name}?`,
+      a: `Un magazin online complet pornește de la 1.200€ și poate ajunge la 4.500€+ în funcție de numărul de produse, integrarea cu curieri și facturare. Include plăți cu cardul, design custom și SEO din structură. Cere estimarea exactă gratuit, în 2 minute.`,
+    },
+    {
+      q: `Faceți SEO și promovare online pentru firme din ${loc.name}?`,
+      a: `Da — fiecare site vine cu SEO local din construcție (pagini optimizate, date structurate, viteză 90+), iar campania de promovare în 50 de ziare online e inclusă la orice site nou. Pentru „${loc.name} + serviciul tău" pe Google, combinația site rapid + profil Google Business + mențiuni în presă e cea care urcă.`,
+    },
+    {
+      q: `Sunteți o agenție de web design potrivită pentru firme mici din ${loc.name}?`,
+      a: `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. Pachetele pornesc de la 699€ cu plata în 2 rate, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`,
     },
     {
       q: `Ce tehnologii folosiți?`,
@@ -394,7 +406,7 @@ export default function LocationPage({
       )}
 
       {/* ─── GHIDURILE ORAȘULUI — linkuri interne oraș ↔ articole (SEO) ─── */}
-      {loc.isCountySeat && (
+      {(
         <section className="border-t border-bg-border/40 py-12">
           <div className="container-app">
             <h3 className="text-center text-xs font-bold uppercase tracking-wider text-text-subtle">

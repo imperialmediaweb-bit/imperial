@@ -12,7 +12,8 @@ export type BlogArticle = {
 };
 
 function generateCostArticles(): BlogArticle[] {
-  return LOCATIONS.filter((l) => l.isCountySeat).map((loc) => ({
+  // TOATE cele 61 de orașe (nu doar reședințele) — fiecare oraș cu ghidul lui de prețuri
+  return LOCATIONS.map((loc) => ({
     slug: `cat-costa-site-web-${loc.slug}`,
     title: `Cât costă un site web în ${loc.name} în 2026?`,
     description: `Ghid complet de prețuri pentru creare site web în ${loc.name}, ${loc.county}. Pachete de la 699€, factori care influențează prețul, și cum să alegi.`,
@@ -25,7 +26,7 @@ function generateCostArticles(): BlogArticle[] {
 }
 
 function generatePromoArticles(): BlogArticle[] {
-  return LOCATIONS.filter((l) => l.isCountySeat).map((loc) => ({
+  return LOCATIONS.map((loc) => ({
     slug: `promovare-afacere-online-${loc.slug}`,
     title: `Cum să-ți promovezi afacerea online în ${loc.name}`,
     description: `Strategii concrete de promovare online pentru afaceri din ${loc.name}: SEO local, Google Business, social media, și campanii în 50 ziare.`,
