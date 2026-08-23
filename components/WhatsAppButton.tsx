@@ -1,43 +1,76 @@
 "use client";
 
-// Butonul plutitor din colț — nu mai e doar WhatsApp: deschide un mini-meniu cu
-// consultantul AI în frunte (răspunde la ORICE întrebare despre site-uri, prețuri,
-// tehnic), Radiografia, și WhatsApp-ul păstrat pentru cine vrea om.
+// Balonul plutitor din colț — CHAT AI DIRECT PE PAGINĂ (consultantul mega smart,
+// cu voce), plus scurtături: Radiografia și WhatsApp pentru cine vrea om.
+// Chatul se încarcă leneș (dynamic) — nu îngreunează nicio pagină până la click.
 
 import { useState } from "react";
 import Link from "next/link";
-import { MessageCircle, X, Sparkles, Radar } from "lucide-react";
+import dynamic from "next/dynamic";
+import { MessageCircle, X, Sparkles, Radar, ArrowLeft } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
+const BriefChat = dynamic(() => import("./BriefChat").then((m) => m.BriefChat), {
+  ssr: false,
+  loading: () => (
+    <div className="grid h-full place-items-center text-sm text-text-muted">
+      Se încarcă consultantul...
+    </div>
+  ),
+});
+
 export function WhatsAppButton() {
-  const [open, setOpen] = useState(false);
+  const [view, setView] = useState<"closed" | "menu" | "chat">("closed");
   const waText = encodeURIComponent(
     "Bună! Am văzut site-ul Imperial Media și aș vrea să discutăm despre un site."
   );
 
   return (
     <div className="fixed bottom-5 right-5 z-50 print:hidden">
-      {/* Mini-meniul */}
-      {open && (
+      {/* ─── CHATUL — direct pe pagină, fără să pleci ─── */}
+      {view === "chat" && (
+        <div className="fixed bottom-24 right-3 left-3 top-16 overflow-hidden rounded-3xl border border-bg-border bg-bg-card shadow-card sm:left-auto sm:top-auto sm:h-[min(640px,calc(100vh-140px))] sm:w-[400px]">
+          <div className="flex items-center justify-between border-b border-bg-border/60 bg-gradient-to-r from-brand-orange/15 to-brand-purple/10 px-4 py-3">
+            <button type="button" onClick={() => setView("menu")} aria-label="Înapoi la meniu"
+              className="grid h-8 w-8 place-items-center rounded-full text-text-muted transition hover:bg-white/10 hover:text-text">
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+            <div className="text-center">
+              <p className="font-display text-sm font-bold text-text">Consultantul AI Imperial</p>
+              <p className="text-[10px] text-text-subtle">Întreabă orice — scris sau cu vocea 🎙</p>
+            </div>
+            <button type="button" onClick={() => setView("closed")} aria-label="Închide chatul"
+              className="grid h-8 w-8 place-items-center rounded-full text-text-muted transition hover:bg-white/10 hover:text-text">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="h-[calc(100%-53px)]">
+            <BriefChat mode="consultanta" compact />
+          </div>
+        </div>
+      )}
+
+      {/* ─── MENIUL ─── */}
+      {view === "menu" && (
         <div className="absolute bottom-16 right-0 w-[300px] overflow-hidden rounded-3xl border border-bg-border bg-bg-card shadow-card">
           <div className="border-b border-bg-border/60 bg-gradient-to-r from-brand-orange/15 to-brand-purple/10 px-5 py-3.5">
             <p className="font-display text-sm font-bold text-text">Cu ce te putem ajuta?</p>
             <p className="text-[11px] text-text-subtle">Răspuns pe loc, 24/7</p>
           </div>
           <div className="p-2.5">
-            <Link href="/consultanta" onClick={() => setOpen(false)}
-              className="flex items-start gap-3 rounded-2xl p-3 transition hover:bg-white/5">
+            <button type="button" onClick={() => setView("chat")}
+              className="flex w-full items-start gap-3 rounded-2xl p-3 text-left transition hover:bg-white/5">
               <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-orange-gradient text-white shadow-glow-orange">
                 <Sparkles className="h-5 w-5" />
               </span>
               <span>
-                <span className="block text-sm font-bold text-text">Întreabă consultantul AI</span>
+                <span className="block text-sm font-bold text-text">Vorbește cu consultantul AI</span>
                 <span className="block text-[11px] leading-snug text-text-muted">
-                  Orice întrebare despre site-uri, prețuri, tehnic — răspuns instant, în chat
+                  Chiar aici, în chat — orice întrebare despre site-uri, prețuri, tehnic
                 </span>
               </span>
-            </Link>
-            <Link href="/service" onClick={() => setOpen(false)}
+            </button>
+            <Link href="/service" onClick={() => setView("closed")}
               className="flex items-start gap-3 rounded-2xl p-3 transition hover:bg-white/5">
               <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-brand-purple/20 text-brand-purple">
                 <Radar className="h-5 w-5" />
@@ -50,7 +83,7 @@ export function WhatsAppButton() {
               </span>
             </Link>
             <a href={`https://wa.me/${siteConfig.whatsapp}?text=${waText}`} target="_blank" rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
+              onClick={() => setView("closed")}
               className="flex items-start gap-3 rounded-2xl p-3 transition hover:bg-white/5">
               <span className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-[#25D366]/20 text-[#25D366]">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
@@ -68,12 +101,12 @@ export function WhatsAppButton() {
         </div>
       )}
 
-      {/* Butonul */}
-      <button type="button" onClick={() => setOpen((o) => !o)}
-        aria-label={open ? "Închide meniul de contact" : "Deschide meniul de contact"}
+      {/* ─── BUTONUL ─── */}
+      <button type="button" onClick={() => setView((v) => (v === "closed" ? "menu" : "closed"))}
+        aria-label={view === "closed" ? "Deschide meniul de contact" : "Închide"}
         className="group relative grid h-14 w-14 place-items-center rounded-full bg-orange-gradient text-white shadow-glow-orange transition-transform hover:scale-110">
-        {!open && <span className="absolute inset-0 animate-ping rounded-full bg-brand-orange opacity-25" />}
-        {open ? <X className="relative h-6 w-6" /> : <MessageCircle className="relative h-7 w-7" />}
+        {view === "closed" && <span className="absolute inset-0 animate-ping rounded-full bg-brand-orange opacity-25" />}
+        {view === "closed" ? <MessageCircle className="relative h-7 w-7" /> : <X className="relative h-6 w-6" />}
       </button>
     </div>
   );

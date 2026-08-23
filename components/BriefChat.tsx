@@ -74,9 +74,11 @@ type BriefChatProps = {
   mode?: "brief" | "consultanta";
   // Context despre client (ex: din /cont) — consultantul îl știe fără să întrebe.
   clientContext?: string;
+  // Varianta pentru balonul plutitor: o singură coloană, umple containerul părinte
+  compact?: boolean;
 };
 
-export function BriefChat({ mode = "brief", clientContext }: BriefChatProps) {
+export function BriefChat({ mode = "brief", clientContext, compact = false }: BriefChatProps) {
   const greeting = GREETINGS[mode];
   const initialChips = CHIPS[mode];
   const router = useRouter();
@@ -503,9 +505,9 @@ Vreau ceva în aceeași direcție.`;
     !lastMsg.options.answered;
 
   return (
-    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-5">
+    <div className={compact ? "flex h-full min-h-0 flex-col" : "flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-5"}>
       {/* ─── CHAT COLUMN ─── */}
-      <div className="flex min-h-[480px] flex-col overflow-hidden rounded-3xl border border-bg-border bg-bg-card bg-card-gradient shadow-card sm:min-h-[640px]">
+      <div className={compact ? "flex h-full min-h-0 flex-col overflow-hidden bg-bg-card" : "flex min-h-[480px] flex-col overflow-hidden rounded-3xl border border-bg-border bg-bg-card bg-card-gradient shadow-card sm:min-h-[640px]"}>
         {/* Header mic */}
         <div className="flex items-center gap-3 border-b border-bg-border/60 px-5 py-3.5">
           <div className="grid h-9 w-9 place-items-center rounded-full bg-orange-gradient shadow-glow-orange">
@@ -696,7 +698,7 @@ Vreau ceva în aceeași direcție.`;
 
       {/* ─── SIDE PANEL (diferit per mod) ───
           sticky pe desktop: urmărește scroll-ul, fără spațiu gol sub el */}
-      <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto">
+      <div className={compact ? "hidden" : "lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto"}>
         {mode === "consultanta" ? (
           <ConsultantaPanel
             brief={brief}
