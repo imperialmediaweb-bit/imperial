@@ -129,6 +129,24 @@ export async function ensureSchema(): Promise<void> {
       seen BOOLEAN NOT NULL DEFAULT FALSE
     );
     CREATE INDEX IF NOT EXISTS idx_client_notifications_email ON client_notifications(email, created_at DESC);
+
+    -- Coada de articole de presă pentru rețeaua Media Expres (feed-ul /api/presa-feed)
+    -- draft (așteaptă aprobarea ta) → ready (în feed, rețeaua îl publică) → published
+    CREATE TABLE IF NOT EXISTS press_articles (
+      id SERIAL PRIMARY KEY,
+      token TEXT NOT NULL UNIQUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      title TEXT NOT NULL,
+      content_html TEXT NOT NULL,
+      image_url TEXT,
+      judet TEXT,
+      distributie TEXT NOT NULL DEFAULT 'local',
+      publica_dupa DATE,
+      client_email TEXT,
+      status TEXT NOT NULL DEFAULT 'draft',
+      published_urls JSONB NOT NULL DEFAULT '[]'::jsonb
+    );
+    CREATE INDEX IF NOT EXISTS idx_press_articles_status ON press_articles(status, created_at DESC);
   `;
 
   try {

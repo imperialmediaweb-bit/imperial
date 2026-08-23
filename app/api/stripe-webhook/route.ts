@@ -366,13 +366,45 @@ Reguli: ton pozitiv de prezentare (e articol de promovare, nu analiză critică)
       const tb = resp.content.find((b) => b.type === "text");
       const art = tb && tb.type === "text" ? tb.text.trim() : "";
       if (!art) return;
+
+      // Ciorna intră AUTOMAT în coada de presă (status draft) — tu doar aprobi
+      // dintr-un click, iar rețeaua o publică singură prin /api/presa-feed.
+      const lines = art.split("\n").map((l) => l.trim());
+      const artTitle = (lines[0] ?? report.companyName).replace(/^\**|\**$/g, "").slice(0, 200);
+      const artBody = lines.slice(1).join("\n").trim();
+      const artHtml = artBody
+        .split(/\n{2,}/)
+        .map((p) => `<p>${p.replace(/</g, "&lt;").replace(/\n/g, "<br/>")}</p>`)
+        .join("\n") +
+        `\n<p>Un exemplu de analiză completă: <a href="${siteConfig.url}/service/exemplu">imperial-media.ro/service/exemplu</a> · Testul pentru orice firmă: <a href="${siteConfig.url}/service">imperial-media.ro/service</a></p>`;
+      let aprobaLink = "";
+      try {
+        const { LOCATIONS } = await import("@/lib/locations");
+        const locMatch = LOCATIONS.find((l) => l.name.toLowerCase() === String(report.city ?? city ?? "").toLowerCase());
+        const artToken = `art_${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36)}`;
+        const { getPool, ensureSchema } = await import("@/lib/db");
+        await ensureSchema();
+        await getPool()!.query(
+          `INSERT INTO press_articles (token, title, content_html, judet, distributie, client_email, status)
+           VALUES ($1, $2, $3, $4, 'toata-reteaua', $5, 'draft')`,
+          [artToken, artTitle, artHtml, locMatch?.county ?? String(report.city ?? city ?? ""), email ?? null]
+        );
+        aprobaLink = `${siteConfig.url}/api/admin/presa-coada?aproba=${artToken}`;
+      } catch (e) {
+        console.error("[stripe-webhook] press queue insert failed:", e);
+      }
+
       await sendSimpleEmail({
         to: ownerEmail(),
-        subject: `🗞️ Ciorna articolului de promovare — ${report.companyName} (gata de publicat)`,
+        subject: `🗞️ Ciorna articolului de promovare — ${report.companyName} (aprobi cu un click)`,
         html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;line-height:1.6;">
-          <p><b>Scrisă automat din raportul plătit.</b> Pașii tăi: 1) citește-o pe diagonală, 2) ia pozele clientului
-          (emailurile „📸 a urcat poze" / folderul lui din Cloudinary — i-am cerut pozele automat pe email),
-          3) publică în rețeaua Media Expres, în toate cele 50 de ziare.</p>
+          <p><b>Scrisă automat din raportul plătit</b> și pusă în coada de presă.</p>
+          ${aprobaLink
+            ? `<p style="background:#e8f7ee;border:1px solid #9ad9b3;border-radius:8px;padding:12px;">
+                ✅ <b>Dacă e ok, un singur click:</b> <a href="${aprobaLink}">APROBĂ PUBLICAREA în toate cele 50 de ziare</a><br/>
+                <span style="font-size:12px;color:#555;">Rețeaua o preia automat din feed (max 24h), iar clientul primește linkurile pe email singur. Vezi toată coada: ${siteConfig.url}/api/admin/presa-coada</span>
+              </p>`
+            : `<p>⚠️ Coada de presă a dat eroare — publică manual în rețea.</p>`}
           <hr/>
           <pre style="white-space:pre-wrap;font-family:Georgia,serif;font-size:15px;">${art.replace(/</g, "&lt;")}</pre>
         </div>`,
