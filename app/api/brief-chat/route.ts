@@ -104,10 +104,17 @@ export async function POST(req: Request) {
   let loops = 0;
   const MAX_LOOPS = 4;
 
+  // Consultanta publică rulează pe MODELUL MARE (răspunsuri de expert la orice
+  // întrebare tehnică) cu fallback pe cel mic dacă modelul mare e indisponibil.
+  const { REPORT_MODEL } = await import("@/lib/ai");
+  let chatModel = mode === "consultanta" ? REPORT_MODEL : CLAUDE_MODEL;
+
   try {
     while (loops < MAX_LOOPS) {
-      const resp = await client.messages.create({
-        model: CLAUDE_MODEL,
+      let resp;
+      try {
+        resp = await client.messages.create({
+        model: chatModel,
         max_tokens: 1024,
         // Prompt caching pe system prompt — reduce costul după prima cerere
         system: [
@@ -142,7 +149,16 @@ TRASEELE DE PLATĂ (toate self-service, cu factura automată pe email — nu pro
         ],
         tools: ANTHROPIC_TOOLS,
         messages: currentMessages,
-      });
+        });
+      } catch (e: any) {
+        // Modelul mare indisponibil (404/suprasarcină) → cădem pe cel mic și reluăm
+        if (chatModel !== CLAUDE_MODEL) {
+          console.warn(`[brief-chat] ${chatModel} indisponibil (${e?.status ?? e?.message}) — fallback pe ${CLAUDE_MODEL}`);
+          chatModel = CLAUDE_MODEL;
+          continue;
+        }
+        throw e;
+      }
 
       // Extrage text + tool_uses din răspuns
       const textBlocks: string[] = [];
