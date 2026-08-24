@@ -2,11 +2,11 @@
 # Distribuție: TOATĂ REȚEAUA (50 de ziare). Recomandare: rescriere per site activată
 # la rețea (anti-duplicat) + categoria „Publicitate" (e articol despre propria firmă).
 
-**Titlu:** Agenția din Botoșani care construiește site-uri cum se fac la marile companii de tehnologie — și le promovează în propria rețea de 50 de ziare
+**Titlu:** Agenția românească care construiește site-uri cum se fac la marile companii de tehnologie — și le promovează în propria rețea de 50 de ziare
 
 **Subtitlu:** Fără WordPress, fără șabloane: fiecare site e scris de la zero, pe aceeași tehnologie folosită de Netflix și Nike — iar la final, afacerea clientului apare în presa din toată țara.
 
-Pentru majoritatea firmelor mici din România, „să-ți faci site" înseamnă de ani de zile același lucru: un șablon de WordPress instalat rapid, care arată ca alte mii de site-uri, se încarcă greu și se strică la prima actualizare uitată. O agenție din Botoșani a luat-o pe drumul opus.
+Pentru majoritatea firmelor mici din România, „să-ți faci site" înseamnă de ani de zile același lucru: un șablon de WordPress instalat rapid, care arată ca alte mii de site-uri, se încarcă greu și se strică la prima actualizare uitată. O agenție românească a luat-o pe drumul opus.
 
 Imperial Media, cu peste 10 ani de activitate și mai bine de 200 de clienți din toată țara, construiește fiecare site de la zero, pe Next.js — tehnologia modernă folosită de companii precum Netflix, Nike sau Notion. Rezultatul se măsoară, nu se povestește: site-uri care se încarcă în mai puțin de o secundă, cu scoruri Google PageSpeed de peste 90 — pragul de la care Google începe să favorizeze un site în căutări.
 
