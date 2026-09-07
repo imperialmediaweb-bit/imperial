@@ -53,6 +53,13 @@ export default function PlataSiteStartPage() {
           <p className="mt-3 text-[11px] text-text-subtle">
             Plată securizată prin Stripe · factura vine automat pe email · fără telefoane, totul online
           </p>
+          <p className="mt-4 border-t border-bg-border/50 pt-4 text-xs text-text-muted">
+            🏦 <b className="text-text">Preferi transfer bancar?</b> Trimite un email la{" "}
+            <a href="mailto:office@imperial-media.ro?subject=Site%20Start%20%E2%80%94%20plata%20prin%20transfer" className="text-brand-orange hover:underline">
+              office@imperial-media.ro
+            </a>{" "}
+            cu numele firmei și CUI-ul — primești factura proformă cu datele contului, iar lucrul începe imediat ce plata intră.
+          </p>
         </div>
       </section>
     </main>
