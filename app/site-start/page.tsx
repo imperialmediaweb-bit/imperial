@@ -66,7 +66,7 @@ export default function SiteStartPage() {
           </Link>
         </div>
         <p className="mt-4 text-xs text-text-subtle">
-          💰 Suma se scade INTEGRAL din orice site complet comanzi în 6 luni · plată securizată Stripe · factură automată
+          💰 Banii nu se pierd: dacă treci la site-ul mare în 6 luni, cei plătiți devin AVANS · plată securizată Stripe · factură automată
         </p>
 
         {/* MEGA OFERTA — stiva de valoare, cu bonusul pe care nu-l are nicio agenție */}
@@ -78,7 +78,7 @@ export default function SiteStartPage() {
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Site-ul complet, cu 4 pagini, pe brandul tău <b className="text-text">(valoare reală 2.500+ lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Domeniu .ro + găzduire primul an <b className="text-text">(~350 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🗞️ BONUS: <b className="text-text">un articol de presă despre firma ta, publicat în ziarul online al județului tău</b> — rețeaua noastră de presă, avantaj pe care nicio altă agenție nu-l are <b className="text-text">(~300 lei)</b></span></p>
-            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>💰 Iar dacă firma crește: <b className="text-text">toți cei {price} lei se scad din site-ul complet</b> — investiția nu se pierde niciodată</span></p>
+            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>💰 Iar dacă firma crește: <b className="text-text">cei {price} lei devin AVANS la site-ul mare</b> — plătești doar diferența</span></p>
           </div>
           <p className="mt-4 border-t border-bg-border/50 pt-3 text-center text-xs text-text-subtle">
             Valoare totală: <s>3.100+ lei</s> → <b className="text-brand-orange">{price} lei</b>, în perioada de lansare
@@ -173,9 +173,14 @@ export default function SiteStartPage() {
           </div>
           <p className="mx-auto mt-8 max-w-xl text-sm text-text-muted">
             Cu peste <b className="text-text">10 ani de experiență și 200+ clienți</b>, suntem agenția care
-            construiește și site-urile mari de mii de euro — Site Start e aceeași calitate, în format mic.
-            Iar dacă firma crește: <b className="text-text">cei {price} lei se scad integral din site-ul complet</b>.
+            construiește și site-urile mari, de mii de euro — Site Start e aceeași calitate, în format mic.
           </p>
+          <div className="mx-auto mt-4 max-w-xl rounded-2xl border border-green-500/30 bg-green-500/5 p-4 text-sm text-text-muted">
+            <b className="text-text">💰 Banii tăi nu se pierd niciodată — uite cum:</b> plătești {price} lei acum.
+            Dacă în următoarele 6 luni vrei site-ul mare (cu programări, magazin, orice funcții),
+            <b className="text-text"> cei {price} lei plătiți devin AVANS</b> — plătești doar diferența.
+            Practic, Site Start e prima rată a oricărui site vei vrea vreodată.
+          </div>
         </div>
       </section>
 
