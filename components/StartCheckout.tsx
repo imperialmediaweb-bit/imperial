@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { fbTrack } from "@/lib/fbq";
 
 export function StartCheckout({ initialEmail = "", price, endpoint = "/api/start-checkout" }: { initialEmail?: string; price: number; endpoint?: string }) {
   const [email, setEmail] = useState(initialEmail);
@@ -16,6 +17,7 @@ export function StartCheckout({ initialEmail = "", price, endpoint = "/api/start
     if (busy) return;
     setBusy(true);
     setError(null);
+    fbTrack("InitiateCheckout", { value: price, currency: "RON" });
     try {
       const res = await fetch(endpoint, {
         method: "POST",
