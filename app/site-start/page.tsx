@@ -78,10 +78,11 @@ export default function SiteStartPage() {
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Site-ul complet, cu 4 pagini, pe brandul tău <b className="text-text">(valoare reală 2.500+ lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Domeniu .ro + găzduire primul an <b className="text-text">(~350 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🗞️ BONUS: <b className="text-text">un articol de presă despre firma ta, publicat în ziarul online al județului tău</b> — rețeaua noastră de presă, avantaj pe care nicio altă agenție nu-l are <b className="text-text">(~300 lei)</b></span></p>
+            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🔍 BONUS: <b className="text-text">Radiografia Afacerii</b> — analiza completă a firmei tale cu AI: scor, recenzii vs concurență, vizibilitate în ChatGPT, plan de acțiune <b className="text-text">(299 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>💰 Iar dacă firma crește: <b className="text-text">cei {price} lei devin AVANS la site-ul mare</b> — plătești doar diferența</span></p>
           </div>
           <p className="mt-4 border-t border-bg-border/50 pt-3 text-center text-xs text-text-subtle">
-            Valoare totală: <s>3.100+ lei</s> → <b className="text-brand-orange">{price} lei</b>, în perioada de lansare
+            Valoare totală: <s>3.400+ lei</s> → <b className="text-brand-orange">{price} lei</b>, în perioada de lansare
           </p>
         </div>
       </section>
