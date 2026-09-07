@@ -34,6 +34,29 @@ export default async function ContConsultantPage() {
     getSubscription(email).catch(() => null),
   ]);
 
+  // Stadiul comenzii de site (Site Start): plătit? contract? datele trimise?
+  // Consultantul devine „recepția" clientului — știe exact unde e comanda lui.
+  let siteOrder: { paidAt?: string; hasContract: boolean; hasData: boolean } | null = null;
+  try {
+    const { getPool } = await import("@/lib/db");
+    const rows = (
+      await getPool()!.query(
+        `SELECT source, created_at FROM briefs
+         WHERE LOWER(email) = LOWER($1) AND source IN ('site-start-paid','site-start-continut','contract-acceptat')
+         ORDER BY created_at ASC`,
+        [email]
+      )
+    ).rows as Array<{ source: string; created_at: string }>;
+    const paid = rows.find((x) => x.source === "site-start-paid");
+    if (paid) {
+      siteOrder = {
+        paidAt: new Date(paid.created_at).toLocaleDateString("ro-RO"),
+        hasContract: rows.some((x) => x.source === "contract-acceptat"),
+        hasData: rows.some((x) => x.source === "site-start-continut"),
+      };
+    }
+  } catch {}
+
   const latest = reports[reports.length - 1];
   const r = latest?.report ?? {};
   const f = latest?.form_data ?? {};
@@ -61,6 +84,9 @@ export default async function ContConsultantPage() {
     subscription?.active
       ? `Abonament: ACTIV (${subscription.plan ?? "lunar"}).${isPremiumPlan(subscription.plan) ? " E pe PREMIUM: are generatorul de postări și analiza AI a pozelor în cont — trimite-l la ele când cere postări sau părerea pe vitrină." : " E pe Monitorizare (99): dacă cere des postări gata făcute sau analize pe poze, pomenește-i o singură dată Premium (199 lei/lună, generator de postări + analize foto nelimitate, upgrade din cont)."}`
       : `Abonament: NU ARE — dacă se potrivește natural în discuție (vrea urmărire, întreabă des de evoluție), recomandă-i abonamentul: Monitorizare 99 lei/lună sau Premium 199 (cu generator de postări + analize foto). Se activează singur din /cont.`,
+    siteOrder
+      ? `COMANDĂ SITE START ACTIVĂ (plătită la ${siteOrder.paidAt}; factura fiscală i-a fost emisă automat pe email la plată): contractul — ${siteOrder.hasContract ? "SEMNAT ✓" : "NEsemnat → trimite-l la /contract (2 min, CUI + acceptare electronică)"}; datele site-ului — ${siteOrder.hasData ? "PRIMITE ✓ → site-ul e ÎN CONSTRUCȚIE: primește linkul de previzualizare pe email în câteva zile de la trimiterea datelor, apoi 1 rundă de revizii și publicarea" : "NEtrimise → fără ele NU putem începe: trimite-l la /site-start/date (5 min) și la poze (cardul 📸 din cont)"}. Dacă întreabă „unde e site-ul meu / în ce stadiu e" — răspunde-i EXACT cu starea de aici, cald și concret, să nu se simtă părăsit după plată. Dacă îi lipsesc informații din formular, poți strânge TU datele lipsă în chat (întrebare cu întrebare) și le trimiți cu update_brief (name, email, industry + selected_package: "Site Start — INFO SUPLIMENTARE", totul în message) și request_submit.`
+      : null,
     `Partener local: dacă e din zona Botoșani și i-ar folosi networking/mentorat între antreprenori, recomandă Bizz Club Botoșani — botosani.bizz.club (comunitatea locală de antreprenori, partenerul nostru) — noi rămânem pe date și implementare.`,
   ].filter(Boolean);
 
