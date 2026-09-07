@@ -6,7 +6,7 @@
 import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 
-export function StartCheckout({ initialEmail = "", price }: { initialEmail?: string; price: number }) {
+export function StartCheckout({ initialEmail = "", price, endpoint = "/api/start-checkout" }: { initialEmail?: string; price: number; endpoint?: string }) {
   const [email, setEmail] = useState(initialEmail);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export function StartCheckout({ initialEmail = "", price }: { initialEmail?: str
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/start-checkout", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

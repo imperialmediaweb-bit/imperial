@@ -20,6 +20,12 @@ export function startPriceRon(): number {
   return Number.isFinite(v) && v > 0 ? Math.round(v) : 500;
 }
 
+// Site Start — treapta de intrare: site de prezentare 4 pagini, livrat în câteva zile
+export function siteStartPriceRon(): number {
+  const v = Number(process.env.SITE_START_PRICE_RON);
+  return Number.isFinite(v) && v > 0 ? Math.round(v) : 1500;
+}
+
 // Date de facturare cerute la orice plată: adresă + denumire firmă + CUI.
 // Ajung în webhook (custom_fields + customer_details) → emailul către proprietar
 // conține tot ce trebuie pentru emiterea facturii.
@@ -126,6 +132,33 @@ export async function createSubscriptionCheckoutSession(opts: {
       ? "Tot din Monitorizare (inclusiv articolul lunar de presă în ziarul local) + generatorul de postări nelimitat + analiza AI a pozelor tale (vitrină, produse) la cerere"
       : "Afacerea ta monitorizată lună de lună: scor, recenzii, competiție, site + sfaturile lunii + consultantul tău dedicat în cont + 1 articol de presă/lună despre afacerea ta în ziarul local din județ (rețeaua Media Expres)",
   });
+  billingParams(params);
+
+  return createSession(key, params);
+}
+
+// Site Start (1.500 lei) — site de prezentare 4 pagini: plata cu cardul, fără telefoane.
+export async function createSiteStartCheckoutSession(opts: {
+  origin: string;
+  email?: string;
+}): Promise<{ url: string }> {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("STRIPE_SECRET_KEY missing");
+
+  const params = new URLSearchParams({
+    mode: "payment",
+    "metadata[purpose]": "site-start",
+    success_url: `${opts.origin}/cont?sitestart=platit`,
+    cancel_url: `${opts.origin}/cont`,
+    "line_items[0][quantity]": "1",
+    "line_items[0][price_data][currency]": "ron",
+    "line_items[0][price_data][unit_amount]": String(siteStartPriceRon() * 100),
+    "line_items[0][price_data][product_data][name]":
+      "Site Start — site de prezentare (4 pagini)",
+    "line_items[0][price_data][product_data][description]":
+      "Site de prezentare custom: Acasă, Despre, Servicii, Contact. Domeniu + găzduire primul an incluse. Suma se scade integral din site-ul complet în 6 luni.",
+  });
+  if (opts.email) params.set("customer_email", opts.email);
   billingParams(params);
 
   return createSession(key, params);
