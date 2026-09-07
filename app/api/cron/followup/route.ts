@@ -158,6 +158,77 @@ async function handle(req: Request) {
     console.error("[cron/followup] press reminder failed:", e);
   }
 
+  // SITE START — plasa anti-abandon: (a) a plătit dar nu a trimis datele în 48h →
+  // un singur reminder; (b) la 11 luni de la plată → oferta de Administrare, fix
+  // înainte să-i expire domeniul și găzduirea gratuite. Marker în ops_markers = o
+  // singură dată per client, oricâte rulări.
+  try {
+    await pool.query(`CREATE TABLE IF NOT EXISTS ops_markers (key TEXT PRIMARY KEY, value TEXT)`);
+
+    const paidNoData = await pool.query(`
+      SELECT DISTINCT ON (LOWER(b.email)) b.email, b.name
+      FROM briefs b
+      WHERE b.source = 'site-start-paid' AND b.email LIKE '%@%' AND b.created_at < NOW() - INTERVAL '48 hours'
+        AND NOT EXISTS (SELECT 1 FROM briefs c WHERE c.source = 'site-start-continut' AND LOWER(c.email) = LOWER(b.email))
+        AND NOT EXISTS (SELECT 1 FROM ops_markers m WHERE m.key = 'ss-datereminder:' || LOWER(b.email))
+      ORDER BY LOWER(b.email), b.created_at DESC LIMIT 50
+    `);
+    for (const r of paidNoData.rows) {
+      try {
+        await sendSimpleEmail({
+          to: r.email,
+          subject: `${r.name ?? "Firma ta"}: site-ul tău așteaptă doar datele — 5 minute`,
+          html: WRAP(`
+            <h2 style="margin:0 0 12px;">Suntem gata să-ți construim site-ul! 🏗️</h2>
+            <p>Am primit plata (mulțumim!) — ne lipsesc doar informațiile despre firmă ca să ne apucăm. Durează 5 minute:</p>
+            <p>${BTN(`${siteConfig.url}/site-start/date`, "Completează datele site-ului")}</p>
+            <p style="font-size:13px;color:#666;">Textele le scriem noi din ce ne povestești. Pozele le urci din contul tău (${siteConfig.url}/cont) — sau folosim imagini profesionale de stock, incluse. Livrăm în câteva zile de la primirea datelor.</p>
+            <p style="font-size:13px;color:#666;">Ai o întrebare? Scrie-i consultantului tău din cont — îți răspunde pe loc.</p>
+          `),
+        });
+        await pool.query(`INSERT INTO ops_markers (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING`,
+          [`ss-datereminder:${String(r.email).toLowerCase()}`, new Date().toISOString()]);
+      } catch (e) {
+        console.error(`[cron/followup] site-start data reminder failed for ${r.email}:`, e);
+      }
+    }
+
+    const elevenMonths = await pool.query(`
+      SELECT DISTINCT ON (LOWER(b.email)) b.email, b.name
+      FROM briefs b
+      WHERE b.source = 'site-start-paid' AND b.email LIKE '%@%' AND b.created_at < NOW() - INTERVAL '11 months'
+        AND NOT EXISTS (SELECT 1 FROM ops_markers m WHERE m.key = 'ss-admin:' || LOWER(b.email))
+      ORDER BY LOWER(b.email), b.created_at DESC LIMIT 50
+    `);
+    for (const r of elevenMonths.rows) {
+      try {
+        await sendSimpleEmail({
+          to: r.email,
+          subject: `${r.name ?? "Site-ul tău"}: anul gratuit de domeniu și găzduire se apropie de final`,
+          html: WRAP(`
+            <h2 style="margin:0 0 12px;">Site-ul tău împlinește un an în curând 🎂</h2>
+            <p>Domeniul și găzduirea incluse GRATUIT expiră peste aproximativ o lună. Ai două variante, ambele simple:</p>
+            <p><b>🔧 Administrare Start — 100 lei/lună:</b> găzduirea + domeniul + 1-2 modificări mici pe lună + backup. Site-ul merge fără să te gândești la el.</p>
+            <p><b>⭐ Administrare Complet — 300 lei/lună:</b> tot ce e mai sus + mentenanță deplină + <b>un articol de presă despre firma ta, în fiecare lună, în ziarul județului</b> + monitorizarea afacerii (scorul, recenziile, competiția — lunar).</p>
+            <p>${BTN(`${siteConfig.url}/cont`, "Alege din contul tău")}</p>
+            <p style="font-size:13px;color:#666;">Preferi doar reînnoirea simplă (fără abonament)? Răspunde la acest email și îți trimitem factura pentru domeniu + găzduire (~350 lei/an). Site-ul tău nu se oprește în niciun caz fără să te anunțăm.</p>
+          `),
+        });
+        await pool.query(`INSERT INTO ops_markers (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING`,
+          [`ss-admin:${String(r.email).toLowerCase()}`, new Date().toISOString()]);
+        sendSimpleEmail({
+          to: (await import("@/lib/email")).ownerEmail(),
+          subject: `🎂 Site Start la 11 luni — ${r.name ?? r.email}: i-am trimis oferta de Administrare`,
+          html: `<p>${r.email} a primit automat emailul cu Administrare Start/Complet (domeniul îi expiră în ~1 lună). Dacă răspunde, alege și facturezi.</p>`,
+        }).catch(() => {});
+      } catch (e) {
+        console.error(`[cron/followup] site-start admin offer failed for ${r.email}:`, e);
+      }
+    }
+  } catch (e) {
+    console.error("[cron/followup] site-start nets failed:", e);
+  }
+
   // NEPLĂTIȚII cu email (au lăsat emailul la scanare dar nu au deblocat):
   // O SINGURĂ reamintire după ~1 zi, apoi îi lăsăm în pace. Marcaj: followup_stage = -1
   // (negativ nu încurcă dripul plătit: dacă plătesc ulterior, -1 < 1 și dripul pornește normal).

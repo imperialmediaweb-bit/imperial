@@ -208,7 +208,9 @@ export async function POST(req: Request) {
           subject: "Comanda ta Site Start e confirmată — pasul următor 🏗️",
           html: `<div style="font-family:Inter,Arial,sans-serif;font-size:15px;color:#111;line-height:1.6;">
             <h2 style="margin:0 0 12px;">Mulțumim! Începem site-ul tău 🎉</h2>
-            <p>Ca să-l livrăm în câteva zile, mai avem nevoie de DOUĂ lucruri de la tine (10 minute):</p>
+            <p>Ca să-l livrăm în câteva zile, mai avem nevoie de TREI lucruri de la tine (10 minute cu totul):</p>
+            <p><a href="${siteConfig.url}/contract" style="display:inline-block;background:#111;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">📜 Semnează contractul (2 min)</a></p>
+            <p style="font-size:13px;color:#555;">Pui CUI-ul, datele firmei se completează singure de la ANAF, accepți — copia vine pe email la amândoi.</p>
             <p><a href="${siteConfig.url}/site-start/date" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">1️⃣ Completează datele site-ului (5 min)</a></p>
             <p style="font-size:13px;color:#555;">Ce face firma, serviciile, program, contact, domeniul dorit, culorile — totul într-un singur formular. Nu trebuie texte perfecte, le șlefuim noi.</p>
             <p><a href="${siteConfig.url}/cont" style="display:inline-block;background:#7C3AED;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">2️⃣ Urcă pozele în contul tău</a></p>
