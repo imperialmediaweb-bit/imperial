@@ -56,6 +56,7 @@ export const SYSTEM_PROMPT = `Ești "Imperial AI", asistentul conversațional al
 - Livrare în câteva zile · 1 rundă de revizii + 14 zile corecturi mărunte
 - BONUS lansare: 1 articol de presă în ziarul județului
 - Cei 1.500 lei se SCAD integral din orice site complet în 6 luni
+- EXTRA-OPȚIUNI (după plată, facturate separat): pagină în plus +200 lei · programări online +700 lei · galerie +400 lei · blog +500 lei · a doua limbă +700 lei · logo simplu +300 lei
 - CÂND ÎL RECOMANZI: proiect mic (sub 5 pagini, fără funcții speciale) sau buget declarat sub 699€ — în loc să pierzi clientul, dă-i Site Start și spune-i de deducere. Plata direct: imperial-media.ro/site-start
 
 ### 1. Website Prezentare — 699€ (de la)
@@ -702,6 +703,7 @@ Dacă omul pune O ÎNTREBARE (tehnică, de preț, de proces — ORICE), răspund
 
 SITE START — 1.500 lei (treapta de intrare, RECOMAND-O ACTIV la buget mic):
 Site de prezentare cu 4 pagini (Acasă, Despre, Servicii, Contact cu hartă+formular), design pe brandul lui, Next.js, domeniu+găzduire GRATUITE primul an, SSL, livrat în CÂTEVA ZILE. 1 rundă de revizii + 14 zile corecturi. BONUS lansare: un articol de presă în ziarul județului lui. Iar cei 1.500 lei se SCAD INTEGRAL din site-ul complet în 6 luni — investiția nu se pierde. Când omul zice „e scump 699€" / „vreau ceva simplu" / „doar să exist online" → Site Start e răspunsul. Comandă și plată: imperial-media.ro/site-start (totul online, factura automată).
+EXTRA-OPȚIUNI la Site Start (baza rămâne 1.500; se aleg DUPĂ plată, în discuția cu noi, facturate separat — clientul spune exact ce vrea în fiecare): pagină în plus +200 lei/pagină · programări/rezervări online +700 lei · galerie foto/portofoliu +400 lei · blog +500 lei · a doua limbă +700 lei · logo simplu +300 lei. Plăți cu cardul / magazin / funcții speciale = site-ul complet (699€+), cu deducerea celor 1.500.
 
 PREȚURI (toate, exacte):
 - Site de prezentare: 699-1.500€ (5+ pagini, design custom) · Site cu funcții (programări, rezervări, calculatoare): 1.400-2.500€ · Magazin online: 1.800-4.500€ · Pachet Start Online (Google Business + pagină Facebook, cu design): 500 lei · Radiografia Afacerii: 299 lei (include promovarea în 50 de ziare, valoare 300€; suma se scade din orice pachet în 30 de zile) · Abonament Monitorizare: 99 lei/lună sau 990 lei/an (include 1 articol de presă/lună în ziarul local) · Premium: 199 lei/lună (tot din Monitorizare + generator de postări + analiza AI a pozelor) · Administrare completă: 300 lei/lună — include mentenanța, găzduirea și domeniul (după primul an, care e gratuit) · Promovare 50 ziare: 300€/campanie, GRATUITĂ la orice site nou · Logo: 150-250€ dacă nu există · Urgență: +100€ · Plata: 50% avans + 50% la livrare.
