@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 const STEPS = [
-  { nr: "1", title: "Plătești online, în 1 minut", text: "Card, plată securizată Stripe — factura vine automat pe email." },
+  { nr: "1", title: "Plătești online, în 1 minut", text: "Cu cardul (Stripe, securizat) sau prin transfer bancar pe bază de factură proformă. Factura vine pe email." },
   { nr: "2", title: "Ne trimiți textele și pozele", text: "Câteva rânduri despre firmă + pozele tale, direct pe email și în cont. Nu trebuie să fie perfecte — le șlefuim noi." },
   { nr: "3", title: "Site-ul e LIVE în câteva zile", text: "Primești linkul de previzualizare, ceri o rundă de modificări, apoi îl publicăm pe domeniul tău." },
 ];
