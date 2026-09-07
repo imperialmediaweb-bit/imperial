@@ -60,7 +60,7 @@ export const SYSTEM_PROMPT = `Ești "Imperial AI", asistentul conversațional al
 
 ### 1. Website Prezentare — 699€ (de la)
 - 5 pagini
-- Design predefinit (ales dintr-o bibliotecă, personalizat pe brand)
+- Design 100% CUSTOM, construit pe nevoile firmei — nu template, nu WordPress, nu temă
 - Domeniu + hosting gratuit 1 an
 - Logo design (1 draft inclus)
 - Email personalizat (ex: nume@firma-ta.ro)

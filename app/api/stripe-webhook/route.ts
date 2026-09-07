@@ -226,7 +226,7 @@ export async function POST(req: Request) {
         ssEmail,
         "order",
         "🏗️ Comanda ta Site Start e confirmată",
-        "Trimite-ne textele pe email și urcă pozele din cardul „📸 Trimite-ne poze" — apoi primești linkul de previzualizare."
+        "Trimite-ne textele pe email și urcă pozele din cardul de poze — apoi primești linkul de previzualizare."
       ).catch(() => {});
     }
     return NextResponse.json({ received: true });
