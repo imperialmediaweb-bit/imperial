@@ -139,7 +139,10 @@ export default function SiteStartDatePage() {
         <div>
           <L>Pozele — ce ai și unde le-ai vrea?</L>
           <textarea className="input min-h-[70px] resize-y rounded-2xl" maxLength={600} value={f.photosWhere} onChange={(e) => set("photosWhere", e.target.value)}
-            placeholder="ex: poze cu localul pe Acasă, echipa pe Despre, lucrările la Servicii... sau lasă gol și le așezăm noi unde arată cel mai bine" />
+            placeholder="ex: poze cu localul pe Acasă, echipa pe Despre, lucrările la Servicii... sau scrie «folosiți voi poze» și alegem noi imagini profesionale de stock, potrivite domeniului tău — gratuit" />
+          <p className="mt-1.5 text-[11px] text-text-subtle">
+            📷 Nu ai poze bune? Nicio problemă — completăm cu imagini profesionale de stock (incluse), iar pozele tale reale le poți adăuga oricând mai târziu.
+          </p>
         </div>
         <div>
           <L>Vrei extra-opțiuni? (se facturează separat)</L>
