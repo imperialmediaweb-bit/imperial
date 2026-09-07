@@ -51,7 +51,7 @@ export default function PlataSiteStartPage() {
             <StartCheckout initialEmail={email ?? ""} price={price} endpoint="/api/site-start-checkout" />
           </div>
           <p className="mt-3 text-[11px] text-text-subtle">
-            Plată securizată prin Stripe · factura vine automat pe email · fără telefoane, totul online
+            Plată securizată prin Stripe · factura vine pe email · fără telefoane, totul online
           </p>
           <p className="mt-4 border-t border-bg-border/50 pt-4 text-xs text-text-muted">
             🏦 <b className="text-text">Preferi transfer bancar?</b> Trimite un email la{" "}

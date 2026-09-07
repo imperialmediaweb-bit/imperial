@@ -122,9 +122,14 @@ export async function POST(req: Request) {
       });
       invoiceNote = inv.issued
         ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
-        : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+        : `<p style="background:#ffe9e9;border:1px solid #f5a8a8;border-radius:8px;padding:12px;">⚠️ <b>Factura automată A EȘUAT — emite MANUAL (2 minute):</b><br/>
+1. cloud.startco.ro → Facturi → <b>Adaugă factură</b><br/>
+2. Client: datele din caseta albastră de mai sus (firma, CUI, adresa)<br/>
+3. Produs + suma: exact ce scrie în subiectul acestui email<br/>
+4. <b>Emite</b> → apoi butonul <b>„Trimite pe email"</b> către clientul de mai sus.<br/>
+Clientul așteaptă factura pe email — trimite-o AZI.</p>`;
     } else {
-      invoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat — pune STARTCO_TOKEN + STARTCO_SERIES).</p>`;
+      invoiceNote = `<p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">🧾 <b>StartCo NEconfigurat</b> — emite factura manual din cloud.startco.ro (datele clientului în caseta albastră) și trimite-i-o pe email. Ca să devină automat: Railway → STARTCO_TOKEN + STARTCO_SERIES.</p>`;
     }
 
     try {
@@ -177,9 +182,14 @@ export async function POST(req: Request) {
       });
       ssInvoiceNote = inv.issued
         ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
-        : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+        : `<p style="background:#ffe9e9;border:1px solid #f5a8a8;border-radius:8px;padding:12px;">⚠️ <b>Factura automată A EȘUAT — emite MANUAL (2 minute):</b><br/>
+1. cloud.startco.ro → Facturi → <b>Adaugă factură</b><br/>
+2. Client: datele din caseta albastră de mai sus (firma, CUI, adresa)<br/>
+3. Produs + suma: exact ce scrie în subiectul acestui email<br/>
+4. <b>Emite</b> → apoi butonul <b>„Trimite pe email"</b> către clientul de mai sus.<br/>
+Clientul așteaptă factura pe email — trimite-o AZI.</p>`;
     } else {
-      ssInvoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat).</p>`;
+      ssInvoiceNote = `<p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">🧾 <b>StartCo NEconfigurat</b> — emite factura manual din cloud.startco.ro (datele clientului în caseta albastră) și trimite-i-o pe email. Ca să devină automat: Railway → STARTCO_TOKEN + STARTCO_SERIES.</p>`;
     }
 
     try {
@@ -269,9 +279,14 @@ export async function POST(req: Request) {
       });
       invoiceNote = inv.issued
         ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
-        : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+        : `<p style="background:#ffe9e9;border:1px solid #f5a8a8;border-radius:8px;padding:12px;">⚠️ <b>Factura automată A EȘUAT — emite MANUAL (2 minute):</b><br/>
+1. cloud.startco.ro → Facturi → <b>Adaugă factură</b><br/>
+2. Client: datele din caseta albastră de mai sus (firma, CUI, adresa)<br/>
+3. Produs + suma: exact ce scrie în subiectul acestui email<br/>
+4. <b>Emite</b> → apoi butonul <b>„Trimite pe email"</b> către clientul de mai sus.<br/>
+Clientul așteaptă factura pe email — trimite-o AZI.</p>`;
     } else {
-      invoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat).</p>`;
+      invoiceNote = `<p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">🧾 <b>StartCo NEconfigurat</b> — emite factura manual din cloud.startco.ro (datele clientului în caseta albastră) și trimite-i-o pe email. Ca să devină automat: Railway → STARTCO_TOKEN + STARTCO_SERIES.</p>`;
     }
 
     try {
@@ -368,7 +383,7 @@ export async function POST(req: Request) {
       ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
       : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
   } else {
-    invoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat — pune STARTCO_TOKEN + STARTCO_SERIES).</p>`;
+    invoiceNote = `<p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">🧾 <b>StartCo NEconfigurat</b> — emite factura manual din cloud.startco.ro (datele clientului în caseta albastră) și trimite-i-o pe email. Ca să devină automat: Railway → STARTCO_TOKEN + STARTCO_SERIES.</p>`;
   }
 
   try {

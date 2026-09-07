@@ -65,7 +65,7 @@ export function UnlockInline({ token, price, initialEmail = "" }: { token: strin
         {busy ? "Se încarcă..." : price === 0 ? "Deblochează gratuit" : `Deblochează — ${price} lei`}
       </button>
       {error && <p className="mt-3 text-sm font-semibold text-red-400">⚠️ {error}</p>}
-      <p className="mt-3 text-[11px] text-text-subtle">Plată securizată prin Stripe · factura vine automat pe email</p>
+      <p className="mt-3 text-[11px] text-text-subtle">Plată securizată prin Stripe · factura vine pe email</p>
     </div>
   );
 }
