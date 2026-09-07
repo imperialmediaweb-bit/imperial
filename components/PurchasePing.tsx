@@ -15,6 +15,14 @@ export function PurchasePing({ token, value }: { token: string; value: number })
       localStorage.setItem(key, "1");
     } catch {}
     fbTrack("Purchase", { value, currency: "RON" });
+    // Și către Google (GA4 → importabil ca conversie în Google Ads)
+    try {
+      (window as any).gtag?.("event", "purchase", {
+        currency: "RON",
+        value,
+        transaction_id: token,
+      });
+    } catch {}
   }, [token, value]);
   return null;
 }

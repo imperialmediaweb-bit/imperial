@@ -25,6 +25,7 @@ export async function GET() {
     { url: `${base}/consultanta`, priority: "0.6", freq: "monthly" },
     { url: `${base}/despre`, priority: "0.6", freq: "monthly" },
     { url: `${base}/blog`, priority: "0.6", freq: "weekly" },
+    { url: `${base}/site-start`, priority: "0.8", freq: "monthly" },
     { url: `${base}/contact`, priority: "0.5", freq: "monthly" },
     { url: `${base}/termeni`, priority: "0.2", freq: "yearly" },
     { url: `${base}/confidentialitate`, priority: "0.2", freq: "yearly" },

@@ -10,6 +10,8 @@ import { hasDb } from "@/lib/db";
 import { cloudinaryEnabled } from "@/lib/cloudinary";
 import { ContLogin } from "@/components/ContLogin";
 import { ContDashboard } from "@/components/ContDashboard";
+import { PurchasePing } from "@/components/PurchasePing";
+import { siteStartPriceRon } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +23,7 @@ export const metadata = {
 export default async function ContPage({
   searchParams,
 }: {
-  searchParams: { expirat?: string };
+  searchParams: { expirat?: string; sitestart?: string };
 }) {
   let email: string | null = null;
   try {
@@ -60,6 +62,10 @@ export default async function ContPage({
   return (
     <main className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
+      {/* Conversia Site Start (Meta + Google) — trasă o dată, la sosirea de după plată */}
+      {searchParams?.sitestart === "platit" && (
+        <PurchasePing token={`sitestart-${new Date().toISOString().slice(0, 10)}`} value={siteStartPriceRon()} />
+      )}
       <ContDashboard
         email={email}
         photosEnabled={cloudinaryEnabled()}

@@ -144,6 +144,94 @@ export async function POST(req: Request) {
     return NextResponse.json({ received: true });
   }
 
+  // ═══ SITE START (1.500 lei — site de prezentare 4 pagini) ═══
+  if (session.metadata?.purpose === "site-start") {
+    const ssEmail = billing.email ?? "";
+    if (hasDb()) {
+      try {
+        const { getPool } = await import("@/lib/db");
+        const dup = await getPool()!.query(`SELECT 1 FROM briefs WHERE message LIKE $1 LIMIT 1`, [
+          `%${session.id}%`,
+        ]);
+        if (dup.rows[0]) return NextResponse.json({ received: true, duplicate: true });
+        await insertBrief({
+          name: billing.firmName || ssEmail || "necunoscut",
+          email: ssEmail || "necunoscut@plata-stripe.ro",
+          selected_package: "Site Start — PLĂTIT",
+          industry: "",
+          message: `✅ A PLĂTIT Site Start (${amount}). Facturare: ${billing.firmName || "—"} / CUI ${billing.cui || "—"}. DE FĂCUT: site de prezentare 4 pagini (Acasă/Despre/Servicii/Contact) — datele și pozele vin de la client pe email/în cont; construiește, preview, 1 rundă revizii, domeniu, live. [stripe:${session.id}]`,
+          source: "site-start-paid",
+        });
+      } catch (e) {
+        console.error("[stripe-webhook] site-start idempotency/lead failed:", e);
+        return NextResponse.json({ error: "db error" }, { status: 500 });
+      }
+    }
+
+    let ssInvoiceNote = "";
+    if (invoicingEnabled()) {
+      const inv = await issueInvoice({
+        client: { name: billing.firmName, cif: billing.cui, address: billing.address, city: billing.city, email: ssEmail },
+        productName: "Servicii creare site web de prezentare (Site Start)",
+        priceRon: amountRon,
+      });
+      ssInvoiceNote = inv.issued
+        ? `<p>✅ Factura a fost emisă și trimisă AUTOMAT prin StartCo.</p>`
+        : `<p>⚠️ Emiterea automată a facturii a eșuat — emite manual.</p>`;
+    } else {
+      ssInvoiceNote = `<p>🧾 Emite factura manual (StartCo neconfigurat).</p>`;
+    }
+
+    try {
+      await sendSimpleEmail({
+        to: ownerEmail(),
+        subject: `💰 SITE START PLĂTIT (${amount}) — ${billing.firmName || ssEmail}`,
+        html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
+          <h2>✅ Site Start plătit — ${amount}</h2>
+          <p><b>Client:</b> ${ssEmail || "necunoscut"}</p>
+          ${billingBlock}${ssInvoiceNote}
+          <p style="background:#fff3e6;border:1px solid #ffc999;border-radius:8px;padding:12px;">
+            🏗️ <b>DE FĂCUT:</b> site de prezentare 4 pagini. Clientul primește acum emailul care îi cere
+            conținutul (texte + poze în cont). Când le trimite: construiește → preview → 1 rundă revizii → domeniu → live.
+          </p>
+        </div>`,
+        replyTo: ssEmail || undefined,
+      });
+    } catch (e) {
+      console.error("[stripe-webhook] site-start owner email failed:", e);
+    }
+
+    if (ssEmail) {
+      try {
+        await sendSimpleEmail({
+          to: ssEmail,
+          subject: "Comanda ta Site Start e confirmată — pasul următor 🏗️",
+          html: `<div style="font-family:Inter,Arial,sans-serif;font-size:15px;color:#111;line-height:1.6;">
+            <h2 style="margin:0 0 12px;">Mulțumim! Începem site-ul tău 🎉</h2>
+            <p>Ca să-l livrăm în câteva zile, avem nevoie de la tine de:</p>
+            <ul>
+              <li><b>Textele</b>: câteva rânduri despre firmă, serviciile tale, datele de contact și programul — răspunde direct la acest email cu ele (nu trebuie să fie perfecte, le șlefuim noi)</li>
+              <li><b>Pozele</b> (logo dacă ai, poze cu firma/lucrările): urcă-le în contul tău — <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a>, cardul „📸 Trimite-ne poze"</li>
+              <li><b>Domeniul dorit</b> (ex: firma-ta.ro) — îl verificăm și îl luăm noi, e inclus primul an</li>
+            </ul>
+            <p>Apoi: îți trimitem linkul de previzualizare → o rundă de modificări → site-ul e LIVE. Totul pe email, fără telefoane.</p>
+            <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
+          </div>`,
+        });
+      } catch (e) {
+        console.error("[stripe-webhook] site-start client email failed:", e);
+      }
+      const { insertNotification } = await import("@/lib/monitoring");
+      insertNotification(
+        ssEmail,
+        "order",
+        "🏗️ Comanda ta Site Start e confirmată",
+        "Trimite-ne textele pe email și urcă pozele din cardul „📸 Trimite-ne poze" — apoi primești linkul de previzualizare."
+      ).catch(() => {});
+    }
+    return NextResponse.json({ received: true });
+  }
+
   // ═══ PACHET START ONLINE (comandat prin consultant) ═══
   if (session.metadata?.purpose === "start-online") {
     const startEmail = billing.email ?? "";
