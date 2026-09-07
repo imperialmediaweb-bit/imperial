@@ -73,6 +73,7 @@ export function ContDashboard({
   subscription,
   photosEnabled = false,
   reviewPlaceId = "",
+  siteOrder = null,
 }: {
   email: string;
   reports: ReportItem[];
@@ -82,6 +83,7 @@ export function ContDashboard({
   subscription?: { active: boolean; plan: string | null };
   photosEnabled?: boolean;
   reviewPlaceId?: string;
+  siteOrder?: { paidAt: string; hasContract: boolean; hasData: boolean } | null;
 }) {
   const [subSent, setSubSent] = useState(false);
   const [subLoading, setSubLoading] = useState<string | null>(null);
@@ -355,6 +357,38 @@ export function ContDashboard({
               {referralCount > 0
                 ? `🎉 Ai adus ${referralCount} ${referralCount === 1 ? "firmă" : "firme"} → ${referralCount} ${referralCount === 1 ? "lună" : "luni"} de monitorizare gratis`
                 : "Încă nicio firmă adusă — trimite linkul pe WhatsApp unui patron pe care-l știi."}
+            </p>
+          </div>
+        )}
+
+        {/* Comanda Site Start — clientul vede exact unde e: plată, contract, date, stadiu */}
+        {siteOrder && (
+          <div className="rounded-3xl border border-brand-orange/40 bg-brand-orange/5 p-6">
+            <h2 className="font-display text-lg font-bold text-text">🏗️ Comanda ta: Site Start</h2>
+            <div className="mt-4 grid gap-2.5 text-sm">
+              <p className="flex items-start gap-2 text-text-muted">
+                <span className="text-green-400">✅</span>
+                <span><b className="text-text">Plata & factura</b> — plătit pe {siteOrder.paidAt}; factura fiscală ți-a venit automat pe email (caut-o după „StartCo" dacă n-o găsești).</span>
+              </p>
+              <p className="flex items-start gap-2 text-text-muted">
+                <span>{siteOrder.hasContract ? "✅" : "⬜"}</span>
+                <span><b className="text-text">Contractul</b> — {siteOrder.hasContract ? "semnat; exemplarul tău e pe email." : <>nesemnat încă — <a href="/contract" className="font-semibold text-brand-orange hover:underline">semnează-l aici (2 min)</a>: pui CUI-ul, restul se completează singur.</>}</span>
+              </p>
+              <p className="flex items-start gap-2 text-text-muted">
+                <span>{siteOrder.hasData ? "✅" : "⬜"}</span>
+                <span><b className="text-text">Datele site-ului</b> — {siteOrder.hasData ? "primite; le folosim la construcție." : <>ne lipsesc — <a href="/site-start/date" className="font-semibold text-brand-orange hover:underline">completează-le aici (5 min)</a>. Fără ele nu putem începe.</>}</span>
+              </p>
+              <p className="flex items-start gap-2 text-text-muted">
+                <span>📸</span>
+                <span><b className="text-text">Pozele</b> — urcă-le din cardul „Trimite-ne poze" de mai jos (sau scrie în formular „folosiți voi poze" și punem noi imagini profesionale).</span>
+              </p>
+              <p className="flex items-start gap-2 text-text-muted">
+                <span>{siteOrder.hasData ? "🔨" : "⏳"}</span>
+                <span><b className="text-text">Stadiul</b> — {siteOrder.hasData ? "site-ul e ÎN CONSTRUCȚIE: primești linkul de previzualizare pe email în câteva zile, apoi o rundă de modificări și publicarea." : "așteptăm datele tale ca să pornim construcția."}</span>
+              </p>
+            </div>
+            <p className="mt-4 border-t border-bg-border/50 pt-3 text-xs text-text-subtle">
+              Întrebări despre comandă? <a href="/cont/consultant" className="text-brand-orange hover:underline">Consultantul tău</a> îți răspunde pe loc — știe exact stadiul.
             </p>
           </div>
         )}

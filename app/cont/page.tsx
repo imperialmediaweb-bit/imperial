@@ -51,6 +51,28 @@ export default async function ContPage({
   // Notificările devin „văzute" după ce le-a deschis pagina.
   markNotificationsSeen(email).catch(() => {});
 
+  // Stadiul comenzii Site Start — clientul VEDE în cont: plată, contract, date, stadiu
+  let siteOrder: { paidAt: string; hasContract: boolean; hasData: boolean } | null = null;
+  try {
+    const { getPool } = await import("@/lib/db");
+    const rows = (
+      await getPool()!.query(
+        `SELECT source, created_at FROM briefs
+         WHERE LOWER(email) = LOWER($1) AND source IN ('site-start-paid','site-start-continut','contract-acceptat')
+         ORDER BY created_at ASC`,
+        [email]
+      )
+    ).rows as Array<{ source: string; created_at: string }>;
+    const paid = rows.find((x) => x.source === "site-start-paid");
+    if (paid) {
+      siteOrder = {
+        paidAt: new Date(paid.created_at).toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" }),
+        hasContract: rows.some((x) => x.source === "contract-acceptat"),
+        hasData: rows.some((x) => x.source === "site-start-continut"),
+      };
+    }
+  } catch {}
+
   // QR-ul de recenzii există dacă vreun raport are placeId-ul firmei (aleasă din lista Google).
   // Aceeași validare ca în /api/review-qr — altfel cardul ar afișa un QR care dă 404.
   const reviewPlaceId =
@@ -70,6 +92,7 @@ export default async function ContPage({
         email={email}
         photosEnabled={cloudinaryEnabled()}
         reviewPlaceId={reviewPlaceId}
+        siteOrder={siteOrder}
         refCode={refCode}
         referralCount={referralCount}
         subscription={subscription ?? undefined}
