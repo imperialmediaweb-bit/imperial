@@ -3,10 +3,10 @@
 // ca să nu semnezi din greșeală cu date lipsă.
 
 export const PRESTATOR = {
-  name: process.env.LEGAL_NAME || "LEGIO WEB DEVELOPMENT TOOL S.R.L.",
-  cui: process.env.LEGAL_CUI || "[COMPLETEAZĂ LEGAL_CUI ÎN RAILWAY]",
-  regcom: process.env.LEGAL_REGCOM || "[COMPLETEAZĂ LEGAL_REGCOM ÎN RAILWAY]",
-  address: process.env.LEGAL_ADDRESS || "Botoșani, România",
+  name: process.env.LEGAL_NAME || "LEGIO WEB DEVELOPMENT TOOLS S.R.L.",
+  cui: process.env.LEGAL_CUI || "46466484",
+  regcom: process.env.LEGAL_REGCOM || "J07/506/2022",
+  address: process.env.LEGAL_ADDRESS || "Aleea Parcului nr. 1, Sc. B, Et. 1, Ap. 7, Botoșani, România",
   rep: process.env.LEGAL_REP || "Administrator",
   email: "office@imperial-media.ro",
   brand: "Imperial Media",
