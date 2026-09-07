@@ -101,6 +101,37 @@ export default function SiteStartPage() {
         </div>
       </section>
 
+      {/* ─── EXTRA-OPȚIUNI — baza e 1.500, restul se adaugă ca la meniu ─── */}
+      <section className="section border-t border-bg-border/40">
+        <div className="container-app max-w-3xl">
+          <h2 className="section-title text-center">Vrei mai mult? Adaugi doar ce-ți trebuie</h2>
+          <p className="mx-auto mt-2 max-w-xl text-center text-sm text-text-muted">
+            Baza rămâne {price} lei. Extra-opțiunile le alegi după plată, în discuția cu noi — ne spui exact ce vrei în fiecare, le adăugăm la factură.
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            {[
+              { name: "Pagină în plus", price: "+200 lei / pagină", desc: "orice pagină extra — ne zici tu ce să conțină" },
+              { name: "Programări / rezervări online", price: "+700 lei", desc: "clienții se programează singuri, tu primești notificare" },
+              { name: "Galerie foto / portofoliu", price: "+400 lei", desc: "lucrările tale, prezentate să vândă" },
+              { name: "Blog / secțiune de noutăți", price: "+500 lei", desc: "articole care te urcă în Google" },
+              { name: "A doua limbă (EN/altă limbă)", price: "+700 lei", desc: "pentru turism, pensiuni, clienți străini" },
+              { name: "Logo simplu", price: "+300 lei", desc: "dacă nu ai deja unul — curat, pe brandul tău" },
+            ].map((a) => (
+              <div key={a.name} className="flex items-start justify-between gap-3 rounded-2xl border border-bg-border bg-bg-card/60 p-4">
+                <div>
+                  <p className="text-sm font-bold text-text">{a.name}</p>
+                  <p className="mt-0.5 text-xs text-text-muted">{a.desc}</p>
+                </div>
+                <span className="flex-shrink-0 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-2.5 py-0.5 text-[11px] font-semibold text-brand-orange">{a.price}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-center text-xs text-text-subtle">
+            Vrei plăți cu cardul, magazin sau funcții speciale? Ăla e <Link href="/brief" className="text-brand-orange hover:underline">site-ul complet (de la 699€)</Link> — iar cei {price} lei se scad integral din el.
+          </p>
+        </div>
+      </section>
+
       {/* ─── CUM FUNCȚIONEAZĂ ─── */}
       <section className="section border-t border-bg-border/40">
         <div className="container-app max-w-4xl">
