@@ -208,13 +208,12 @@ export async function POST(req: Request) {
           subject: "Comanda ta Site Start e confirmată — pasul următor 🏗️",
           html: `<div style="font-family:Inter,Arial,sans-serif;font-size:15px;color:#111;line-height:1.6;">
             <h2 style="margin:0 0 12px;">Mulțumim! Începem site-ul tău 🎉</h2>
-            <p>Ca să-l livrăm în câteva zile, avem nevoie de la tine de:</p>
-            <ul>
-              <li><b>Textele</b>: câteva rânduri despre firmă, serviciile tale, datele de contact și programul — răspunde direct la acest email cu ele (nu trebuie să fie perfecte, le șlefuim noi)</li>
-              <li><b>Pozele</b> (logo dacă ai, poze cu firma/lucrările): urcă-le în contul tău — <a href="${siteConfig.url}/cont">${siteConfig.url}/cont</a>, cardul „📸 Trimite-ne poze"</li>
-              <li><b>Domeniul dorit</b> (ex: firma-ta.ro) — îl verificăm și îl luăm noi, e inclus primul an</li>
-            </ul>
-            <p>Apoi: îți trimitem linkul de previzualizare → o rundă de modificări → site-ul e LIVE. Totul pe email, fără telefoane.</p>
+            <p>Ca să-l livrăm în câteva zile, mai avem nevoie de DOUĂ lucruri de la tine (10 minute):</p>
+            <p><a href="${siteConfig.url}/site-start/date" style="display:inline-block;background:#FF6B1A;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">1️⃣ Completează datele site-ului (5 min)</a></p>
+            <p style="font-size:13px;color:#555;">Ce face firma, serviciile, program, contact, domeniul dorit, culorile — totul într-un singur formular. Nu trebuie texte perfecte, le șlefuim noi.</p>
+            <p><a href="${siteConfig.url}/cont" style="display:inline-block;background:#7C3AED;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">2️⃣ Urcă pozele în contul tău</a></p>
+            <p style="font-size:13px;color:#555;">Logo (dacă ai), poze cu firma/lucrările — cardul „📸 Trimite-ne poze". Direct de pe telefon.</p>
+            <p>Apoi: îți trimitem linkul de previzualizare → o rundă de modificări → site-ul e LIVE. Totul online, fără telefoane.</p>
             <p style="color:#666;font-size:13px;">Imperial Media · ${siteConfig.email} · imperial-media.ro</p>
           </div>`,
         });
