@@ -7,8 +7,8 @@ import { useState } from "react";
 import { CheckCircle2, Send, Loader2 } from "lucide-react";
 
 const FIELDS_INIT = {
-  email: "", companyName: "", domain: "", description: "", services: "",
-  schedule: "", phone: "", address: "", colors: "", hasLogo: "", extras: "", other: "",
+  email: "", companyName: "", industry: "", domain: "", description: "", services: "",
+  schedule: "", phone: "", address: "", colors: "", hasLogo: "", photosWhere: "", extras: "", other: "",
 };
 
 export default function SiteStartDatePage() {
@@ -73,8 +73,9 @@ export default function SiteStartDatePage() {
         Spune-ne ce să punem în site
       </h1>
       <p className="mt-2 text-sm text-text-muted">
-        5 minute, o singură dată — din răspunsurile tale construim site-ul. Nu trebuie să fie texte perfecte,
-        le șlefuim noi. Pozele le urci separat, din contul tău.
+        5 minute, o singură dată. <b className="text-text">Textele site-ului le scriem NOI</b> din ce ne
+        povestești aici — tu nu trebuie să scrii nimic „frumos", doar să ne spui despre firmă, cu cuvintele tale.
+        Pozele le urci separat, din contul tău.
       </p>
 
       <div className="mt-8 grid gap-5">
@@ -87,7 +88,11 @@ export default function SiteStartDatePage() {
           <input className="input rounded-2xl" value={f.companyName} onChange={(e) => set("companyName", e.target.value)} placeholder="ex: Pizzeria La Mario" />
         </div>
         <div>
-          <L>Ce domeniu ți-ai dori?</L>
+          <L>Domeniul de activitate *</L>
+          <input className="input rounded-2xl" value={f.industry} onChange={(e) => set("industry", e.target.value)} placeholder="ex: restaurant, service auto, salon, construcții, avocatură..." />
+        </div>
+        <div>
+          <L>Ce domeniu (adresă web) ți-ai dori?</L>
           <input className="input rounded-2xl" value={f.domain} onChange={(e) => set("domain", e.target.value)} placeholder="ex: pizzerialamario.ro — îl verificăm și îl luăm noi (inclus primul an)" />
         </div>
         <div>
@@ -130,6 +135,11 @@ export default function SiteStartDatePage() {
               ))}
             </div>
           </div>
+        </div>
+        <div>
+          <L>Pozele — ce ai și unde le-ai vrea?</L>
+          <textarea className="input min-h-[70px] resize-y rounded-2xl" maxLength={600} value={f.photosWhere} onChange={(e) => set("photosWhere", e.target.value)}
+            placeholder="ex: poze cu localul pe Acasă, echipa pe Despre, lucrările la Servicii... sau lasă gol și le așezăm noi unde arată cel mai bine" />
         </div>
         <div>
           <L>Vrei extra-opțiuni? (se facturează separat)</L>

@@ -31,6 +31,7 @@ export async function POST(req: Request) {
 
   const detalii = [
     `FIRMA: ${companyName}`,
+    `DOMENIU DE ACTIVITATE: ${F("industry", 150) || "—"}`,
     `DOMENIU DORIT: ${F("domain", 200) || "—"}`,
     `DESCRIERE: ${description}`,
     `SERVICII: ${F("services", 1500) || "—"}`,
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
     `ADRESĂ: ${F("address", 300) || "—"}`,
     `CULORI/STIL: ${F("colors", 300) || "—"}`,
     `LOGO: ${F("hasLogo", 60) || "—"}`,
+    `POZELE — CE ARE ȘI UNDE LE VREA: ${F("photosWhere", 600) || "le așezăm noi"}`,
     `EXTRA-OPȚIUNI CERUTE: ${F("extras") || "niciuna"}`,
     `ALTCEVA: ${F("other", 1000) || "—"}`,
   ].join("\n");
@@ -50,7 +52,7 @@ export async function POST(req: Request) {
         name: companyName,
         email,
         selected_package: "Site Start — DATELE SITE-ULUI",
-        industry: "",
+        industry: F("industry", 150),
         message: `📋 Conținutul pentru construcție:\n${detalii}\n\n(Pozele: emailurile „📸 a urcat poze" / Cloudinary pe emailul lui.)`,
         source: "site-start-continut",
       });
