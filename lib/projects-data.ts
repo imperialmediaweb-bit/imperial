@@ -21,7 +21,14 @@ export const importedProjects: ImportedProject[] = [
     "categories": ["Dezvoltare Web", "Website de Prezentare", "Migrare WordPress", "SEO", "PR & Marketing"],
     "image": null,
     "wpImages": [
-      "https://image.thum.io/get/width/1520/https://sarami.ro"
+      "/proiecte/sarami/home.jpg",
+      "/proiecte/sarami/landing.jpg",
+      "/proiecte/sarami/editare-video.jpg",
+      "/proiecte/sarami/portofoliu.jpg",
+      "/proiecte/sarami/redactare.jpg",
+      "/proiecte/sarami/blog.jpg",
+      "/proiecte/sarami/admin.jpg",
+      "/proiecte/sarami/admin-briefuri.jpg"
     ],
     "externalUrl": "https://sarami.ro",
     "excerpt": "Migrare completă de pe WordPress pe Next.js pentru o agenție de editare video și redactare conținut: 124 de articole mutate fără pierdere SEO, panou de administrare propriu, sistem de brief-uri și ofertare, cutie poștală integrată și landing page pentru campanii Facebook.",

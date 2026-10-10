@@ -111,9 +111,10 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       },
     ],
     metrics: [
-      { label: "Greutate pagină", value: "~180 KB", hint: "comprimat, de 15× mai ușoară decât media" },
-      { label: "Răspuns server", value: "sub 1s", hint: "măsurat pe pagina de campanie" },
-      { label: "Redirecturi 301", value: "124", hint: "câte un URL vechi păstrat pentru fiecare articol" },
+      { label: "Greutate pagină", value: "180 KB", hint: "HTML + CSS + JS comprimat — de ~15× mai ușoară decât media web" },
+      { label: "Răspuns server", value: "0,87 s", hint: "măsurat live pe pagina de campanie" },
+      { label: "Timp până la primul byte", value: "sub 150 ms", hint: "server Node pe Railway, cache Cloudflare în față" },
+      { label: "Redirecturi 301", value: "124", hint: "câte un URL vechi păstrat pentru fiecare articol migrat" },
     ],
     deliverables: [
       { label: "Pagini și secțiuni", count: "15+" },
