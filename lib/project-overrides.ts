@@ -36,6 +36,127 @@ export type ProjectOverride = {
 };
 
 export const projectOverrides: Record<string, ProjectOverride> = {
+  "sarami-media-editare-video": {
+    tagline:
+      "Migrare de pe WordPress pe Next.js, cu panou de administrare propriu și sistem de brief-uri — fără nicio pierdere de SEO.",
+    challenge:
+      "Sarami Media avea un site WordPress lent, greu de administrat și imposibil de extins fără programator. Cele 124 de articole erau bine poziționate în Google, deci migrarea nu avea voie să strice nimic. În plus, cererile de la clienți se pierdeau printre emailuri, iar agenția nu avea un loc unic unde să vadă brief-urile și să trimită ofertele.",
+    solution:
+      "Am reconstruit site-ul de la zero pe Next.js și am mutat toate articolele cu imagini cu tot, punând redirect 301 pe fiecare URL vechi. Am livrat un panou de administrare propriu, din care agenția își publică singură articolele, portofoliul video și testimonialele. Peste el am construit un flux complet de vânzare: brief-uri pe site → notificare pe email și în panou → ofertă trimisă într-un click, pe email sau pe WhatsApp. În panou a intrat și cutia poștală a agenției, iar pentru reclamele Facebook am făcut o pagină de campanie separată, cu măsurarea conversiilor conformă GDPR.",
+    highlights: [
+      "Migrare WordPress → Next.js",
+      "124 articole cu redirect 301",
+      "Panou de administrare propriu",
+      "Brief-uri + ofertare din panou",
+      "Cutie poștală integrată (IMAP)",
+      "Portofoliu video, YouTube & TikTok",
+      "SEO clasic + optimizare pentru AI",
+      "Landing page campanii Facebook",
+    ],
+    results: [
+      { label: "Articole migrate", value: "124" },
+      { label: "Pierdere SEO", value: "0%" },
+      { label: "Administrare fără cod", value: "100%" },
+      { label: "Răspuns la brief", value: "sub 24h" },
+    ],
+    client: "Sarami Media",
+    industry: "Producție de conținut (video & copywriting)",
+    year: "2026",
+    duration: "În dezvoltare continuă",
+    services: [
+      "Dezvoltare web",
+      "Migrare WordPress",
+      "SEO tehnic",
+      "Panou de administrare",
+      "Integrare email & WhatsApp",
+      "Campanii Facebook Ads",
+    ],
+    objectives: [
+      "Mutarea site-ului de pe WordPress fără pierderea pozițiilor în Google",
+      "Independență totală a clientului: să își administreze singur conținutul",
+      "Un singur loc unde ajung cererile clienților și de unde pleacă ofertele",
+      "Prezentarea portofoliului video direct pe site, nu doar prin linkuri",
+      "O pagină de campanie care transformă traficul plătit în cereri de ofertă",
+    ],
+    process: [
+      {
+        title: "Audit și plan de migrare",
+        description:
+          "Am inventariat cele 124 de articole, imaginile și URL-urile indexate, apoi am construit harta de redirecturi 301 înainte să scriem prima linie de cod.",
+      },
+      {
+        title: "Site nou pe Next.js",
+        description:
+          "Design propriu pe culorile brandului, pagini de serviciu pentru editare video și redactare, portofoliu, blog și paginile legale — toate rapide și optimizate pentru mobil.",
+      },
+      {
+        title: "Migrarea conținutului",
+        description:
+          "Import automat al articolelor din WordPress, mutarea imaginilor pe Cloudinary și curățarea codului rămas de la plugin-uri, cu verificarea fiecărui redirect.",
+      },
+      {
+        title: "Panoul de administrare",
+        description:
+          "Editor vizual pentru articole, administrare portofoliu și testimoniale, setări de site — construit ca să fie folosit de un om fără cunoștințe tehnice.",
+      },
+      {
+        title: "Fluxul de brief-uri și oferte",
+        description:
+          "Formulare de brief, notificări pe email cu design de brand, confirmare automată către client și ofertare din panou pe email sau WhatsApp.",
+      },
+      {
+        title: "Campanii și măsurare",
+        description:
+          "Landing page dedicat reclamelor Facebook, Meta Pixel și Google Analytics 4 pornite după consimțământ, cu urmărirea conversiilor pe formular.",
+      },
+    ],
+    metrics: [
+      { label: "Greutate pagină", value: "~180 KB", hint: "comprimat, de 15× mai ușoară decât media" },
+      { label: "Răspuns server", value: "sub 1s", hint: "măsurat pe pagina de campanie" },
+      { label: "Redirecturi 301", value: "124", hint: "câte un URL vechi păstrat pentru fiecare articol" },
+    ],
+    deliverables: [
+      { label: "Pagini și secțiuni", count: "15+" },
+      { label: "Articole migrate", count: "124" },
+      { label: "Formulare de brief", count: "4" },
+      { label: "Secțiuni în panoul de admin", count: "7" },
+    ],
+    technologies: [
+      "Next.js 15",
+      "TypeScript",
+      "React 19",
+      "Cloudinary",
+      "Resend",
+      "IMAP",
+      "Meta Pixel",
+      "Google Analytics 4",
+      "Schema.org JSON-LD",
+      "Railway",
+      "Cloudflare",
+    ],
+    faq: [
+      {
+        question: "S-au pierdut pozițiile în Google după mutarea de pe WordPress?",
+        answer:
+          "Nu. Fiecare dintre cele 124 de articole a primit redirect 301 de pe adresa veche pe cea nouă, iar imaginile au fost mutate pe Cloudinary. Google a urmat redirecturile și a păstrat autoritatea câștigată.",
+      },
+      {
+        question: "Clientul poate publica singur, fără programator?",
+        answer:
+          "Da — tot conținutul se administrează din panoul propriu: articole cu editor vizual și poze, portofoliu video, testimoniale, date de contact și promoții. Modificările apar instant pe site.",
+      },
+      {
+        question: "Cum ajung cererile clienților la agenție?",
+        answer:
+          "Fiecare brief completat pe site ajunge simultan pe email și în panoul de administrare, iar clientul primește automat o confirmare. Oferta pleacă apoi dintr-un singur click, pe email sau pe WhatsApp — cum a cerut clientul în formular.",
+      },
+      {
+        question: "Ce înseamnă optimizare pentru motoarele AI?",
+        answer:
+          "Pe lângă SEO-ul clasic pentru Google, site-ul are date structurate și un fișier llms.txt, iar crawlerele ChatGPT, Perplexity și Claude au acces — astfel încât serviciile agenției să poată fi recomandate și în răspunsurile asistenților AI.",
+      },
+    ],
+  },
   "creare-website-asociatia-h-a-p-py": {
     tagline:
       "Platformă pentru rezervări evenimente la o asociație care schimbă vieți.",
@@ -455,6 +576,7 @@ export function extractMonthFromImages(images?: string[]): number {
 // Sortează proiectele descrescător după an + lună (cele mai noi primele).
 // Proiectele "featured" (SaaS-uri noi) rămân mereu PRIMELE, în ordinea dată.
 const FEATURED_KEYS = [
+  "sarami-media",
   "nexit-marketplace",
   "invofyx-facturare",
   "cardova-carti-vizita",
