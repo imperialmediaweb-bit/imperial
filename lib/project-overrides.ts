@@ -36,6 +36,127 @@ export type ProjectOverride = {
 };
 
 export const projectOverrides: Record<string, ProjectOverride> = {
+  "site-clinica-sfantul-gheorghe-botosani": {
+    tagline:
+      "Site complet pentru un spital privat nou din Botoșani: programări online, pagină pentru fiecare medic, asistent virtual AI și panou de administrare.",
+    challenge:
+      "Clinica Medicală Sfântul Gheorghe s-a deschis pe 1 octombrie 2026, fără istoric online. Pacienții ei sunt mai ales vârstnici și familiile lor, care caută îngrijire paliativă sau internare pentru un om drag, de multe ori de pe telefon și sub presiune. Site-ul trebuia să inspire încredere din prima secundă și să aibă puțin text. Trebuia să ducă rapid la un telefon sau la o programare și să apară în Google pentru căutările din Botoșani, Suceava și Iași.",
+    solution:
+      "Am construit de la zero un site de 36 de pagini pe Next.js, cu fotografii reale din clinică, slider și iconițe animate în culorile brandului. Fiecare serviciu are pagina lui, iar fiecare dintre cei 18 medici are o pagină cu biografie documentată și buton de programare. Programarea online trimite cererea instant pe email și în panou, iar recepția sună pacientul pentru confirmare. Există și varianta pe WhatsApp. Un asistent virtual AI răspunde la orice întrebare despre clinică și poate prelua cereri de programare din conversație. Din panoul de administrare, echipa gestionează singură programările, mesajele, chestionarele, medicii, specialitățile și telefoanele.",
+    highlights: [
+      "36 de pagini, design propriu",
+      "18 pagini de medic cu biografie",
+      "Programări online + WhatsApp",
+      "Asistent virtual AI 24/7",
+      "Panou de administrare complet",
+      "SEO local Botoșani, Suceava, Iași",
+      "Iconițe animate în culorile brandului",
+      "Gândit pentru telefon și vârstnici",
+    ],
+    results: [
+      { label: "Pagini", value: "36" },
+      { label: "Pagini de medic", value: "18" },
+      { label: "Specialități", value: "16" },
+      { label: "Asistent virtual", value: "24/7" },
+    ],
+    client: "Clinica Sf. Gheorghe",
+    industry: "Medical",
+    year: "2026",
+    services: [
+      "Dezvoltare web",
+      "Design UI/UX",
+      "Programări online",
+      "Chatbot AI",
+      "Panou de administrare",
+      "SEO local",
+    ],
+    objectives: [
+      "Un site care inspiră încredere pentru o clinică abia deschisă",
+      "Programări simple, pe care recepția le confirmă la telefon",
+      "Prezentarea fiecărui medic și a fiecărui serviciu pe pagina lui",
+      "Răspunsuri rapide pentru pacienți, oricând, fără să aștepte la telefon",
+      "Administrarea medicilor, specialităților și telefoanelor fără programator",
+      "Vizibilitate în Google pentru Botoșani și județele vecine",
+    ],
+    process: [
+      {
+        title: "Identitate și conținut",
+        description:
+          "Am pornit de la logo, culorile clădirii și fotografiile reale din clinică. Am cercetat fiecare medic și am scris texte scurte, calde și ușor de citit.",
+      },
+      {
+        title: "Design și animații",
+        description:
+          "Prima pagină are slider, cifre animate, iconițe animate recolorate în culorile brandului și o hartă cu pin pulsant. Fiecare serviciu are o pagină cu ritmul ei.",
+      },
+      {
+        title: "Medici și programări",
+        description:
+          "Lista de medici are filtru pe specialități, iar fiecare medic are o pagină proprie. Formularul de programare trimite cererea pe email și în panou, cu opțiunea de WhatsApp.",
+      },
+      {
+        title: "Asistent virtual",
+        description:
+          "Chatbotul AI știe serviciile, medicii, telefoanele și actele pentru internare. Datele îi vin automat din panou și poate înregistra o cerere de programare din conversație.",
+      },
+      {
+        title: "Panoul de administrare",
+        description:
+          "Panoul are secțiuni pentru programări cu status, mesaje, chestionare de satisfacție, medici cu poze, specialități și setări. E construit ca să fie folosit de recepție, fără cunoștințe tehnice.",
+      },
+      {
+        title: "SEO local și testare",
+        description:
+          "Am folosit cuvinte cheie din căutările reale și date structurate pentru spital, medici și servicii. Fiecare pagină a fost verificată automat pe desktop și pe telefon.",
+      },
+    ],
+    metrics: [
+      { label: "Pagini indexabile", value: "36", hint: "fiecare cu titlu, descriere și date structurate proprii" },
+      { label: "Pagini de medic", value: "18", hint: "cu biografie, specialitate și programare directă" },
+      { label: "Secțiuni în panou", value: "6", hint: "programări, mesaje, chestionare, medici, specialități, setări" },
+      { label: "Iconițe animate", value: "15", hint: "recolorate în culorile clinicii" },
+    ],
+    deliverables: [
+      { label: "Pagini", count: "36" },
+      { label: "Pagini de servicii", count: "6" },
+      { label: "Pagini de medic", count: "18" },
+      { label: "Formulare (programare, contact, chestionar)", count: "3" },
+    ],
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Bază de date proprie",
+      "Asistent virtual AI",
+      "CDN global de imagini",
+      "Email tranzacțional",
+      "Animații vectoriale",
+      "Date structurate Schema.org",
+      "Infrastructură cloud",
+    ],
+    faq: [
+      {
+        question: "Cum funcționează programarea online?",
+        answer:
+          "Pacientul alege specialitatea, medicul și ziua dorită și își lasă numărul de telefon. Cererea ajunge instant pe email și în panoul de administrare, iar recepția sună pentru confirmarea orei. Cine preferă poate trimite cererea și pe WhatsApp.",
+      },
+      {
+        question: "Ce știe asistentul virtual?",
+        answer:
+          "Știe tot ce este pe site: serviciile, medicii și specialitățile lor, telefoanele, adresa, actele necesare la internare și întrebările frecvente. Datele vin automat din panou, deci un medic nou adăugat apare imediat și în răspunsuri. Poate prelua și o cerere de programare direct din conversație.",
+      },
+      {
+        question: "Clinica își poate administra singură site-ul?",
+        answer:
+          "Da. Din panou, echipa vede și gestionează programările, mesajele și chestionarele. Tot de acolo adaugă sau modifică medici, cu poze și biografii, specialități, numere de telefon, WhatsApp și anunțul afișat pe site.",
+      },
+      {
+        question: "Cum apare clinica în Google?",
+        answer:
+          "Fiecare pagină are titlu și descriere scrise pe căutările reale din zonă, ca „spital privat Botoșani”, „îngrijiri paliative Botoșani” sau „medic neurolog Botoșani”. Site-ul are date structurate pentru spital, medici, servicii și întrebări frecvente, plus sitemap dinamic. Sunt acoperite și căutările din Suceava și Iași.",
+      },
+    ],
+  },
   "sarami-media-editare-video": {
     tagline:
       "Migrare de pe WordPress pe Next.js, cu panou de administrare propriu și sistem de brief-uri — fără nicio pierdere de SEO.",
@@ -575,6 +696,7 @@ export function extractMonthFromImages(images?: string[]): number {
 // Sortează proiectele descrescător după an + lună (cele mai noi primele).
 // Proiectele "featured" (SaaS-uri noi) rămân mereu PRIMELE, în ordinea dată.
 const FEATURED_KEYS = [
+  "clinica-sf-gheorghe",
   "sarami-media",
   "nexit-marketplace",
   "invofyx-facturare",

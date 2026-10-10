@@ -15,6 +15,32 @@ export type ImportedProject = {
 
 export const importedProjects: ImportedProject[] = [
   {
+    "key": "clinica-sf-gheorghe",
+    "title": "Site Clinica Sfântul Gheorghe Botoșani",
+    "slug": "site-clinica-sfantul-gheorghe-botosani",
+    "categories": ["Dezvoltare Web", "Website de Prezentare", "Medical", "Programări Online", "Chatbot AI", "SEO"],
+    "image": null,
+    "wpImages": [
+      "/proiecte/clinica-sf-gheorghe/home.jpg",
+      "/proiecte/clinica-sf-gheorghe/home-sectiuni.jpg",
+      "/proiecte/clinica-sf-gheorghe/servicii.jpg",
+      "/proiecte/clinica-sf-gheorghe/spitalizare.jpg",
+      "/proiecte/clinica-sf-gheorghe/spitalizare-zi.jpg",
+      "/proiecte/clinica-sf-gheorghe/medici.jpg",
+      "/proiecte/clinica-sf-gheorghe/medic.jpg",
+      "/proiecte/clinica-sf-gheorghe/programare.jpg",
+      "/proiecte/clinica-sf-gheorghe/despre.jpg",
+      "/proiecte/clinica-sf-gheorghe/galerie.jpg",
+      "/proiecte/clinica-sf-gheorghe/mobil.jpg",
+      "/proiecte/clinica-sf-gheorghe/admin-programari.jpg",
+      "/proiecte/clinica-sf-gheorghe/admin-medici.jpg",
+      "/proiecte/clinica-sf-gheorghe/admin-setari.jpg"
+    ],
+    "externalUrl": "https://clinicasfantulgheorghe.ro",
+    "excerpt": "Site complet pentru un spital privat nou din Botoșani, cu 48 de locuri, spitalizare continuă și îngrijiri paliative: 36 de pagini, pagină pentru fiecare medic, programări online cu email și WhatsApp, asistent virtual AI, panou de administrare și SEO local pentru Botoșani, Suceava și Iași.",
+    "content": "<h3>Descriere Proiect</h3><p><strong>Website:</strong> <a href=\"https://clinicasfantulgheorghe.ro\" target=\"_blank\" rel=\"noopener\">clinicasfantulgheorghe.ro</a></p><p><strong>Clinica Medicală Sfântul Gheorghe</strong> este un spital privat nou din Botoșani, cu <strong>48 de locuri</strong>, specializat în <strong>spitalizare continuă și îngrijiri paliative</strong>, cu medici din 16 specialități. Clinica a fost inaugurată la 1 octombrie 2026, de Ziua Internațională a Persoanelor Vârstnice.</p><p>Am construit site-ul complet de la zero pe Next.js: 36 de pagini, o pagină pentru fiecare medic, programări online, un asistent virtual care răspunde pacienților și un panou de administrare din care clinica își gestionează singură medicii, specialitățile și cererile primite.</p><h3>Provocarea</h3><p>Publicul clinicii sunt în mare parte <strong>familii care caută îngrijire pentru un părinte vârstnic sau grav bolnav</strong>, de multe ori de pe telefon și în momente grele. Site-ul trebuia să fie cald și liniștitor, cu puțin text și ușor de folosit. Trebuia să ducă oamenii repede la un telefon sau la o programare și să apară în Google pentru căutările din Botoșani, Suceava și Iași, toate pentru o clinică abia deschisă, fără istoric online.</p><h3>Funcționalități cheie</h3><ul><li><strong>Prima pagină cu slider și animații:</strong> fotografii reale din clinică, cifre animate, iconițe animate în culorile brandului și o hartă cu pin pulsant spre adresa clinicii</li><li><strong>Pagini dedicate pentru fiecare serviciu:</strong> spitalizare continuă, îngrijiri paliative, asistență medicală specializată, analize de laborator, kinetoterapie și sprijin spiritual, fiecare cu medicii ei, întrebări frecvente și programare</li><li><strong>18 pagini de medic:</strong> fiecare cu biografie documentată, specialitate și buton de programare direct la medicul respectiv. Lista de medici se poate filtra pe specialitate</li><li><strong>Programare online:</strong> pacientul alege specialitatea, medicul și ziua. Cererea ajunge instant pe email și în panou, iar recepția sună pentru confirmare. Există și varianta pe WhatsApp</li><li><strong>Asistent virtual (chatbot AI)</strong> care știe tot despre clinică: servicii, medici, telefoane, acte pentru internare. Poate înregistra o cerere de programare direct din conversație și funcționează perfect pe telefon</li><li><strong>Panou de administrare:</strong> programări cu status (nouă, sunat, confirmată, anulată), mesaje de contact, chestionare de satisfacție, medici cu încărcare de poze, specialități și setări (telefoane, WhatsApp, anunț pe site)</li><li><strong>Formular de contact și chestionar pentru pacienți:</strong> fiecare mesaj e salvat în panou și trimis pe email</li><li><strong>SEO local complet:</strong> cuvinte cheie din căutările reale din Botoșani, Suceava și Iași, date structurate pentru spital, medici, servicii și întrebări frecvente, sitemap dinamic și texte alternative pentru fiecare imagine</li><li><strong>Gândit pentru telefon:</strong> butoane mari, sunat dintr-o atingere, texte ușor de citit pentru persoanele vârstnice</li></ul><h3>Cum e construit</h3><p>Site rapid pe <strong>Next.js, React și TypeScript</strong>, cu bază de date proprie pentru programări, mesaje și medici. Pozele sunt livrate printr-un CDN global de imagini și notificările pleacă prin email tranzacțional. Asistentul virtual folosește un model AI de ultimă generație, alimentat automat cu datele din panou. Totul rulează pe infrastructură cloud modernă, cu certificat SSL.</p><h3>Rezultatul Proiectului</h3><p>Clinica are un site care inspiră încredere încă din prima secundă și pe care pacienții îl folosesc ușor de pe telefon. Cererile de programare ajung organizat într-un singur loc, iar recepția doar sună și confirmă. Echipa adaugă sau modifică singură medicii, specialitățile și telefoanele, fără programator, iar asistentul virtual răspunde automat oricând.</p>"
+  },
+  {
     "key": "sarami-media",
     "title": "Sarami Media — Platformă pentru Agenție de Editare Video",
     "slug": "sarami-media-editare-video",
