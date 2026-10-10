@@ -48,7 +48,7 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       "124 articole cu redirect 301",
       "Panou de administrare propriu",
       "Brief-uri + ofertare din panou",
-      "Cutie poștală integrată (IMAP)",
+      "Cutie poștală integrată în panou",
       "Portofoliu video, YouTube & TikTok",
       "SEO clasic + optimizare pentru AI",
       "Landing page campanii Facebook",
@@ -92,7 +92,7 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       {
         title: "Migrarea conținutului",
         description:
-          "Import automat al articolelor din WordPress, mutarea imaginilor pe Cloudinary și curățarea codului rămas de la plugin-uri, cu verificarea fiecărui redirect.",
+          "Import automat al articolelor din WordPress, mutarea imaginilor pe un CDN rapid și curățarea codului rămas de la plugin-uri, cu verificarea fiecărui redirect.",
       },
       {
         title: "Panoul de administrare",
@@ -107,13 +107,13 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       {
         title: "Campanii și măsurare",
         description:
-          "Landing page dedicat reclamelor Facebook, Meta Pixel și Google Analytics 4 pornite după consimțământ, cu urmărirea conversiilor pe formular.",
+          "Landing page dedicat reclamelor plătite, cu măsurarea conversiilor pornită după consimțământ, ca bugetul să fie optimizat pe cereri reale.",
       },
     ],
     metrics: [
       { label: "Greutate pagină", value: "180 KB", hint: "HTML + CSS + JS comprimat — de ~15× mai ușoară decât media web" },
       { label: "Răspuns server", value: "0,87 s", hint: "măsurat live pe pagina de campanie" },
-      { label: "Timp până la primul byte", value: "sub 150 ms", hint: "server Node pe Railway, cache Cloudflare în față" },
+      { label: "Timp până la primul byte", value: "sub 150 ms", hint: "infrastructură cloud modernă, cu cache global în față" },
       { label: "Redirecturi 301", value: "124", hint: "câte un URL vechi păstrat pentru fiecare articol migrat" },
     ],
     deliverables: [
@@ -123,23 +123,21 @@ export const projectOverrides: Record<string, ProjectOverride> = {
       { label: "Secțiuni în panoul de admin", count: "7" },
     ],
     technologies: [
-      "Next.js 15",
+      "Next.js",
       "TypeScript",
-      "React 19",
-      "Cloudinary",
-      "Resend",
-      "IMAP",
-      "Meta Pixel",
-      "Google Analytics 4",
-      "Schema.org JSON-LD",
-      "Railway",
-      "Cloudflare",
+      "React",
+      "CDN global de imagini și video",
+      "Email tranzacțional",
+      "Panou de administrare propriu",
+      "Date structurate Schema.org",
+      "Măsurarea conversiilor",
+      "Infrastructură cloud",
     ],
     faq: [
       {
         question: "S-au pierdut pozițiile în Google după mutarea de pe WordPress?",
         answer:
-          "Nu. Fiecare dintre cele 124 de articole a primit redirect 301 de pe adresa veche pe cea nouă, iar imaginile au fost mutate pe Cloudinary. Google a urmat redirecturile și a păstrat autoritatea câștigată.",
+          "Nu. Fiecare dintre cele 124 de articole a primit redirect 301 de pe adresa veche pe cea nouă, iar imaginile au fost mutate pe un CDN rapid. Google a urmat redirecturile și a păstrat autoritatea câștigată.",
       },
       {
         question: "Clientul poate publica singur, fără programator?",
