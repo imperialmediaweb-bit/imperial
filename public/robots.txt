@@ -38,8 +38,27 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
 # Blocăm doar admin-ul
 User-agent: *
 Disallow: /admin
 
 Sitemap: https://imperial-media.ro/sitemap.xml
+
+# Conținut structurat pentru LLM-uri
+# https://imperial-media.ro/llms.txt
+# https://imperial-media.ro/llms-full.txt

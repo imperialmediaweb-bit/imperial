@@ -104,9 +104,10 @@ export default function RootLayout({
                   url: siteConfig.url,
                   telephone: siteConfig.phone,
                   email: siteConfig.email,
-                  priceRange: "899€ - 10000€",
+                  priceRange: "500 - 25000 RON",
                   address: {
                     "@type": "PostalAddress",
+                    addressLocality: "Botoșani",
                     addressCountry: "RO",
                   },
                   areaServed: { "@type": "Country", name: "România" },

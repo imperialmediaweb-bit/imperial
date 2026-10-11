@@ -37,6 +37,15 @@ const INCLUDED = [
   "1 rundă de revizii + 14 zile de corecturi mărunte",
 ];
 
+const SITE_START_FAQ = [
+  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 4 pagini (Acasă, Despre, Servicii, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în ziarul online al județului + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
+  { q: "În cât timp e gata site-ul?", a: "În 3-7 zile lucrătoare de la primirea conținutului (formularul de 5 minute + pozele). Plătești azi, ne trimiți datele, primești linkul de previzualizare, ceri o rundă de modificări și site-ul e live." },
+  { q: "Nu am texte sau poze bune. E o problemă?", a: "Deloc. Textele le scriem noi din ce ne povestești despre firmă (nu trebuie să scrii nimic «frumos»), iar dacă nu ai poze folosim imagini profesionale de stock, incluse în preț. Pozele tale reale le poți adăuga oricând mai târziu." },
+  { q: "E făcut pe WordPress?", a: "Nu. Site-ul e scris custom pe Next.js — aceeași tehnologie folosită de Netflix și Nike. Se încarcă sub o secundă, nu are plugin-uri care se strică și nu cere mentenanță lunară obligatorie. Codul, domeniul și datele sunt 100% ale tale." },
+  { q: "Ce se întâmplă după primul an?", a: "Domeniul și găzduirea gratuite expiră după 12 luni. Alegi atunci: Administrare Start (100 lei/lună — găzduire, domeniu, modificări mici, backup), Administrare Complet (300 lei/lună — tot ce e la Start, plus mentenanță deplină, un articol de presă pe lună în ziarul județului tău și monitorizarea lunară a afacerii) sau reînnoirea simplă (~350 lei/an). Te anunțăm cu 30 de zile înainte — site-ul nu se oprește niciodată fără știrea ta." },
+  { q: "Dacă vreau mai mult decât 4 pagini sau funcții în plus?", a: "Adaugi doar ce-ți trebuie: pagină în plus +200 lei, programări online +700 lei, galerie foto +400 lei, blog +500 lei, a doua limbă +700 lei, logo +300 lei. Iar dacă firma crește și vrei site-ul mare (de la 699€), cei 1.500 lei plătiți devin avans — plătești doar diferența." },
+];
+
 export default function SiteStartPage() {
   const price = siteStartPriceRon();
 
@@ -185,6 +194,21 @@ export default function SiteStartPage() {
         </div>
       </section>
 
+      {/* ─── FAQ — răspunsuri directe (SEO + citare în motoarele AI) ─── */}
+      <section className="section border-t border-bg-border/40">
+        <div className="container-app max-w-3xl">
+          <h2 className="section-title text-center">Întrebări frecvente</h2>
+          <div className="mt-8 space-y-3">
+            {SITE_START_FAQ.map((f) => (
+              <details key={f.q} className="group rounded-2xl border border-bg-border bg-bg-card">
+                <summary className="cursor-pointer select-none px-5 py-4 font-medium text-text transition hover:bg-white/5">{f.q}</summary>
+                <p className="px-5 pb-5 text-sm leading-relaxed text-text-muted">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── CTA FINAL ─── */}
       <section className="section border-t border-bg-border/40">
         <div className="container-app text-center">
@@ -208,17 +232,29 @@ export default function SiteStartPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Product",
-            name: "Site Start — site de prezentare (4 pagini)",
-            description: "Site profesional cu 4 pagini, construit pe Next.js: domeniu + găzduire gratuite primul an, livrat în câteva zile.",
-            brand: { "@type": "Organization", name: "Imperial Media" },
-            offers: {
-              "@type": "Offer",
-              price: price,
-              priceCurrency: "RON",
-              availability: "https://schema.org/InStock",
-              url: `${siteConfig.url}/site-start`,
-            },
+            "@graph": [
+              {
+                "@type": "Product",
+                name: "Site Start — site de prezentare (4 pagini)",
+                description: "Site profesional cu 4 pagini, construit pe Next.js: domeniu + găzduire gratuite primul an, livrat în câteva zile.",
+                brand: { "@type": "Organization", name: "Imperial Media" },
+                offers: {
+                  "@type": "Offer",
+                  price: price,
+                  priceCurrency: "RON",
+                  availability: "https://schema.org/InStock",
+                  url: `${siteConfig.url}/site-start`,
+                },
+              },
+              {
+                "@type": "FAQPage",
+                mainEntity: SITE_START_FAQ.map((f) => ({
+                  "@type": "Question",
+                  name: f.q,
+                  acceptedAnswer: { "@type": "Answer", text: f.a },
+                })),
+              },
+            ],
           }),
         }}
       />
