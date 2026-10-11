@@ -80,8 +80,10 @@ export function Footer() {
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">
               {[
-                { label: "Despre", href: "/despre" },
-                { label: "Servicii", href: "/servicii" },
+                { label: "Creare site web", href: "/creare-site-web" },
+                { label: "Magazin online", href: "/creare-magazin-online" },
+                { label: "Site de prezentare", href: "/creare-site-prezentare" },
+                { label: "Optimizare SEO", href: "/optimizare-seo" },
                 { label: "Proiecte", href: "/proiecte" },
                 { label: "Radiografia Afacerii", href: "/service" },
                 { label: "Blog & ghiduri", href: "/blog" },

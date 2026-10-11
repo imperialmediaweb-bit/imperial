@@ -53,6 +53,10 @@ ${LOCATIONS.filter((l) => l.isCountySeat).slice(0, 15).map((l) => `- Creare site
 
 ## Pagini importante
 
+- [Creare site web](${siteConfig.url}/creare-site-web): pagina principală a serviciului, cu prețuri și toate orașele
+- [Creare magazin online](${siteConfig.url}/creare-magazin-online): prețuri reale 1.200-4.500€, integrări
+- [Site de prezentare](${siteConfig.url}/creare-site-prezentare): de la 1.500 lei
+- [Optimizare SEO + vizibilitate AI](${siteConfig.url}/optimizare-seo): SEO clasic + GEO
 - [Site Start — site de prezentare 1.500 lei](${siteConfig.url}/site-start): totul inclus, gata în câteva zile
 - [Radiografia Afacerii](${siteConfig.url}/service): raport pe date reale + promovare în 50 de ziare, 299 lei
 - [Exemplu de raport complet](${siteConfig.url}/service/exemplu): vezi exact ce primești
