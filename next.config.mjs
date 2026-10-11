@@ -36,7 +36,6 @@ const nextConfig = {
     const legacyMap = [
       ["/despre-noi", "/despre"],
       ["/cere-oferta", "/brief"],
-      ["/creare-magazin-online", "/servicii"],
       ["/website-uri-de-prezentare", "/servicii"],
       ["/mentenanta-web", "/servicii"],
       ["/dezvoltare-web", "/servicii"],
