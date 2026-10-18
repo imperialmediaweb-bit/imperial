@@ -36,7 +36,7 @@ export function LocalOfferSection({ offer }: { offer: LocalOffer }) {
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-text-muted sm:text-lg">
             Gata în maximum {LOCAL_DEADLINE_DAYS} zile. Plus un asistent care răspunde clienților tăi
-            non-stop, articol în {offer.newspaper.name} și profilul pe Google Maps făcut de noi — cadou.
+            non-stop, articol în {offer.newspaper.name} și campanie pe Facebook — cadou.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a href="#estimare" className="btn-primary text-base">

@@ -40,15 +40,12 @@ export function localGifts(o: LocalOffer): { title: string; text: string }[] {
     { title: `Articol de lansare în ${o.newspaper.name}`, text: `Ziarul județului ${o.county} anunță noul tău site.` },
     { title: "Campanie de promovare pe Facebook, 5 zile", text: `Reclamă către oameni din ${o.city} și împrejurimi.` },
     { title: "Asistent AI pe site, non-stop", text: "Răspunde clienților la program, prețuri, servicii și preia cereri de programare — le primești pe WhatsApp." },
-    {
-      title: "Profilul tău pe Google Maps (Google Business)",
-      text: `Îl creăm sau îl completăm: program, telefon, poze, servicii, link spre site. Când cineva caută „${o.city} + ce faci tu", Google arată întâi harta cu 3 firme — acolo vrei să fii.`,
-    },
     { title: "30 de zile de modificări gratuite", text: "După lansare schimbăm ce vrei, fără cost." },
   ];
 }
 
 export const LOCAL_EXTRAS: { label: string; price: string; why: string }[] = [
+  { label: "Profil Google Maps (Google Business), complet", price: "200 lei", why: "Cel mai important pentru o afacere locală: când cineva caută în oraș ce faci tu, Google arată întâi harta cu 3 firme — cu program, telefon, poze și recenzii. Acolo se iau cei mai mulți clienți." },
   { label: "Pagină de Facebook completă", price: "199 lei", why: "Logo, copertă, descriere, buton WhatsApp și primele postări — oamenii din oraș verifică pagina înainte să sune." },
   { label: "Logo nou", price: "199 lei", why: "Firma arată serioasă pe site, pe firmă, pe facturi și pe Facebook." },
   { label: "Identitate vizuală (logo, culori, fonturi)", price: "399 lei", why: "Totul arată la fel peste tot — clienții te recunosc dintr-o privire." },
