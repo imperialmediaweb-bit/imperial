@@ -20,6 +20,8 @@ import { cityEconomyProfile } from "@/lib/city-economy";
 import { importedProjects } from "@/lib/projects-data";
 import { siteConfig } from "@/lib/site";
 import { packages } from "@/lib/packages";
+import { getLocalOffer } from "@/lib/local-offer";
+import { LocalOfferSection } from "@/components/LocalOfferSection";
 
 // Pre-render toate locațiile la build
 export function generateStaticParams() {
@@ -33,9 +35,14 @@ export function generateMetadata({
 }): Metadata {
   const loc = getLocationBySlug(params.slug);
   if (!loc) return {};
+  const offer = getLocalOffer(loc.slug);
   return {
-    title: `Creare Site Web ${loc.name} — Web Design, Magazine Online, Promovare | Imperial Media`,
-    description: `Creare site web în ${loc.name} de la 699€, magazine online de la 1.200€, promovare în 50 de ziare. Web design custom pentru afaceri din ${loc.name}, ${loc.county} — estimare gratuită în 2 minute.`,
+    title: offer
+      ? `Site pentru afacerea ta din ${loc.name} — 1.500 lei, gata în 14 zile | Imperial Media`
+      : `Creare Site Web ${loc.name} — Web Design, Magazine Online, Promovare | Imperial Media`,
+    description: offer
+      ? `Site de prezentare pentru afaceri din ${loc.name}: 1.500 lei, gata în maximum 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook 5 zile, asistent AI pe site, pagina de Facebook și profilul Google. Estimare în 2 minute.`
+      : `Creare site web în ${loc.name} de la 699€, magazine online de la 1.200€, promovare în 50 de ziare. Web design custom pentru afaceri din ${loc.name}, ${loc.county} — estimare gratuită în 2 minute.`,
     alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
       title: `Creare Site Web ${loc.name} | Imperial Media`,
@@ -56,6 +63,8 @@ export default function LocationPage({
   if (!loc) notFound();
 
   const nearby = getNearbyLocations(params.slug, 6);
+  // Orașele cu ofertă locală (campanii pe județ) primesc oferta în lei în capul paginii.
+  const offer = getLocalOffer(loc.slug);
 
   // Cifre locale derivate din populația reală — fiecare pagină de oraș devine unică
   const popK = Math.round(loc.population / 1000);
@@ -72,13 +81,13 @@ export default function LocationPage({
       icon: Code2,
       title: `Website prezentare ${loc.name}`,
       text: `Site-uri de prezentare custom pentru firme din ${loc.name} — design modern, responsive, optimizat SEO.`,
-      price: "de la 699€",
+      price: offer ? "1.500 lei" : "de la 699€",
     },
     {
       icon: ShoppingBag,
       title: `Magazin online ${loc.name}`,
       text: `Magazine online performante pentru afaceri din ${loc.county} — plăți sigure, administrare ușoară.`,
-      price: "de la 1200€",
+      price: offer ? "de la 3.499 lei" : "de la 1200€",
     },
     {
       icon: Palette,
@@ -97,11 +106,15 @@ export default function LocationPage({
   const faqs = [
     {
       q: `Cât costă un site web în ${loc.name}?`,
-      a: `Un site de prezentare custom pornește de la 699€, iar un magazin online de la 1200€. Prețul final depinde de funcționalități, pagini și complexitate. Folosește estimatorul nostru AI gratuit pentru un preț orientativ în 2 minute.`,
+      a: offer
+        ? `Pentru afacerile din ${loc.name}, un site de prezentare cu 5 pagini costă 1.500 lei și e gata în maximum 14 zile. Primești cadou articol în ${offer.newspaper.name}, campanie pe Facebook de 5 zile, asistent AI pe site și pagina de Facebook plus profilul Google făcute de noi. Opțiunile (logo, programări, blog) au preț fix, de la 99 lei.`
+        : `Un site de prezentare custom pornește de la 699€, iar un magazin online de la 1200€. Prețul final depinde de funcționalități, pagini și complexitate. Folosește estimatorul nostru AI gratuit pentru un preț orientativ în 2 minute.`,
     },
     {
       q: `Cât durează să faceți un site pentru firma mea din ${loc.name}?`,
-      a: `Un site de prezentare: 2-4 săptămâni. Un magazin online: 4-8 săptămâni. Termenul exact depinde de complexitate și de cât de repede primim conținutul (texte, poze).`,
+      a: offer
+        ? `Site-ul de prezentare e gata în maximum 14 zile de la primirea textelor și pozelor; macheta o vezi în 5 zile. Un magazin online: 4-8 săptămâni.`
+        : `Un site de prezentare: 2-4 săptămâni. Un magazin online: 4-8 săptămâni. Termenul exact depinde de complexitate și de cât de repede primim conținutul (texte, poze).`,
     },
     {
       q: `Faceți și mentenanță după livrare?`,
@@ -113,15 +126,21 @@ export default function LocationPage({
     },
     {
       q: `Cât costă un magazin online în ${loc.name}?`,
-      a: `Un magazin online complet pornește de la 1.200€ și poate ajunge la 4.500€+ în funcție de numărul de produse, integrarea cu curieri și facturare. Include plăți cu cardul, design custom și SEO din structură. Cere estimarea exactă gratuit, în 2 minute.`,
+      a: offer
+        ? `Pentru afacerile din ${loc.name}, un magazin online pornește de la 3.499 lei, cu plăți cu cardul, design pe brand și SEO din structură. Prețul exact îl afli în 2 minute din estimarea de pe pagină.`
+        : `Un magazin online complet pornește de la 1.200€ și poate ajunge la 4.500€+ în funcție de numărul de produse, integrarea cu curieri și facturare. Include plăți cu cardul, design custom și SEO din structură. Cere estimarea exactă gratuit, în 2 minute.`,
     },
     {
       q: `Faceți SEO și promovare online pentru firme din ${loc.name}?`,
-      a: `Da — fiecare site vine cu SEO local din construcție (pagini optimizate, date structurate, viteză 90+), iar campania de promovare în 50 de ziare online e inclusă la orice site nou. Pentru „${loc.name} + serviciul tău" pe Google, combinația site rapid + profil Google Business + mențiuni în presă e cea care urcă.`,
+      a: offer
+        ? `Da — fiecare site vine cu SEO local din construcție (pagini optimizate, date structurate, viteză 90+), iar la lansare primești cadou articol în ${offer.newspaper.name} și 5 zile de promovare pe Facebook. Pentru „${loc.name} + serviciul tău" pe Google, combinația site rapid + profil Google Business + mențiuni în presă e cea care urcă.`
+        : `Da — fiecare site vine cu SEO local din construcție (pagini optimizate, date structurate, viteză 90+), iar campania de promovare în 50 de ziare online e inclusă la orice site nou. Pentru „${loc.name} + serviciul tău" pe Google, combinația site rapid + profil Google Business + mențiuni în presă e cea care urcă.`,
     },
     {
       q: `Sunteți o agenție de web design potrivită pentru firme mici din ${loc.name}?`,
-      a: `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. Pachetele pornesc de la 699€ cu plata în 2 rate, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`,
+      a: offer
+        ? `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. În ${loc.name} site-ul de prezentare costă 1.500 lei, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`
+        : `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. Pachetele pornesc de la 699€ cu plata în 2 rate, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`,
     },
     {
       q: `Ce tehnologii folosiți?`,
@@ -132,7 +151,7 @@ export default function LocationPage({
   const benefits = [
     { icon: Zap, text: "Site-uri ultra-rapide, scor PageSpeed 90+" },
     { icon: Shield, text: "100% custom — NU WordPress, NU template-uri" },
-    { icon: Clock, text: "Livrare în 2-4 săptămâni" },
+    { icon: Clock, text: offer ? "Gata în maximum 14 zile" : "Livrare în 2-4 săptămâni" },
     { icon: Star, text: "10+ ani experiență, 200+ clienți" },
     { icon: MapPin, text: `Experți în piața din ${loc.region}` },
     { icon: CheckCircle2, text: "Suport 30 zile gratuit post-lansare" },
@@ -140,7 +159,7 @@ export default function LocationPage({
 
   return (
     <main>
-      {/* ─── HERO ─── */}
+      {offer ? <LocalOfferSection offer={offer} /> : (
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div className="pointer-events-none absolute inset-0 bg-hero-gradient" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,107,26,0.1)_0%,transparent_50%)]" />
@@ -183,6 +202,7 @@ export default function LocationPage({
           </div>
         </div>
       </section>
+      )}
 
       {/* ─── BENEFITS ─── */}
       <section className="section border-t border-bg-border/40">
@@ -206,6 +226,9 @@ export default function LocationPage({
         </div>
       </section>
 
+      {/* Orașele cu ofertă locală au prețurile și apelul la acțiune în oferta de sus. */}
+      {!offer && (
+        <>
       {/* ─── SERVICII ─── */}
       <section className="section">
         <div className="container-app">
@@ -297,6 +320,9 @@ export default function LocationPage({
         </div>
       </section>
 
+        </>
+      )}
+
       {/* ─── FAQ LOCAL ─── */}
       <section className="section border-t border-bg-border/40">
         <div className="container-app max-w-3xl">
@@ -324,6 +350,9 @@ export default function LocationPage({
         </div>
       </section>
 
+      {/* Orașele cu ofertă locală au prețurile și apelul la acțiune în oferta de sus. */}
+      {!offer && (
+        <>
       {/* ─── CTA FINAL ─── */}
       <section className="section border-t border-bg-border/40">
         <div className="container-app text-center">
@@ -347,6 +376,9 @@ export default function LocationPage({
           </p>
         </div>
       </section>
+
+        </>
+      )}
 
       {/* ─── PIAȚA LOCALĂ ÎN CIFRE — conținut unic per oraș (anti-doorway) ─── */}
       <section className="border-t border-bg-border/40 py-12">
@@ -479,7 +511,7 @@ export default function LocationPage({
                   { "@type": "City", name: loc.name },
                   { "@type": "AdministrativeArea", name: loc.county },
                 ],
-                priceRange: "699€ - 5000€",
+                priceRange: offer ? "1500 - 15000 RON" : "699€ - 5000€",
                 aggregateRating: {
                   "@type": "AggregateRating",
                   ratingValue: siteConfig.reviews.ratingValue,
@@ -491,7 +523,7 @@ export default function LocationPage({
                   itemListElement: services.map((s) => ({
                     "@type": "Offer",
                     itemOffered: { "@type": "Service", name: s.title, description: s.text },
-                    priceSpecification: { "@type": "PriceSpecification", price: s.price, priceCurrency: "EUR" },
+                    priceSpecification: { "@type": "PriceSpecification", price: s.price, priceCurrency: offer ? "RON" : "EUR" },
                   })),
                 },
                 sameAs: [siteConfig.social.facebook, siteConfig.social.instagram],

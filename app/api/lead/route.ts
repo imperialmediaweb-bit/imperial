@@ -63,6 +63,9 @@ export async function POST(req: Request) {
   const aiRecommendedPackage = String(body?.aiRecommendedPackage ?? "").trim();
   const aiRecommendedReason = String(body?.aiRecommendedReason ?? "").trim();
   const source = String(body?.source ?? "classic-form").trim();
+  // Oferta locală pe județ: estimarea e în lei, nu în euro.
+  const offer = String(body?.offer ?? "").trim().slice(0, 40);
+  const estimateCurrency = body?.estimateCurrency === "lei" ? "lei" : "€";
 
   const features = Array.isArray(body?.features)
     ? body.features.map(String).slice(0, 30)
@@ -72,12 +75,13 @@ export async function POST(req: Request) {
   let aiBlock = "";
   if (source === "ai-chat") {
     aiBlock += "\n\n─── Date generate de Imperial AI ───";
+    if (offer) aiBlock += `\n▸ Venit din oferta locală: ${offer} (prețuri în lei)`;
     if (aiRecommendedPackage) {
       aiBlock += `\n▸ Pachet recomandat de AI: ${aiRecommendedPackage}`;
       if (aiRecommendedReason) aiBlock += ` — ${aiRecommendedReason}`;
     }
     if (aiEstimateMin !== null && aiEstimateMax !== null && (aiEstimateMin > 0 || aiEstimateMax > 0)) {
-      aiBlock += `\n▸ Estimare orientativă AI: ${aiEstimateMin}–${aiEstimateMax} €`;
+      aiBlock += `\n▸ Estimare orientativă AI: ${aiEstimateMin}–${aiEstimateMax} ${estimateCurrency}`;
       if (aiEstimateReason) aiBlock += ` (${aiEstimateReason})`;
     } else if (aiEstimateReason) {
       aiBlock += `\n▸ Notă AI: ${aiEstimateReason}`;

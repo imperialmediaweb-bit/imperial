@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import type { BriefState, MoodBoard } from "@/lib/brief-schema";
 import { emptyBrief, MOODBOARDS, canSubmitBrief } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
+import type { LocalOffer } from "@/lib/local-offer";
+import { fbTrack } from "@/lib/fbq";
 import { ConsultantaPanel } from "./ConsultantaPanel";
 import { getPackageByKey } from "@/lib/packages";
 
@@ -76,10 +78,14 @@ type BriefChatProps = {
   clientContext?: string;
   // Varianta pentru balonul plutitor: o singură coloană, umple containerul părinte
   compact?: boolean;
+  /** Oferta locală pe județ (pagina /creare-site-web/<oraș>): estimare în lei. */
+  offer?: LocalOffer;
 };
 
-export function BriefChat({ mode = "brief", clientContext, compact = false }: BriefChatProps) {
-  const greeting = GREETINGS[mode];
+export function BriefChat({ mode = "brief", clientContext, compact = false, offer }: BriefChatProps) {
+  const greeting = offer
+    ? `Salut! 👋 Sunt Imperial AI. Spune-mi ce afacere ai în ${offer.city} și îți calculez pe loc cât costă site-ul tău — de la 1.500 lei, cu cadourile incluse.`
+    : GREETINGS[mode];
   const initialChips = CHIPS[mode];
   const router = useRouter();
   const [history, setHistory] = useState<AnthropicMsg[]>([]);
@@ -284,7 +290,7 @@ export function BriefChat({ mode = "brief", clientContext, compact = false }: Br
       const resp = await fetch("/api/brief-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newHistory, mode, ...(clientContext ? { clientContext } : {}) }),
+        body: JSON.stringify({ messages: newHistory, mode, ...(clientContext ? { clientContext } : {}), ...(offer ? { local: offer.slug } : {}) }),
       });
       const data = await resp.json();
       if (!resp.ok) {
@@ -470,6 +476,7 @@ Vreau ceva în aceeași direcție.`;
           aiRecommendedPackage: brief.recommendedPackage,
           aiRecommendedReason: brief.recommendedReason,
           source: mode === "consultanta" ? "consultanta" : "ai-chat",
+          ...(offer ? { offer: offer.slug, estimateCurrency: "lei" } : {}),
         }),
       });
       if (!res.ok) {
@@ -489,6 +496,8 @@ Vreau ceva în aceeași direcție.`;
         setSubmitting(false);
         return;
       }
+      // Lead-ul complet e conversia pe care o optimizează reclamele locale.
+      if (offer) fbTrack("Lead", { content_name: `oferta-${offer.slug}`, currency: "RON", value: 1500 });
       router.push("/multumim");
     } catch (e: any) {
       setError(e?.message ?? "Eroare.");
@@ -710,6 +719,7 @@ Vreau ceva în aceeași direcție.`;
             brief={brief}
             onSubmit={handleSubmit}
             submitting={submitting}
+            offer={offer}
           />
         )}
       </div>

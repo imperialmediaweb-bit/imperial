@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { ANTHROPIC_TOOLS, CLAUDE_MODEL, SYSTEM_PROMPT, CONSULTANTA_PROMPT, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { getLocalOffer, localOfferPrompt } from "@/lib/local-offer";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -46,7 +47,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { messages?: Anthropic.MessageParam[]; mode?: string; clientContext?: string };
+  let body: { messages?: Anthropic.MessageParam[]; mode?: string; clientContext?: string; local?: string };
   try {
     body = await req.json();
   } catch {
@@ -60,6 +61,9 @@ export async function POST(req: Request) {
     mode === "consultanta" && typeof body.clientContext === "string"
       ? body.clientContext.slice(0, 4000)
       : "";
+
+  // Oferta locală pe județ: prețurile în lei înlocuiesc lista în euro.
+  const localOffer = mode === "brief" ? getLocalOffer(body.local) : undefined;
 
   if (messages.length === 0) {
     return NextResponse.json({ error: "Niciun mesaj." }, { status: 400 });
@@ -123,6 +127,7 @@ export async function POST(req: Request) {
             text: mode === "consultanta" ? CONSULTANTA_PROMPT : SYSTEM_PROMPT,
             cache_control: { type: "ephemeral" },
           },
+          ...(localOffer ? [{ type: "text" as const, text: localOfferPrompt(localOffer) }] : []),
           ...(clientContext
             ? [
                 {

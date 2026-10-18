@@ -7,11 +7,14 @@ import type { BriefState } from "@/lib/brief-schema";
 import { canSubmitBrief, computeBriefProgress, computeLiveEstimate } from "@/lib/brief-schema";
 import { getPackageByKey } from "@/lib/packages";
 import { LiveMockup } from "./LiveMockup";
+import { type LocalOffer, computeLocalEstimate, localGifts } from "@/lib/local-offer";
 
 type Props = {
   brief: BriefState;
   onSubmit: () => void;
   submitting: boolean;
+  /** Oferta locală: estimarea și cadourile în lei, pe județ. */
+  offer?: LocalOffer;
 };
 
 type FieldRow = {
@@ -20,10 +23,14 @@ type FieldRow = {
   value: string | string[] | null;
 };
 
-export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
+export function LiveBriefCard({ brief, onSubmit, submitting, offer }: Props) {
   const progress = useMemo(() => computeBriefProgress(brief), [brief]);
   const canSubmit = useMemo(() => canSubmitBrief(brief), [brief]);
-  const liveEstimate = useMemo(() => computeLiveEstimate(brief), [brief]);
+  const liveEstimate = useMemo(
+    () => (offer ? computeLocalEstimate(brief) : computeLiveEstimate(brief)),
+    [brief, offer]
+  );
+  const cur = offer ? " lei" : "€";
 
   const recommendedPkg = brief.recommendedPackage
     ? getPackageByKey(brief.recommendedPackage)
@@ -159,7 +166,7 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                   </p>
                   <p className="mt-1 font-display text-2xl font-extrabold text-text sm:text-3xl">
                     <span className="text-gradient">
-                      {brief.estimate.min} – {brief.estimate.max} €
+                      {brief.estimate.min === brief.estimate.max ? brief.estimate.min : `${brief.estimate.min} – ${brief.estimate.max}`}{offer ? " lei" : " €"}
                     </span>
                   </p>
                   {brief.estimate.reasoning && (
@@ -226,8 +233,8 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                         </span>
                         <span className="flex-shrink-0 whitespace-nowrap font-mono text-text">
                           {line.priceMin === line.priceMax
-                            ? `${line.priceMin}€`
-                            : `${line.priceMin}–${line.priceMax}€`}
+                            ? `${line.priceMin}${cur}`
+                            : `${line.priceMin}–${line.priceMax}${cur}`}
                         </span>
                       </motion.div>
                     ))}
@@ -247,8 +254,8 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                   >
                     <span className="text-gradient">
                       {liveEstimate.totalMin === liveEstimate.totalMax
-                        ? `${liveEstimate.totalMin} €`
-                        : `${liveEstimate.totalMin}–${liveEstimate.totalMax} €`}
+                        ? `${liveEstimate.totalMin}${offer ? " lei" : " €"}`
+                        : `${liveEstimate.totalMin}–${liveEstimate.totalMax}${offer ? " lei" : " €"}`}
                     </span>
                   </motion.span>
                 </div>
@@ -260,7 +267,7 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
 
                 {/* Ce include prețul — trust builder */}
                 <div className="mt-3 grid grid-cols-2 gap-1.5 border-t border-brand-orange/15 pt-3">
-                  {[
+                  {(offer ? localGifts(offer).slice(0, 6).map((g) => `🎁 ${g.title}`) : [
                     "✅ Cod de la zero (Next.js)",
                     "✅ Viteză maximă (Google 95+)",
                     "✅ SEO + optimizare AI/LLM",
@@ -269,18 +276,26 @@ export function LiveBriefCard({ brief, onSubmit, submitting }: Props) {
                     "✅ Domeniu + hosting 1 an",
                     "🎁 Promovare 50 ziare (300€)",
                     "🛟 30 zile suport gratuit",
-                  ].map((item) => (
+                  ]).map((item) => (
                     <span key={item} className="text-[10px] leading-snug text-text-muted">
                       {item}
                     </span>
                   ))}
                 </div>
-                <p className="mt-2 text-center text-[10px] font-semibold text-brand-orangeLight">
-                  Plată în 2 rate: 50% avans · 50% la livrare
-                </p>
-                <p className="mt-1.5 text-center text-[9px] leading-snug text-text-subtle">
-                  După anul 1: hosting+domeniu ~50-80€/an · Mentenanță opțională de la 50€/lună
-                </p>
+                {offer ? (
+                  <p className="mt-2 text-center text-[10px] font-semibold text-brand-orangeLight">
+                    Gata în maximum 14 zile · după anul 1: domeniu + găzduire 299 lei/an
+                  </p>
+                ) : (
+                  <>
+                    <p className="mt-2 text-center text-[10px] font-semibold text-brand-orangeLight">
+                      Plată în 2 rate: 50% avans · 50% la livrare
+                    </p>
+                    <p className="mt-1.5 text-center text-[9px] leading-snug text-text-subtle">
+                      După anul 1: hosting+domeniu ~50-80€/an · Mentenanță opțională de la 50€/lună
+                    </p>
+                  </>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
