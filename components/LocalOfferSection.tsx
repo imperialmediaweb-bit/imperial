@@ -5,12 +5,14 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Gift, MessageCircle, Zap } from "lucide-react";
 import { BriefChat } from "@/components/BriefChat";
 import { DemoAssistant } from "@/components/DemoAssistant";
+import { LocalConfigurator } from "@/components/LocalConfigurator";
 import { siteConfig } from "@/lib/site";
 import {
   type LocalOffer,
   LOCAL_DEADLINE_DAYS,
   LOCAL_EXTRAS,
   LOCAL_INCLUDED,
+  LOCAL_MONTHLY,
   LOCAL_SITE_PRICE,
   localGifts,
 } from "@/lib/local-offer";
@@ -101,9 +103,13 @@ export function LocalOfferSection({ offer }: { offer: LocalOffer }) {
                 </li>
               ))}
             </ul>
-            <Link href="/plata-site-start" className="btn-primary mt-6 w-full justify-center">
-              Comandă direct — {price} lei
-            </Link>
+            <p className="mt-4 rounded-xl bg-bg-soft/50 p-3 text-xs leading-relaxed text-text-muted">
+              Plus abonamentul „Site activ" de {LOCAL_MONTHLY} lei/lună (prima lună gratuită): găzduire,
+              asistentul AI, backup, modificări mici și raport lunar.
+            </p>
+            <a href="#estimare" className="btn-primary mt-4 w-full justify-center">
+              Alege ce vrei și vezi prețul
+            </a>
           </div>
           <div className="rounded-2xl border border-bg-border bg-bg-card/60 p-6">
             <h3 className="font-display text-xl font-bold text-text">Vrei mai mult? Adaugi doar ce-ți trebuie</h3>
@@ -127,8 +133,8 @@ export function LocalOfferSection({ offer }: { offer: LocalOffer }) {
         <div className="container-app">
           <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-3">
             {[
-              ["1", "Azi", "Completezi estimarea de mai jos sau ne scrii pe WhatsApp."],
-              ["2", "În 5 zile", "Vezi macheta site-ului și ceri modificări."],
+              ["1", "Azi", "Alegi ce vrei pe site, mai jos, sau ne scrii pe WhatsApp."],
+              ["2", "În 5 zile", "Vezi site-ul tău pe o adresă de probă și ceri modificări."],
               ["3", `În max. ${LOCAL_DEADLINE_DAYS} zile`, `Site-ul e live, iar ${offer.newspaper.name} anunță lansarea.`],
             ].map(([nr, title, text]) => (
               <div key={nr} className="rounded-2xl border border-bg-border bg-bg-card/60 p-5 text-center">
@@ -161,16 +167,30 @@ export function LocalOfferSection({ offer }: { offer: LocalOffer }) {
         </div>
       </section>
 
-      {/* ─── BRIEF ÎN LEI ─── */}
+      {/* ─── BRIEF: CONFIGURATORUL ─── */}
       <section id="estimare" className="section scroll-mt-20 border-t border-bg-border/40">
         <div className="container-app">
           <div className="text-center">
             <h2 className="section-title mx-auto">
-              Află <span className="text-gradient">cât costă site-ul tău</span> în 2 minute
+              Alege ce vrei — <span className="text-gradient">vezi prețul pe loc</span>
             </h2>
             <p className="section-subtitle mx-auto">
-              Spune-i asistentului ce afacere ai — îți calculează prețul pe loc, în lei. Fără obligații.
+              Bifezi, ne spui despre afacere, încarci logo-ul și pozele. Nu plătești nimic acum.
             </p>
+          </div>
+          <div className="mx-auto mt-10 max-w-6xl">
+            <LocalConfigurator offer={offer} />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── ÎNTREBĂRI: ASISTENTUL ─── */}
+      <section className="section border-t border-bg-border/40">
+        <div className="container-app">
+          <div className="text-center">
+            <h2 className="section-title mx-auto">
+              Ai întrebări? <span className="text-gradient">Întreabă-l pe Imperial AI</span>
+            </h2>
           </div>
           <div className="mx-auto mt-10 max-w-6xl">
             <BriefChat offer={offer} />

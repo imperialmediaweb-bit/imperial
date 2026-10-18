@@ -32,7 +32,17 @@ export const LOCAL_INCLUDED = [
   "Formular, buton WhatsApp, buton de apel, hartă",
   "Google Analytics + Search Console, înscris în Google și Bing",
   "Pregătit să fie recomandat de ChatGPT și Gemini",
-  "Domeniu .ro, găzduire, SSL și email profesional — primul an inclus",
+  "Domeniu .ro gratuit primul an",
+];
+
+/** Abonamentul lunar: găzduirea, asistentul AI și întreținerea au cost lunar real. */
+export const LOCAL_MONTHLY = 99;
+export const LOCAL_MONTHLY_INCLUDES = [
+  "Găzduire rapidă, SSL și email profesional",
+  "Asistentul AI pe site, mereu pornit",
+  "Backup și actualizări de securitate",
+  "1–2 modificări mici pe lună",
+  "Raport lunar: vizitatori, apeluri, mesaje",
 ];
 
 export function localGifts(o: LocalOffer): { title: string; text: string }[] {
@@ -56,8 +66,7 @@ export const LOCAL_EXTRAS: { label: string; price: string; why: string }[] = [
   { label: "A doua limbă", price: "499 lei", why: "Pentru clienți din diaspora sau turiști." },
   { label: "Comenzi online simple (restaurante, livrări)", price: "599 lei", why: "Comenzile vin direct la tine, fără comision la platforme." },
   { label: "Magazin online în loc de site", price: `de la ${LOCAL_SHOP_PRICE.toLocaleString("ro-RO")} lei`, why: "Vinzi și când e închis magazinul." },
-  { label: "Administrare lunară (modificări, backup)", price: "149 lei / lună", why: "Noi ținem site-ul la zi, tu te ocupi de afacere." },
-  { label: "Domeniu + găzduire din anul 2", price: "299 lei / an", why: "Primul an e inclus." },
+  { label: "Abonament „Site activ” (obligatoriu)", price: "99 lei / lună", why: "Găzduire, asistentul AI, backup, modificări mici și raport lunar. Prima lună gratuită; anual 990 lei." },
 ];
 
 export const LOCAL_OFFERS: LocalOffer[] = [
@@ -127,6 +136,7 @@ Clientul a venit de pe pagina ofertei pentru ${o.city} (județul ${o.county}). T
 
 - Site de prezentare (5 pagini): ${LOCAL_SITE_PRICE} lei, gata în maximum ${LOCAL_DEADLINE_DAYS} zile de la primirea textelor și pozelor.
 - Magazin online: de la ${LOCAL_SHOP_PRICE} lei.
+- Abonament „Site activ” obligatoriu: ${LOCAL_MONTHLY} lei/lună, prima lună gratuită (sau 990 lei/an): găzduire, SSL, email, asistentul AI, backup, 1–2 modificări mici pe lună, raport lunar. Domeniul .ro e gratuit primul an. Spune-l clar la fiecare estimare.
 - Ce e peste ofertă (platforme, aplicații, mai mult de 15 pagini): spune că echipa face oferta separat, pe email.
 
 Ce include site-ul:
@@ -146,4 +156,54 @@ Calculul e o ADUNARE simplă: 1.500 lei + fiecare opțiune aleasă, o singură d
 Verifică suma de două ori înainte s-o scrii. Când chemi set_estimate, min și max sunt ÎN LEI și egale cu suma din text.
 Nu promite nimic ce nu e în listă: fără SMS, fără aplicații mobile, fără „poziția 1 în Google". Reamintirile de programare se trimit pe email.
 Clientul poate comanda direct cu cardul la imperial-media.ro/plata-site-start (1.500 lei, factură automată) sau trimite brief-ul și primește oferta pe email în 24h.`;
+}
+
+// ─── Configuratorul (brief-ul cu bife) ───
+
+export type SiteType = "prezentare" | "programari" | "comenzi" | "magazin";
+
+export const SITE_TYPES: { id: SiteType; label: string; who: string; price: number }[] = [
+  { id: "prezentare", label: "Site de prezentare", who: "Firme, meserii, servicii", price: LOCAL_SITE_PRICE },
+  { id: "programari", label: "Site cu programări", who: "Saloane, cabinete, service-uri, săli de sport", price: LOCAL_SITE_PRICE + 399 },
+  { id: "comenzi", label: "Site cu comenzi", who: "Restaurante, cofetării, livrări", price: LOCAL_SITE_PRICE + 599 },
+  { id: "magazin", label: "Magazin online", who: "Cine vinde produse", price: LOCAL_SHOP_PRICE },
+];
+
+export type ConfigOption = {
+  id: string;
+  label: string;
+  price: number;
+  /** Prețul se înmulțește cu o cantitate (pagini, pachete de produse). */
+  perUnit?: string;
+  /** Doar pentru aceste tipuri; lipsă = pentru toate. */
+  only?: SiteType[];
+  why?: string;
+};
+
+export const CONFIG_OPTIONS: ConfigOption[] = [
+  { id: "logo", label: "Nu am logo — faceți-mi unul", price: 199 },
+  { id: "pagini", label: "Pagini în plus", price: 99, perUnit: "pagină", why: "O pagină pentru fiecare serviciu important." },
+  { id: "blog", label: "Blog / noutăți", price: 199 },
+  { id: "limba", label: "A doua limbă", price: 499 },
+  { id: "google", label: "Profil Google Maps complet", price: 200, why: "Cel mai important pentru o afacere locală." },
+  { id: "facebook", label: "Pagină de Facebook completă", price: 199 },
+  { id: "kit", label: "Kit grafic: carte de vizită, afiș, 3 postări", price: 199 },
+  { id: "produse", label: "Produse peste 50", price: 99, perUnit: "50 de produse", only: ["magazin"] },
+  { id: "card", label: "Plăți cu cardul", price: 299, only: ["magazin"] },
+  { id: "curier", label: "Curier automat (FanCourier, Sameday)", price: 399, only: ["magazin"] },
+  { id: "facturare", label: "Facturare automată", price: 299, only: ["magazin"] },
+];
+
+export type ConfigSelection = { type: SiteType; options: Record<string, number> };
+
+/** Totalul configuratorului. Calculat la fel în browser și pe server. */
+export function configTotal(sel: ConfigSelection): { lines: { label: string; price: number }[]; total: number } {
+  const type = SITE_TYPES.find((t) => t.id === sel.type) ?? SITE_TYPES[0];
+  const lines = [{ label: type.label, price: type.price }];
+  for (const o of CONFIG_OPTIONS) {
+    const qty = Math.max(0, Math.min(50, Math.floor(sel.options[o.id] ?? 0)));
+    if (!qty || (o.only && !o.only.includes(type.id))) continue;
+    lines.push({ label: o.perUnit ? `${o.label} × ${qty}` : o.label, price: o.price * (o.perUnit ? qty : 1) });
+  }
+  return { lines, total: lines.reduce((s, l) => s + l.price, 0) };
 }
