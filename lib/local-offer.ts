@@ -41,7 +41,6 @@ export function localGifts(o: LocalOffer): { title: string; text: string }[] {
     { title: "Campanie de promovare pe Facebook, 5 zile", text: `Reclamă către oameni din ${o.city} și împrejurimi.` },
     { title: "Asistent AI pe site, non-stop", text: "Răspunde clienților la program, prețuri, servicii și preia cereri de programare — le primești pe WhatsApp." },
     { title: "Pagina de Facebook și profilul Google Maps", text: "Le creăm sau le refacem: logo, copertă, descriere, program, poze." },
-    { title: "Kit de lansare", text: "Carte de vizită, afiș pentru vitrină și 3 postări gata de publicat." },
     { title: "30 de zile de modificări gratuite", text: "După lansare schimbăm ce vrei, fără cost." },
   ];
 }
@@ -49,6 +48,7 @@ export function localGifts(o: LocalOffer): { title: string; text: string }[] {
 export const LOCAL_EXTRAS: { label: string; price: string }[] = [
   { label: "Logo nou", price: "199 lei" },
   { label: "Identitate vizuală (logo, culori, fonturi)", price: "399 lei" },
+  { label: "Kit grafic: carte de vizită, afiș, 3 postări", price: "199 lei" },
   { label: "Pagină în plus", price: "99 lei / pagină" },
   { label: "Programări automate în calendar + reamintire pe email", price: "399 lei" },
   { label: "Blog / noutăți", price: "199 lei" },
