@@ -36,7 +36,7 @@ export function LocalOfferSection({ offer }: { offer: LocalOffer }) {
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base text-text-muted sm:text-lg">
             Gata în maximum {LOCAL_DEADLINE_DAYS} zile. Plus un asistent care răspunde clienților tăi
-            non-stop, articol în {offer.newspaper.name} și pagina de Facebook făcută de noi — cadou.
+            non-stop, articol în {offer.newspaper.name} și profilul pe Google Maps făcut de noi — cadou.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a href="#estimare" className="btn-primary text-base">
@@ -109,9 +109,12 @@ export function LocalOfferSection({ offer }: { offer: LocalOffer }) {
             <h3 className="font-display text-xl font-bold text-text">Vrei mai mult? Adaugi doar ce-ți trebuie</h3>
             <ul className="mt-4 divide-y divide-bg-border/60">
               {LOCAL_EXTRAS.map((e) => (
-                <li key={e.label} className="flex items-center justify-between gap-4 py-2.5 text-sm">
-                  <span className="text-text-muted">{e.label}</span>
-                  <span className="whitespace-nowrap font-semibold text-text">{e.price}</span>
+                <li key={e.label} className="py-2.5 text-sm">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-text">{e.label}</span>
+                    <span className="whitespace-nowrap font-semibold text-text">{e.price}</span>
+                  </div>
+                  <p className="mt-0.5 text-xs leading-snug text-text-subtle">{e.why}</p>
                 </li>
               ))}
             </ul>
