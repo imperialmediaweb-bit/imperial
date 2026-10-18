@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import type { BriefState, MoodBoard } from "@/lib/brief-schema";
 import { emptyBrief, MOODBOARDS, canSubmitBrief } from "@/lib/brief-schema";
 import { LiveBriefCard } from "./LiveBriefCard";
-import type { LocalOffer } from "@/lib/local-offer";
+import { type LocalOffer, computeLocalEstimate } from "@/lib/local-offer";
 import { fbTrack } from "@/lib/fbq";
 import { ConsultantaPanel } from "./ConsultantaPanel";
 import { getPackageByKey } from "@/lib/packages";
@@ -470,8 +470,8 @@ Vreau ceva în aceeași direcție.`;
           features: brief.features,
           inspiration: brief.inspiration,
           message: brief.message,
-          aiEstimateMin: brief.estimate.min,
-          aiEstimateMax: brief.estimate.max,
+          aiEstimateMin: offer ? computeLocalEstimate(brief)?.totalMin ?? null : brief.estimate.min,
+          aiEstimateMax: offer ? computeLocalEstimate(brief)?.totalMax ?? null : brief.estimate.max,
           aiEstimateReason: brief.estimate.reasoning,
           aiRecommendedPackage: brief.recommendedPackage,
           aiRecommendedReason: brief.recommendedReason,

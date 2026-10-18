@@ -61,7 +61,9 @@ export function LiveBriefCard({ brief, onSubmit, submitting, offer }: Props) {
     { key: "inspiration", label: "Inspirație", value: brief.inspiration || null },
   ];
 
+  // Oferta locală are prețuri fixe: suma o calculează site-ul, nu asistentul.
   const hasEstimate =
+    !offer &&
     (brief.estimate.min !== null && brief.estimate.max !== null) &&
     (brief.estimate.min !== 0 || brief.estimate.max !== 0);
 
