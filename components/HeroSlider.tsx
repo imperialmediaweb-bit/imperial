@@ -26,13 +26,15 @@ function VideoSlide({ isDesktop }: { isDesktop: boolean }) {
       {isDesktop ? (
         <video
           className="absolute inset-0 h-full w-full object-cover"
-          src="/video/hero-loop.webm"
           poster="/video/hero-poster.jpg"
           autoPlay
           muted
           loop
           playsInline
-        />
+        >
+          <source src="/video/hero-loop.webm" type="video/webm" />
+          <source src="/video/hero-loop.mp4" type="video/mp4" />
+        </video>
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img src="/video/hero-poster.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
