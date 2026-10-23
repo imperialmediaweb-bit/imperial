@@ -428,7 +428,7 @@ function CircularProgress({ value }: { value: number }) {
         <defs>
           <linearGradient id="briefGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#FF6B1A" />
-            <stop offset="100%" stopColor="#8B2FF7" />
+            <stop offset="100%" stopColor="#7B2FF7" />
           </linearGradient>
         </defs>
       </svg>

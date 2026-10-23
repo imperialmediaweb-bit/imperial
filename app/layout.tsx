@@ -1,30 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Archivo, Inter } from "next/font/google";
 import "./globals.css";
-
-// Fonturile sunt servite de pe domeniul nostru (next/font) — fără cereri către
-// Google la încărcare, fără FOUT; Archivo e fontul display din noul branding.
-const inter = Inter({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
-  display: "swap",
-});
-const archivo = Archivo({
-  subsets: ["latin", "latin-ext"],
-  weight: ["600", "700", "800", "900"],
-  variable: "--font-archivo",
-  display: "swap",
-});
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { NoiseOverlay } from "@/components/effects/NoiseOverlay";
 import { MetaPixel } from "@/components/MetaPixel";
 import { ScrollProgress } from "@/components/effects/ScrollProgress";
-import { LightThread } from "@/components/effects/LightThread";
-import { SparkTrail } from "@/components/effects/SparkTrail";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -73,7 +55,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#060608",
+  themeColor: "#0E0617",
   width: "device-width",
   initialScale: 1,
 };
@@ -84,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ro" className={`${inter.variable} ${archivo.variable}`}>
+    <html lang="ro">
       <head>
         {/* Font preconnect — elimină latența DNS/TCP pentru Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
@@ -171,8 +153,6 @@ export default function RootLayout({
         <MetaPixel />
         <NoiseOverlay />
         <ScrollProgress />
-        <LightThread />
-        <SparkTrail />
         <Header />
         <div>{children}</div>
         <Footer />

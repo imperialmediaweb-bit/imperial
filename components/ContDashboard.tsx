@@ -513,7 +513,7 @@ function ScoreChart({ points }: { points: Array<{ date: string; score: number }>
           />
           <path d={path} fill="none" stroke="#ea580c" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
           {xs.map((x, i) => (
-            <circle key={i} cx={x} cy={ys[i]} r={i === xs.length - 1 ? 5.5 : 4} fill="#ea580c" stroke="#060608" strokeWidth={2} />
+            <circle key={i} cx={x} cy={ys[i]} r={i === xs.length - 1 ? 5.5 : 4} fill="#ea580c" stroke="#0e0617" strokeWidth={2} />
           ))}
           <text x={xs[xs.length - 1]} y={ys[ys.length - 1] - 12} textAnchor="middle" fontSize={12} fontWeight={700} fill="currentColor">
             {points[points.length - 1].score}

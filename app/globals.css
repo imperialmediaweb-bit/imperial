@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,14 +10,9 @@
 
 html,
 body {
-  background-color: #060608;
-  color: #f7f6fa;
+  background-color: #0e0617;
+  color: #f5f0fa;
   -webkit-font-smoothing: antialiased;
-  /* clip, nu hidden: taie orice depășire orizontală fără să strice sticky */
-  overflow-x: clip;
-}
-body {
-  font-family: var(--font-inter), Inter, system-ui, sans-serif;
 }
 
 html {
@@ -24,8 +21,8 @@ html {
 
 /* Selecție text cu accent brand */
 ::selection {
-  background-color: #ff2e9a;
-  color: #060608;
+  background-color: #ff6b1a;
+  color: #0e0617;
 }
 
 /* Scrollbar customizat */
@@ -33,14 +30,14 @@ html {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #060608;
+  background: #0e0617;
 }
 ::-webkit-scrollbar-thumb {
-  background: #26262f;
+  background: #2d1f4e;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8b2ff7;
+  background: #7b2ff7;
 }
 
 @layer components {
@@ -97,9 +94,8 @@ html {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 107, 26, 0.3) 25%,
-    rgba(255, 46, 154, 0.3) 50%,
-    rgba(139, 47, 247, 0.3) 75%,
+    rgba(255, 107, 26, 0.25) 30%,
+    rgba(123, 47, 247, 0.25) 70%,
     transparent
   );
 }
@@ -119,30 +115,12 @@ html {
     0 0 30px rgba(255, 107, 26, 0.08);
 }
 
-/* Text gradient pentru titluri — gradientul semnătură din banner */
+/* Text gradient pentru titluri */
 .text-gradient {
-  background: linear-gradient(110deg, #ff6b1a 0%, #ff2e9a 55%, #8b2ff7 100%);
+  background: linear-gradient(135deg, #ff6b1a 0%, #ff8a42 50%, #a855f7 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* ───── Text „chrome” metalic — ca „TU AI IDEEA.” din bannerul brandului ───── */
-@keyframes chrome-sweep {
-  0% { background-position: -150% 50%, 0% 50%; }
-  100% { background-position: 250% 50%, 0% 50%; }
-}
-.text-chrome {
-  background-image:
-    linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.9) 50%, transparent 60%),
-    linear-gradient(180deg, #ffffff 0%, #e9e7f0 34%, #8f8a9e 50%, #d9d6e2 64%, #ffffff 100%);
-  background-size: 50% 100%, 100% 100%;
-  background-repeat: no-repeat;
-  background-blend-mode: screen, normal;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: chrome-sweep 5s ease-in-out infinite;
 }
 
 /* Animație background hero — gradient mișcător */
@@ -150,9 +128,9 @@ html {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 30%, rgba(139, 47, 247, 0.32) 0%, transparent 45%),
-    radial-gradient(circle at 85% 70%, rgba(255, 107, 26, 0.24) 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(255, 46, 154, 0.16) 0%, transparent 50%);
+    radial-gradient(circle at 15% 30%, rgba(123, 47, 247, 0.35) 0%, transparent 45%),
+    radial-gradient(circle at 85% 70%, rgba(255, 107, 26, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.2) 0%, transparent 50%);
   filter: blur(40px);
   animation: hero-pulse 12s ease-in-out infinite;
 }
@@ -219,9 +197,9 @@ html {
   background: linear-gradient(
     90deg,
     #FF6B1A 0%,
-    #FF2E9A 30%,
+    #FFB020 25%,
     #FFFFFF 50%,
-    #B06CFF 70%,
+    #FFB020 75%,
     #FF6B1A 100%
   );
   background-size: 200% auto;
@@ -247,10 +225,9 @@ html {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    #FF6B1A 50deg,
-    #FF2E9A 110deg,
-    #8B2FF7 160deg,
-    transparent 220deg,
+    #FF6B1A 60deg,
+    #7B2FF7 120deg,
+    transparent 180deg,
     transparent 360deg
   );
   border-radius: inherit;
@@ -261,7 +238,7 @@ html {
   content: "";
   position: absolute;
   inset: 1.5px;
-  background: #121218;
+  background: #1F1338;
   border-radius: inherit;
   z-index: -1;
 }
@@ -301,7 +278,7 @@ html {
 
 /* ───── Reveal fade ───── */
 .glass {
-  background: rgba(10, 10, 14, 0.65);
+  background: rgba(31, 19, 56, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -318,8 +295,8 @@ html {
 }
 .project-content h2,
 .project-content h3 {
-  color: #f7f6fa;
-  font-family: Archivo, Inter, sans-serif;
+  color: #f5f0fa;
+  font-family: Manrope, Inter, sans-serif;
   font-weight: 800;
   letter-spacing: -0.01em;
   margin-top: 2em;
@@ -339,7 +316,7 @@ html {
   top: 0.45em;
   bottom: 0.25em;
   width: 3px;
-  background: linear-gradient(180deg, #FF6B1A, #FF2E9A, #8B2FF7);
+  background: linear-gradient(180deg, #FF6B1A, #7B2FF7);
   border-radius: 2px;
 }
 .project-content p {
@@ -565,7 +542,7 @@ html {
   }
   /* Logo-ul e alb — pe hârtie îi punem plăcuța închisă în spate ca să se vadă */
   .service-report-print img[alt="Imperial Media"] {
-    background: #0a0a0e !important;
+    background: #170b2e !important;
     padding: 8px 14px !important;
     border-radius: 12px !important;
   }

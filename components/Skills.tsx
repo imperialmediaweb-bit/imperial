@@ -109,7 +109,7 @@ function DashboardMockup() {
                 </linearGradient>
                 <linearGradient id="chart-line" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#FF6B1A" />
-                  <stop offset="100%" stopColor="#B06CFF" />
+                  <stop offset="100%" stopColor="#A855F7" />
                 </linearGradient>
               </defs>
               {/* Grid lines */}
