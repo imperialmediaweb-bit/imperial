@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Zap } from "lucide-react";
@@ -11,19 +10,96 @@ import { ParticleField } from "./effects/ParticleField";
 import { NumberTicker } from "./effects/NumberTicker";
 import { Magnetic } from "./effects/MagneticButton";
 
-// Hero = experiență: slider full-screen cu 3D, video-motion și proiecte reale.
-// Text puțin; imaginea și mișcarea vorbesc.
+// Hero = experiență. 3 „camere”: CLIPUL de brand, cristalul 3D, cifrele.
+// Tranziția dintre slide-uri e o trecere printr-o ușă: camera curentă vine
+// spre tine și se dizolvă, următoarea se deschide din adâncime.
 
 const Crystal3D = dynamic(() => import("./effects/Crystal3D"), { ssr: false });
 
-const AUTOPLAY = 7000;
+const AUTOPLAY = 8000;
 
-type SlideDef = {
-  key: string;
-  render: (active: boolean, isDesktop: boolean) => React.ReactNode;
-};
+/* ───── Slide 1: CLIPUL ───── */
+function VideoSlide({ isDesktop }: { isDesktop: boolean }) {
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-[#050507]">
+      {/* clipul generat — doar desktop; pe mobil posterul static */}
+      {isDesktop ? (
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/video/hero-loop.webm"
+          poster="/video/hero-poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src="/video/hero-poster.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      )}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.8)_100%)]" />
 
-function BrandSlide({ isDesktop }: { isDesktop: boolean }) {
+      <div className="container-app relative z-10 flex h-full flex-col items-center justify-center text-center">
+        {/* sigla nouă, mare, cu glow */}
+        <motion.svg
+          viewBox="0 0 100 100"
+          className="h-24 w-24 drop-shadow-[0_0_30px_rgba(255,46,154,0.5)] sm:h-28 sm:w-28"
+          initial={{ opacity: 0, scale: 0.6, rotate: -8 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <defs>
+            <linearGradient id="hRing" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FF6B1A" />
+              <stop offset="55%" stopColor="#FF2E9A" />
+              <stop offset="100%" stopColor="#8B2FF7" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="rgba(7,6,10,0.75)" stroke="url(#hRing)" strokeWidth="3" />
+          <g fill="url(#hRing)">
+            <path d="M22 66 L30 34 L40 50 L36 66 Z" />
+            <path d="M50 26 L58 46 L50 66 L42 46 Z" />
+            <path d="M78 66 L70 34 L60 50 L64 66 Z" />
+          </g>
+          <path d="M50 16 L52.2 21.5 L50 24 L47.8 21.5 Z" fill="#FFB020" />
+        </motion.svg>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-7 font-display text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+        >
+          <span className="text-chrome">Tu ai ideea.</span>{" "}
+          <span className="text-gradient whitespace-nowrap drop-shadow-[0_0_28px_rgba(255,46,154,0.4)]">
+            Noi o aducem la viață.
+          </span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.85 }}
+          className="mt-9"
+        >
+          <Magnetic strength={0.45}>
+            <Link
+              href="/brief"
+              className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-orange-gradient px-8 py-4 text-base font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,46,154,0.55)]"
+            >
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <Zap className="h-5 w-5" />
+              Primește estimare gratuită
+            </Link>
+          </Magnetic>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* ───── Slide 2: cristalul 3D ───── */
+function CrystalSlide({ isDesktop }: { isDesktop: boolean }) {
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#050507]">
       <RibbonField />
@@ -37,184 +113,48 @@ function BrandSlide({ isDesktop }: { isDesktop: boolean }) {
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
             className="text-[11px] font-semibold uppercase tracking-[0.32em] text-text-subtle"
           >
             Web · AI · Software · Automatizări
           </motion.p>
-          <h1 className="mt-4 font-display text-4xl font-black uppercase leading-[1.04] tracking-tight sm:text-5xl lg:text-6xl">
-            <motion.span
-              initial={{ opacity: 0, y: 36 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="text-chrome block"
-            >
-              Tu ai ideea.
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 36 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.62, ease: [0.22, 1, 0.36, 1] }}
-              className="text-chrome block"
-            >
-              Noi o aducem{" "}
-              <span className="text-gradient whitespace-nowrap drop-shadow-[0_0_26px_rgba(255,107,26,0.35)]">la viață.</span>
-            </motion.span>
-          </h1>
+          <motion.h2
+            initial={{ opacity: 0, y: 34 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-4 font-display text-4xl font-black uppercase leading-[1.05] sm:text-5xl lg:text-6xl"
+          >
+            <span className="text-chrome">Construit de la zero.</span>
+            <br />
+            <span className="text-gradient">Fără șabloane.</span>
+          </motion.h2>
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.85 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
             className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
           >
-            <Magnetic strength={0.45}>
-              <Link
-                href="/brief"
-                className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-orange-gradient px-7 py-3.5 text-[15px] font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_55px_rgba(255,46,154,0.5)]"
-              >
-                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <Zap className="h-5 w-5" />
-                Primește estimare
-              </Link>
-            </Magnetic>
             <Link
-              href="/proiecte"
+              href="/site-start"
+              className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-glow-orange transition hover:scale-[1.04]"
+            >
+              Site Start — 1.500 lei
+            </Link>
+            <Link
+              href="/servicii"
               className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange/70 hover:bg-white/[0.08]"
             >
-              Vezi proiectele
+              Toate serviciile
             </Link>
           </motion.div>
         </div>
-
-        {/* 3D — doar desktop; pe mobil, glow static */}
-        <div className="relative hidden h-[480px] lg:block">
-          {isDesktop && <Crystal3D />}
-        </div>
-        <div className="pointer-events-none absolute right-[8%] top-1/2 hidden h-72 w-72 -translate-y-1/2 rounded-full bg-brand-magenta/20 blur-[100px] lg:block" />
+        <div className="relative hidden h-[460px] lg:block">{isDesktop && <Crystal3D />}</div>
       </div>
     </div>
   );
 }
 
-function ProjectSlide({
-  img,
-  tag,
-  title,
-  text,
-  href,
-}: {
-  img: string;
-  tag: string;
-  title: string;
-  text: string;
-  href: string;
-}) {
-  return (
-    <div className="relative h-full w-full overflow-hidden bg-[#050507]">
-      {/* luminile din spate */}
-      <div className="pointer-events-none absolute -left-32 bottom-0 h-[420px] w-[420px] rounded-full bg-brand-orange/[0.12] blur-[120px]" />
-      <div className="pointer-events-none absolute -right-24 top-0 h-[420px] w-[420px] rounded-full bg-brand-purple/[0.14] blur-[120px]" />
-
-      <div className="container-app relative z-10 grid h-full items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        {/* stânga: puțin text */}
-        <div className="text-center lg:text-left">
-          <motion.span
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className="inline-block rounded-full border border-brand-orange/40 bg-black/50 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-brand-orangeLight backdrop-blur"
-          >
-            {tag}
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 font-display text-4xl font-black uppercase leading-[1.05] text-white sm:text-5xl"
-          >
-            {title}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-            className="mx-auto mt-3 max-w-md text-[15px] text-white/70 lg:mx-0"
-          >
-            {text}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.85 }}
-            className="mt-7"
-          >
-            <Link
-              href={href}
-              className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-sm font-semibold text-white shadow-glow-orange transition hover:scale-[1.04]"
-            >
-              Vezi proiectul <ArrowRight className="h-4 w-4" />
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* dreapta: site-ul în ramă de sticlă, înclinată 3D, plutind */}
-        <motion.div
-          initial={{ opacity: 0, x: 60, rotateY: -16 }}
-          animate={{ opacity: 1, x: 0, rotateY: -9 }}
-          transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="relative hidden lg:block"
-          style={{ perspective: 1200, transformStyle: "preserve-3d" }}
-        >
-          <div className="absolute -inset-6 rounded-[1.8rem] bg-imperial-gradient opacity-20 blur-3xl" />
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="glass relative overflow-hidden rounded-2xl shadow-card"
-            style={{ transform: "rotateY(-9deg) rotateX(3deg)" }}
-          >
-            <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-              <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-              <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-              <span className="mx-auto flex items-center gap-1.5 rounded-full bg-white/[0.06] px-3 py-0.5 text-[11px] text-text-muted">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
-                {new URL("https://" + hrefDomain(href, title)).hostname}
-              </span>
-              <span className="w-12" />
-            </div>
-            <div className="relative aspect-[16/10] overflow-hidden">
-              <motion.div
-                initial={{ y: 0 }}
-                animate={{ y: ["0%", "-18%", "0%"] }}
-                transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-                className="absolute inset-x-0 top-0 h-[140%]"
-              >
-                <Image src={img} alt={title} fill sizes="640px" className="object-cover object-top" priority />
-              </motion.div>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* pe mobil: rama simplă, dreaptă */}
-        <div className="lg:hidden">
-          <div className="glass relative overflow-hidden rounded-2xl shadow-card">
-            <div className="relative aspect-[16/10] overflow-hidden">
-              <Image src={img} alt={title} fill sizes="90vw" className="object-cover object-top" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// domeniul afișat în bara ramei — derivat simplu din titlu/proiect
-function hrefDomain(href: string, title: string) {
-  if (href.includes("clinica")) return "clinicasfantulgheorghe.ro";
-  if (href.includes("sarami")) return "sarami.ro";
-  return "imperial-media.ro";
-}
-
+/* ───── Slide 3: cifrele ───── */
 function StatsSlide() {
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#050507]">
@@ -231,8 +171,7 @@ function StatsSlide() {
           transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl font-display text-4xl font-black uppercase leading-[1.05] sm:text-5xl lg:text-6xl"
         >
-          <span className="text-chrome">Cifrele</span>{" "}
-          <span className="text-gradient">vorbesc.</span>
+          <span className="text-chrome">Cifrele</span> <span className="text-gradient">vorbesc.</span>
         </motion.h2>
         <div className="mt-12 grid grid-cols-2 gap-x-14 gap-y-10 sm:grid-cols-4">
           {[
@@ -285,33 +224,10 @@ export function HeroSlider() {
     setIsDesktop(window.matchMedia("(min-width: 1024px)").matches);
   }, []);
 
-  const slides: SlideDef[] = [
-    { key: "brand", render: (_a, d) => <BrandSlide isDesktop={d} /> },
-    {
-      key: "clinica",
-      render: () => (
-        <ProjectSlide
-          img="/proiecte/clinica-sf-gheorghe/home.jpg"
-          tag="Proiect livrat · spital privat"
-          title="Clinica Sfântul Gheorghe"
-          text="36 de pagini, programări online, asistent AI și panou de administrare — construit de la zero."
-          href="/proiecte/site-clinica-sfantul-gheorghe-botosani"
-        />
-      ),
-    },
-    {
-      key: "sarami",
-      render: () => (
-        <ProjectSlide
-          img="/proiecte/sarami/home.jpg"
-          tag="Proiect livrat · agenție video"
-          title="Sarami Media"
-          text="Migrare completă de pe WordPress: 124 de articole fără pierdere SEO, panou propriu, brief-uri și ofertare."
-          href="/proiecte/sarami-media-editare-video"
-        />
-      ),
-    },
-    { key: "stats", render: () => <StatsSlide /> },
+  const slides = [
+    { key: "clip", el: <VideoSlide isDesktop={isDesktop} /> },
+    { key: "crystal", el: <CrystalSlide isDesktop={isDesktop} /> },
+    { key: "stats", el: <StatsSlide /> },
   ];
 
   const go = useCallback(
@@ -319,7 +235,6 @@ export function HeroSlider() {
     [slides.length]
   );
 
-  // autoplay cu pauză la hover
   useEffect(() => {
     timer.current = setInterval(() => {
       if (!paused.current) go(1);
@@ -329,7 +244,6 @@ export function HeroSlider() {
     };
   }, [go]);
 
-  // săgețile de la tastatură
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") go(1);
@@ -342,20 +256,23 @@ export function HeroSlider() {
   return (
     <section
       className="relative h-[calc(100svh-6rem)] min-h-[560px] overflow-hidden bg-[#050507] sm:h-[calc(100svh-7rem)] md:h-[calc(100svh-8rem)]"
+      style={{ perspective: 1400 }}
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
     >
-      {/* slide-urile — wipe diagonal cinematic */}
+      {/* trecerea „dintr-o cameră în alta”: slide-ul curent vine spre tine și
+          se dizolvă; următorul se deschide din adâncime */}
       <AnimatePresence initial={false}>
         <motion.div
           key={slides[i].key}
-          initial={{ clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)" }}
-          animate={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
-          exit={{ opacity: 0, transition: { duration: 0.5, delay: 0.35 } }}
-          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, scale: 0.82, filter: "blur(6px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          exit={{ opacity: 0, scale: 1.45, filter: "blur(14px)", transition: { duration: 0.7, ease: [0.4, 0, 1, 1] } }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
+          style={{ transformOrigin: "50% 50%" }}
         >
-          {slides[i].render(true, isDesktop)}
+          {slides[i].el}
         </motion.div>
       </AnimatePresence>
 
@@ -400,7 +317,6 @@ export function HeroSlider() {
         </button>
       </div>
 
-      {/* linia de lumină de la bază */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-px bg-gradient-to-r from-transparent via-brand-orange/50 to-transparent" />
     </section>
   );
