@@ -1,4 +1,4 @@
-import { Hero } from "@/components/Hero";
+import { HeroSlider } from "@/components/HeroSlider";
 import { ToolsSection } from "@/components/ToolsSection";
 import { Services } from "@/components/Services";
 import { Skills } from "@/components/Skills";
@@ -15,7 +15,7 @@ import { FAQ } from "@/components/FAQ";
 export default function HomePage() {
   return (
     <main>
-      <Hero />
+      <HeroSlider />
       <ToolsSection />
       <Services />
       <Skills />
