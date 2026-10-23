@@ -1,108 +1,116 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, BrainCircuit, Code2, Globe, Play, Settings2, Zap } from "lucide-react";
 import { ParticleField } from "./effects/ParticleField";
-import { Meteors } from "./effects/Meteors";
 import { Spotlight } from "./effects/Spotlight";
-import { Aurora } from "./effects/Aurora";
-import { InteractiveGrid } from "./effects/InteractiveGrid";
 import { Magnetic } from "./effects/MagneticButton";
 import { NumberTicker } from "./effects/NumberTicker";
 
-// Hero centrat, minimalist, premium — fără mockup-uri placeholder.
-// Text masiv + toate efectele în background fac toată treaba.
+// Hero construit 1:1 după bannerul de brand: negru pur, fascicule de lumină
+// portocaliu→magenta→violet, titlu chrome metalic, rândul de servicii cu iconițe.
+const services = [
+  { icon: Globe, l1: "Web", l2: "Development" },
+  { icon: BrainCircuit, l1: "AI", l2: "Soluții" },
+  { icon: Code2, l1: "Software", l2: "Personalizat" },
+  { icon: Settings2, l1: "Automatizări", l2: "Business" },
+];
+
 export function Hero() {
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden sm:min-h-[96vh]">
-      {/* === STRATURI EFECTE === */}
-      <Aurora />
-      <InteractiveGrid />
-      <div className="absolute inset-0">
-        <ParticleField density={110} color="rgba(255, 165, 80," />
-      </div>
-      <Meteors count={20} />
-      <Spotlight color="rgba(255, 107, 26, 0.28)" size={700} />
+    <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-[#050507] sm:min-h-[96vh]">
+      {/* === FUNDAL: negru pur + luminile din banner === */}
+      {/* glow portocaliu — colțul stânga-jos, ca în banner */}
+      <div className="pointer-events-none absolute -bottom-40 -left-40 h-[560px] w-[560px] rounded-full bg-brand-orange/[0.16] blur-[130px]" />
+      {/* glow violet — dreapta, ca în banner */}
+      <div className="pointer-events-none absolute -right-40 top-1/4 h-[560px] w-[560px] rounded-full bg-brand-purple/[0.16] blur-[130px]" />
+      {/* magenta discret în centru-sus */}
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[640px] -translate-x-1/2 rounded-full bg-brand-magenta/[0.07] blur-[120px]" />
 
-      {/* Vignette + radial */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(14,6,23,0.9)_100%)]" />
-
-      {/* Gradient text de fundal MASIV — efect depth */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-      >
-        <span className="select-none whitespace-nowrap font-display text-[22vw] font-extrabold leading-none tracking-tighter text-white/[0.025] sm:text-[18vw]">
-          IMPERIAL
-        </span>
+      {/* fascicule — liniile de lumină diagonale din banner */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <span className="absolute -left-24 bottom-[18%] h-px w-[46%] rotate-[24deg] bg-gradient-to-r from-transparent via-brand-orange/70 to-transparent shadow-[0_0_14px_rgba(255,107,26,0.8)]" />
+        <span className="absolute -left-10 bottom-[10%] h-px w-[36%] rotate-[24deg] bg-gradient-to-r from-transparent via-brand-orangeLight/50 to-transparent" />
+        <span className="absolute -right-24 top-[22%] h-px w-[46%] rotate-[-24deg] bg-gradient-to-r from-transparent via-brand-purple/70 to-transparent shadow-[0_0_14px_rgba(139,47,247,0.8)]" />
+        <span className="absolute -right-10 top-[32%] h-px w-[34%] rotate-[-24deg] bg-gradient-to-r from-transparent via-brand-magenta/50 to-transparent" />
       </div>
+
+      {/* scântei fine, ca pulberea de lumină din banner */}
+      <div className="absolute inset-0 opacity-70">
+        <ParticleField density={70} color="rgba(255, 165, 80," />
+      </div>
+      <Spotlight color="rgba(255, 107, 26, 0.16)" size={700} />
+
+      {/* vignetă spre negru pur */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_15%,rgba(5,5,7,0.95)_100%)]" />
 
       {/* === CONȚINUT === */}
       <div className="container-app relative z-10 py-24 text-center">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex justify-center"
-        >
-          <div className="gradient-border rounded-full">
-            <span className="relative inline-flex items-center gap-2 rounded-full bg-bg-card/90 px-4 py-1.5 text-xs font-medium backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
-              <span className="text-shimmer font-semibold">
-                Creatori de Emoții digitale
-              </span>
-              <span className="inline-flex h-1.5 w-1.5 rounded-full bg-brand-orange shadow-[0_0_8px_2px_rgba(255,107,26,0.8)]" />
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Titlu MASIV — două linii cu staggered reveal */}
+        {/* Titlu — exact ca în banner: chrome + gradient */}
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="mx-auto mt-6 max-w-5xl font-display text-4xl font-extrabold leading-[0.95] tracking-tight text-text sm:mt-8 sm:text-6xl md:text-7xl lg:text-[7rem] xl:text-[8.5rem]"
+          className="mx-auto mt-2 max-w-6xl font-display text-[2.5rem] font-black uppercase leading-[1.04] tracking-tight text-text sm:text-6xl md:text-7xl lg:text-[5.25rem] xl:text-[6.25rem]"
         >
           <motion.span
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="block"
+            className="text-chrome block"
           >
-            Site-uri care
+            Tu ai ideea.
           </motion.span>
           <motion.span
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="text-shimmer block"
+            className="text-gradient block drop-shadow-[0_0_30px_rgba(255,46,154,0.35)]"
           >
-            impresionează
+            Noi o aducem la&nbsp;viață.
           </motion.span>
         </motion.h1>
 
-        {/* Subtitlu scurt */}
-        <motion.p
+        {/* linia de lumină de sub titlu, ca în banner */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto mt-8 h-px w-full max-w-2xl bg-gradient-to-r from-transparent via-white/40 to-transparent"
+        />
+
+        {/* Rândul de servicii cu iconițe — ca în banner */}
+        <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.55 }}
-          className="mx-auto mt-4 max-w-xl text-sm text-text-muted sm:mt-7 sm:text-base md:text-lg"
+          transition={{ duration: 0.6, delay: 0.75 }}
+          className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-y-4 divide-x divide-white/10"
         >
-          Design premium · Dezvoltare rapidă · Rezultate reale
-        </motion.p>
+          {services.map((s) => (
+            <div key={s.l2} className="flex items-center gap-2.5 px-4 sm:px-6">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/15 bg-white/[0.03]">
+                <s.icon className="h-4 w-4 text-brand-orange" strokeWidth={1.8} />
+              </span>
+              <span className="text-left text-[13px] font-medium leading-tight text-text sm:text-sm">
+                {s.l1}
+                <br />
+                {s.l2}
+              </span>
+            </div>
+          ))}
+        </motion.div>
 
         {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:mt-10 sm:gap-3"
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:mt-10 sm:gap-3"
         >
           <Magnetic strength={0.45}>
             <a
               href="/brief"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-orange-gradient px-5 py-3 text-sm font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,107,26,0.7)] sm:gap-2.5 sm:px-8 sm:py-4 sm:text-base"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-orange-gradient px-5 py-3 text-sm font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.04] hover:shadow-[0_0_60px_rgba(255,46,154,0.6)] sm:gap-2.5 sm:px-8 sm:py-4 sm:text-base"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
               <Zap className="h-5 w-5" />
@@ -112,7 +120,7 @@ export function Hero() {
           </Magnetic>
           <a
             href="/proiecte"
-            className="group inline-flex items-center gap-2 rounded-full border border-bg-border bg-bg-card/40 px-4 py-2.5 text-xs font-medium text-text backdrop-blur transition hover:border-brand-orange hover:bg-bg-card/80 sm:gap-3 sm:px-5 sm:py-3 sm:text-sm"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-medium text-text backdrop-blur transition hover:border-brand-magenta/60 hover:bg-white/[0.07] sm:gap-3 sm:px-5 sm:py-3 sm:text-sm"
           >
             <span className="relative grid h-9 w-9 place-items-center rounded-full bg-orange-gradient text-white">
               <span className="absolute inset-0 rounded-full pulse-ring" />
@@ -122,12 +130,12 @@ export function Hero() {
           </a>
         </motion.div>
 
-        {/* Stats animate — numere care urcă la 0 → valoare */}
+        {/* Stats animate */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-10 flex flex-wrap items-start justify-center gap-x-8 gap-y-4 sm:mt-20 sm:gap-x-14"
+          transition={{ duration: 0.8, delay: 1.15 }}
+          className="mt-10 flex flex-wrap items-start justify-center gap-x-8 gap-y-4 sm:mt-16 sm:gap-x-14"
         >
           {[
             { value: 10, suffix: "", label: "ani experiență" },
@@ -159,7 +167,7 @@ export function Hero() {
         className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-text-subtle"
       >
         <span className="text-[10px] uppercase tracking-[0.2em]">Scroll</span>
-        <span className="h-8 w-px bg-gradient-to-b from-brand-orange to-transparent" />
+        <span className="h-8 w-px bg-gradient-to-b from-brand-magenta to-transparent" />
       </motion.div>
     </section>
   );
