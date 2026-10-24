@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
   let email: string | null = null;
   try {
-    email = getClientEmail();
+    email = await getClientEmail();
   } catch {
     email = null;
   }

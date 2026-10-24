@@ -21,10 +21,10 @@ const INCLUDED = [
   "Consultantul tău din cont te învață apoi ce să postezi și cum să faci reclame",
 ];
 
-export default function PlataStartPage() {
+export default async function PlataStartPage() {
   let email: string | null = null;
   try {
-    email = getClientEmail();
+    email = await getClientEmail();
   } catch {
     email = null;
   }

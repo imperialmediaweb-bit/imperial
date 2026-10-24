@@ -28,11 +28,12 @@ export function generateStaticParams() {
   return LOCATIONS.map((l) => ({ slug: l.slug }));
 }
 
-export function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Metadata {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const loc = getLocationBySlug(params.slug);
   if (!loc) return {};
   const offer = getLocalOffer(loc.slug);
@@ -54,11 +55,12 @@ export function generateMetadata({
   };
 }
 
-export default function LocationPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function LocationPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const loc = getLocationBySlug(params.slug);
   if (!loc) notFound();
 

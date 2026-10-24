@@ -20,14 +20,15 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function ContPage({
-  searchParams,
-}: {
-  searchParams: { expirat?: string; sitestart?: string };
-}) {
+export default async function ContPage(
+  props: {
+    searchParams: Promise<{ expirat?: string; sitestart?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   let email: string | null = null;
   try {
-    email = getClientEmail();
+    email = await getClientEmail();
   } catch {
     email = null;
   }

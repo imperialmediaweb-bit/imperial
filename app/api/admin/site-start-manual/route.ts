@@ -16,7 +16,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  if (!isAuthed()) return NextResponse.json({ error: "Loghează-te întâi în /admin." }, { status: 401 });
+  if (!await isAuthed()) return NextResponse.json({ error: "Loghează-te întâi în /admin." }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
   const email = String(searchParams.get("email") ?? "").trim().toLowerCase();

@@ -59,8 +59,8 @@ const nextConfig = {
       { source: "/projects-category/:slug*", destination: "/proiecte", permanent: true },
       { source: "/portfolio/:slug*", destination: "/proiecte", permanent: true },
       { source: "/landing/:slug*", destination: "/", permanent: true },
-      { source: "/news-:slug*", destination: "/blog", permanent: true },
-      { source: "/home-layout:slug*", destination: "/", permanent: true },
+      { source: "/news-:slug(.*)", destination: "/blog", permanent: true },
+      { source: "/home-layout:slug(.*)", destination: "/", permanent: true },
       { source: "/author/:slug*", destination: "/blog", permanent: true },
     ];
 

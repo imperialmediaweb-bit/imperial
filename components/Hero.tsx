@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { ArrowRight, Zap } from "lucide-react";
 import { RibbonField } from "./effects/RibbonField";
 import { ParticleField } from "./effects/ParticleField";
@@ -13,11 +13,11 @@ import { ProjectShowcase } from "./ProjectShowcase";
 // gradient; dreapta — munca reală într-un slider cu ramă de sticlă. Fundalul e
 // „video-ul”: panglici de lumină în culorile brandului, generate live pe canvas.
 
-const line = {
+const line: Variants = {
   hidden: {},
   show: (d: number) => ({ transition: { staggerChildren: 0.08, delayChildren: d } }),
 };
-const word = {
+const word: Variants = {
   hidden: { opacity: 0, y: 34, rotateX: 45 },
   show: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };

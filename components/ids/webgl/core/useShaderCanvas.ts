@@ -26,8 +26,8 @@ export interface ShaderCanvasController {
 }
 
 export interface ShaderCanvasState {
-  canvasRef: RefObject<HTMLCanvasElement>;
-  wrapperRef: RefObject<HTMLDivElement>;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
+  wrapperRef: RefObject<HTMLDivElement | null>;
   /** null until checked; false when WebGL (or the effect's requirements) are unavailable. */
   supported: boolean | null;
   reduced: boolean;

@@ -66,8 +66,8 @@ export function verifyMagicToken(token: string): string | null {
 }
 
 // ─── Sesiune (cookie) ───
-export function setClientSession(email: string) {
-  cookies().set(COOKIE_NAME, buildToken(email, SESSION_TTL_SEC), {
+export async function setClientSession(email: string) {
+  (await cookies()).set(COOKIE_NAME, buildToken(email, SESSION_TTL_SEC), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -76,8 +76,8 @@ export function setClientSession(email: string) {
   });
 }
 
-export function getClientEmail(): string | null {
-  const token = cookies().get(COOKIE_NAME)?.value;
+export async function getClientEmail(): Promise<string | null> {
+  const token = (await cookies()).get(COOKIE_NAME)?.value;
   if (!token) return null;
   try {
     return verifyToken(token);
@@ -86,6 +86,6 @@ export function getClientEmail(): string | null {
   }
 }
 
-export function clearClientSession() {
-  cookies().delete(COOKIE_NAME);
+export async function clearClientSession() {
+  (await cookies()).delete(COOKIE_NAME);
 }

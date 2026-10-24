@@ -18,7 +18,7 @@ const MAX_SIZE = 8 * 1024 * 1024; // 8MB / poză
 export async function POST(req: Request) {
   let email: string | null = null;
   try {
-    email = getClientEmail();
+    email = await getClientEmail();
   } catch {
     email = null;
   }

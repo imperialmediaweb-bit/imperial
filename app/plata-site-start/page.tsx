@@ -21,10 +21,10 @@ const INCLUDED = [
   "Suma se scade INTEGRAL din site-ul complet dacă faci pasul în 6 luni",
 ];
 
-export default function PlataSiteStartPage() {
+export default async function PlataSiteStartPage() {
   let email: string | null = null;
   try {
-    email = getClientEmail();
+    email = await getClientEmail();
   } catch {
     email = null;
   }

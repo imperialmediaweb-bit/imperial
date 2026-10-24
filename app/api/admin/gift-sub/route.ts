@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  if (!isAuthed()) {
+  if (!await isAuthed()) {
     return NextResponse.json({ error: "Loghează-te întâi în /admin." }, { status: 401 });
   }
   if (!hasDb()) {

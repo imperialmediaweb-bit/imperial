@@ -15,15 +15,16 @@ type SearchParams = {
   q?: string;
 };
 
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+export default async function AdminPage(
+  props: {
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
   if (!isAdminConfigured()) {
     return <NotConfigured />;
   }
-  if (!isAuthed()) {
+  if (!await isAuthed()) {
     redirect("/admin/login");
   }
   if (!hasDb()) {

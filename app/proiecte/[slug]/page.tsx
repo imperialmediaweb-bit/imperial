@@ -41,7 +41,8 @@ export function generateStaticParams() {
   return importedProjects.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const p = importedProjects.find((x) => x.slug === params.slug);
   if (!p) return { title: "Proiect · Imperial Media" };
   const override = projectOverrides[p.slug];
@@ -59,11 +60,12 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-export default function ProjectDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function ProjectDetailPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const index = importedProjects.findIndex((x) => x.slug === params.slug);
   if (index === -1) notFound();
   const p = importedProjects[index];

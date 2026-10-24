@@ -15,7 +15,7 @@ export const maxDuration = 60;
 const INDEXNOW_KEY = "imperialmedia-a7f3e9c2b1d48056"; // servit public la /{key}.txt (cerința protocolului)
 
 export async function GET(req: Request) {
-  if (!isAuthed()) {
+  if (!await isAuthed()) {
     return NextResponse.json({ error: "Loghează-te întâi în /admin." }, { status: 401 });
   }
 

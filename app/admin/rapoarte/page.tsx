@@ -14,7 +14,7 @@ export const metadata = { robots: { index: false, follow: false } };
 
 export default async function AdminRapoartePage() {
   if (!isAdminConfigured()) redirect("/admin");
-  if (!isAuthed()) redirect("/admin/login");
+  if (!await isAuthed()) redirect("/admin/login");
   if (!hasDb()) redirect("/admin");
 
   const pool = getPool()!;

@@ -58,14 +58,14 @@ export function checkPassword(password: string): boolean {
   }
 }
 
-export function isAuthed(): boolean {
-  const token = cookies().get(COOKIE_NAME)?.value;
+export async function isAuthed(): Promise<boolean> {
+  const token = (await cookies()).get(COOKIE_NAME)?.value;
   if (!token) return false;
   return verifyToken(token);
 }
 
-export function setAuthCookie() {
-  cookies().set(COOKIE_NAME, buildToken(), {
+export async function setAuthCookie() {
+  (await cookies()).set(COOKIE_NAME, buildToken(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -74,8 +74,8 @@ export function setAuthCookie() {
   });
 }
 
-export function clearAuthCookie() {
-  cookies().delete(COOKIE_NAME);
+export async function clearAuthCookie() {
+  (await cookies()).delete(COOKIE_NAME);
 }
 
 export function isAdminConfigured(): boolean {

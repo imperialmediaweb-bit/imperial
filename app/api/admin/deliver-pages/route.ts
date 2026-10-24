@@ -16,7 +16,7 @@ const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 const isHttpUrl = (v: string) => /^https?:\/\/\S+$/i.test(v);
 
 export async function POST(req: Request) {
-  if (!isAuthed()) {
+  if (!await isAuthed()) {
     return NextResponse.json({ error: "Neautorizat." }, { status: 401 });
   }
 

@@ -22,7 +22,7 @@ export const metadata = {
 export default async function ContConsultantPage() {
   let email: string | null = null;
   try {
-    email = getClientEmail();
+    email = await getClientEmail();
   } catch {
     email = null;
   }

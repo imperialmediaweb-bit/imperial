@@ -11,7 +11,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  if (!isAuthed()) return NextResponse.json({ error: "Loghează-te întâi în /admin." }, { status: 401 });
+  if (!await isAuthed()) return NextResponse.json({ error: "Loghează-te întâi în /admin." }, { status: 401 });
   if (!hasDb()) return NextResponse.json({ error: "Fără bază de date." }, { status: 503 });
   await ensureSchema();
   const pool = getPool()!;

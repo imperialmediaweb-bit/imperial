@@ -18,13 +18,14 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function ReportPage({
-  params,
-  searchParams,
-}: {
-  params: { token: string };
-  searchParams?: { platit?: string };
-}) {
+export default async function ReportPage(
+  props: {
+    params: Promise<{ token: string }>;
+    searchParams?: Promise<{ platit?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const token = params.token;
   if (!hasDb() || !/^[0-9a-f-]{36}$/i.test(token)) notFound();
 

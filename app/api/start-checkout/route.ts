@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
   let sessionEmail: string | null = null;
   try {
-    sessionEmail = getClientEmail();
+    sessionEmail = await getClientEmail();
   } catch {
     sessionEmail = null;
   }

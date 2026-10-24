@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 const VALID: BriefStatus[] = ["nou", "ofertat", "client", "refuzat"];
 
 export async function POST(req: Request) {
-  if (!isAuthed()) {
+  if (!await isAuthed()) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

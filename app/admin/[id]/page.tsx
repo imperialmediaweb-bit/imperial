@@ -20,15 +20,16 @@ import { LogoutButton } from "@/components/admin/LogoutButton";
 
 export const dynamic = "force-dynamic";
 
-export default async function BriefDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function BriefDetailPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   if (!isAdminConfigured()) {
     redirect("/admin");
   }
-  if (!isAuthed()) {
+  if (!await isAuthed()) {
     redirect("/admin/login");
   }
   if (!hasDb()) {

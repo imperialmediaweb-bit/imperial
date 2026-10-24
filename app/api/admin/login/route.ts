@@ -36,6 +36,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Parolă greșită." }, { status: 401 });
   }
 
-  setAuthCookie();
+  await setAuthCookie();
   return NextResponse.json({ ok: true });
 }

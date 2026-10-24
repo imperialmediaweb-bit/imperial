@@ -17,7 +17,7 @@ export async function GET(req: Request) {
   const home = `${base || origin}/cont`;
 
   if (searchParams.get("logout")) {
-    clearClientSession();
+    await clearClientSession();
     return NextResponse.redirect(home);
   }
 
@@ -33,6 +33,6 @@ export async function GET(req: Request) {
     return NextResponse.redirect(`${home}?expirat=1`);
   }
 
-  setClientSession(email);
+  await setClientSession(email);
   return NextResponse.redirect(home);
 }
