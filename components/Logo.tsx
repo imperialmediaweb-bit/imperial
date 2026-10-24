@@ -70,10 +70,12 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       aria-label="Imperial Media — Tu ai ideea. Noi o aducem la viață."
     >
       <Image
-        src="/brand/logo-round-512.png"
+        src="/brand/logo-round-200.png"
         alt="Imperial Media"
-        width={512}
-        height={512}
+        width={200}
+        height={200}
+        quality={100}
+        unoptimized
         priority
         className={`${mark} rounded-full drop-shadow-[0_0_14px_rgba(255,46,154,0.35)] transition duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_24px_rgba(255,46,154,0.6)]`}
       />
