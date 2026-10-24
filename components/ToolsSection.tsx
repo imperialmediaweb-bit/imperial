@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { IconBadge } from "./IconBadge";
 import Link from "next/link";
 import { Sparkles, Target, Shield } from "lucide-react";
-import { ShineCard } from "./effects/ShineCard";
+import { SpotlightCard } from "./ids/extras/SpotlightCard";
 
 const tools = [
   {
@@ -15,6 +15,7 @@ const tools = [
     href: "/brief",
     cta: "Cere estimare →",
     accent: "from-brand-orange to-brand-magenta",
+    wash: "from-brand-orange/[0.22] via-brand-magenta/[0.08] to-transparent",
     glow: "group-hover:bg-brand-orange/30",
   },
   {
@@ -25,6 +26,7 @@ const tools = [
     href: "/consultanta",
     cta: "Află unde greșești →",
     accent: "from-brand-magenta to-brand-purple",
+    wash: "from-brand-magenta/[0.2] via-brand-purple/[0.08] to-transparent",
     glow: "group-hover:bg-brand-purple/30",
   },
   {
@@ -35,6 +37,7 @@ const tools = [
     href: "/audit",
     cta: "Scanează gratuit →",
     accent: "from-brand-purple to-brand-glow",
+    wash: "from-brand-purple/[0.22] via-brand-magenta/[0.07] to-transparent",
     glow: "group-hover:bg-green-500/30",
   },
 ];
@@ -64,11 +67,13 @@ export function ToolsSection() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              <ShineCard className="h-full rounded-2xl">
+              <SpotlightCard color="#FF2E9A" intensity={0.3} radius={16} className="h-full rounded-2xl">
                 <Link
                   href={t.href}
                   className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-bg-border glass-card bg-card-gradient p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
                 >
+                  <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${t.wash}`} />
+                  <t.icon className="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 text-white/[0.05] transition-transform duration-500 group-hover:scale-110 group-hover:text-white/[0.08]" strokeWidth={1} />
                   <div className={`absolute -right-12 -top-12 h-40 w-40 rounded-full bg-transparent blur-3xl transition-all duration-500 ${t.glow}`} />
 
                   <div className="relative">
@@ -87,7 +92,7 @@ export function ToolsSection() {
                     </span>
                   </div>
                 </Link>
-              </ShineCard>
+              </SpotlightCard>
             </motion.div>
           ))}
         </div>
