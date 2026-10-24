@@ -18,7 +18,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Site de prezentare — 1.500 lei, gata în câteva zile | Imperial Media",
   description:
-    "Site profesional cu 4 pagini: 1.500 lei, domeniu + găzduire gratuite primul an, livrat în câteva zile. Construit pe Next.js, nu WordPress. Suma se scade din site-ul complet.",
+    "Site profesional cu 5 pagini + blog: 1.500 lei, domeniu + găzduire gratuite primul an, livrat în câteva zile. Construit pe Next.js, nu WordPress. Suma se scade din site-ul complet.",
   alternates: { canonical: `${siteConfig.url}/site-start` },
 };
 
@@ -29,7 +29,7 @@ const STEPS = [
 ];
 
 const INCLUDED = [
-  "4 pagini: Acasă, Despre, Servicii, Contact (cu hartă și formular)",
+  "5 pagini: Acasă, Despre, Servicii, Blog, Contact (cu hartă și formular)",
   "Design pe brandul tău — culori, logo, poze",
   "Domeniu (.ro) + găzduire GRATUITE primul an",
   "Certificat SSL (https) și optimizare de bază Google incluse",
@@ -38,12 +38,12 @@ const INCLUDED = [
 ];
 
 const SITE_START_FAQ = [
-  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 4 pagini (Acasă, Despre, Servicii, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în ziarul online al județului + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
+  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 5 pagini (Acasă, Despre, Servicii, Blog cu articole, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în ziarul online al județului + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
   { q: "În cât timp e gata site-ul?", a: "În 3-7 zile lucrătoare de la primirea conținutului (formularul de 5 minute + pozele). Plătești azi, ne trimiți datele, primești linkul de previzualizare, ceri o rundă de modificări și site-ul e live." },
   { q: "Nu am texte sau poze bune. E o problemă?", a: "Deloc. Textele le scriem noi din ce ne povestești despre firmă (nu trebuie să scrii nimic «frumos»), iar dacă nu ai poze folosim imagini profesionale de stock, incluse în preț. Pozele tale reale le poți adăuga oricând mai târziu." },
   { q: "E făcut pe WordPress?", a: "Nu. Site-ul e scris custom pe Next.js — aceeași tehnologie folosită de Netflix și Nike. Se încarcă sub o secundă, nu are plugin-uri care se strică și nu cere mentenanță lunară obligatorie. Codul, domeniul și datele sunt 100% ale tale." },
   { q: "Ce se întâmplă după primul an?", a: "Domeniul și găzduirea gratuite expiră după 12 luni. Alegi atunci: Administrare Start (100 lei/lună — găzduire, domeniu, modificări mici, backup), Administrare Complet (300 lei/lună — tot ce e la Start, plus mentenanță deplină, un articol de presă pe lună în ziarul județului tău și monitorizarea lunară a afacerii) sau reînnoirea simplă (~350 lei/an). Te anunțăm cu 30 de zile înainte — site-ul nu se oprește niciodată fără știrea ta." },
-  { q: "Dacă vreau mai mult decât 4 pagini sau funcții în plus?", a: "Adaugi doar ce-ți trebuie: pagină în plus +200 lei, programări online +700 lei, galerie foto +400 lei, blog +500 lei, a doua limbă +700 lei, logo +300 lei. Iar dacă firma crește și vrei site-ul mare (de la 699€), cei 1.500 lei plătiți devin avans — plătești doar diferența." },
+  { q: "Dacă vreau mai mult decât cele 5 pagini sau funcții în plus?", a: "Adaugi doar ce-ți trebuie: pagină în plus +200 lei, programări online +700 lei, galerie foto +400 lei, a doua limbă +700 lei, logo +300 lei. Iar dacă firma crește și vrei site-ul mare (de la 699€), cei 1.500 lei plătiți devin avans — plătești doar diferența." },
 ];
 
 export default function SiteStartPage() {
@@ -84,7 +84,7 @@ export default function SiteStartPage() {
             🔥 Oferta de lansare — totul inclus în {price} lei
           </p>
           <div className="mt-4 grid gap-2.5 text-sm text-text-muted">
-            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Site-ul complet, cu 4 pagini, pe brandul tău <b className="text-text">(valoare reală 2.500+ lei)</b></span></p>
+            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Site-ul complet, cu 5 pagini + blog, pe brandul tău <b className="text-text">(valoare reală 2.500+ lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Domeniu .ro + găzduire primul an <b className="text-text">(~350 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🗞️ BONUS: <b className="text-text">un articol de presă despre firma ta, publicat în ziarul online al județului tău</b> — rețeaua noastră de presă, avantaj pe care nicio altă agenție nu-l are <b className="text-text">(~300 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🔍 BONUS: <b className="text-text">Radiografia Afacerii</b> — analiza completă a firmei tale cu AI: scor, recenzii vs concurență, vizibilitate în ChatGPT, plan de acțiune <b className="text-text">(299 lei)</b></span></p>
@@ -123,7 +123,6 @@ export default function SiteStartPage() {
               { name: "Pagină în plus", price: "+200 lei / pagină", desc: "orice pagină extra — ne zici tu ce să conțină" },
               { name: "Programări / rezervări online", price: "+700 lei", desc: "clienții se programează singuri, tu primești notificare" },
               { name: "Galerie foto / portofoliu", price: "+400 lei", desc: "lucrările tale, prezentate să vândă" },
-              { name: "Blog / secțiune de noutăți", price: "+500 lei", desc: "articole care te urcă în Google" },
               { name: "A doua limbă (EN/altă limbă)", price: "+700 lei", desc: "pentru turism, pensiuni, clienți străini" },
               { name: "Logo simplu", price: "+300 lei", desc: "dacă nu ai deja unul — curat, pe brandul tău" },
             ].map((a) => (
@@ -235,8 +234,8 @@ export default function SiteStartPage() {
             "@graph": [
               {
                 "@type": "Product",
-                name: "Site Start — site de prezentare (4 pagini)",
-                description: "Site profesional cu 4 pagini, construit pe Next.js: domeniu + găzduire gratuite primul an, livrat în câteva zile.",
+                name: "Site Start — site de prezentare (5 pagini + blog)",
+                description: "Site profesional cu 5 pagini + blog, construit pe Next.js: domeniu + găzduire gratuite primul an, livrat în câteva zile.",
                 brand: { "@type": "Organization", name: "Imperial Media" },
                 offers: {
                   "@type": "Offer",

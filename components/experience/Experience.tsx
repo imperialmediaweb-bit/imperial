@@ -337,7 +337,7 @@ export function Experience() {
             </motion.div>
             <div className="mt-10 grid max-w-4xl gap-4 sm:grid-cols-3">
               {[
-                ["Site Start", "1.500 lei", "plată unică", ["Gata în câteva zile", "O pagină, design premium", "Găzduire 1 an inclusă"], "/site-start", false],
+                ["Site Start", "1.500 lei", "plată unică", ["5 pagini + blog incluse", "Gata în câteva zile", "Găzduire 1 an inclusă"], "/site-start", false],
                 ["Site de prezentare", "699 €", "de la, plată unică", ["Pagini nelimitate, design unic", "Panou de administrare propriu", "SEO tehnic din construcție"], "/creare-site-web", true],
                 ["Magazin online", "1.200 €", "de la, plată unică", ["Plăți cu cardul integrate", "AWB automat la curieri", "Facturare integrată"], "/creare-magazin-online", false],
               ].map(([name, price, per, feats, href, featured], i) => (

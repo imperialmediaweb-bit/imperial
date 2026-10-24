@@ -14,7 +14,7 @@ import { Zap, Check } from "lucide-react";
 type TypeKey = "start" | "prezentare" | "magazin";
 
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
-  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "o pagină, gata în câteva zile" },
+  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, gata în câteva zile" },
   { key: "prezentare", name: "Site de prezentare", base: 699, cur: "€", note: "pagini nelimitate, panou propriu" },
   { key: "magazin", name: "Magazin online", base: 1200, cur: "€", note: "plăți card, AWB, facturare" },
 ];
