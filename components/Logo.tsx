@@ -59,35 +59,24 @@ export function Mark({ className }: { className?: string }) {
 }
 
 export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+  // doar sigla rotundă — numele e deja scris în interiorul ei
   const mark =
-    size === "lg" ? "h-12 w-12 sm:h-14 sm:w-14" : size === "sm" ? "h-9 w-9" : "h-11 w-11";
-  const word =
-    size === "lg" ? "text-lg sm:text-xl" : size === "sm" ? "text-sm" : "text-base";
+    size === "lg" ? "h-14 w-14 sm:h-16 sm:w-16" : size === "sm" ? "h-11 w-11" : "h-12 w-12 sm:h-14 sm:w-14";
 
   return (
     <Link
       href="/"
-      className="group inline-flex shrink-0 items-center gap-3 transition-all duration-300"
+      className="group inline-flex shrink-0 items-center transition-all duration-300"
       aria-label="Imperial Media — Tu ai ideea. Noi o aducem la viață."
     >
-      <span className="relative inline-block">
-        <Image
-          src="/brand/logo-round-96.png"
-          alt=""
-          width={96}
-          height={96}
-          priority
-          className={`${mark} rounded-full drop-shadow-[0_0_14px_rgba(255,46,154,0.35)] transition duration-300 group-hover:drop-shadow-[0_0_22px_rgba(255,46,154,0.6)]`}
-        />
-      </span>
-      <span className="leading-none">
-        <span className={`block font-display font-black uppercase tracking-[0.08em] text-text ${word}`}>
-          Imperial
-        </span>
-        <span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-[0.42em] text-text-subtle sm:text-[10px]">
-          Media
-        </span>
-      </span>
+      <Image
+        src="/brand/logo-round-512.png"
+        alt="Imperial Media"
+        width={512}
+        height={512}
+        priority
+        className={`${mark} rounded-full drop-shadow-[0_0_14px_rgba(255,46,154,0.35)] transition duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_24px_rgba(255,46,154,0.6)]`}
+      />
     </Link>
   );
 }
