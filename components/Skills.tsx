@@ -210,7 +210,7 @@ export function Skills() {
           <span className="chip">Ce facem</span>
           <h2 className="section-title mt-4">
             Servicii Web și{" "}
-            <span className="text-shimmer">Soluții de Marketing</span> pentru
+            <span className="text-gradient">Soluții de Marketing</span> pentru
             Afacerea Ta
           </h2>
           <p className="section-subtitle">

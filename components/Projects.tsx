@@ -226,7 +226,7 @@ export function Projects() {
           <div>
             <span className="chip">Portofoliu</span>
             <h2 className="section-title mt-4">
-              Ultimele <span className="text-shimmer">proiecte</span>
+              Ultimele <span className="text-gradient">proiecte</span>
             </h2>
             <p className="section-subtitle">
               Câteva dintre cele <span className="text-brand-orange font-semibold">peste 200 de site-uri</span> lansate pentru clienți reali.

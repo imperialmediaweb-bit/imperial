@@ -23,6 +23,10 @@ export function Footer() {
       id="contact"
       className="relative overflow-hidden border-t border-bg-border/60 bg-bg-soft/40"
     >
+      {/* Beam de lumină sus — linia brandului */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-orange/60 via-30% to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px translate-x-1/4 bg-gradient-to-r from-transparent via-brand-purple/50 via-70% to-transparent" />
+
       {/* Glow accent */}
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-brand-orange/15 blur-[120px]" />
       <div className="pointer-events-none absolute -top-24 left-1/3 h-64 w-64 rounded-full bg-brand-purple/20 blur-[120px]" />
