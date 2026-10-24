@@ -1,360 +1,225 @@
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2, Sparkles } from "lucide-react";
-import { Skills } from "@/components/Skills";
-import { Marquee } from "@/components/Marquee";
+import { ArrowUpRight, BadgeCheck, Newspaper, Zap } from "lucide-react";
+import { DespreHero } from "@/components/despre/DespreHero";
+import { ReasonsCards } from "@/components/despre/ReasonsCards";
 import { Testimonials } from "@/components/Testimonials";
-import { HowItWorks } from "@/components/HowItWorks";
-import { Aurora } from "@/components/effects/Aurora";
-import { Meteors } from "@/components/effects/Meteors";
-import { siteConfig } from "@/lib/site";
+import { IconBadge } from "@/components/IconBadge";
 
 export const metadata = {
   title: "Despre noi — Imperial Media",
   description:
-    "Cu peste 10 ani experiență și 240+ clienți în România și străinătate, Imperial Media livrează soluții digitale complete: web design, magazine online, SEO, promovare și mentenanță.",
+    "Cu peste 10 ani experiență, 384+ proiecte livrate și o rețea proprie de 50 de ziare online, Imperial Media construiește site-uri, magazine online și campanii care aduc clienți reali.",
 };
 
-const stats = [
-  { n: "10+", label: "Ani experiență" },
-  { n: "240+", label: "Clienți mulțumiți" },
-  { n: "200+", label: "Proiecte livrate" },
-  { n: "50+", label: "Publicații partenere" },
-];
-
-const reasons = [
+/* povestea, pe firul de lumină */
+const milestones = [
   {
-    title: "Profesionalism dovedit",
-    text: "Am trecut prin multiple etape de dezvoltare digitală și am rămas mereu conectați la noile tehnologii.",
+    k: "2014",
+    title: "Începutul",
+    text: "Un grup mic de pasionați de design și cod, într-un oraș în care „site-ul firmei” încă era un lux. Fără birouri de sticlă — doar convingerea că un site bine făcut poate schimba o afacere.",
   },
   {
-    title: "Rezultate reale",
-    text: "Site-uri funcționale, magazine online performante, campanii de promovare care au adus conversii.",
+    k: "Creșterea",
+    title: "Din recomandare în recomandare",
+    text: "Primul client a venit printr-o recomandare. Al doilea la fel. Un restaurant care și-a dublat rezervările, o clinică cu programări online zilnice, un magazin de cartier devenit e-commerce național.",
   },
   {
-    title: "Încrederea clienților",
-    text: "Peste 240 de parteneri din România și din străinătate au ales să colaboreze cu noi.",
+    k: "Rețeaua",
+    title: "50 de ziare online, ale noastre",
+    text: "Am construit rețeaua Media Expres — presă locală și națională în toată România. Clienții noștri apar în articole reale, cu autoritate în Google.",
   },
   {
-    title: "Expertiză diversă",
-    text: "Fiecare membru al echipei aduce know-how în web design, dezvoltare, marketing digital, SEO, content și project management.",
+    k: "Azi",
+    title: "384+ proiecte, aceeași obsesie",
+    text: "Echipă completă: designeri, developeri, SEO, copywriteri, project manageri. Construim pe Next.js — tehnologia Netflix și Nike — cu 3D, mișcare și AI. Aceeași echipă curioasă din 2014, încăpățânată să livreze fiecare pixel cum trebuie.",
   },
 ];
 
 const services = [
-  {
-    title: "Web Design & Site-uri de Prezentare",
-    text: "Creăm platforme moderne, responsive, rapide și adaptate nevoilor fiecărui client.",
-  },
-  {
-    title: "Magazine Online & E-commerce",
-    text: "Soluții complete de vânzare online cu plăți integrate, sisteme de livrare și panouri de administrare intuitive.",
-  },
-  {
-    title: "SEO & Optimizare Conținut",
-    text: "Strategii SEO care cresc vizibilitatea afacerilor și aduc trafic organic constant.",
-  },
-  {
-    title: "Promovare în Social Media",
-    text: "Administrăm pagini de Facebook și Instagram, creăm campanii targetate și gestionăm conținut care atrage.",
-  },
-  {
-    title: "Advertoriale & Promovare în Presă",
-    text: "Publicăm articole în rețeaua noastră de peste 50 de ziare online, cu linkuri dofollow și distribuire pe Facebook.",
-  },
-  {
-    title: "Email Marketing & Automatizări",
-    text: "Dezvoltăm campanii eficiente, personalizate, care mențin relația cu clienții.",
-  },
-  {
-    title: "Administrare & Mentenanță Website-uri",
-    text: "Asigurăm backup-uri, actualizări și suport tehnic permanent.",
-  },
-];
-
-const benefits = [
-  "Peste 10 ani de experiență continuă în domeniul digital",
-  "240+ clienți mulțumiți din România și din străinătate",
-  "Echipă multidisciplinară — designeri, developeri, specialiști SEO și marketing, project manageri",
-  "Soluții personalizate pentru fiecare afacere, indiferent de industrie",
-  "Parteneriat pe termen lung și consultanță constantă pentru dezvoltare",
+  ["01", "Web design & site-uri de prezentare", "Platforme moderne, rapide, scrise de la zero."],
+  ["02", "Magazine online", "Plăți integrate, livrare, panouri de administrare intuitive."],
+  ["03", "SEO & vizibilitate AI", "Trafic organic constant + prezență în ChatGPT/Gemini."],
+  ["04", "Promovare în presă", "Articole în rețeaua proprie de 50 de ziare, cu linkuri dofollow."],
+  ["05", "Social media & email", "Campanii targetate și automatizări care mențin relația cu clienții."],
+  ["06", "Administrare & mentenanță", "Backup-uri, actualizări și suport tehnic permanent."],
 ];
 
 export default function DesprePage() {
   return (
-    <main>
-      {/* HERO */}
-      <section className="relative overflow-hidden py-20 sm:py-28">
-        <Aurora />
-        <Meteors count={10} />
-        <div className="container-app relative z-10">
-          <div className="flex justify-center">
-            <div className="gradient-border rounded-full">
-              <span className="relative inline-flex items-center gap-2 rounded-full bg-bg-card/90 px-4 py-1.5 text-xs font-medium backdrop-blur">
-                <Sparkles className="h-3.5 w-3.5 text-brand-orange" />
-                <span className="text-shimmer font-semibold">
-                  Despre Imperial Media
-                </span>
-              </span>
-            </div>
-          </div>
+    <main className="bg-[#050507]">
+      <DespreHero />
 
-          <h1 className="mx-auto mt-7 max-w-4xl text-center font-display text-5xl font-extrabold leading-[0.98] tracking-tight text-text sm:text-6xl lg:text-7xl">
-            Partenerul digital al{" "}
-            <span className="text-shimmer">afacerii tale</span> de{" "}
-            <span className="text-gradient">peste 10 ani</span>
-          </h1>
-
-          <p className="mx-auto mt-7 max-w-2xl text-center text-base text-text-muted sm:text-lg">
-            De peste un deceniu, echipa Imperial Media ajută companiile să-și
-            construiască prezența online prin servicii moderne și eficiente —
-            de la website-uri de prezentare și magazine online, până la
-            promovare digitală și soluții IT integrate. Livrăm rezultate
-            concrete și parteneriate de lungă durată.
-          </p>
-
-          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-6 sm:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <p className="font-display text-3xl font-extrabold text-brand-orange sm:text-4xl">
-                  {s.n}
-                </p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-text-muted">
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* POVESTEA NOASTRĂ */}
-      <section className="section relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,107,26,0.08),transparent_60%)]" />
-        <div className="container-app relative">
-          <div className="mx-auto max-w-3xl">
-            <div className="text-center">
-              <span className="chip">Povestea noastră</span>
-              <h2 className="section-title mt-4">
-                Totul a început cu o{" "}
-                <span className="text-shimmer">singură idee</span>
-              </h2>
-            </div>
-
-            <div className="mt-12 space-y-6 text-base leading-relaxed text-text-muted sm:text-lg">
-              <p>
-                Prin 2014, într-un oraș în care &bdquo;site-ul firmei&rdquo;
-                încă mai era un lux, un grup mic de pasionați de design și
-                cod s-a hotărât să schimbe felul în care afacerile locale
-                arată online. Nu aveam birouri de sticlă, nici clienți
-                celebri. Aveam doar{" "}
-                <strong className="text-text">
-                  convingerea că un site bine făcut poate schimba o afacere
-                </strong>
-                .
-              </p>
-
-              <p>
-                Primul client a venit printr-o recomandare. Al doilea, la
-                fel. La fel și al zecelea. Nu am făcut niciodată reclamă
-                agresivă — am lăsat rezultatele să vorbească. Un restaurant
-                care a dublat rezervările în două luni. O clinică medicală
-                care a început să primească programări online zilnic. Un
-                magazin de cartier care a devenit un e-commerce cu livrare
-                în toată țara.
-              </p>
-
-              <p className="border-l-2 border-brand-orange pl-6 italic text-text">
-                &bdquo;Nu vindem site-uri. Construim instrumente care aduc
-                clienți reali, cât timp dormi.&rdquo;
-              </p>
-
-              <p>
-                Au trecut <strong className="text-text">peste 10 ani</strong>.
-                Echipa a crescut. În spatele proiectelor sunt acum
-                designeri, developeri, specialiști SEO, copywriteri și
-                project manageri — fiecare cu expertiza lui, toți cu
-                aceeași obsesie pentru detaliu. Am livrat{" "}
-                <strong className="text-text">peste 200 de proiecte</strong>{" "}
-                pentru{" "}
-                <strong className="text-text">240+ clienți</strong> din
-                România și din străinătate: de la ONG-uri care strâng
-                fonduri online, până la magazine cu mii de produse și
-                platforme SaaS.
-              </p>
-
-              <p>
-                Dar cel mai mult ne mândrim nu cu numărul de site-uri
-                livrate, ci cu câți dintre clienții noștri au rămas alături
-                de noi <strong className="text-text">ani la rând</strong>.
-                Pentru că un site bun nu e un proiect &mdash; e începutul
-                unei relații lungi.
-              </p>
-
-              <p>
-                Astăzi, Imperial Media e o agenție completă: web design,
-                magazine online, SEO, promovare în presa online, social
-                media, mentenanță. Dar în esență am rămas aceeași echipă
-                mică din 2014 — curioși, pragmatici și încăpățânați să
-                livrăm fiecare pixel cum trebuie.
-              </p>
-
-              <p className="text-center text-xl font-semibold text-text">
-                Iar dacă citești rândurile astea și ai o idee pe care vrei
-                să o aduci online —{" "}
-                <span className="text-shimmer">hai să stăm de vorbă</span>.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* DE CE IMPERIAL MEDIA */}
-      <section className="section bg-bg-soft/30">
-        <div className="container-app">
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="chip">De ce noi</span>
-            <h2 className="section-title mt-4">
-              De ce să alegi{" "}
-              <span className="text-shimmer">Imperial Media</span>?
-            </h2>
-            <p className="section-subtitle">
-              Cu o experiență de peste un deceniu în domeniul digital, Imperial
-              Media este mai mult decât o agenție de web design și marketing —
-              este partenerul de încredere al afacerilor care vor să se
-              dezvolte și să se impună online.
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
-            {reasons.map((r) => (
-              <div
-                key={r.title}
-                className="group rounded-2xl border border-bg-border bg-bg-card/60 p-7 transition hover:border-brand-orange/60 hover:shadow-glow-orange"
-              >
-                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-orange-gradient text-white shadow-glow-orange">
-                  <CheckCircle2 className="h-5 w-5" strokeWidth={2.5} />
-                </div>
-                <h3 className="font-display text-xl font-bold text-text">
-                  {r.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                  {r.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SERVICII */}
+      {/* ───── POVESTEA — pe firul de lumină ───── */}
       <section className="section relative">
         <div className="container-app">
-          <div className="mx-auto max-w-3xl text-center">
-            <span className="chip">Servicii</span>
+          <div className="max-w-xl">
+            <span className="chip">Povestea noastră</span>
             <h2 className="section-title mt-4">
-              Tot ce are nevoie <span className="text-shimmer">afacerea ta</span>{" "}
-              online
+              Un deceniu, <span className="font-serifd italic text-gradient">pe scurt.</span>
             </h2>
-            <p className="section-subtitle">
-              De la idee la implementare și promovare. Acoperim complet ciclul
-              digital printr-o echipă multidisciplinară.
-            </p>
           </div>
 
-          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((s, i) => (
-              <div
-                key={s.title}
-                className="rounded-2xl border border-bg-border bg-bg-card/40 p-6 transition hover:border-brand-orange/40 hover:bg-bg-card/80"
-              >
-                <div className="mb-3 font-display text-sm font-bold text-brand-orange">
-                  0{i + 1}.
+          <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_380px]">
+          <div className="relative max-w-3xl">
+            {/* firul vertical gradient */}
+            <div className="absolute bottom-4 left-[7px] top-2 w-px bg-gradient-to-b from-brand-orange via-brand-magenta to-brand-purple opacity-70" />
+            <div className="space-y-12">
+              {milestones.map((m, i) => (
+                <div key={m.k} className="relative pl-10">
+                  <span
+                    className="absolute left-0 top-1.5 h-[15px] w-[15px] rounded-full border-2 bg-[#050507]"
+                    style={{
+                      borderColor: ["#FF9A1A", "#FF2E9A", "#B04CF7", "#8B2FF7"][i],
+                      boxShadow: `0 0 14px ${["#FF9A1A", "#FF2E9A", "#B04CF7", "#8B2FF7"][i]}80`,
+                    }}
+                  />
+                  <span className="font-jmono text-[10px] uppercase tracking-[0.28em] text-white/50">
+                    {m.k}
+                  </span>
+                  <h3 className="mt-1.5 font-display text-xl font-bold text-text">{m.title}</h3>
+                  <p className="mt-2 max-w-xl text-[14.5px] leading-relaxed text-text-muted">
+                    {m.text}
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-bold leading-tight text-text">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                  {s.text}
-                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* colajul foto din atelier */}
+          <div className="relative hidden lg:block">
+            <div className="sticky top-28 space-y-5">
+              <div className="group relative rotate-[1.5deg] overflow-hidden rounded-2xl border border-white/[0.08]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/despre/studio.jpg" alt="Studioul Imperial Media" className="shot-img block w-full" />
+                <div className="shot-fade" />
+              </div>
+              <div className="group relative -rotate-2 overflow-hidden rounded-2xl border border-white/[0.08]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/despre/craft.jpg" alt="Schițe de design" className="shot-img block w-full" />
+                <div className="shot-fade" />
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <blockquote className="mt-16 max-w-2xl border-l-2 border-brand-magenta/60 pl-6 font-serifd text-2xl italic leading-snug text-white/85 sm:text-[1.7rem]">
+            „Nu vindem site-uri. Construim instrumente care aduc clienți reali,
+            cât timp dormi.”
+          </blockquote>
+        </div>
+      </section>
+
+      {/* ───── DE CE NOI ───── */}
+      <section className="section relative">
+        <div className="container-app">
+          <div className="max-w-xl">
+            <span className="chip">De ce Imperial Media</span>
+            <h2 className="section-title mt-4">
+              Mai mult decât o <span className="font-serifd italic text-gradient">agenție.</span>
+            </h2>
+          </div>
+          <ReasonsCards />
+        </div>
+      </section>
+
+      {/* ───── BANDA FOTO — atelierul noaptea ───── */}
+      <section className="relative h-[340px] overflow-hidden sm:h-[420px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/despre/echipa.jpg" alt="Echipa Imperial Media lucrând" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050507] via-transparent to-[#050507]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.6)_100%)]" />
+        <div className="container-app relative z-10 flex h-full items-end pb-10">
+          <p className="max-w-md font-serifd text-xl italic leading-snug text-white/90 [text-shadow:0_2px_14px_rgba(0,0,0,0.9)] sm:text-2xl">
+            Lucrăm până arată <span className="text-gradient">exact</span> cum trebuie.
+          </p>
+        </div>
+      </section>
+
+      {/* ───── CE FACEM — rânduri editoriale ───── */}
+      <section className="section relative">
+        <div className="container-app">
+          <div className="max-w-xl">
+            <span className="chip">Ce facem</span>
+            <h2 className="section-title mt-4">
+              Totul, <span className="font-serifd italic text-gradient">sub un singur acoperiș.</span>
+            </h2>
+          </div>
+          <div className="mt-10 max-w-3xl border-t border-white/[0.07]">
+            {services.map(([n, title, text]) => (
+              <div
+                key={n}
+                className="group flex items-baseline gap-5 border-b border-white/[0.07] py-4 transition hover:border-brand-magenta/40"
+              >
+                <span className="font-jmono text-[11px] text-white/45">{n}</span>
+                <span className="font-display text-base font-semibold text-text sm:text-lg">
+                  {title}
+                </span>
+                <span className="ml-auto hidden max-w-[300px] text-right text-[12.5px] leading-snug text-white/60 sm:block">
+                  {text}
+                </span>
               </div>
             ))}
           </div>
+          <Link
+            href="/servicii"
+            className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium text-text transition hover:border-brand-orange/70"
+          >
+            Vezi serviciile și prețurile
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
 
-      {/* BENEFICII + CTA */}
-      <section className="section bg-bg-soft/30">
-        <div className="container-app grid items-center gap-12 lg:grid-cols-2">
-          <div>
-            <span className="chip">Beneficii</span>
-            <h2 className="section-title mt-4">
-              Nu livrăm doar servicii — construim{" "}
-              <span className="text-shimmer">povești de succes</span>
-            </h2>
-            <p className="mt-6 text-base leading-relaxed text-text-muted">
-              Fiecare site realizat, fiecare campanie lansată și fiecare
-              strategie implementată reprezintă un pas înainte pentru client
-              și o dovadă a profesionalismului nostru. Într-o lume unde
-              tehnologia se schimbă rapid, experiența acumulată ne ajută să
-              anticipăm tendințele, să inovăm și să livrăm rezultate măsurabile.
-            </p>
+      {/* ───── REȚEAUA DE PRESĂ ───── */}
+      <section className="section relative">
+        <div className="container-app">
+          <div className="relative overflow-hidden rounded-2xl border border-bg-border glass-card p-8 sm:p-10">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-magenta/10 blur-3xl" />
+            <div className="flex flex-wrap items-center gap-6">
+              <IconBadge icon={Newspaper} className="!h-14 !w-14" />
+              <div className="min-w-[240px] flex-1">
+                <h2 className="font-display text-2xl font-bold text-text">
+                  Deținem rețeaua <span className="text-gradient">Media Expres</span> — 50 de ziare online.
+                </h2>
+                <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-text-muted">
+                  Presă locală și națională, în toată România. Clienții noștri apar în
+                  articole reale, cu linkuri care contează în Google — un avantaj pe care
+                  nicio altă agenție de web design din România nu îl are.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-sm font-semibold text-brand-magenta">
+                <BadgeCheck className="h-5 w-5" />
+                Avantaj exclusiv
+              </div>
+            </div>
           </div>
-
-          <ul className="space-y-4">
-            {benefits.map((b) => (
-              <li
-                key={b}
-                className="flex items-start gap-3 rounded-xl border border-bg-border bg-bg-card/40 p-4"
-              >
-                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-orange-gradient text-white">
-                  <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={3} />
-                </span>
-                <span className="text-sm leading-relaxed text-text">{b}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
-      {/* DASHBOARD MOCKUP EXISTENT (Skills) */}
-      <Skills />
-
-      {/* MARQUEE */}
-      <Marquee />
-
-      {/* CUM PROCEDĂM */}
-      <HowItWorks />
-
-      {/* TESTIMONIALE */}
       <Testimonials />
 
-      {/* CTA FINAL */}
-      <section className="section border-t border-bg-border/50">
+      {/* ───── CTA ───── */}
+      <section className="section relative">
         <div className="container-app text-center">
-          <h2 className="section-title mx-auto">
-            Ești gata să <span className="text-shimmer">colaborăm</span>?
+          <span className="font-jmono text-[10px] uppercase tracking-[0.3em] text-white/60">
+            Hai să vorbim
+          </span>
+          <h2 className="section-title mt-5 !text-4xl sm:!text-5xl">
+            Ai o idee? <span className="font-serifd italic text-gradient">O aducem la viață.</span>
           </h2>
-          <p className="section-subtitle mx-auto">
-            Sună-ne la{" "}
-            <a
-              href={`tel:${siteConfig.phoneRaw}`}
-              className="font-semibold text-brand-orange hover:underline"
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/estimare"
+              className="inline-flex items-center gap-2.5 rounded-full bg-orange-gradient px-8 py-4 text-[15px] font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.05]"
             >
-              {siteConfig.phone}
-            </a>{" "}
-            sau trimite-ne brief-ul tău online. Răspundem în 24h cu propunere
-            personalizată.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/contact" className="btn-primary">
-              <ArrowUpRight className="h-4 w-4" />
-              Începe proiectul
+              <Zap className="h-5 w-5" />
+              Calculează prețul pe loc
             </Link>
             <Link
-              href="/proiecte"
-              className="inline-flex items-center gap-2 rounded-full border border-bg-border bg-bg-card/40 px-5 py-3 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange hover:bg-bg-card/80"
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-7 py-4 text-sm font-medium text-text transition hover:border-brand-orange/70"
             >
-              Vezi proiecte
+              Scrie-ne direct
             </Link>
           </div>
         </div>
