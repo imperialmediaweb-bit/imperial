@@ -8,32 +8,51 @@ export function Mark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
       <defs>
-        <linearGradient id="imRing" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#FF6B1A" />
-          <stop offset="55%" stopColor="#FF2E9A" />
+        <linearGradient id="imRing" x1="0%" y1="85%" x2="100%" y2="15%">
+          <stop offset="0%" stopColor="#FF8A1A" />
+          <stop offset="50%" stopColor="#FF2E9A" />
           <stop offset="100%" stopColor="#8B2FF7" />
         </linearGradient>
-        <linearGradient id="imMark" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#FF8A42" />
-          <stop offset="50%" stopColor="#FF2E9A" />
-          <stop offset="100%" stopColor="#B06CFF" />
+        <linearGradient id="imWingL" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#FFB020" />
+          <stop offset="60%" stopColor="#FF6B1A" />
+          <stop offset="100%" stopColor="#FF2E9A" />
         </linearGradient>
+        <linearGradient id="imWingR" x1="100%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stopColor="#B06CFF" />
+          <stop offset="55%" stopColor="#8B2FF7" />
+          <stop offset="100%" stopColor="#FF2E9A" />
+        </linearGradient>
+        <linearGradient id="imCore" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#FF6B1A" />
+          <stop offset="55%" stopColor="#FF2E9A" />
+          <stop offset="100%" stopColor="#FF7ADF" />
+        </linearGradient>
+        <filter id="imGlow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="2.2" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
-      {/* discul negru */}
+      {/* discul negru + inelul cu glow */}
       <circle cx="50" cy="50" r="47" fill="#07060a" />
-      {/* inelul în gradient */}
-      <circle cx="50" cy="50" r="46" fill="none" stroke="url(#imRing)" strokeWidth="3.2" />
-      {/* coroana angulară — aripă stângă, vârf central, aripă dreaptă */}
-      <g fill="url(#imMark)">
-        {/* aripa stângă */}
-        <path d="M22 66 L30 34 L40 50 L36 66 Z" />
-        {/* vârful central (diamant) */}
-        <path d="M50 26 L58 46 L50 66 L42 46 Z" />
-        {/* aripa dreaptă */}
-        <path d="M78 66 L70 34 L60 50 L64 66 Z" />
+      <circle cx="50" cy="50" r="45.5" fill="none" stroke="url(#imRing)" strokeWidth="2.6" filter="url(#imGlow)" />
+      {/* aripa stângă — două lame în unghi (foc) */}
+      <g filter="url(#imGlow)">
+        <path d="M21 63 L31 33 L43 46 L39 55 L30 48 Z" fill="url(#imWingL)" />
+        <path d="M30 66 L37 48 L45 56 L41 66 Z" fill="url(#imWingL)" opacity="0.9" />
+        {/* aripa dreaptă — oglindit (violet) */}
+        <path d="M79 63 L69 33 L57 46 L61 55 L70 48 Z" fill="url(#imWingR)" />
+        <path d="M70 66 L63 48 L55 56 L59 66 Z" fill="url(#imWingR)" opacity="0.9" />
+        {/* cristalul central cu vârf */}
+        <path d="M50 24 L56 44 L50 68 L44 44 Z" fill="url(#imCore)" />
+        <path d="M50 24 L56 44 L50 50 L44 44 Z" fill="#FF9ADF" opacity="0.55" />
+        {/* scânteia de deasupra */}
+        <path d="M50 13 L52.4 19 L50 24 L47.6 19 Z" fill="#FFD27A" />
+        <line x1="50" y1="24" x2="50" y2="64" stroke="#FFE6F5" strokeWidth="1" opacity="0.7" />
       </g>
-      {/* scânteia de deasupra */}
-      <path d="M50 16 L52.2 21.5 L50 24 L47.8 21.5 Z" fill="#FFB020" />
     </svg>
   );
 }
