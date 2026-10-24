@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { TiltCard } from "./effects/TiltCard";
+import { IconBadge } from "./IconBadge";
 
 // Bento grid asimetric: un card mare (meseria de bază) + carduri mici cu
 // specializările. Texte specifice, nu generice.
@@ -73,12 +74,12 @@ export function Services() {
                 <div className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-brand-purple/10 blur-3xl" />
 
                 <div className="relative">
-                  <span className="grid h-14 w-14 place-items-center rounded-2xl bg-orange-gradient shadow-glow-orange">
-                    <Globe className="h-7 w-7 text-white" strokeWidth={1.8} />
-                  </span>
-                  <h3 className="mt-6 font-display text-2xl font-extrabold text-text sm:text-3xl">
-                    Site-uri & aplicații custom
-                  </h3>
+                  <div className="flex items-center gap-4">
+                    <IconBadge icon={Globe} />
+                    <h3 className="font-display text-2xl font-extrabold text-text sm:text-3xl">
+                      Site-uri & aplicații custom
+                    </h3>
+                  </div>
                   <p className="mt-3 max-w-md text-[15px] leading-relaxed text-text-muted">
                     Scrise de la zero pe Next.js — tehnologia Netflix și Nike. Fără
                     WordPress, fără șabloane: viteză sub o secundă, SEO din
@@ -112,10 +113,10 @@ export function Services() {
                 <a href={s.href} className="relative block h-full overflow-hidden p-6">
                   <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-brand-orange/0 blur-3xl transition-all duration-500 group-hover:bg-brand-orange/20" />
                   <div className="relative">
-                    <span className="grid h-11 w-11 place-items-center rounded-xl border border-bg-border bg-bg-soft transition-all group-hover:border-transparent group-hover:bg-orange-gradient">
-                      <s.icon className="h-5 w-5 text-brand-orange transition group-hover:text-white" strokeWidth={1.8} />
-                    </span>
-                    <h3 className="mt-4 font-display text-lg font-bold text-text">{s.name}</h3>
+                    <div className="flex items-center gap-3.5">
+                      <IconBadge icon={s.icon} className="!h-12 !w-12 transition-transform duration-300 group-hover:scale-110" />
+                      <h3 className="font-display text-lg font-bold text-text">{s.name}</h3>
+                    </div>
                     <p className="mt-2 text-sm leading-relaxed text-text-muted">{s.text}</p>
                   </div>
                 </a>

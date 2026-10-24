@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MessageCircle, Pencil, Code2, Rocket } from "lucide-react";
+import { IconBadge } from "./IconBadge";
 
 const steps = [
   {
@@ -35,16 +36,12 @@ function StepCard({ step, idx }: { step: (typeof steps)[number]; idx: number }) 
       </span>
 
       <div className="relative">
-        <div className="grid h-14 w-14 place-items-center rounded-2xl border border-bg-border bg-bg-soft shadow-card transition-all group-hover:border-transparent group-hover:bg-orange-gradient">
-          <step.icon
-            className="h-6 w-6 text-brand-orange transition group-hover:text-white"
-            strokeWidth={2}
-          />
+        <div className="flex items-center gap-4">
+          <IconBadge icon={step.icon} className="transition-transform duration-300 group-hover:scale-110" />
+          <h3 className="font-display text-lg font-bold text-text lg:text-xl">
+            {step.title}
+          </h3>
         </div>
-
-        <h3 className="mt-5 font-display text-lg font-bold text-text lg:text-xl">
-          {step.title}
-        </h3>
         <p className="mt-2 text-sm leading-relaxed text-text-muted lg:text-[15px]">
           {step.text}
         </p>

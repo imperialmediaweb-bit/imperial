@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { IconBadge } from "./IconBadge";
 import Link from "next/link";
 import { Sparkles, Target, Shield } from "lucide-react";
 import { ShineCard } from "./effects/ShineCard";
@@ -71,15 +72,12 @@ export function ToolsSection() {
                   <div className={`absolute -right-12 -top-12 h-40 w-40 rounded-full bg-transparent blur-3xl transition-all duration-500 ${t.glow}`} />
 
                   <div className="relative">
-                    <span
-                      className={`grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br ${t.accent} shadow-card transition-transform group-hover:scale-110 group-hover:rotate-6`}
-                    >
-                      <t.icon className="h-6 w-6 text-white" strokeWidth={1.8} />
-                    </span>
-
-                    <h3 className="mt-5 font-display text-lg font-bold text-text">
-                      {t.title}
-                    </h3>
+                    <div className="flex items-center gap-4">
+                      <IconBadge icon={t.icon} className="transition-transform duration-300 group-hover:scale-110" />
+                      <h3 className="font-display text-lg font-bold text-text">
+                        {t.title}
+                      </h3>
+                    </div>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
                       {t.description}
                     </p>

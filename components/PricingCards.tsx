@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check, X, ArrowRight, Crown, Globe2, ShoppingBag, Megaphone, Wrench } from "lucide-react";
+import { IconBadge } from "./IconBadge";
 
 const ICONS = { website: Globe2, shop: ShoppingBag, promo: Megaphone, admin: Wrench } as const;
 import { packages } from "@/lib/packages";
@@ -42,17 +43,12 @@ export function PricingCards() {
                 </span>
               )}
 
-              {(() => {
-                const Icon = ICONS[pkg.key as keyof typeof ICONS] ?? Globe2;
-                return (
-                  <span className="mb-4 grid h-12 w-12 place-items-center rounded-xl bg-orange-gradient shadow-glow-orange">
-                    <Icon className="h-6 w-6 text-white" strokeWidth={1.8} />
-                  </span>
-                );
-              })()}
-              <h3 className="font-display text-lg font-bold text-text">
-                {pkg.name}
-              </h3>
+              <div className="flex items-center gap-3.5">
+                <IconBadge icon={ICONS[pkg.key as keyof typeof ICONS] ?? Globe2} className="!h-12 !w-12" />
+                <h3 className="font-display text-lg font-bold text-text">
+                  {pkg.name}
+                </h3>
+              </div>
 
               <div className="mt-4 flex items-baseline gap-1">
                 <span className="font-display text-4xl font-extrabold text-text">

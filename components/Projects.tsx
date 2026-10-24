@@ -236,7 +236,8 @@ function HomepageProjectsGrid({ items }: { items: ImportedProject[] }) {
             className="group w-[280px] shrink-0 snap-start overflow-hidden rounded-2xl border border-bg-border glass-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 sm:w-[320px]"
           >
             <div className="relative aspect-[16/10] overflow-hidden border-b border-white/5 bg-bg-soft">
-              <ProjectImage p={p} big={false} />
+              <div className="shot-img absolute inset-0"><ProjectImage p={p} big={false} /></div>
+              <div className="shot-fade" />
             </div>
             <div className="p-5">
               <span className="font-jmono text-[10px] uppercase tracking-wider text-brand-magenta">{cat}</span>
