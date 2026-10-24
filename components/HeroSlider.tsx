@@ -18,6 +18,27 @@ const Crystal3D = dynamic(() => import("./effects/Crystal3D"), { ssr: false });
 
 const AUTOPLAY = 8000;
 
+// Titlu care se asamblează literă cu literă (cascadă fină, cu rotație mică).
+function Letters({ text, className, delay }: { text: string; className: string; delay: number }) {
+  // Gradientul stă pe wrapper (background-clip: text acoperă și copiii), ca să
+  // curgă pe toată fraza, nu pe fiecare literă; literele animă doar transform.
+  return (
+    <span className={`inline-block ${className}`} style={{ perspective: 400 }}>
+      {text.split("").map((ch, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 22, rotateX: 60 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ duration: 0.5, delay: delay + i * 0.028, ease: [0.22, 1, 0.36, 1] }}
+          className="inline-block"
+        >
+          {ch === " " ? " " : ch}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 /* ───── Slide 1: CLIPUL ───── */
 function VideoSlide({ isDesktop }: { isDesktop: boolean }) {
   return (
@@ -42,13 +63,13 @@ function VideoSlide({ isDesktop }: { isDesktop: boolean }) {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.8)_100%)]" />
 
       <div className="container-app relative z-10 flex h-full flex-col items-center justify-center text-center">
-        {/* sigla nouă, mare, cu glow */}
+        {/* sigla nouă: se DESENEAZĂ singură pe contur, apoi se aprinde */}
         <motion.svg
           viewBox="0 0 100 100"
           className="h-24 w-24 drop-shadow-[0_0_30px_rgba(255,46,154,0.5)] sm:h-28 sm:w-28"
-          initial={{ opacity: 0, scale: 0.6, rotate: -8 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.15 }}
         >
           <defs>
             <linearGradient id="hRing" x1="0%" y1="100%" x2="100%" y2="0%">
@@ -57,26 +78,43 @@ function VideoSlide({ isDesktop }: { isDesktop: boolean }) {
               <stop offset="100%" stopColor="#8B2FF7" />
             </linearGradient>
           </defs>
-          <circle cx="50" cy="50" r="46" fill="rgba(7,6,10,0.75)" stroke="url(#hRing)" strokeWidth="3" />
-          <g fill="url(#hRing)">
-            <path d="M22 66 L30 34 L40 50 L36 66 Z" />
-            <path d="M50 26 L58 46 L50 66 L42 46 Z" />
-            <path d="M78 66 L70 34 L60 50 L64 66 Z" />
-          </g>
-          <path d="M50 16 L52.2 21.5 L50 24 L47.8 21.5 Z" fill="#FFB020" />
+          <motion.circle
+            cx="50" cy="50" r="46" fill="rgba(7,6,10,0.75)"
+            stroke="url(#hRing)" strokeWidth="3"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.1, delay: 0.2, ease: "easeInOut" }}
+          />
+          {["M22 66 L30 34 L40 50 L36 66 Z", "M50 26 L58 46 L50 66 L42 46 Z", "M78 66 L70 34 L60 50 L64 66 Z"].map((d, k) => (
+            <motion.path
+              key={d}
+              d={d}
+              stroke="url(#hRing)"
+              strokeWidth="1.6"
+              fill="url(#hRing)"
+              initial={{ pathLength: 0, fillOpacity: 0 }}
+              animate={{ pathLength: 1, fillOpacity: 1 }}
+              transition={{
+                pathLength: { duration: 0.7, delay: 0.5 + k * 0.18, ease: "easeInOut" },
+                fillOpacity: { duration: 0.5, delay: 1.1 + k * 0.18 },
+              }}
+            />
+          ))}
+          <motion.path
+            d="M50 16 L52.2 21.5 L50 24 L47.8 21.5 Z" fill="#FFB020"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: [0, 1, 1], scale: [0, 1.6, 1] }}
+            transition={{ duration: 0.6, delay: 1.7 }}
+          />
         </motion.svg>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-7 font-display text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl"
-        >
-          <span className="text-chrome">Tu ai ideea.</span>{" "}
-          <span className="text-gradient whitespace-nowrap drop-shadow-[0_0_28px_rgba(255,46,154,0.4)]">
-            Noi o aducem la viață.
+        {/* titlul: se asamblează literă cu literă */}
+        <h1 className="mt-7 font-display text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          <Letters text="Tu ai ideea." className="text-chrome" delay={0.9} />{" "}
+          <span className="whitespace-nowrap drop-shadow-[0_0_28px_rgba(255,46,154,0.4)]">
+            <Letters text="Noi o aducem la viață." className="text-gradient" delay={1.45} />
           </span>
-        </motion.h1>
+        </h1>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}

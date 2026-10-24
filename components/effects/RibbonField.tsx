@@ -59,6 +59,19 @@ export function RibbonField() {
     let last = 0;
     let t = 0;
 
+    // interacțiune: panglicile se îndoaie fin spre cursor (revin singure)
+    const mouse = { x: -9999, y: 0, cx: -9999, cy: 0 };
+    const onMove = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+    };
+    const onLeave = () => {
+      mouse.x = -9999;
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerleave", onLeave);
+
     const draw = (now: number) => {
       raf = requestAnimationFrame(draw);
       if (!visible) return;
@@ -66,6 +79,11 @@ export function RibbonField() {
       if (now - last < 33) return;
       t += (now - last) / 1000;
       last = now;
+
+      // cursorul „efectiv” alunecă lin spre cel real (mișcare elastică)
+      mouse.cx += (mouse.x - mouse.cx) * 0.08;
+      mouse.cy += (mouse.y - mouse.cy) * 0.08;
+      const hasMouse = mouse.x > -9000 && mouse.cx > -9000;
 
       ctx.clearRect(0, 0, w, h);
       ctx.globalCompositeOperation = "lighter";
@@ -82,11 +100,16 @@ export function RibbonField() {
           ctx.beginPath();
           for (let x = -40; x <= w + 40; x += 16) {
             const n = x / w;
-            const y =
+            let y =
               h * r.baseY +
               off +
               Math.sin(n * Math.PI * r.freq + t * r.speed * Math.PI * 2 + r.phase) * h * r.amp +
               Math.sin(n * Math.PI * r.freq * 2.7 + t * r.speed * 1.6 + r.phase * 2) * h * r.amp * 0.3;
+            // îndoire locală spre cursor (clopot gaussian în jurul lui x)
+            if (hasMouse) {
+              const dx = (x - mouse.cx) / 260;
+              y += (mouse.cy - y) * 0.22 * Math.exp(-dx * dx);
+            }
             if (x === -40) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           }
@@ -119,6 +142,8 @@ export function RibbonField() {
       io.disconnect();
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerleave", onLeave);
     };
   }, []);
 
