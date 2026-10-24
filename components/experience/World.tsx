@@ -202,10 +202,10 @@ const NODE_COLORS = ["#FF9A1A", "#FF2E9A", "#B04CF7", "#8B2FF7"] as const;
 function Thread() {
   const { tube, nodes } = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-2.4, -1.1, -119),
-      new THREE.Vector3(1.8, 0.6, -126),
-      new THREE.Vector3(-1.6, 1.2, -133),
-      new THREE.Vector3(2.2, -0.6, -141),
+      new THREE.Vector3(-2.4, -1.1, -140),
+      new THREE.Vector3(1.8, 0.6, -147),
+      new THREE.Vector3(-1.6, 1.2, -153),
+      new THREE.Vector3(2.2, -0.6, -160),
     ]);
     const tube = new THREE.TubeGeometry(curve, 120, 0.028, 8, false);
     const nodes = [0.04, 0.36, 0.66, 0.96].map((t) => curve.getPoint(t));
@@ -225,19 +225,67 @@ function Thread() {
           <pointLight intensity={10} color={NODE_COLORS[i]} distance={6} />
         </group>
       ))}
-      <Sparkles count={40} scale={[8, 6, 26]} position={[0, 0, -130]} size={1.5} speed={0.3} color="#FF9ADF" opacity={0.5} />
+      <Sparkles count={40} scale={[8, 6, 26]} position={[0, 0, -150]} size={1.5} speed={0.3} color="#FF9ADF" opacity={0.5} />
     </group>
   );
 }
 
-/* ───── Capitolul 5: cristalul final (z −150 … −168) ───── */
+/* ───── zona Vocea clienților (z −120 … −134): scântei + cioburi mici ───── */
+function VoicesZone() {
+  const shards = useMemo(() => {
+    const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+    return Array.from({ length: 14 }, () => ({
+      pos: [rnd(-6, 6), rnd(-3, 3), rnd(-134, -120)] as [number, number, number],
+      s: rnd(0.15, 0.5),
+    }));
+  }, []);
+  return (
+    <group>
+      {shards.map((s, i) => (
+        <mesh key={i} position={s.pos} scale={s.s} rotation={[i, i * 0.7, 0]}>
+          <octahedronGeometry args={[1, 0]} />
+          <meshPhysicalMaterial color="#0d0b12" metalness={0.5} roughness={0.1} clearcoat={1} flatShading />
+        </mesh>
+      ))}
+      <pointLight position={[0, 1, -126]} intensity={16} color="#FF2E9A" distance={14} />
+      <Sparkles count={60} scale={[12, 7, 18]} position={[0, 0, -127]} size={1.8} speed={0.35} color="#FFB020" opacity={0.6} />
+    </group>
+  );
+}
+
+/* ───── inelul orbital al Estimatorului (z −186 … −198) ───── */
+function OrbitRing() {
+  const g = useRef<THREE.Group>(null);
+  useFrame((_, dt) => {
+    if (g.current) {
+      g.current.rotation.z += dt * 0.25;
+      g.current.rotation.x += dt * 0.1;
+    }
+  });
+  return (
+    <group position={[0, 0, -194]}>
+      <group ref={g}>
+        {BRAND.map((c, i) => (
+          <mesh key={c} rotation={[1.1 + i * 0.35, i * 0.8, 0]}>
+            <torusGeometry args={[3.1 + i * 0.5, 0.02, 8, 90]} />
+            <meshBasicMaterial color={c} transparent opacity={0.6} />
+          </mesh>
+        ))}
+      </group>
+      <pointLight intensity={18} color="#FF2E9A" distance={14} />
+      <Sparkles count={50} scale={[10, 7, 14]} size={1.8} speed={0.4} color="#B06CFF" opacity={0.55} />
+    </group>
+  );
+}
+
+/* ───── Capitolul final: cristalul (vizibil din Pachete încolo) ───── */
 function Finale() {
   const g = useRef<THREE.Group>(null);
   useFrame((_, dt) => {
     if (g.current) g.current.rotation.y += dt * 0.3;
   });
   return (
-    <group position={[0, 0.1, -164]}>
+    <group position={[0, 0.1, -176]}>
       <group ref={g}>
         <mesh rotation={[0.35, 0.6, 0.1]}>
           <icosahedronGeometry args={[2.3, 0]} />
@@ -268,7 +316,20 @@ function Grid() {
       <gridHelper args={[60, 48, "#3a1430", "#160a1c"]} position={[0, -4.4, -20]} />
       <gridHelper args={[60, 48, "#3a1430", "#160a1c"]} position={[0, -4.4, -90]} />
       <gridHelper args={[60, 48, "#3a1430", "#160a1c"]} position={[0, -4.4, -155]} />
+      <gridHelper args={[60, 48, "#3a1430", "#160a1c"]} position={[0, -4.4, -205]} />
     </>
+  );
+}
+
+/* adâncimea finală: scântei pentru capitolul cu FAQ + CTA */
+function DeepEnd() {
+  return (
+    <group position={[0, 0, -206]}>
+      <Sparkles count={90} scale={[16, 10, 16]} size={2.2} speed={0.4} color="#FFB020" opacity={0.65} />
+      <Sparkles count={50} scale={[18, 11, 18]} size={1.8} speed={0.3} color="#B06CFF" opacity={0.5} />
+      <pointLight intensity={16} color="#FF6B1A" distance={16} position={[3, 2, 2]} />
+      <pointLight intensity={14} color="#8B2FF7" distance={16} position={[-3, -2, 2]} />
+    </group>
   );
 }
 
@@ -294,8 +355,11 @@ export function World({
       <ShardField />
       <Tunnel />
       <Gallery />
+      <VoicesZone />
       <Thread />
       <Finale />
+      <OrbitRing />
+      <DeepEnd />
       <Grid />
     </Canvas>
   );

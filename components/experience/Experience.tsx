@@ -14,13 +14,15 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Zap, ArrowRight, ArrowUpRight } from "lucide-react";
 import { NumberTicker } from "../effects/NumberTicker";
+import { Estimator } from "./Estimator";
+import { Quote, ChevronDown, ScanLine, Gauge, Search, ShieldCheck } from "lucide-react";
 import type { CameraMap } from "./World";
 
 const World = dynamic(() => import("./World").then((m) => m.World), { ssr: false });
 
 /* adâncimile-țintă ale camerei la STARTUL fiecărui capitol (vezi World.tsx) */
-const Z_STARTS = [8, -24, -70, -118, -144, -156];
-const Z_END = -160;
+const Z_STARTS = [8, -24, -70, -118, -138, -162, -182, -200];
+const Z_END = -206;
 
 const mono = "font-jmono text-[10px] uppercase tracking-[0.3em] text-white/60";
 
@@ -59,7 +61,10 @@ const fade = {
 
 export function Experience() {
   const progressRef = useRef(0);
-  const mapRef = useRef<CameraMap>({ ps: [0, 0.17, 0.36, 0.55, 0.7, 0.87, 1], zs: [...Z_STARTS, Z_END] });
+  const mapRef = useRef<CameraMap>({
+    ps: [0, 0.13, 0.28, 0.42, 0.53, 0.66, 0.78, 0.9, 1],
+    zs: [...Z_STARTS, Z_END],
+  });
   const sections = useRef<(HTMLElement | null)[]>([]);
   const [ready, setReady] = useState(false);
 
@@ -238,13 +243,54 @@ export function Experience() {
           </div>
         </Chapter>
 
-        {/* ───── 04 FIRUL / PROCES ───── */}
-        <Chapter idx="proces" height="h-[160vh]" refCb={bind(3)}>
+        {/* ───── 04 VOCEA CLIENȚILOR ───── */}
+        <Chapter idx="voci" height="h-[170vh]" refCb={bind(3)}>
+          <div className="container-app">
+            <motion.div {...fade} transition={{ duration: 0.7 }} className="max-w-md">
+              <div className="flex items-center gap-4">
+                <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">03</span>
+                <span className="h-px w-14 bg-gradient-to-r from-brand-magenta to-brand-glow" />
+                <span className={mono}>Clienți</span>
+              </div>
+              <h2 className="mt-5 font-display text-3xl font-semibold sm:text-4xl">
+                Vocea <span className="font-serifd italic text-gradient">clienților.</span>
+              </h2>
+            </motion.div>
+            <div className="mt-8 grid max-w-5xl gap-4 lg:grid-cols-3">
+              {[
+                ["Ionela Ivan Tudose", "Asociația H.A.P.P.Y", "Mulțumim pentru toate lucrurile grozave: programul de rezervare și plata online a meselor calde, website, harta online!"],
+                ["Ionuț-Bogdan Cărăușu", "Scut Botoșănean", "Seriozitate și profesionalism. Răspunde cu promptitudine și efectuează lucrări de calitate. Recomand!"],
+                ["Botosaneanul.ro", "Ziar & TV", "Au rezolvat în timp record o problemă veche și ne-au ajutat să creștem eficiența întregii activități."],
+              ].map(([name, firm, text], i) => (
+                <motion.figure
+                  key={name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, margin: "-15% 0px -15% 0px" }}
+                  transition={{ duration: 0.55, delay: i * 0.12 }}
+                  className={`${panel} !p-6 ${i === 1 ? "lg:translate-y-8" : ""}`}
+                >
+                  <Quote className="h-5 w-5 text-brand-magenta/70" />
+                  <blockquote className="mt-3 text-[13.5px] leading-relaxed text-white/80">
+                    „{text}”
+                  </blockquote>
+                  <figcaption className="mt-4">
+                    <div className="font-display text-[13.5px] font-bold text-text">{name}</div>
+                    <div className="font-jmono text-[10px] uppercase tracking-[0.18em] text-white/50">{firm}</div>
+                  </figcaption>
+                </motion.figure>
+              ))}
+            </div>
+          </div>
+        </Chapter>
+
+        {/* ───── 05 FIRUL / PROCES ───── */}
+        <Chapter idx="proces" height="h-[160vh]" refCb={bind(4)}>
           <div className="container-app">
             <div className={`max-w-4xl ${panel}`}>
             <motion.div {...fade} transition={{ duration: 0.7 }}>
               <div className="flex items-center gap-4">
-                <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">03</span>
+                <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">04</span>
                 <span className="h-px w-14 bg-gradient-to-r from-brand-purple to-brand-glow" />
                 <span className={mono}>Proces</span>
               </div>
@@ -276,12 +322,12 @@ export function Experience() {
           </div>
         </Chapter>
 
-        {/* ───── 05 PACHETE ───── */}
-        <Chapter idx="pachete" height="h-[180vh]" refCb={bind(4)}>
+        {/* ───── 06 PACHETE ───── */}
+        <Chapter idx="pachete" height="h-[180vh]" refCb={bind(5)}>
           <div className="container-app">
             <motion.div {...fade} transition={{ duration: 0.7 }}>
               <div className="flex items-center gap-4">
-                <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">04</span>
+                <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">05</span>
                 <span className="h-px w-14 bg-gradient-to-r from-brand-orange to-brand-purple" />
                 <span className={mono}>Prețuri</span>
               </div>
@@ -339,29 +385,149 @@ export function Experience() {
           </div>
         </Chapter>
 
-        {/* ───── 06 FINAL / CTA ───── */}
-        <Chapter idx="final" height="h-[130vh]" refCb={bind(5)}>
-          <div className="container-app relative text-center">
-            <div className={scrim} />
-            <motion.div {...fade} transition={{ duration: 0.8 }}>
-              <span className={mono}>Hai să vorbim</span>
-              <h2 className="mt-5 font-display text-4xl font-semibold sm:text-5xl">
-                Construim ceva <span className="font-serifd italic text-gradient">memorabil?</span>
+        {/* ───── 07 ESTIMATOR LIVE ───── */}
+        <Chapter idx="estimator" height="h-[190vh]" refCb={bind(6)}>
+          <div className="container-app">
+            <motion.div {...fade} transition={{ duration: 0.7 }} className="max-w-2xl">
+              <div className="flex items-center gap-4">
+                <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">06</span>
+                <span className="h-px w-14 bg-gradient-to-r from-brand-magenta to-brand-purple" />
+                <span className={mono}>Estimare live</span>
+              </div>
+              <h2 className="mt-5 font-display text-3xl font-semibold sm:text-4xl">
+                Cât ar costa <span className="font-serifd italic text-gradient">site-ul tău?</span>
               </h2>
-              <p className="mx-auto mt-4 max-w-sm text-[14.5px] text-white/75">
-                Răspundem în aceeași zi. Estimarea e gratuită.
+              <p className="mt-3 text-[14px] text-white/70">
+                Bifează ce îți trebuie și vezi estimarea pe loc.
               </p>
-              <Link
-                href="/brief"
-                className="pointer-events-auto mt-9 inline-flex items-center gap-2.5 rounded-full bg-orange-gradient px-9 py-4 text-base font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.05] hover:shadow-[0_0_60px_rgba(255,46,154,0.5)]"
-              >
-                <Zap className="h-5 w-5" />
-                Începe proiectul
-              </Link>
+            </motion.div>
+            <motion.div {...fade} transition={{ duration: 0.7, delay: 0.15 }} className="mt-7">
+              <Estimator />
             </motion.div>
           </div>
         </Chapter>
+
+        {/* ───── 08 FINAL: radiografie + FAQ + presă + CTA ───── */}
+        <section ref={bind(7)} data-chapter="final" className="relative">
+          <div className="container-app space-y-20 py-24">
+            {/* Radiografia afacerii — teaser cu scanner */}
+            <motion.div {...fade} transition={{ duration: 0.7 }} className={`${panel} mx-auto grid max-w-4xl items-center gap-8 lg:grid-cols-2`}>
+              <div>
+                <div className="flex items-center gap-3">
+                  <ScanLine className="h-5 w-5 text-brand-magenta" />
+                  <span className={mono}>Gratuit — 2 minute</span>
+                </div>
+                <h3 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
+                  Radiografia <span className="font-serifd italic text-gradient">afacerii tale.</span>
+                </h3>
+                <p className="mt-3 text-[14px] leading-relaxed text-white/70">
+                  Îți scanăm prezența online și îți arătăm exact unde pierzi clienți:
+                  viteză, Google, securitate, prezență în AI.
+                </p>
+                <Link
+                  href="/service"
+                  className="pointer-events-auto mt-6 inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-[14px] font-semibold text-white shadow-glow-orange transition hover:scale-[1.04]"
+                >
+                  <ScanLine className="h-4 w-4" />
+                  Scanează-ți site-ul gratuit
+                </Link>
+              </div>
+              <div className="relative overflow-hidden rounded-xl border border-white/[0.08] bg-[#0b0a10] p-5">
+                <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-transparent via-brand-magenta/25 to-transparent" />
+                {[
+                  [Gauge, "Viteză de încărcare", "3.8s — lent, pierzi 40% din vizitatori"],
+                  [Search, "Vizibilitate Google", "pagina 4 — clienții nu te găsesc"],
+                  [ShieldCheck, "Securitate & SSL", "2 vulnerabilități găsite"],
+                ].map(([Icon, t, d]: any, i) => (
+                  <div key={t} className={`flex items-start gap-3 py-3 ${i < 2 ? "border-b border-white/[0.06]" : ""}`}>
+                    <Icon className="mt-0.5 h-5 w-5 shrink-0 text-brand-orange" />
+                    <div>
+                      <div className="text-[13px] font-semibold text-white/90">{t}</div>
+                      <div className="text-[12px] text-white/55">{d}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* FAQ compact */}
+            <div className="mx-auto max-w-3xl">
+              <motion.h3 {...fade} transition={{ duration: 0.6 }} className="text-center font-display text-2xl font-bold sm:text-3xl">
+                Întrebări <span className="font-serifd italic text-gradient">frecvente.</span>
+              </motion.h3>
+              <div className="mt-7">
+                <MiniFAQ />
+              </div>
+            </div>
+
+            {/* banda cu rețeaua de presă */}
+            <motion.div {...fade} transition={{ duration: 0.6 }} className="relative overflow-hidden border-y border-white/[0.07] py-4">
+              <div className="flex w-max animate-marquee gap-10" style={{ animationDuration: "30s" }}>
+                {[...Array(2)].flatMap((_, k) =>
+                  ["MEDIA EXPRES", "50 DE ZIARE ÎN TOATĂ ROMÂNIA", "ARTICOLE REALE DESPRE FIRMA TA", "BOTOȘĂNEANUL", "PRESĂ LOCALĂ + NAȚIONALĂ", "AUTORITATE ÎN GOOGLE"].map((t, i) => (
+                    <span key={`${k}-${i}`} className="flex items-center gap-10 font-jmono text-[11px] uppercase tracking-[0.3em] text-white/50">
+                      {t}
+                      <span className="h-1.5 w-1.5 rounded-full bg-orange-gradient" />
+                    </span>
+                  ))
+                )}
+              </div>
+            </motion.div>
+
+            {/* CTA final */}
+            <div className="relative py-10 text-center">
+              <div className={scrim} />
+              <motion.div {...fade} transition={{ duration: 0.8 }}>
+                <span className={mono}>Hai să vorbim</span>
+                <h2 className="mt-5 font-display text-4xl font-semibold sm:text-5xl">
+                  Construim ceva <span className="font-serifd italic text-gradient">memorabil?</span>
+                </h2>
+                <p className="mx-auto mt-4 max-w-sm text-[14.5px] text-white/75">
+                  Răspundem în aceeași zi. Estimarea e gratuită.
+                </p>
+                <Link
+                  href="/brief"
+                  className="pointer-events-auto mt-9 inline-flex items-center gap-2.5 rounded-full bg-orange-gradient px-9 py-4 text-base font-semibold text-white shadow-glow-orange transition-all hover:scale-[1.05] hover:shadow-[0_0_60px_rgba(255,46,154,0.5)]"
+                >
+                  <Zap className="h-5 w-5" />
+                  Începe proiectul
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+          <style>{`@keyframes scanmove{0%{transform:translateY(-40px)}100%{transform:translateY(260px)}}.scanline{animation:scanmove 2.6s ease-in-out infinite alternate}`}</style>
+        </section>
       </div>
+    </div>
+  );
+}
+
+/* FAQ compact pe sticlă — primele 4 întrebări, acordeon */
+const FAQ_ITEMS = [
+  ["Cât durează realizarea unui site?", "Un site de prezentare durează 2-4 săptămâni de la primirea conținutului; magazinele online 4-8 săptămâni, în funcție de complexitate."],
+  ["Ce se întâmplă cu domeniul și hostingul după primul an?", "Primul an sunt incluse gratuit. După, reînnoirea costă 50-80€/an, în funcție de extensie. Te anunțăm cu o lună înainte."],
+  ["Cum se face plata?", "50% avans la începerea proiectului, 50% la livrare. Acceptăm transfer bancar și emitem factură."],
+  ["Pot face modificări după ce site-ul e gata?", "Da — modificările minore în primele 30 de zile sunt gratuite; pentru ulterior recomandăm Administrarea lunară."],
+];
+
+function MiniFAQ() {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <div className="pointer-events-auto space-y-2.5">
+      {FAQ_ITEMS.map(([q, a], i) => (
+        <div key={q} className="overflow-hidden rounded-xl border border-white/[0.08] bg-[#09080e]/80 backdrop-blur-md">
+          <button
+            onClick={() => setOpen(open === i ? null : i)}
+            className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+          >
+            <span className="text-[14px] font-semibold text-white/90">{q}</span>
+            <ChevronDown className={`h-4 w-4 shrink-0 text-brand-magenta transition-transform ${open === i ? "rotate-180" : ""}`} />
+          </button>
+          {open === i ? (
+            <p className="px-5 pb-4 text-[13px] leading-relaxed text-white/65">{a}</p>
+          ) : null}
+        </div>
+      ))}
     </div>
   );
 }
