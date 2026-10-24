@@ -10,6 +10,7 @@ import { siteConfig } from "@/lib/site";
 
 const navLinks = [
   { href: "/despre", label: "Despre", hint: "Cine suntem și cum lucrăm" },
+  { href: "/estimare", label: "Estimare", hint: "Calculezi prețul pe loc, în lei" },
   { href: "/servicii", label: "Servicii", hint: "Site-uri, aplicații, AI, automatizări" },
   { href: "/proiecte", label: "Proiecte", hint: "384+ proiecte livrate" },
   { href: "/site-start", label: "Site Start", hint: "Site-ul tău — 1.500 lei, totul inclus" },
