@@ -21,6 +21,7 @@ import { MagneticButton } from "./ids/effects/MagneticButton";
 import { CustomCursor } from "./ids/effects/CustomCursor";
 import { Marquee as IdsMarquee } from "./ids/extras/Marquee";
 import { PortalScroll, type PortalScene } from "./ids/extras/PortalScroll";
+import { SmoothScrollProvider } from "./ids/extras/SmoothScroll";
 
 const GlowingOrbitalRing = dynamic(
   () => import("./ids/three/ring/GlowingOrbitalRing").then((m) => m.GlowingOrbitalRing),
@@ -124,9 +125,15 @@ function DoorScene({
   const at = highlight ? title.indexOf(highlight) : -1;
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#0a0908]">
+      {/* desktop: imaginea pe tot ecranul, cinematic */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img} alt={title} className="absolute inset-0 h-full w-full object-cover object-top" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(5_5_5/0.55)_0%,rgb(5_5_5/0.25)_40%,rgb(5_5_5/0.9)_100%)]" />
+      <img src={img} alt={title} className="absolute inset-0 hidden h-full w-full object-cover object-top brightness-[0.72] saturate-[0.9] lg:block" />
+      <div className="absolute inset-0 hidden bg-[linear-gradient(180deg,rgb(5_5_5/0.6)_0%,rgb(5_5_5/0.4)_40%,rgb(5_5_5/0.94)_100%)] lg:block" />
+      {/* telefon: site-ul ÎNTREG, în ramă — nimic tăiat */}
+      <div className="absolute inset-x-5 top-[12%] overflow-hidden rounded-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)] lg:hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={img} alt="" className="aspect-[16/11] w-full object-cover object-top" />
+      </div>
       <div className="absolute inset-x-0 bottom-0 p-6 sm:p-12">
         <p className="font-jmono text-[11px] uppercase tracking-[0.3em]" style={{ color: ACCENT }}>
           {eyebrow}
@@ -192,17 +199,17 @@ const DOORS: PortalScene[] = [
     ),
   },
   {
-    id: "programari",
-    label: "Programări online",
+    id: "teona",
+    label: "Asociația Teona Ariana",
     shape: "circle",
     accent: ACCENT,
     content: (
       <DoorScene
-        img="/proiecte/clinica-sf-gheorghe/programare.jpg"
-        eyebrow="Modul construit de la zero"
-        title="Programări online"
-        highlight="online"
-        text="Pacientul alege medicul și ziua; recepția primește totul în panou, instant."
+        img="/proiecte/teona-ariana/home.jpg"
+        eyebrow="ONG · Suceava · livrat 2026"
+        title="Asociația Teona Ariana"
+        highlight="Teona Ariana"
+        text="Tabere RESPIRO și sprijin pentru copii cu nevoi speciale — site cu donații online."
         href="/proiecte"
         ctaLabel="Tot portofoliul"
       />
@@ -351,6 +358,7 @@ const FAQ_ITEMS = [
 export function ImperialHome() {
   return (
     <div className="relative bg-[#050505] text-white">
+      <SmoothScrollProvider><span className="hidden" /></SmoothScrollProvider>
       <CustomCursor size={12} hoverSize={56} blend="difference" />
 
       {/* ───── HERO: inelul orbital de aur + titlul cuvânt cu cuvânt ───── */}
@@ -383,9 +391,11 @@ export function ImperialHome() {
           <div className="mt-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <p className="relative max-w-xl border-l-2 border-transparent pl-6 text-lg font-light leading-relaxed text-white/55 sm:text-xl [border-image:linear-gradient(180deg,#FF6B1A,#FF2E9A,#8B2FF7)_1]">
               Site-uri premium, magazine online și produse SaaS —{" "}
-              <span className="text-white">mișcare cinematică, 3D în timp real</span> și cod
-              care se încarcă instant. Promovate în{" "}
-              <span className="text-white">propria rețea de 50 de ziare</span>.
+              <span className="text-white">mișcare cinematică, 3D în timp real</span>
+              <span className="hidden sm:inline">
+                {" "}și cod care se încarcă instant
+              </span>
+              . Promovate în <span className="text-white">propria rețea de 50 de ziare</span>.
             </p>
             <div className="flex flex-wrap gap-3">
               <MagneticButton strength={0.35}>
@@ -463,7 +473,7 @@ export function ImperialHome() {
             client real.
           </p>
         </div>
-        <PortalScroll scenes={DOORS} accent={ACCENT} label="Intră în proiecte" />
+        <PortalScroll scenes={DOORS} accent={ACCENT} nav={false} label="Intră în proiecte" />
       </section>
 
       {/* ───── Indexul de servicii ───── */}
