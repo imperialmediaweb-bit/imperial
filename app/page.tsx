@@ -1,4 +1,4 @@
-import { HeroSlider } from "@/components/HeroSlider";
+import { HeroCrystal } from "@/components/HeroCrystal";
 import { ToolsSection } from "@/components/ToolsSection";
 import { Services } from "@/components/Services";
 import { Skills } from "@/components/Skills";
@@ -15,7 +15,7 @@ import { FAQ } from "@/components/FAQ";
 export default function HomePage() {
   return (
     <main>
-      <HeroSlider />
+      <HeroCrystal />
       <ToolsSection />
       <Services />
       <Skills />
