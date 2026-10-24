@@ -130,15 +130,15 @@ function Tunnel() {
       <group ref={g}>
         {rings.map((r, i) => (
           <mesh key={i} position={[0, 0, r.z]}>
-            <torusGeometry args={[r.r, 0.032, 8, 64]} />
-            <meshBasicMaterial color={r.c} transparent opacity={0.85} />
+            <torusGeometry args={[r.r, 0.022, 8, 64]} />
+            <meshBasicMaterial color={r.c} transparent opacity={0.62} />
           </mesh>
         ))}
       </group>
       {streaks.map((s, i) => (
         <mesh key={i} position={[s.x, s.y, s.z]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.012, 0.012, s.l, 5]} />
-          <meshBasicMaterial color={s.c} transparent opacity={0.65} />
+          <meshBasicMaterial color={s.c} transparent opacity={0.45} />
         </mesh>
       ))}
       <pointLight position={[0, 0, -38]} intensity={26} color="#FF2E9A" distance={20} />
@@ -175,13 +175,13 @@ function GalleryInner() {
             {/* rama de lumină */}
             <mesh position={[0, 0, -0.02]}>
               <planeGeometry args={[4.85, 3.12]} />
-              <meshBasicMaterial color={c} transparent opacity={0.8} />
+              <meshBasicMaterial color={c} transparent opacity={0.65} />
             </mesh>
             <mesh>
               <planeGeometry args={[4.7, 2.97]} />
               <meshBasicMaterial map={tex} toneMapped={false} />
             </mesh>
-            <pointLight position={[0, 0, 1.6]} intensity={9} color={c} distance={6} />
+            <pointLight position={[0, 0, 1.6]} intensity={6} color={c} distance={6} />
           </group>
         );
       })}
@@ -288,7 +288,7 @@ export function World({
       aria-label="Călătorie 3D prin universul Imperial Media"
     >
       <color attach="background" args={["#050507"]} />
-      <fog attach="fog" args={["#050507", 8, 38]} />
+      <fog attach="fog" args={["#050507", 8, 34]} />
       <ambientLight intensity={0.3} />
       <CameraRig progressRef={progressRef} mapRef={mapRef} />
       <ShardField />

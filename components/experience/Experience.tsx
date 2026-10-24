@@ -22,7 +22,14 @@ const World = dynamic(() => import("./World").then((m) => m.World), { ssr: false
 const Z_STARTS = [8, -24, -70, -118, -144, -156];
 const Z_END = -160;
 
-const mono = "font-jmono text-[10px] uppercase tracking-[0.3em] text-white/45";
+const mono = "font-jmono text-[10px] uppercase tracking-[0.3em] text-white/60";
+
+/* panou de sticlă întunecată sub blocurile de text — efectele rămân vizibile în jur */
+const panel =
+  "rounded-2xl border border-white/[0.06] bg-[#050507]/70 p-7 backdrop-blur-md sm:p-9";
+/* scrim radial pentru textul centrat (intro/final) */
+const scrim =
+  "pointer-events-none absolute -inset-x-28 -inset-y-14 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(5,5,7,0.78)_0%,rgba(5,5,7,0.35)_55%,transparent_78%)]";
 
 function Chapter({
   idx,
@@ -92,10 +99,11 @@ export function Experience() {
       {/* vignetă globală pentru lizibilitate */}
       <div className="pointer-events-none fixed inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.55)_100%)]" />
 
-      <div className="relative z-10">
+      <div className="relative z-10 [text-shadow:0_2px_16px_rgba(0,0,0,0.85)]">
         {/* ───── 01 INTRO ───── */}
         <Chapter idx="intro" height="h-[160vh]" refCb={bind(0)}>
-          <div className="container-app flex flex-col items-center text-center">
+          <div className="container-app relative flex flex-col items-center text-center">
+            <div className={scrim} />
             <motion.div {...fade} transition={{ duration: 0.9 }}>
               <Image
                 src="/brand/logo-round-200.png"
@@ -118,7 +126,7 @@ export function Experience() {
             <motion.p
               {...fade}
               transition={{ duration: 0.9, delay: 0.28 }}
-              className="mt-5 max-w-md text-[15px] leading-relaxed text-white/60 sm:text-base"
+              className="mt-5 max-w-md text-[15px] leading-relaxed text-white/75 sm:text-base"
             >
               Studio de web design & development. Derulează — site-ul ăsta e chiar demonstrația.
             </motion.p>
@@ -156,6 +164,7 @@ export function Experience() {
         {/* ───── 02 TUNELUL / SERVICII ───── */}
         <Chapter idx="servicii" height="h-[190vh]" refCb={bind(1)}>
           <div className="container-app">
+            <div className={`max-w-3xl ${panel}`}>
             <motion.div {...fade} transition={{ duration: 0.7 }}>
               <div className="flex items-center gap-4">
                 <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">01</span>
@@ -166,7 +175,7 @@ export function Experience() {
                 Tot ce îți trebuie, <span className="font-serifd italic text-gradient">sub un singur acoperiș.</span>
               </h2>
             </motion.div>
-            <div className="mt-10 max-w-3xl">
+            <div className="mt-8">
               {[
                 ["01", "Site-uri & aplicații custom", "Next.js — tehnologia Netflix și Nike. De la 699€.", "/creare-site-web"],
                 ["02", "Magazine online", "Plăți cu cardul, AWB automat, facturare. De la 1.200€.", "/creare-magazin-online"],
@@ -186,11 +195,11 @@ export function Experience() {
                     href={href}
                     className="pointer-events-auto group flex items-baseline gap-5 border-b border-white/[0.07] py-4 transition hover:border-brand-magenta/40"
                   >
-                    <span className="font-jmono text-[11px] text-white/35">{n}</span>
+                    <span className="font-jmono text-[11px] text-white/55">{n}</span>
                     <span className="font-display text-lg font-semibold text-text transition group-hover:text-brand-magenta sm:text-xl">
                       {title}
                     </span>
-                    <span className="ml-auto hidden max-w-[260px] text-right text-[12.5px] leading-snug text-white/45 sm:block">
+                    <span className="ml-auto hidden max-w-[260px] text-right text-[12.5px] leading-snug text-white/70 sm:block">
                       {text}
                     </span>
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-white/30 transition group-hover:text-brand-orange" />
@@ -198,13 +207,14 @@ export function Experience() {
                 </motion.div>
               ))}
             </div>
+            </div>
           </div>
         </Chapter>
 
         {/* ───── 03 GALERIA / PROIECTE ───── */}
         <Chapter idx="proiecte" height="h-[190vh]" refCb={bind(2)}>
           <div className="container-app">
-            <motion.div {...fade} transition={{ duration: 0.7 }} className="max-w-md">
+            <motion.div {...fade} transition={{ duration: 0.7 }} className={`max-w-md ${panel}`}>
               <div className="flex items-center gap-4">
                 <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">02</span>
                 <span className="h-px w-14 bg-gradient-to-r from-brand-magenta to-brand-purple" />
@@ -213,7 +223,7 @@ export function Experience() {
               <h2 className="mt-5 font-display text-3xl font-semibold sm:text-4xl">
                 Treci prin <span className="font-serifd italic text-gradient">galeria lucrărilor.</span>
               </h2>
-              <p className="mt-4 text-[14.5px] leading-relaxed text-white/55">
+              <p className="mt-4 text-[14.5px] leading-relaxed text-white/75">
                 Portalurile din jur sunt proiecte reale, livrate — clinici, agenții, branduri.
                 384+ până acum.
               </p>
@@ -231,6 +241,7 @@ export function Experience() {
         {/* ───── 04 FIRUL / PROCES ───── */}
         <Chapter idx="proces" height="h-[160vh]" refCb={bind(3)}>
           <div className="container-app">
+            <div className={`max-w-4xl ${panel}`}>
             <motion.div {...fade} transition={{ duration: 0.7 }}>
               <div className="flex items-center gap-4">
                 <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">03</span>
@@ -241,7 +252,7 @@ export function Experience() {
                 De la idee la lansare, <span className="font-serifd italic text-gradient">pe un singur fir.</span>
               </h2>
             </motion.div>
-            <div className="mt-12 grid max-w-4xl gap-8 sm:grid-cols-4">
+            <div className="mt-10 grid gap-8 sm:grid-cols-4">
               {[
                 ["Pas 01", "Consultanță", "Identificăm nevoile și propunem soluția potrivită."],
                 ["Pas 02", "Design", "Modele și design personalizat pentru brandul tău."],
@@ -257,9 +268,10 @@ export function Experience() {
                 >
                   <span className={mono}>{k}</span>
                   <h3 className="mt-2 font-display text-lg font-bold">{t}</h3>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-white/50">{d}</p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-white/70">{d}</p>
                 </motion.div>
               ))}
+            </div>
             </div>
           </div>
         </Chapter>
@@ -289,10 +301,10 @@ export function Experience() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, margin: "-20% 0px -20% 0px" }}
                   transition={{ duration: 0.55, delay: i * 0.1 }}
-                  className={`pointer-events-auto relative rounded-2xl border p-6 backdrop-blur-sm ${
+                  className={`pointer-events-auto relative rounded-2xl border p-6 backdrop-blur-md ${
                     featured
-                      ? "border-brand-magenta/50 bg-gradient-to-b from-brand-magenta/[0.1] to-brand-purple/[0.05]"
-                      : "border-white/10 bg-white/[0.03]"
+                      ? "border-brand-magenta/50 bg-[#0d0812]/85"
+                      : "border-white/10 bg-[#0a090f]/80"
                   }`}
                 >
                   {featured ? (
@@ -305,7 +317,7 @@ export function Experience() {
                   <div className="mt-1 text-[11px] text-white/40">{per}</div>
                   <ul className="mt-5 space-y-2">
                     {(feats as string[]).map((f) => (
-                      <li key={f} className="flex items-baseline gap-2.5 text-[13px] text-white/55">
+                      <li key={f} className="flex items-baseline gap-2.5 text-[13px] text-white/70">
                         <span className="h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-orange-gradient" />
                         {f}
                       </li>
@@ -329,13 +341,14 @@ export function Experience() {
 
         {/* ───── 06 FINAL / CTA ───── */}
         <Chapter idx="final" height="h-[130vh]" refCb={bind(5)}>
-          <div className="container-app text-center">
+          <div className="container-app relative text-center">
+            <div className={scrim} />
             <motion.div {...fade} transition={{ duration: 0.8 }}>
               <span className={mono}>Hai să vorbim</span>
               <h2 className="mt-5 font-display text-4xl font-semibold sm:text-5xl">
                 Construim ceva <span className="font-serifd italic text-gradient">memorabil?</span>
               </h2>
-              <p className="mx-auto mt-4 max-w-sm text-[14.5px] text-white/55">
+              <p className="mx-auto mt-4 max-w-sm text-[14.5px] text-white/75">
                 Răspundem în aceeași zi. Estimarea e gratuită.
               </p>
               <Link
