@@ -18,7 +18,7 @@ import { useReducedMotion } from "./ids/hooks";
 import { MagneticButton } from "./ids/effects/MagneticButton";
 import { NumberTicker } from "./effects/NumberTicker";
 import { Zap } from "lucide-react";
-import { Mark } from "./Logo";
+import Image from "next/image";
 
 const FloatingRocks = dynamic(
   () => import("./ids/three/rocks/FloatingRocks").then((m) => m.FloatingRocks),
@@ -137,7 +137,14 @@ export function HeroCrystal() {
         {/* LOGO-ul ca vedetă: sigla + wordmark ca în identitate, slogan mic */}
         <LineReveal className="flex flex-col items-center lg:items-start">
           <span data-line className="block">
-            <Mark className="h-24 w-24 drop-shadow-[0_0_28px_rgba(255,46,154,0.45)] sm:h-28 sm:w-28" />
+            <Image
+              src="/brand/logo-round-512.png"
+              alt="Imperial Media"
+              width={512}
+              height={512}
+              priority
+              className="h-28 w-28 rounded-full drop-shadow-[0_0_30px_rgba(255,46,154,0.5)] sm:h-32 sm:w-32"
+            />
           </span>
           <span data-line className="text-chrome mt-6 block font-brand text-[clamp(1.7rem,3.4vw,3rem)] tracking-[0.14em]">
             IMPERIAL

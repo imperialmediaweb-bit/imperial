@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 // Logo-ul NOU — recreat vectorial după identitatea rotundă: inel în gradientul
 // foc→magenta→violet pe negru, sigla-coroană angulară în același gradient,
@@ -70,7 +71,14 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       aria-label="Imperial Media — Tu ai ideea. Noi o aducem la viață."
     >
       <span className="relative inline-block">
-        <Mark className={`${mark} drop-shadow-[0_0_14px_rgba(255,46,154,0.35)] transition duration-300 group-hover:drop-shadow-[0_0_22px_rgba(255,46,154,0.6)]`} />
+        <Image
+          src="/brand/logo-round-96.png"
+          alt=""
+          width={96}
+          height={96}
+          priority
+          className={`${mark} rounded-full drop-shadow-[0_0_14px_rgba(255,46,154,0.35)] transition duration-300 group-hover:drop-shadow-[0_0_22px_rgba(255,46,154,0.6)]`}
+        />
       </span>
       <span className="leading-none">
         <span className={`block font-display font-black uppercase tracking-[0.08em] text-text ${word}`}>
