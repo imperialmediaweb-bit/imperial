@@ -15,7 +15,7 @@ const tools = [
     href: "/brief",
     cta: "Cere estimare →",
     accent: "from-brand-orange to-brand-magenta",
-    wash: "from-brand-orange/[0.22] via-brand-magenta/[0.08] to-transparent",
+    wash: "from-brand-orange/[0.14] via-brand-magenta/[0.08] to-transparent",
     glow: "group-hover:bg-brand-orange/30",
   },
   {
@@ -26,7 +26,7 @@ const tools = [
     href: "/consultanta",
     cta: "Află unde greșești →",
     accent: "from-brand-magenta to-brand-purple",
-    wash: "from-brand-magenta/[0.2] via-brand-purple/[0.08] to-transparent",
+    wash: "from-brand-magenta/[0.13] via-brand-purple/[0.08] to-transparent",
     glow: "group-hover:bg-brand-purple/30",
   },
   {
@@ -37,7 +37,7 @@ const tools = [
     href: "/audit",
     cta: "Scanează gratuit →",
     accent: "from-brand-purple to-brand-glow",
-    wash: "from-brand-purple/[0.22] via-brand-magenta/[0.07] to-transparent",
+    wash: "from-brand-purple/[0.14] via-brand-magenta/[0.07] to-transparent",
     glow: "group-hover:bg-green-500/30",
   },
 ];

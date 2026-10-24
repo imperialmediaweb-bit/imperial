@@ -236,6 +236,12 @@ function HomepageProjectsGrid({ items }: { items: ImportedProject[] }) {
             className="group w-[280px] shrink-0 snap-start overflow-hidden rounded-2xl border border-bg-border glass-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 sm:w-[320px]"
           >
             <div className="relative aspect-[16/10] overflow-hidden border-b border-white/5 bg-bg-soft">
+              <div className={`absolute inset-0 bg-gradient-to-br ${FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length]} opacity-60`} />
+              <div className="absolute inset-0 grid place-items-center">
+                <span className="font-display text-4xl font-black text-white/70">
+                  {p.title.split(" ").filter(w => /[A-ZĂÂÎȘȚ]/.test(w[0] ?? "")).map(w => w[0]).slice(0, 2).join("")}
+                </span>
+              </div>
               <div className="shot-img absolute inset-0"><ProjectImage p={p} big={false} /></div>
               <div className="shot-fade" />
             </div>

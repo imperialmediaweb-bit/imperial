@@ -29,7 +29,7 @@ const steps = [
 
 function StepCard({ step, idx }: { step: (typeof steps)[number]; idx: number }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-bg-border glass-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 lg:w-[380px] lg:shrink-0 lg:p-8">
+    <div className="group relative overflow-hidden rounded-2xl border border-bg-border glass-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 lg:p-8">
       {/* numărul uriaș din fundal */}
       <span className="absolute -right-4 -top-6 font-display text-8xl font-black text-white/[0.04] lg:text-9xl">
         0{idx + 1}
