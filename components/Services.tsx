@@ -20,7 +20,7 @@ const small = [
     wash: "from-brand-orange/[0.18] via-brand-magenta/[0.06] to-transparent",
     icon: ShoppingBag,
     name: "Magazine online",
-    text: "Plăți cu cardul, AWB automat la curieri, facturare integrată. De la 1.200€.",
+    text: "Plăți cu cardul, AWB automat la curieri, facturare integrată. De la 6.000 lei.",
     href: "/creare-magazin-online",
   },
   {
@@ -92,7 +92,7 @@ export function Services() {
                   </p>
                   <ul className="mt-5 space-y-2 text-sm text-text-muted">
                     <li>· Site Start — <strong className="text-text">1.500 lei</strong>, gata în câteva zile</li>
-                    <li>· Site de prezentare complet — de la <strong className="text-text">699€</strong></li>
+                    <li>· Site de prezentare complet — de la <strong className="text-text">3.500 lei</strong></li>
                     <li>· Platforme, SaaS, programări, portaluri — la cerere</li>
                   </ul>
                 </div>

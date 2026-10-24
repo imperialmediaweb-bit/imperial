@@ -21,8 +21,8 @@ export const packages: Package[] = [
   {
     key: "website",
     name: "Website Prezentare",
-    price: "699 €",
-    priceNote: "de la",
+    price: "3.500 lei",
+    priceNote: "de la (≈ 699 €)",
     popular: true,
     highlight: "Cel mai popular",
     features: [
@@ -37,8 +37,8 @@ export const packages: Package[] = [
   {
     key: "shop",
     name: "Magazin Online",
-    price: "1200 €",
-    priceNote: "de la",
+    price: "6.000 lei",
+    priceNote: "de la (≈ 1.200 €)",
     features: [
       "20 produse listate",
       "Design responsive",
@@ -53,8 +53,8 @@ export const packages: Package[] = [
   {
     key: "promo",
     name: "Promovare",
-    price: "300 €",
-    priceNote: "campanie",
+    price: "1.500 lei",
+    priceNote: "campanie (≈ 300 €)",
     highlight: "Rețeaua Media Expres",
     features: [
       "Articol publicat în 50+ ziare online",
@@ -70,7 +70,7 @@ export const packages: Package[] = [
   {
     key: "admin",
     name: "Administrare",
-    price: "50 €",
+    price: "100 lei",
     priceUnit: "/lună",
     priceNote: "de la",
     features: [

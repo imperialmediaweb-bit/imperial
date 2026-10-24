@@ -15,8 +15,8 @@ type TypeKey = "start" | "prezentare" | "magazin";
 
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
   { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, gata în câteva zile" },
-  { key: "prezentare", name: "Site de prezentare", base: 699, cur: "€", note: "pagini nelimitate, panou propriu" },
-  { key: "magazin", name: "Magazin online", base: 1200, cur: "€", note: "plăți card, AWB, facturare" },
+  { key: "prezentare", name: "Site de prezentare", base: 3500, cur: "lei", note: "pagini nelimitate, panou propriu — ≈ 699 €" },
+  { key: "magazin", name: "Magazin online", base: 6000, cur: "lei", note: "plăți card, AWB, facturare — ≈ 1.200 €" },
 ];
 
 // adaosuri orientative per monedă [lei, €]; monthly = se plătește lunar
