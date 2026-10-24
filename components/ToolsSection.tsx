@@ -13,7 +13,7 @@ const tools = [
       "Spune-ne ce vrei (scris sau prin voce) și primești estimare orientativă pe loc. AI-ul adaptează întrebările pe industria ta.",
     href: "/brief",
     cta: "Cere estimare →",
-    accent: "from-brand-orange to-brand-orangeDark",
+    accent: "from-brand-orange to-brand-magenta",
     glow: "group-hover:bg-brand-orange/30",
   },
   {
@@ -23,7 +23,7 @@ const tools = [
       "Nu știi ce ai nevoie? AI-ul analizează afacerea ta și-ți spune exact unde pierzi clienți: site, social media, SEO, branding.",
     href: "/consultanta",
     cta: "Află unde greșești →",
-    accent: "from-brand-purple to-brand-glow",
+    accent: "from-brand-magenta to-brand-purple",
     glow: "group-hover:bg-brand-purple/30",
   },
   {
@@ -33,7 +33,7 @@ const tools = [
       "Ai deja un site? Introdu URL-ul și primești scor + probleme + recomandări pe 5 categorii: viteză, mobile, SEO, securitate, design.",
     href: "/audit",
     cta: "Scanează gratuit →",
-    accent: "from-green-500 to-emerald-600",
+    accent: "from-brand-purple to-brand-glow",
     glow: "group-hover:bg-green-500/30",
   },
 ];

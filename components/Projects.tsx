@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { importedProjects, type ImportedProject } from "@/lib/projects-data";
 import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-overrides";
@@ -194,30 +194,68 @@ export function ProjectsGrid({
   );
 }
 
-// Layout dedicat homepage: 4 carduri uniform pe rând (1×4 desktop, 2×2 tablet,
-// 1 coloană mobile). Fără bento cycle aici — bento e doar pe /proiecte.
+// Layout dedicat homepage: card CURAT — screenshotul sus în ramă, textul sub el
+// (fără text suprapus peste imaginea site-ului).
 function HomepageProjectsGrid({ items }: { items: ImportedProject[] }) {
+  const scroller = useRef<HTMLDivElement>(null);
+  const slide = (dir: number) => {
+    const el = scroller.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * (el.clientWidth * 0.8), behavior: "smooth" });
+  };
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="relative">
+      <button
+        type="button"
+        aria-label="Înapoi"
+        onClick={() => slide(-1)}
+        className="absolute -left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur transition hover:border-brand-orange md:grid"
+      >
+        ←
+      </button>
+      <button
+        type="button"
+        aria-label="Înainte"
+        onClick={() => slide(1)}
+        className="absolute -right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-black/60 text-white backdrop-blur transition hover:border-brand-orange md:grid"
+      >
+        →
+      </button>
+    <div ref={scroller} className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((p, idx) => {
-        const grad = FALLBACK_GRADIENTS[idx % FALLBACK_GRADIENTS.length];
+        const cat = p.categories[0] ?? "Web Design";
+        const host = p.externalUrl ? new URL(p.externalUrl).hostname.replace("www.", "") : null;
         return (
-          <ProjectCard
+          <motion.a
             key={p.key + idx}
-            p={p}
-            idx={idx}
-            span={{ col: "", row: "aspect-[4/3]", big: false }}
-            grad={grad}
-          />
+            href={`/proiecte/${p.slug}`}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: (idx % 4) * 0.07 }}
+            className="group w-[280px] shrink-0 snap-start overflow-hidden rounded-2xl border border-bg-border glass-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 sm:w-[320px]"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden border-b border-white/5 bg-bg-soft">
+              <ProjectImage p={p} big={false} />
+            </div>
+            <div className="p-5">
+              <span className="font-jmono text-[10px] uppercase tracking-wider text-brand-magenta">{cat}</span>
+              <h3 className="mt-1.5 font-display text-base font-bold leading-snug text-text group-hover:text-brand-orangeLight">
+                {p.title}
+              </h3>
+              {host && <p className="mt-1 text-[11px] text-text-subtle">{host}</p>}
+            </div>
+          </motion.a>
         );
       })}
+    </div>
     </div>
   );
 }
 
 export function Projects() {
   // Pe homepage: cele mai recente 4 proiecte (sortate după an descrescător)
-  const latest = sortProjectsNewestFirst(importedProjects).slice(0, 4);
+  const latest = sortProjectsNewestFirst(importedProjects).slice(0, 8);
 
   return (
     <section id="proiecte" className="section relative">

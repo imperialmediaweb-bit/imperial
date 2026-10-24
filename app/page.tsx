@@ -1,9 +1,7 @@
 import { HeroCrystal } from "@/components/HeroCrystal";
 import { ToolsSection } from "@/components/ToolsSection";
 import { Services } from "@/components/Services";
-import { Skills } from "@/components/Skills";
 import { Projects } from "@/components/Projects";
-import { Marquee } from "@/components/Marquee";
 import { HowItWorks } from "@/components/HowItWorks";
 import { PricingCards } from "@/components/PricingCards";
 import { MediaExpresBonus } from "@/components/MediaExpresBonus";
@@ -18,9 +16,7 @@ export default function HomePage() {
       <HeroCrystal />
       <ToolsSection />
       <Services />
-      <Skills />
       <Projects />
-      <Marquee />
       <HowItWorks />
       <PricingCards />
       <MediaExpresBonus />

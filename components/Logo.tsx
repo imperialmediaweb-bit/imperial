@@ -4,7 +4,7 @@ import Link from "next/link";
 // foc→magenta→violet pe negru, sigla-coroană angulară în același gradient,
 // wordmark „IMPERIAL MEDIA” alături. SVG = crisp la orice mărime.
 
-function Mark({ className }: { className?: string }) {
+export function Mark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
       <defs>

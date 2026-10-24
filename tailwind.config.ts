@@ -34,6 +34,7 @@ const config: Config = {
         display: ["var(--font-archivo)", "Archivo", "Inter", "system-ui", "sans-serif"],
         serifd: ["var(--font-instrument)", "Georgia", "serif"],
         jmono: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
+        brand: ["var(--font-michroma)", "Archivo", "sans-serif"],
       },
       backgroundImage: {
         "hero-gradient":

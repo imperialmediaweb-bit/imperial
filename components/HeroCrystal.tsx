@@ -18,6 +18,7 @@ import { useReducedMotion } from "./ids/hooks";
 import { MagneticButton } from "./ids/effects/MagneticButton";
 import { NumberTicker } from "./effects/NumberTicker";
 import { Zap } from "lucide-react";
+import { Mark } from "./Logo";
 
 const FloatingRocks = dynamic(
   () => import("./ids/three/rocks/FloatingRocks").then((m) => m.FloatingRocks),
@@ -132,16 +133,27 @@ export function HeroCrystal() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#050507] to-transparent" />
 
       {/* conținutul */}
-      <div className="container-app relative z-10 flex h-full flex-col items-start justify-center">
-        <p className="font-jmono text-[11px] uppercase tracking-[0.32em] text-brand-magenta">
-          Imperial Media — studio de design & development
-        </p>
-        <LineReveal className="mt-5 max-w-[18ch] font-display text-[clamp(1.9rem,4.4vw,4.2rem)] font-black uppercase leading-[0.98] tracking-tight">
-          <span data-line className="text-chrome block">Site-uri pe care oamenii</span>
-          <span data-line className="text-gradient block">nu le uită.</span>
+      <div className="container-app relative z-10 flex h-full flex-col items-center justify-center lg:items-start">
+        {/* LOGO-ul ca vedetă: sigla + wordmark ca în identitate, slogan mic */}
+        <LineReveal className="flex flex-col items-center lg:items-start">
+          <span data-line className="block">
+            <Mark className="h-24 w-24 drop-shadow-[0_0_28px_rgba(255,46,154,0.45)] sm:h-28 sm:w-28" />
+          </span>
+          <span data-line className="text-chrome mt-6 block font-brand text-[clamp(1.7rem,3.4vw,3rem)] tracking-[0.14em]">
+            IMPERIAL
+          </span>
+          <span data-line className="mt-2 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.55em] text-white/60">
+            <span className="h-px w-10 bg-gradient-to-r from-transparent via-brand-orange to-brand-magenta" />
+            MEDIA
+            <span className="h-px w-10 bg-gradient-to-r from-brand-magenta via-brand-purple to-transparent" />
+          </span>
+          <span data-line className="mt-6 block max-w-md text-center text-[15px] leading-relaxed text-white/65 sm:text-[17px] lg:text-left">
+            Site-uri pe care oamenii <span className="text-gradient font-semibold">nu le uită</span> —
+            construite de la zero, cu 3D, mișcare și cod rapid.
+          </span>
         </LineReveal>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
           <MagneticButton strength={0.4}>
             <Link
               href="/brief"
@@ -160,7 +172,7 @@ export function HeroCrystal() {
           </Link>
         </div>
 
-        <div className="mt-10 flex items-start gap-8 sm:gap-12">
+        <div className="mt-10 flex items-start justify-center gap-8 sm:gap-12 lg:justify-start">
           {[
             { value: 384, suffix: "+", label: "proiecte" },
             { value: 200, suffix: "+", label: "clienți" },

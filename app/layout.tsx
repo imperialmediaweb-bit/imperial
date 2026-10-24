@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Archivo, Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo, Instrument_Serif, Inter, JetBrains_Mono, Michroma } from "next/font/google";
 import "./globals.css";
 
 // Fonturile sunt servite de pe domeniul nostru (next/font) — fără cereri către
@@ -22,6 +22,12 @@ const jetbrains = JetBrains_Mono({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500"],
   variable: "--font-jetbrains",
+  display: "swap",
+});
+const michroma = Michroma({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-michroma",
   display: "swap",
 });
 const archivo = Archivo({
@@ -97,7 +103,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ro" className={`${inter.variable} ${archivo.variable} ${instrument.variable} ${jetbrains.variable}`}>
+    <html lang="ro" className={`${inter.variable} ${archivo.variable} ${instrument.variable} ${jetbrains.variable} ${michroma.variable}`}>
       <head>
         {/* Font preconnect — elimină latența DNS/TCP pentru Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />

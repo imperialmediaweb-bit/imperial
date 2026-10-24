@@ -29,7 +29,7 @@ function Row({ imgs, reverse }: { imgs: string[]; reverse?: boolean }) {
       {all.map((src, i) => (
         <div
           key={i}
-          className="relative h-32 w-52 shrink-0 overflow-hidden rounded-xl border border-bg-border/80 opacity-80 saturate-[0.35] transition-all duration-300 hover:opacity-100 hover:saturate-100 hover:border-brand-orange/50 sm:h-40 sm:w-64"
+          className="relative h-32 w-52 shrink-0 overflow-hidden rounded-xl border border-bg-border/80 opacity-95 saturate-100 transition-all duration-300 hover:opacity-100 hover:border-brand-orange/50 sm:h-40 sm:w-64"
         >
           <Image src={src} alt="Proiect livrat Imperial Media" fill sizes="260px" className="object-cover object-top" />
         </div>

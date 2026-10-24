@@ -119,23 +119,40 @@ html {
     0 0 30px rgba(255, 107, 26, 0.08);
 }
 
-/* ───── Neon Glass: cardul de sticlă cu fir de gradient sus ───── */
+/* ───── Neon Glass v2: sticlă premium cu bordură gradient reală ───── */
 .glass-card {
   position: relative;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015));
+  border-color: transparent !important;
+  background:
+    linear-gradient(160deg, rgba(23, 22, 30, 0.92), rgba(12, 12, 17, 0.96)) padding-box,
+    linear-gradient(135deg, rgba(255, 107, 26, 0.5), rgba(255, 46, 154, 0.34) 40%, rgba(139, 47, 247, 0.5)) border-box;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 18px 50px -18px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
-.glass-card::before {
+.glass-card:hover {
+  background:
+    linear-gradient(160deg, rgba(28, 26, 38, 0.94), rgba(14, 13, 20, 0.97)) padding-box,
+    linear-gradient(135deg, rgba(255, 107, 26, 0.85), rgba(255, 46, 154, 0.7) 40%, rgba(139, 47, 247, 0.85)) border-box;
+  box-shadow:
+    0 24px 60px -16px rgba(0, 0, 0, 0.85),
+    0 0 42px rgba(255, 46, 154, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+/* ───── Lumină ambientală în secțiuni — negrul nu mai e mort ───── */
+.section::after {
   content: "";
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 2px;
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
-  background: linear-gradient(90deg, transparent, rgba(255,107,26,.65) 25%, rgba(255,46,154,.65) 50%, rgba(139,47,247,.65) 75%, transparent);
-  opacity: .55;
+  inset: 0;
+  z-index: -1;
   pointer-events: none;
+  background:
+    radial-gradient(42% 50% at 85% 8%, rgba(139, 47, 247, 0.07) 0%, transparent 70%),
+    radial-gradient(38% 45% at 10% 95%, rgba(255, 107, 26, 0.06) 0%, transparent 70%),
+    radial-gradient(30% 35% at 50% 50%, rgba(255, 46, 154, 0.025) 0%, transparent 70%);
 }
 
 /* Text gradient pentru titluri — gradientul semnătură din banner */
