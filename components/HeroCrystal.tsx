@@ -8,6 +8,9 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Sparkles } from "@react-three/drei";
+import type { Group } from "three";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { gsap, registerGsap, useGSAP } from "./ids/lib/gsap";
@@ -47,27 +50,38 @@ function LineReveal({ children, className }: { children: React.ReactNode; classN
 
 /* conținut 3D suplimentar: cristalul central glossy + wireframe (igloo + basement) */
 function CrystalCore() {
+  const g = useRef<Group>(null);
+  useFrame((_, dt) => {
+    if (g.current) g.current.rotation.y += dt * 0.35;
+  });
   return (
     <>
+      <group ref={g} position={[2.9, 0.3, 2]}>
       {/* cristalul central — obsidian lucios cu reflexe */}
-      <mesh position={[2.6, 0.4, 2]} rotation={[0.4, 0.8, 0.1]}>
-        <icosahedronGeometry args={[1.5, 0]} />
+      <mesh rotation={[0.4, 0.8, 0.1]}>
+        <icosahedronGeometry args={[2, 0]} />
         <meshPhysicalMaterial
-          color="#14101c"
-          metalness={0.5}
-          roughness={0.08}
+          color="#1a1424"
+          metalness={0.45}
+          roughness={0.07}
           clearcoat={1}
           clearcoatRoughness={0.05}
-          emissive="#2a0f33"
-          emissiveIntensity={0.4}
+          emissive="#3a1245"
+          emissiveIntensity={0.55}
           flatShading
         />
       </mesh>
       {/* muchiile neon ale cristalului */}
-      <mesh position={[2.6, 0.4, 2]} rotation={[0.4, 0.8, 0.1]} scale={1.004}>
-        <icosahedronGeometry args={[1.5, 0]} />
-        <meshBasicMaterial color="#FF2E9A" wireframe transparent opacity={0.5} />
+      <mesh rotation={[0.4, 0.8, 0.1]} scale={1.004}>
+        <icosahedronGeometry args={[2, 0]} />
+        <meshBasicMaterial color="#FF2E9A" wireframe transparent opacity={0.6} />
       </mesh>
+      {/* lumina din interiorul cristalului */}
+      <pointLight position={[0, 0, 0]} intensity={24} color="#FF2E9A" distance={8} />
+      </group>
+      {/* pulbere de scântei aurii + violete prin toată scena */}
+      <Sparkles count={120} scale={14} size={2.4} speed={0.5} color="#FFB020" opacity={0.75} />
+      <Sparkles count={70} scale={16} size={2} speed={0.35} color="#B06CFF" opacity={0.55} />
       {/* gridul wireframe de sub scenă — basement vibe */}
       <gridHelper args={[60, 48, "#3a1430", "#160a1c"]} position={[0, -4.2, 0]} />
       {/* lumini suplimentare în culorile brandului */}
@@ -89,11 +103,11 @@ export function HeroCrystal() {
       {/* scena 3D (desktop) / posterul clipului (mobil) */}
       {isDesktop ? (
         <FloatingRocks
-          count={26}
+          count={36}
           spread={8}
           size={0.7}
-          speed={0.8}
-          drift={0.5}
+          speed={1.25}
+          drift={0.8}
           roughness={0.12}
           color="#0d0b12"
           accent="#FF2E9A"
@@ -122,9 +136,8 @@ export function HeroCrystal() {
         <p className="font-jmono text-[11px] uppercase tracking-[0.32em] text-brand-magenta">
           Imperial Media — studio de design & development
         </p>
-        <LineReveal className="mt-5 max-w-[15ch] font-display text-[clamp(2.3rem,6.5vw,6.2rem)] font-black uppercase leading-[0.98] tracking-tight">
-          <span data-line className="text-chrome block">Site-uri pe care</span>
-          <span data-line className="text-chrome block">oamenii</span>
+        <LineReveal className="mt-5 max-w-[18ch] font-display text-[clamp(1.9rem,4.4vw,4.2rem)] font-black uppercase leading-[0.98] tracking-tight">
+          <span data-line className="text-chrome block">Site-uri pe care oamenii</span>
           <span data-line className="text-gradient block">nu le uită.</span>
         </LineReveal>
 
