@@ -96,7 +96,7 @@ export function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="group relative flex h-full flex-col rounded-2xl border border-bg-border bg-bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50"
+              className="group relative flex h-full flex-col rounded-2xl border border-bg-border glass-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50"
             >
               <Quote className="absolute right-5 top-5 h-8 w-8 text-brand-orange/15" />
 

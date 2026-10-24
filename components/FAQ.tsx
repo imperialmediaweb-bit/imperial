@@ -65,7 +65,7 @@ export function FAQ() {
             return (
               <div
                 key={it.q}
-                className="overflow-hidden rounded-2xl border border-bg-border bg-bg-card"
+                className="overflow-hidden rounded-2xl border border-bg-border glass-card"
               >
                 <button
                   onClick={() => setOpen(isOpen ? null : idx)}

@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, X, ArrowRight, Crown } from "lucide-react";
+import { Check, X, ArrowRight, Crown, Globe2, ShoppingBag, Megaphone, Wrench } from "lucide-react";
+
+const ICONS = { website: Globe2, shop: ShoppingBag, promo: Megaphone, admin: Wrench } as const;
 import { packages } from "@/lib/packages";
 
 export function PricingCards() {
@@ -27,7 +29,7 @@ export function PricingCards() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className={`group relative flex flex-col rounded-2xl border bg-bg-card bg-card-gradient p-7 shadow-card transition-all duration-300 hover:-translate-y-1 ${
+              className={`group relative flex flex-col rounded-2xl border glass-card bg-card-gradient p-7 shadow-card transition-all duration-300 hover:-translate-y-1 ${
                 pkg.popular
                   ? "border-brand-orange/60 shadow-glow-orange"
                   : "border-bg-border hover:border-brand-purple/50"
@@ -40,6 +42,14 @@ export function PricingCards() {
                 </span>
               )}
 
+              {(() => {
+                const Icon = ICONS[pkg.key as keyof typeof ICONS] ?? Globe2;
+                return (
+                  <span className="mb-4 grid h-12 w-12 place-items-center rounded-xl bg-orange-gradient shadow-glow-orange">
+                    <Icon className="h-6 w-6 text-white" strokeWidth={1.8} />
+                  </span>
+                );
+              })()}
               <h3 className="font-display text-lg font-bold text-text">
                 {pkg.name}
               </h3>

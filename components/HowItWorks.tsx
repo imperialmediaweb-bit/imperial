@@ -29,7 +29,7 @@ const steps = [
 
 function StepCard({ step, idx }: { step: (typeof steps)[number]; idx: number }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-bg-border bg-bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 lg:w-[380px] lg:shrink-0 lg:p-8">
+    <div className="group relative overflow-hidden rounded-2xl border border-bg-border glass-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-magenta/50 lg:w-[380px] lg:shrink-0 lg:p-8">
       {/* numărul uriaș din fundal */}
       <span className="absolute -right-4 -top-6 font-display text-8xl font-black text-white/[0.04] lg:text-9xl">
         0{idx + 1}
@@ -116,7 +116,7 @@ export function HowItWorks() {
               <StepCard key={step.title} step={step} idx={idx} />
             ))}
             {/* cartea finală — CTA */}
-            <div className="relative flex w-[380px] shrink-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-brand-magenta/30 bg-bg-card p-8">
+            <div className="relative flex w-[380px] shrink-0 flex-col items-start justify-center overflow-hidden rounded-2xl border border-brand-magenta/30 glass-card p-8">
               <div className="pointer-events-none absolute inset-0 bg-hero-gradient opacity-60" />
               <h3 className="relative font-display text-2xl font-black uppercase text-text">
                 Gata de <span className="text-gradient">start?</span>

@@ -67,7 +67,7 @@ export function Services() {
             transition={{ duration: 0.5 }}
             className="sm:col-span-2 lg:row-span-2"
           >
-            <TiltCard className="group h-full rounded-2xl border border-bg-border bg-bg-card bg-card-gradient transition-all hover:border-brand-orange/50">
+            <TiltCard className="group h-full rounded-2xl border border-bg-border glass-card bg-card-gradient transition-all hover:border-brand-orange/50">
               <a href="/creare-site-web" className="relative flex h-full flex-col justify-between overflow-hidden p-8">
                 <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-orange/10 blur-3xl transition-all duration-500 group-hover:bg-brand-orange/25" />
                 <div className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-brand-purple/10 blur-3xl" />
@@ -108,7 +108,7 @@ export function Services() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, delay: 0.06 + idx * 0.06 }}
             >
-              <TiltCard className="group h-full rounded-2xl border border-bg-border bg-bg-card bg-card-gradient transition-all hover:border-brand-orange/50">
+              <TiltCard className="group h-full rounded-2xl border border-bg-border glass-card bg-card-gradient transition-all hover:border-brand-orange/50">
                 <a href={s.href} className="relative block h-full overflow-hidden p-6">
                   <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-brand-orange/0 blur-3xl transition-all duration-500 group-hover:bg-brand-orange/20" />
                   <div className="relative">

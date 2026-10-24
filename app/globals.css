@@ -119,6 +119,25 @@ html {
     0 0 30px rgba(255, 107, 26, 0.08);
 }
 
+/* ───── Neon Glass: cardul de sticlă cu fir de gradient sus ───── */
+.glass-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(90deg, transparent, rgba(255,107,26,.65) 25%, rgba(255,46,154,.65) 50%, rgba(139,47,247,.65) 75%, transparent);
+  opacity: .55;
+  pointer-events: none;
+}
+
 /* Text gradient pentru titluri — gradientul semnătură din banner */
 .text-gradient {
   background: linear-gradient(110deg, #ff6b1a 0%, #ff2e9a 55%, #8b2ff7 100%);

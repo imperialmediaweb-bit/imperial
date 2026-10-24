@@ -53,7 +53,7 @@ export function BlogPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-bg-border bg-bg-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50"
+              className="group flex flex-col overflow-hidden rounded-2xl border border-bg-border glass-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50"
             >
               <div className="relative aspect-[16/10] overflow-hidden">
                 <div

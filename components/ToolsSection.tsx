@@ -66,7 +66,7 @@ export function ToolsSection() {
               <ShineCard className="h-full rounded-2xl">
                 <Link
                   href={t.href}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-bg-border bg-bg-card bg-card-gradient p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-bg-border glass-card bg-card-gradient p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
                 >
                   <div className={`absolute -right-12 -top-12 h-40 w-40 rounded-full bg-transparent blur-3xl transition-all duration-500 ${t.glow}`} />
 
