@@ -3,7 +3,7 @@
 
 import { siteConfig } from "./site";
 import { type Config, configHtml, configQuery, configSummary } from "./configuratie";
-import { PRAG_AVANS } from "./contract";
+import { PRAG_AVANS, termenLivrare } from "./contract";
 
 type LeadPayload = {
   name: string;
@@ -208,7 +208,7 @@ function clientOfferBlock(c: Config, p: LeadPayload): string {
             ${step(1, "Accepți oferta din butonul de mai jos. Citești contractul complet (îl poți și descărca), apoi îl semnezi online, cu CUI-ul firmei.")}
             ${step(2, `Îți trimitem factura. Plătești prin transfer bancar în contul firmei: ${plata}.`)}
             ${step(3, "Ne trimiți datele firmei, textele și pozele, printr-un formular simplu.")}
-            ${step(4, "Construim site-ul și îți trimitem linkul de previzualizare.")}
+            ${step(4, `Construim site-ul în ${termenLivrare(c)} de la primirea materialelor și îți trimitem linkul de previzualizare.`)}
             ${step(5, "O rundă de modificări, pe observațiile tale.")}
             ${step(6, c.once > PRAG_AVANS ? "Plătești restul de 50% și publicăm site-ul." : "Publicăm site-ul pe domeniul tău.")}
             ${c.monthly > 0 ? step(7, `De la lansare: administrarea, ${lei(c.monthly)}/lună — găzduire, domeniu, backup, actualizări și modificări mici.`) : ""}

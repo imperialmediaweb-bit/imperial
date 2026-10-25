@@ -72,6 +72,12 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
         ))}
       </div>
       <p className="mt-2 text-[12px] text-white/50">{t.note}</p>
+      <p className="mt-1.5 text-[12px] text-white/50">
+        Ai nevoie de o aplicație, o platformă SaaS sau alt program la comandă?{" "}
+        <Link href="/brief" className="font-medium text-brand-orange hover:underline">
+          Descrie proiectul și primești oferta personalizată
+        </Link>
+      </p>
 
       {/* ce e inclus în orice site */}
       <div className="mt-5">

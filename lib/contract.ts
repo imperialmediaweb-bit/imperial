@@ -63,6 +63,16 @@ export function contractNumber(i: ContractInput): string {
   return `IM-${d}-${i.clientCui}`;
 }
 
+// Termenul de livrare, de la primirea completă a conținutului: o bază pe pachet
+// + 2 zile lucrătoare pentru fiecare opțiune aleasă — cu cât proiectul e mai complex, cu atât mai mult timp
+const TERMEN_BAZA: Record<string, number> = { start: 7, prezentare: 14, magazin: 20 };
+export const ZILE_PE_OPTIUNE = 2;
+
+export function termenLivrare(c: Config): string {
+  const extra = c.lines.filter((l) => !l.monthly).length * ZILE_PE_OPTIUNE;
+  return `maximum ${TERMEN_BAZA[c.type] + extra} zile lucrătoare`;
+}
+
 // Culorile Imperial — folosite inline, ca documentul să arate la fel în email, pe pagină și la print
 const C = { dark: "#0d0b12", orange: "#FF9A1A", magenta: "#FF2E9A", purple: "#8B2FF7", ink: "#1d1a24", muted: "#6b6577", line: "#ece8f2", soft: "#faf7ff" };
 
@@ -75,6 +85,7 @@ export function contractHtml(i: ContractInput): string {
   const prag = lei(PRAG_AVANS);
   const avans = c ? Math.round(c.once / 2) : 0;
   const transe = c && c.once > PRAG_AVANS;
+  const termen = c ? termenLivrare(c) : "maximum 7 zile lucrătoare pentru Site Start, 14 zile lucrătoare pentru Site Custom și 20 de zile lucrătoare pentru magazinul online, plus 2 zile lucrătoare pentru fiecare opțiune suplimentară";
 
   const P = (html: string) => `<p style="margin:0 0 10px;font-size:14px;line-height:1.65;color:${C.ink};">${html}</p>`;
   const section = (n: string, title: string, body: string) => `
@@ -183,7 +194,7 @@ export function contractHtml(i: ContractInput): string {
 
     ${section("IV", "Pașii proiectului, termene și livrare", `
       ${stepsTable}
-      ${P("Termenul de livrare curge de la data la care Beneficiarul transmite integral conținutul necesar (datele firmei prin formularul dedicat și materialele foto) și este de regulă 3-7 zile lucrătoare. Livrarea include: link de previzualizare, o rundă de revizii consolidate, publicarea pe domeniul agreat și 14 zile de corecturi mărunte de la publicare (pentru pachetul Site Start; pachetele superioare beneficiază de 30 de zile).")}`)}
+      ${P(`Termenul de livrare curge de la data la care Beneficiarul transmite integral conținutul necesar (datele firmei prin formularul dedicat și materialele foto) și este de ${termen}. Livrarea include: link de previzualizare, o rundă de revizii consolidate, publicarea pe domeniul agreat și ${c && c.type !== "start" ? "30" : "14"} zile de corecturi mărunte de la publicare.`)}`)}
 
     ${section("V", "Obligațiile părților", P("<b>Prestatorul</b> execută serviciile profesionist, informează Beneficiarul asupra stadiului și păstrează confidențialitatea datelor primite. <b>Beneficiarul</b> furnizează conținut corect asupra căruia deține drepturile, răspunde solicitărilor de clarificare și folosește serviciile în conformitate cu legea."))}
 
