@@ -16,22 +16,22 @@ const milestones = [
   {
     k: "2014",
     title: "Începutul",
-    text: "Un grup mic de pasionați de design și cod, într-un oraș în care „site-ul firmei” încă era un lux. Fără birouri de sticlă — doar convingerea că un site bine făcut poate schimba o afacere.",
+    text: "Am pornit în 2014 — câțiva oameni care făceau site-uri seara, după muncă. Fără birouri de sticlă, fără clienți celebri. Doar convingerea că un site bun poate schimba o afacere.",
   },
   {
     k: "Creșterea",
     title: "Din recomandare în recomandare",
-    text: "Primul client a venit printr-o recomandare. Al doilea la fel. Un restaurant care și-a dublat rezervările, o clinică cu programări online zilnice, un magazin de cartier devenit e-commerce național.",
+    text: "N-am dat niciodată reclamă agresivă. Primul client a venit din recomandare — la fel și al zecelea. Un restaurant care și-a dublat rezervările. O clinică plină de programări online. Un magazin de cartier care azi livrează în toată țara.",
   },
   {
     k: "Rețeaua",
     title: "50 de ziare online, ale noastre",
-    text: "Am construit rețeaua Media Expres — presă locală și națională în toată România. Clienții noștri apar în articole reale, cu autoritate în Google.",
+    text: "Ne-am construit propria rețea de presă: Media Expres, 50 de ziare online. Când lucrezi cu noi, firma ta apare în articole adevărate, nu în bannere pe care nu dă nimeni click.",
   },
   {
     k: "Azi",
     title: "384+ proiecte, aceeași obsesie",
-    text: "Echipă completă: designeri, developeri, SEO, copywriteri, project manageri. Construim pe Next.js — tehnologia Netflix și Nike — cu 3D, mișcare și AI. Aceeași echipă curioasă din 2014, încăpățânată să livreze fiecare pixel cum trebuie.",
+    text: "384 de proiecte mai târziu, suntem aceeași echipă încăpățânată. Doar că acum construim cu aceleași unelte ca Netflix și Nike — Next.js, 3D, AI. Și tot nu livrăm nimic până nu arată exact cum trebuie.",
   },
 ];
 
@@ -90,13 +90,15 @@ export default function DesprePage() {
             <div className="sticky top-28 space-y-5">
               <div className="group relative rotate-[1.5deg] overflow-hidden rounded-2xl border border-white/[0.08]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/despre/studio.jpg" alt="Studioul Imperial Media" className="shot-img block w-full" />
+                <img src="/proiecte/clinica-sf-gheorghe/home.jpg" alt="Site-ul Clinicii Sf. Gheorghe — lucrare reală" className="shot-img block w-full" />
                 <div className="shot-fade" />
+                <span className="absolute bottom-3 left-4 font-jmono text-[9px] uppercase tracking-[0.2em] text-white/80">Clinica Sf. Gheorghe — livrat</span>
               </div>
               <div className="group relative -rotate-2 overflow-hidden rounded-2xl border border-white/[0.08]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/despre/craft.jpg" alt="Schițe de design" className="shot-img block w-full" />
+                <img src="/proiecte/sarami/home.jpg" alt="Site-ul Sarami Production — lucrare reală" className="shot-img block w-full" />
                 <div className="shot-fade" />
+                <span className="absolute bottom-3 left-4 font-jmono text-[9px] uppercase tracking-[0.2em] text-white/80">Sarami Production — livrat</span>
               </div>
             </div>
           </div>
@@ -125,7 +127,7 @@ export default function DesprePage() {
       {/* ───── BANDA FOTO — atelierul noaptea ───── */}
       <section className="relative h-[340px] overflow-hidden sm:h-[420px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/despre/echipa.jpg" alt="Echipa Imperial Media lucrând" className="absolute inset-0 h-full w-full object-cover" />
+        <img src="/video/hero-poster.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050507] via-transparent to-[#050507]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.6)_100%)]" />
         <div className="container-app relative z-10 flex h-full items-end pb-10">
@@ -182,9 +184,8 @@ export default function DesprePage() {
                   Deținem rețeaua <span className="text-gradient">Media Expres</span> — 50 de ziare online.
                 </h2>
                 <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-text-muted">
-                  Presă locală și națională, în toată România. Clienții noștri apar în
-                  articole reale, cu linkuri care contează în Google — un avantaj pe care
-                  nicio altă agenție de web design din România nu îl are.
+                  Firma ta, în presă adevărată — articole reale, cu linkuri care contează
+                  în Google. Nicio altă agenție de web design din România nu poate oferi asta.
                 </p>
               </div>
               <div className="flex items-center gap-2 text-sm font-semibold text-brand-magenta">

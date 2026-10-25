@@ -74,8 +74,8 @@ export function DespreHero() {
             <span className="font-serifd italic text-gradient">Construim ce alții doar promit.</span>
           </h1>
           <p className="mt-5 max-w-xl text-[15.5px] leading-relaxed text-white/75 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
-            De peste 10 ani construim site-uri, magazine online și campanii pentru firme
-            din toată România — și deținem propria rețea de 50 de ziare online.
+            De 10 ani facem site-uri și magazine pentru firme din toată România.
+            Și da — avem propria rețea de 50 de ziare online.
           </p>
         </motion.div>
         <motion.div

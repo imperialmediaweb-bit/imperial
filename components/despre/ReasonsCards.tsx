@@ -9,26 +9,26 @@ const reasons = [
   {
     icon: Award,
     wash: "from-brand-orange/[0.14] via-brand-magenta/[0.05] to-transparent",
-    title: "Profesionalism dovedit",
-    text: "Peste un deceniu de dezvoltare digitală, mereu conectați la noile tehnologii.",
+    title: "Ne ținem de cuvânt",
+    text: "Termene reale, prețuri spuse de la început, fără surprize pe factură.",
   },
   {
     icon: Zap,
     wash: "from-brand-magenta/[0.14] via-brand-purple/[0.05] to-transparent",
-    title: "Rezultate reale",
-    text: "Site-uri rapide, magazine performante, campanii care au adus conversii — nu promisiuni.",
+    title: "Rezultate, nu vorbe",
+    text: "Rezervări dublate, programări zilnice, magazine care chiar vând. Cu astea ne lăudăm.",
   },
   {
     icon: HeartHandshake,
     wash: "from-brand-purple/[0.15] via-brand-magenta/[0.05] to-transparent",
-    title: "Clienții rămân",
-    text: "200+ de parteneri activi. Un site bun nu e un proiect — e începutul unei relații lungi.",
+    title: "Clienții rămân cu anii",
+    text: "200+ de firme lucrează cu noi și azi. Site-ul e începutul, nu finalul.",
   },
   {
     icon: Layers,
     wash: "from-brand-orange/[0.12] via-brand-purple/[0.06] to-transparent",
-    title: "Expertiză completă",
-    text: "Design, development, SEO, content, presă și marketing — totul sub un singur acoperiș.",
+    title: "Totul în casă",
+    text: "Design, cod, SEO, presă, reclame — nu dăm nimic mai departe. Facem noi.",
   },
 ];
 
