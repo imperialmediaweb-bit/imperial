@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Mail, Phone, Clock, Database, AlertCircle, Search as SearchIcon } from "lucide-react";
 import { isAdminConfigured, isAuthed } from "@/lib/admin-auth";
 import { hasDb } from "@/lib/db";
-import { listBriefs, STATUS_LABELS, type BriefStatus } from "@/lib/briefs";
+import { listBriefs, sourceLabel, STATUS_LABELS, type BriefStatus } from "@/lib/briefs";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { AdminNav } from "@/components/admin/AdminNav";
@@ -134,9 +134,9 @@ export default async function AdminPage(
                   <p className="mt-0.5 truncate text-xs text-text-muted">{b.email}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <span className="chip">{packageLabel(b.selected_package)}</span>
-                    {b.source === "ai-chat" && (
-                      <span className="text-[10px] text-brand-orange">✨ AI</span>
-                    )}
+                    {b.source && b.source !== "classic-form" ? (
+                      <span className="text-[10px] text-brand-orange">{sourceLabel(b.source)}</span>
+                    ) : null}
                     {b.ai_estimate_min && b.ai_estimate_max && (
                       <span className="font-mono text-[11px] text-text">
                         {b.ai_estimate_min}–{b.ai_estimate_max}€
@@ -212,11 +212,9 @@ export default async function AdminPage(
                         <span className="chip">
                           {packageLabel(b.selected_package)}
                         </span>
-                        {b.source === "ai-chat" && (
-                          <span className="ml-1 text-[10px] text-brand-orange">
-                            ✨ AI
-                          </span>
-                        )}
+                        {b.source && b.source !== "classic-form" ? (
+                          <span className="ml-1 text-[10px] text-brand-orange">{sourceLabel(b.source)}</span>
+                        ) : null}
                       </Link>
                     </td>
                     <td className="px-4 py-3 align-top">

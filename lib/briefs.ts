@@ -132,6 +132,7 @@ export async function insertBrief(b: NewBrief): Promise<number | null> {
 
 export type ListFilters = {
   status?: BriefStatus;
+  sourcePrefix?: string; // ex. "analiza" → toate analizele
   search?: string;
   limit?: number;
   offset?: number;
@@ -162,6 +163,10 @@ export async function listBriefs(
       `(name ILIKE $${i} OR email ILIKE $${i} OR industry ILIKE $${i} OR message ILIKE $${i})`
     );
     params.push(`%${f.search}%`);
+  }
+  if (f.sourcePrefix) {
+    where.push(`source LIKE $${params.length + 1}`);
+    params.push(`${f.sourcePrefix}%`);
   }
   const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
 
@@ -222,4 +227,21 @@ export async function updateNotes(id: number, notes: string): Promise<void> {
     notes,
     id,
   ]);
+}
+
+// Numele lizibile ale surselor, pentru admin
+export const SOURCE_LABELS: Record<string, string> = {
+  "ai-chat": "✨ Chat AI",
+  "classic-form": "Formular",
+  consultanta: "Consultanță",
+  analiza: "📊 Analiză fără contact",
+  "analiza-email": "📩 Analiză — a lăsat emailul",
+  "analiza-email-reamintiri": "📩 Analiză — email + reamintiri",
+  "site-start-paid": "Site Start plătit",
+  "site-start-continut": "Datele site-ului",
+  "site-start-cerere": "Cerere Site Start",
+};
+
+export function sourceLabel(s: string | null): string {
+  return s ? SOURCE_LABELS[s] ?? s : "—";
 }

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { isAdminConfigured, isAuthed } from "@/lib/admin-auth";
 import { hasDb } from "@/lib/db";
-import { getBrief } from "@/lib/briefs";
+import { getBrief, sourceLabel } from "@/lib/briefs";
 import { StatusPill } from "@/components/admin/StatusPill";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 
@@ -240,7 +240,7 @@ export default async function BriefDetailPage(
       <div className="mt-5 rounded-2xl border border-bg-border bg-bg-soft/40 p-4 text-[11px] text-text-subtle">
         <p>
           <strong className="text-text-muted">Sursa:</strong>{" "}
-          {b.source === "ai-chat" ? "AI Chat (/brief)" : b.source ?? "—"}
+          {sourceLabel(b.source)}
         </p>
         {b.user_agent && (
           <p className="mt-1 truncate">

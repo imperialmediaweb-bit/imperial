@@ -52,7 +52,8 @@ async function send(opts: {
     },
     body: JSON.stringify({
       from: opts.from,
-      to: [opts.to],
+      // LEAD_EMAIL poate avea mai multe adrese, separate prin virgulă
+      to: opts.to.split(",").map((x) => x.trim()).filter(Boolean),
       subject: opts.subject,
       html: opts.html,
       reply_to: opts.replyTo,

@@ -4,11 +4,12 @@ import Link from "next/link";
 
 const TABS = [
   { href: "/admin", key: "leads", label: "📥 Lead-uri" },
+  { href: "/admin/analize", key: "analize", label: "📊 Analize" },
   { href: "/admin/rapoarte", key: "rapoarte", label: "📊 Rapoarte & abonați" },
   { href: "/admin/prospects", key: "prospects", label: "🎯 Prospectare" },
 ];
 
-export function AdminNav({ active }: { active: "leads" | "rapoarte" | "prospects" }) {
+export function AdminNav({ active }: { active: "leads" | "analize" | "rapoarte" | "prospects" }) {
   return (
     <nav className="mb-6 flex flex-wrap gap-2 border-b border-bg-border/60 pb-4">
       {TABS.map((t) => (
