@@ -42,7 +42,7 @@ export async function generateMetadata(
       ? `Site pentru afacerea ta din ${loc.name} — 1.500 lei, gata în 14 zile | Imperial Media`
       : `Creare Site Web ${loc.name} — Web Design, Magazine Online, Promovare | Imperial Media`,
     description: offer
-      ? `Site de prezentare pentru afaceri din ${loc.name}: 1.500 lei, gata în maximum 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook 5 zile, asistent AI pe site, pagina de Facebook și profilul Google. Estimare în 2 minute.`
+      ? `Site de prezentare pentru afaceri din ${loc.name}: 1.500 lei, gata în maximum 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook 5 zile, pagina de Facebook și profilul Google. Estimare în 2 minute.`
       : `Creare site web în ${loc.name} de la 699€, magazine online de la 1.200€, promovare în 50 de ziare. Web design custom pentru afaceri din ${loc.name}, ${loc.county} — estimare gratuită în 2 minute.`,
     alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
@@ -109,7 +109,7 @@ export default async function LocationPage(
     {
       q: `Cât costă un site web în ${loc.name}?`,
       a: offer
-        ? `Pentru afacerile din ${loc.name}, un site de prezentare cu 5 pagini costă 1.500 lei și e gata în maximum 14 zile. Primești cadou articol în ${offer.newspaper.name}, campanie pe Facebook de 5 zile, asistent AI pe site și pagina de Facebook plus profilul Google făcute de noi. Opțiunile (logo, programări, blog) au preț fix, de la 99 lei.`
+        ? `Pentru afacerile din ${loc.name}, un site de prezentare cu 5 pagini costă 1.500 lei și e gata în maximum 14 zile. Primești cadou articol în ${offer.newspaper.name}, campanie pe Facebook de 5 zile și pagina de Facebook plus profilul Google făcute de noi. Opțiunile (logo, programări, blog) au preț fix, de la 99 lei.`
         : `Un site de prezentare custom pornește de la 699€, iar un magazin online de la 1200€. Prețul final depinde de funcționalități, pagini și complexitate. Folosește estimatorul nostru AI gratuit pentru un preț orientativ în 2 minute.`,
     },
     {

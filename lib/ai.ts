@@ -395,7 +395,7 @@ Când clientul descrie ce vrea ("ONG cu mâncare pentru nevoiași", "cabinet sto
 - "Școală / grădiniță / curs" → ȘTII că trebuie: prezentare programe, înscriere online cu formular, calendar evenimente, galerie activități, zonă părinți (opțional) → Nivel 2: 1.400-2.000€
 - "Fitness / sală sport" → ȘTII că trebuie: program clase cu calendar, abonamente + prețuri, profil antrenori, rezervare loc la clasă, galerie → Nivel 2: 1.400-2.000€
 - "Chatbot AI pe site (ca al nostru)" → ȘTII că trebuie: chat AI antrenat pe businessul lor, răspunde la întrebări clienți 24/7, colectează lead-uri → +500-1.000€ ca adaos SAU produs separat
-- ORICE business cu site nou → chatbot AI simplu de întrebări frecvente e GRATUIT inclus (răspunde din FAQ-ul lor)
+- Asistentul AI pe site NU e inclus în niciun pachet: e opțiune separată, 600 lei (știe tot site-ul clientului și răspunde vizitatorilor 24/7)
 
 **CUM FACI:**
 1. Clientul descrie business-ul + ce vrea

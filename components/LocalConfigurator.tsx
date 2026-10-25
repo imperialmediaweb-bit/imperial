@@ -339,7 +339,7 @@ export function LocalConfigurator({ offer }: { offer: LocalOffer }) {
             <li>• Domeniu .ro gratuit primul an</li>
           </ul>
           <p className="mt-3 text-[11px] text-brand-orangeLight">
-            🎁 Cadou: articol în {offer.newspaper.name}, campanie Facebook 5 zile, asistent AI, 30 de zile de modificări.
+            🎁 Cadou: articol în {offer.newspaper.name}, campanie Facebook 5 zile, 30 de zile de modificări.
           </p>
           {error && <p className="mt-3 rounded-lg bg-red-500/10 p-2 text-xs text-red-300">{error}</p>}
           <button type="submit" disabled={sending || uploading} className="btn-primary mt-4 w-full justify-center">
