@@ -20,7 +20,7 @@ const small = [
     wash: "from-brand-orange/[0.18] via-brand-magenta/[0.06] to-transparent",
     icon: ShoppingBag,
     name: "Magazine online",
-    text: "Coș, comenzi și plată ramburs; opțional plăți cu cardul, AWB automat și facturare. De la 4.000 lei.",
+    text: "Magazin Start cu plată ramburs; opțional plăți cu cardul, AWB automat și facturare. De la 3.000 lei.",
     href: "/creare-magazin-online",
   },
   {

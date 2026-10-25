@@ -7,7 +7,7 @@ import { ServiceLanding } from "@/components/ServiceLanding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Creare Magazin Online — de la 4.000 lei, opțiuni la alegere | Imperial Media",
+  title: "Creare Magazin Online — de la 3.000 lei, opțiuni la alegere | Imperial Media",
   description:
     "Creare magazin online în România: plăți cu cardul, integrare curieri cu AWB automat, facturare automată. Prețuri transparente de la 1.200€, custom pe Next.js. Promovare în 50 de ziare inclusă.",
   alternates: { canonical: `${siteConfig.url}/creare-magazin-online` },
@@ -18,12 +18,12 @@ export default function CreareMagazinOnlinePage() {
     <ServiceLanding
       slug="creare-magazin-online"
       chip="🛒 Creare magazin online"
-      h1={<>Magazin online care <span className="text-gradient">chiar vinde</span> — de la 4.000 lei</>}
+      h1={<>Magazin online care <span className="text-gradient">chiar vinde</span> — de la 3.000 lei</>}
       h1Plain="Creare magazin online"
-      intro="Magazine online construite custom pe Next.js, cu design unic și viteză sub o secundă. Pornești de la 4.000 lei și adaugi doar ce îți trebuie: plăți cu cardul, AWB automat, facturare automată. Prețuri publice, fără costuri ascunse — și campania de promovare în 50 de ziare online, cadou."
-      priceText="de la 4.000 lei + opțiunile pe care le alegi"
+      intro="Magazine online construite custom pe Next.js, cu design unic și viteză sub o secundă. Pornești de la 3.000 lei, cu plata ramburs, și adaugi doar ce îți trebuie: plăți cu cardul, AWB automat, facturare automată. Prețuri publice, fără costuri ascunse — și campania de promovare în 50 de ziare online, cadou."
+      priceText="de la 3.000 lei + opțiunile pe care le alegi"
       bullets={[
-        "Inclus: design unic, până la 50 de produse, coș, comenzi, plată ramburs / transfer",
+        "Magazin Start, 3.000 lei: design unic, până la 30 de produse, coș, comenzi, plată ramburs",
         "Opțional: plăți cu cardul (Stripe / Netopia) +800 lei",
         "Opțional: AWB automat la curieri +700 lei · facturare automată (SmartBill / Oblio) +600 lei",
         "Conform legii: retur 14 zile, ANPC/SOL, GDPR — incluse",
@@ -35,9 +35,9 @@ export default function CreareMagazinOnlinePage() {
           title: "Cât costă un magazin online în 2026 — prețuri reale",
           body: (
             <>
-              <p><strong className="text-text">De la 4.000 lei — magazinul de bază</strong>: design unic, până la 50 de produse încărcate de noi, coș, comenzi, plată ramburs sau transfer, panou pentru produse și comenzi.</p>
-              <p><strong className="text-text">Opțiuni la alegere</strong>: plăți online cu cardul +800 lei · AWB automat la curieri +700 lei · facturare automată +600 lei · variante de produs și filtre +500 lei · produse peste 50: +200 lei la fiecare 50 · asistent AI +600 lei · logo +300 lei.</p>
-              <p><strong className="text-text">Exemplu</strong>: magazin de bază + plăți cu cardul + AWB + facturare = 6.100 lei. Magazinele avansate (mii de produse, import de la furnizori, integrare cu gestiunea) au ofertă personalizată.</p>
+              <p><strong className="text-text">3.000 lei — Magazin Start</strong>: design unic, până la 30 de produse încărcate de noi, coș, comenzi, plata ramburs, panou pentru produse și comenzi.</p>
+              <p><strong className="text-text">Opțiuni la alegere</strong>: plăți online cu cardul +800 lei · AWB automat la curieri +700 lei · facturare automată +600 lei · variante de produs și filtre +500 lei · produse peste 30: +200 lei la fiecare 30 · asistent AI +600 lei · logo +300 lei.</p>
+              <p><strong className="text-text">Exemplu</strong>: Magazin Start + plăți cu cardul + AWB + facturare = 5.100 lei. Magazinele avansate (mii de produse, import de la furnizori, integrare cu gestiunea) au ofertă personalizată.</p>
               <p>Costuri lunare reale, spuse cinstit: procesatorul de plăți ia 1-2% pe tranzacție (al lui, nu al nostru); administrarea de la 100 lei/lună (include găzduirea). Ghidul complet de prețuri: <Link href="/blog/cat-costa-magazin-online-romania" className="text-brand-orange hover:underline">Preț magazin online 2026 →</Link></p>
             </>
           ),

@@ -310,7 +310,7 @@ export const briefToolsJsonSchema = {
           type: "string",
           enum: ["website", "shop", "promo", "admin", "personalizat"],
           description:
-            "Pachetul potrivit: website=site prezentare (699€), shop=magazin online (de la 4.000 lei), promo=promovare (200€), admin=mentenanță (50€/lună), personalizat=altceva",
+            "Pachetul potrivit: website=site prezentare (699€), shop=magazin online (de la 3.000 lei), promo=promovare (200€), admin=mentenanță (50€/lună), personalizat=altceva",
         },
         industry: { type: "string", description: "Domeniul de activitate" },
         currentSite: { type: "string", description: "URL-ul site-ului actual (dacă există)" },

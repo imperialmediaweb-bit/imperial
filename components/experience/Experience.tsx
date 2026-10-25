@@ -183,7 +183,7 @@ export function Experience() {
             <div className="mt-8">
               {[
                 ["01", "Site-uri & aplicații custom", "Design unic și cod scris de la zero, pe Next.js. De la 3.500 lei.", "/creare-site-web"],
-                ["02", "Magazine online", "Coș, comenzi și plată ramburs; opțional plăți cu cardul, AWB și facturare. De la 4.000 lei.", "/creare-magazin-online"],
+                ["02", "Magazine online", "Magazin Start cu plată ramburs; opțional plăți cu cardul, AWB și facturare. De la 3.000 lei.", "/creare-magazin-online"],
                 ["03", "AI & automatizări", "Asistenți AI pentru clienți și automatizarea proceselor interne.", "/brief"],
                 ["04", "Presă — 50 de ziare", "Articole în rețeaua proprie Media Expres, cu acoperire națională.", "/servicii"],
                 ["05", "SEO + vizibilitate AI", "Poziționare în Google și vizibilitate în ChatGPT și Gemini.", "/optimizare-seo"],
@@ -339,7 +339,7 @@ export function Experience() {
               {[
                 ["Site Start", "1.500 lei", "plată unică — preț fix", ["5 pagini + blog incluse", "Design unic, pe brandul tău", "Găzduire în administrare, de la 100 lei/lună"], "/site-start", false],
                 ["Site Custom", "3.500 lei", "de la (≈ 699 €), plată unică", ["Design unic, creat de la zero", "Până la 10 pagini, panou propriu", "SEO tehnic din construcție"], "/creare-site-web", true],
-                ["Magazin online", "4.000 lei", "de la (≈ 800 €), plată unică", ["Coș, comenzi, plată ramburs", "Până la 50 de produse", "Opțional: card, AWB, facturare"], "/creare-magazin-online", false],
+                ["Magazin online", "3.000 lei", "de la — Magazin Start, plată unică", ["Coș, comenzi, plată ramburs", "Până la 30 de produse", "Opțional: card, AWB, facturare"], "/creare-magazin-online", false],
               ].map(([name, price, per, feats, href, featured], i) => (
                 <motion.div
                   key={name as string}

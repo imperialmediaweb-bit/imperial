@@ -18,7 +18,7 @@ type TypeKey = "start" | "prezentare" | "magazin";
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
   { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic, WhatsApp, articol în Botoșani Expres, campanie 5 zile pe Facebook — de la 1.500 lei" },
   { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, până la 10 pagini, panou propriu — de la 3.500 lei" },
-  { key: "magazin", name: "Magazin online", base: 4000, cur: "lei", note: "design unic, până la 50 de produse, coș, comenzi, plată ramburs — de la 4.000 lei" },
+  { key: "magazin", name: "Magazin online", base: 3000, cur: "lei", note: "Magazin Start: design unic, până la 30 de produse, coș, comenzi, plată ramburs — de la 3.000 lei" },
 ];
 
 // Site Start și Site Custom folosesc opțiunile Site Start; magazinul are lista lui

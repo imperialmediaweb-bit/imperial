@@ -54,12 +54,12 @@ export const packages: Package[] = [
   {
     key: "shop",
     name: "Magazin Online",
-    price: "4.000 lei",
-    priceNote: "de la (≈ 800 €)",
+    price: "3.000 lei",
+    priceNote: "de la — Magazin Start",
     features: [
       "Design unic, creat de la zero",
-      "Până la 50 de produse, încărcate de noi",
-      "Coș, comenzi și plată ramburs / transfer",
+      "Până la 30 de produse, încărcate de noi",
+      "Coș, comenzi și plată ramburs",
       "Panou pentru produse și comenzi",
       "Găzduire + domeniu în administrare (de la 100 lei/lună)",
       "Opțional: plăți cu cardul, AWB automat, facturare automată",

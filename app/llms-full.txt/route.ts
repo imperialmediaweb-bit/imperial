@@ -19,7 +19,7 @@ export async function GET() {
 - Site Start (4 pagini, prezentare): 1.500 lei, totul inclus — livrat în câteva zile
 - Site de prezentare complet: de la 699€
 - Site cu funcționalități (programări, rezervări): 1.400-2.500€
-- Magazin online: de la 4.000 lei (bază) + opțiuni: plăți cu cardul +800, AWB automat +700, facturare automată +600, variante + filtre +500 lei
+- Magazin online: de la 3.000 lei (bază) + opțiuni: plăți cu cardul +800, AWB automat +700, facturare automată +600, variante + filtre +500 lei
 - Aplicații web / SaaS / platforme: de la 3.500€, ofertă la cerere
 - Pachet Start Online (Google Business + Facebook, fără site): 500 lei
 

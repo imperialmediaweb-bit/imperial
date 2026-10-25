@@ -1,17 +1,17 @@
 // Opțiunile magazinului online — sursă unică pentru pachete, calculator și consultantul AI.
-// Baza (de la 4.000 lei) include: design unic, până la 50 de produse încărcate de noi,
-// coș și comenzi, plata ramburs / transfer, panou pentru produse și comenzi, SEO tehnic.
+// Magazin Start (3.000 lei) include: design unic, până la 30 de produse încărcate de noi,
+// coș și comenzi, plata ramburs, panou pentru produse și comenzi, SEO tehnic.
 
 import type { Addon } from "./site-start-addons";
 
-export const SHOP_BASE = 4000;
+export const SHOP_BASE = 3000;
 
 export const SHOP_ADDONS: Addon[] = [
   { key: "card", name: "Plăți online cu cardul", price: 800, desc: "Stripe sau Netopia, banii direct în contul tău" },
   { key: "awb", name: "AWB automat la curieri", price: 700, desc: "Fan Courier, Sameday și alții — AWB generat din comandă" },
   { key: "factura", name: "Facturare automată", price: 600, desc: "SmartBill sau Oblio — factura pleacă singură la comandă" },
   { key: "variante", name: "Variante de produs + filtre", price: 500, desc: "mărimi, culori și filtre de căutare în magazin" },
-  { key: "produse", name: "Încărcare produse peste 50", price: 200, unit: "50 de produse", desc: "le încărcăm noi, cu poze și descrieri" },
+  { key: "produse", name: "Încărcare produse peste 30", price: 200, unit: "30 de produse", desc: "le încărcăm noi, cu poze și descrieri" },
   { key: "ai", name: "Asistent AI pe site", price: 600, desc: "știe tot magazinul și răspunde clienților 24/7" },
   { key: "logo", name: "Logo", price: 300, desc: "dacă nu ai deja unul — creat pe brandul tău" },
 ];

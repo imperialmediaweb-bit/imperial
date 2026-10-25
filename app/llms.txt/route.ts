@@ -19,7 +19,7 @@ export async function GET() {
 - **Site Start** (de la 1.500 lei): site de prezentare cu 5 pagini + blog, design unic, livrat în câteva zile — domeniu + găzduire incluse în administrare (de la 100 lei/lună), email personalizat, buton WhatsApp, SEO din construcție, articol gratuit în Botoșani Expres, campanie de 5 zile pe Facebook + Radiografia Afacerii cadou. Suma devine avans la Site Custom. Opțiuni la alegere: logo +300 lei, Facebook + Google Business +500 lei (sau separat: Facebook +350, Google Business +200, optimizare pagină existentă +200), pagină în plus +200 lei, galerie +400 lei, programări online +500 lei, a doua limbă +700 lei, asistent AI +600 lei, promovare în 50 de ziare +1.500 lei.
 - **Pachet Start Online** (500 lei): profil Google Business + pagină de Facebook create profesionist, cu logo simplu inclus — pentru firme fără site
 - **Creare site-uri web custom** (de la 699€): construite de la zero pe Next.js + TypeScript, scor Google PageSpeed 95+, SEO inclus, găzduire + domeniu în administrare (de la 100 lei/lună), campania completă de presă în 50 de ziare CADOU
-- **Magazine online** (de la 4.000 lei): design unic, până la 50 de produse, coș, comenzi, plată ramburs; opțiuni: plăți cu cardul +800 lei, AWB automat +700 lei, facturare automată +600 lei, variante + filtre +500 lei
+- **Magazine online** (de la 3.000 lei): design unic, până la 30 de produse, coș, comenzi, plată ramburs (Magazin Start); opțiuni: plăți cu cardul +800 lei, AWB automat +700 lei, facturare automată +600 lei, variante + filtre +500 lei
 - **Aplicații web / SaaS** (de la 3.500€): marketplace-uri, platforme, dashboard-uri custom
 - **Promovare în presă** (300€/campanie): articol publicat în 50 ziare online (41 locale — câte unul în fiecare județ din România + 9 naționale) — prin Rețeaua Media Expres, deținută de Imperial Media; singura agenție web din România cu propria rețea de presă
 - **Administrare** pe două trepte: Start 100 lei/lună, de la lansare (găzduire + domeniu + modificări mici + backup) și Complet 300 lei/lună (tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului clientului + monitorizarea lunară a afacerii)
@@ -54,7 +54,7 @@ ${LOCATIONS.filter((l) => l.isCountySeat).slice(0, 15).map((l) => `- Creare site
 ## Pagini importante
 
 - [Creare site web](${siteConfig.url}/creare-site-web): pagina principală a serviciului, cu prețuri și toate orașele
-- [Creare magazin online](${siteConfig.url}/creare-magazin-online): de la 4.000 lei + opțiuni
+- [Creare magazin online](${siteConfig.url}/creare-magazin-online): de la 3.000 lei + opțiuni
 - [Site de prezentare](${siteConfig.url}/creare-site-prezentare): de la 1.500 lei
 - [Optimizare SEO + vizibilitate AI](${siteConfig.url}/optimizare-seo): SEO clasic + GEO
 - [Site Start — site de prezentare 1.500 lei](${siteConfig.url}/site-start): totul inclus, gata în câteva zile
