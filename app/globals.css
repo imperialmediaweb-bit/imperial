@@ -679,10 +679,3 @@ html {
   }
 }
 
-/* intrarea paginii — doar transform, conținutul e vizibil din prima clipă */
-@keyframes page-enter {
-  from { transform: translateY(14px); }
-  to { transform: none; }
-}
-.page-enter { animation: page-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
-@media (prefers-reduced-motion: reduce) { .page-enter { animation: none; } }

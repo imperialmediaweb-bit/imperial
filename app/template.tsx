@@ -1,5 +1,5 @@
-// Tranziție discretă între pagini: conținutul nou urcă puțin, doar din CSS.
-// Fără opacitate 0 la start — textul e vizibil de la prima afișare (contează la viteză).
+// Fără animație de intrare pe tot conținutul: un transform pe părinte strică elementele
+// fixate și secțiunile care se blochează la derulare (portofoliul).
 export default function Template({ children }: { children: React.ReactNode }) {
-  return <div className="page-enter">{children}</div>;
+  return <>{children}</>;
 }
