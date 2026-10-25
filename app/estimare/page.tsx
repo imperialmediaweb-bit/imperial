@@ -50,6 +50,12 @@ export default function EstimarePage() {
             </p>
           </div>
 
+          <Link
+            href="/analiza"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand-magenta/40 bg-brand-magenta/[0.07] px-5 py-2.5 text-sm font-medium text-white/85 transition hover:border-brand-magenta"
+          >
+            Nu știi ce-ți trebuie? Fă analiza gratuită în 2 minute →
+          </Link>
           <div className="mt-10">
             <Estimator />
           </div>
