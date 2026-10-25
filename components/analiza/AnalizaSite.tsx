@@ -571,6 +571,14 @@ export function AnalizaSite() {
                     <Zap className="h-4 w-4" />
                     Primește oferta exactă
                   </Link>
+                  {!areSite && !dom.custom ? (
+                    <Link
+                      href="/site-start"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-[13.5px] font-medium text-white/85 transition hover:border-brand-orange/70"
+                    >
+                      Vezi ce include Site Start
+                    </Link>
+                  ) : null}
                   <a
                     href={waHref}
                     target="_blank"
