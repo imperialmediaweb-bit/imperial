@@ -29,7 +29,7 @@ export const packages: Package[] = [
     features: [
       "5 pagini + blog",
       "Design unic, pe brandul tău",
-      "Domeniu și hosting gratuit 1 an",
+      "Găzduire + domeniu în administrare (de la 100 lei/lună)",
       "Buton WhatsApp inclus",
       "Email personalizat",
       "Articol gratuit în Botoșani Expres",
@@ -48,7 +48,7 @@ export const packages: Package[] = [
       "Panou de administrare propriu",
       "SEO tehnic din construcție",
       "Viteză sub o secundă",
-      "Domeniu și hosting gratuit 1 an",
+      "Găzduire + domeniu în administrare (de la 100 lei/lună)",
     ],
   },
   {
@@ -59,7 +59,7 @@ export const packages: Package[] = [
     features: [
       "20 produse listate",
       "Design responsive",
-      "Domeniu + hosting inclus 1 an",
+      "Găzduire + domeniu în administrare (de la 100 lei/lună)",
       "Certificat SSL inclus",
       "Panou administrare produse",
     ],
@@ -87,12 +87,12 @@ export const packages: Package[] = [
   {
     key: "admin",
     name: "Administrare",
-    price: "200 lei",
+    price: "100 lei",
     priceUnit: "/lună",
     priceNote: "de la",
     features: [
-      "Credite AI incluse (asistentul de pe site)",
-      "Găzduire + domeniu incluse (din anul 2)",
+      "Găzduire + domeniu incluse, de la lansare",
+      "Cu asistent AI: 200 lei/lună (credite AI incluse)",
       "Backup lunar + update-uri",
       "1 articol SEO pe site",
       "2 postări Facebook",

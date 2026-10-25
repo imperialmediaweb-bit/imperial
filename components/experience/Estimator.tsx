@@ -15,14 +15,14 @@ import { SITE_START_ADDONS } from "@/lib/site-start-addons";
 type TypeKey = "start" | "prezentare" | "magazin";
 
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
-  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic, domeniu + găzduire 1 an, WhatsApp, articol în Botoșani Expres, campanie 5 zile pe Facebook — de la 1.500 lei" },
+  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic, WhatsApp, articol în Botoșani Expres, campanie 5 zile pe Facebook — de la 1.500 lei" },
   { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, pagini nelimitate, panou propriu — de la 3.500 lei" },
   { key: "magazin", name: "Magazin online", base: 6000, cur: "lei", note: "plăți card, AWB, facturare — de la 6.000 lei" },
 ];
 
 // opțiunile vin din lista unică a Site Start; la Site Custom / magazin paginile sunt nelimitate
 type Opt = { key: string; name: string; lei: number; monthly?: boolean };
-const ADMIN: Opt = { key: "admin", name: "Administrare lunară (cu credite AI)", lei: 200, monthly: true };
+const ADMIN: Opt = { key: "admin", name: "Administrare lunară — găzduire, domeniu, backup (200 lei/lună cu asistent AI)", lei: 100, monthly: true };
 
 function optionsFor(type: TypeKey): Opt[] {
   const list = SITE_START_ADDONS.filter((a) => !a.onlyOnPage && (type === "start" || a.key !== "pagina")).map((a) => ({
@@ -44,7 +44,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
     let monthly = 0;
     for (const o of optionsFor(type)) {
       if (!opts[o.key]) continue;
-      const v = o.lei;
+      const v = o.key === "admin" && opts.ai ? 200 : o.lei;
       if (o.monthly) monthly += v;
       else once += v;
     }
@@ -77,7 +77,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
       <div className="mt-5 grid gap-2 sm:grid-cols-2">
         {options.map((o) => {
           const on = !!opts[o.key];
-          const v = o.lei;
+          const v = o.key === "admin" && opts.ai ? 200 : o.lei;
           return (
             <button
               key={o.key}
@@ -128,7 +128,10 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
           Primește oferta exactă
         </Link>
       </div>
-      <p className="mt-3 text-[11px] leading-relaxed text-white/40">
+      <p className="mt-3 text-[12px] leading-relaxed text-white/60">
+        Găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună, plătită lunar de la lansare.
+      </p>
+      <p className="mt-1 text-[11px] leading-relaxed text-white/40">
         Prețul final depinde de cerințele exacte — răspundem cu oferta personalizată în aceeași zi, gratuit.
       </p>
     </div>

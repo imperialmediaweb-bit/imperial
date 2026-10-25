@@ -38,7 +38,7 @@ export default function CreareMagazinOnlinePage() {
               <p><strong className="text-text">1.200-1.800€ — magazinul de pornire</strong>: până la ~50 de produse, plăți cu cardul, design pe brand. Pentru afaceri la început, cu gamă restrânsă.</p>
               <p><strong className="text-text">1.800-3.000€ — magazinul standard serios</strong>: sute de produse, AWB automat la curieri, facturare automată, filtre și căutare, blog pentru SEO. Aici sunt majoritatea magazinelor care chiar vând.</p>
               <p><strong className="text-text">3.000-4.500€+ — magazinul avansat</strong>: mii de produse, import automat de la furnizori, abonamente, configuratoare, integrare cu gestiunea, multi-limbă.</p>
-              <p>Costuri lunare reale, spuse cinstit: procesatorul de plăți ia 1-2% pe tranzacție (al lui, nu al nostru); găzduirea e inclusă primul an; mentenanța opțională de la 200 lei/lună. Ghidul complet de prețuri: <Link href="/blog/cat-costa-magazin-online-romania" className="text-brand-orange hover:underline">Preț magazin online 2026 →</Link></p>
+              <p>Costuri lunare reale, spuse cinstit: procesatorul de plăți ia 1-2% pe tranzacție (al lui, nu al nostru); administrarea de la 100 lei/lună (include găzduirea). Ghidul complet de prețuri: <Link href="/blog/cat-costa-magazin-online-romania" className="text-brand-orange hover:underline">Preț magazin online 2026 →</Link></p>
             </>
           ),
         },
@@ -66,7 +66,7 @@ export default function CreareMagazinOnlinePage() {
         { q: "Pot încasa cu cardul și ramburs?", a: "Da — integrăm Stripe, Netopia sau PayU pentru plăți cu cardul (comision 1-2% al procesatorului), iar rambursul prin curier rămâne activ (încă ~40% din comenzile din România). Facturile se emit automat la fiecare comandă." },
         { q: "Cât durează până e gata?", a: "4-8 săptămâni de la primirea conținutului (produse, poze, texte). Magazinele mici, spre 4; cele cu integrări multiple, spre 8." },
         { q: "Ce acte îmi trebuie ca să vând online?", a: "SRL sau PFA, plus paginile legale obligatorii pe site: termeni și condiții, politica de retur (14 zile drept de retragere), GDPR și linkurile ANPC/SOL. Toate sunt incluse — le configurăm noi corect." },
-        { q: "Mă ajutați și după lansare?", a: "Da: 30 de zile de modificări incluse, apoi administrare opțională (de la 200 lei/lună — credite AI și găzduire incluse din anul 2). Plus campania de presă din 50 de ziare cadou la lansare și consultantul AI din contul tău, disponibil oricând." },
+        { q: "Mă ajutați și după lansare?", a: "Da: 30 de zile de modificări incluse, apoi administrare opțională (de la 100 lei/lună, de la lansare — găzduire și domeniu incluse). Plus campania de presă din 50 de ziare cadou la lansare și consultantul AI din contul tău, disponibil oricând." },
       ]}
       ctaLabel="Cere estimarea pentru magazinul tău"
       ctaHref="/brief"

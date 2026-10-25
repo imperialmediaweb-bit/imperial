@@ -19,7 +19,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Site de prezentare — 1.500 lei, gata în câteva zile | Imperial Media",
   description:
-    "Site profesional cu 5 pagini + blog: 1.500 lei, domeniu + găzduire gratuite primul an, livrat în câteva zile. Construit pe Next.js, nu WordPress. Suma se scade din site-ul complet.",
+    "Site profesional cu 5 pagini + blog: 1.500 lei, domeniu + găzduire incluse în administrare (de la 100 lei/lună), livrat în câteva zile. Construit pe Next.js, nu WordPress. Suma se scade din site-ul complet.",
   alternates: { canonical: `${siteConfig.url}/site-start` },
 };
 
@@ -32,7 +32,7 @@ const STEPS = [
 const INCLUDED = [
   "5 pagini: Acasă, Despre, Servicii, Blog, Contact (cu hartă și formular)",
   "Design unic pe brandul tău — culorile și pozele tale",
-  "Domeniu (.ro) + găzduire GRATUITE primul an",
+  "Domeniu (.ro) + găzduire incluse în administrare (de la 100 lei/lună)",
   "Certificat SSL (https) și optimizare de bază Google incluse",
   "Perfect pe telefon — acolo unde te caută 70% din clienți",
   "Buton WhatsApp — clienții îți scriu direct pe telefon",
@@ -43,11 +43,11 @@ const INCLUDED = [
 ];
 
 const SITE_START_FAQ = [
-  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 5 pagini (Acasă, Despre, Servicii, Blog cu articole, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în Botoșani Expres + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
+  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 5 pagini (Acasă, Despre, Servicii, Blog cu articole, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire incluse în administrare (de la 100 lei/lună), certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în Botoșani Expres + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
   { q: "În cât timp e gata site-ul?", a: "În 3-7 zile lucrătoare de la primirea conținutului (formularul de 5 minute + pozele). Plătești azi, ne trimiți datele, primești linkul de previzualizare, ceri o rundă de modificări și site-ul e live." },
   { q: "Nu am texte sau poze bune. E o problemă?", a: "Deloc. Textele le scriem noi din ce ne povestești despre firmă (nu trebuie să scrii nimic «frumos»), iar dacă nu ai poze folosim imagini profesionale de stock, incluse în preț. Pozele tale reale le poți adăuga oricând mai târziu." },
   { q: "E făcut pe WordPress?", a: "Nu. Site-ul e scris custom pe Next.js — aceeași tehnologie folosită de Netflix și Nike. Se încarcă sub o secundă, nu are plugin-uri care se strică și nu cere mentenanță lunară obligatorie. Codul, domeniul și datele sunt 100% ale tale." },
-  { q: "Ce se întâmplă după primul an?", a: "Domeniul și găzduirea gratuite expiră după 12 luni. Alegi atunci: Administrare Start (200 lei/lună — găzduire, domeniu, credite AI pentru asistent, modificări mici, backup), Administrare Complet (300 lei/lună — tot ce e la Start, plus mentenanță deplină, un articol de presă pe lună în ziarul județului tău și monitorizarea lunară a afacerii) sau reînnoirea simplă (~350 lei/an). Te anunțăm cu 30 de zile înainte — site-ul nu se oprește niciodată fără știrea ta." },
+  { q: "Cât costă după lansare?", a: "Găzduirea și domeniul sunt incluse în administrarea lunară, plătită de la lansare. Alegi: Administrare Start (100 lei/lună — găzduire, domeniu, modificări mici, backup; 200 lei/lună cu asistent AI), Administrare Complet (300 lei/lună — tot ce e la Start, plus mentenanță deplină, un articol de presă pe lună în ziarul județului tău și monitorizarea lunară a afacerii)." },
   { q: "Dacă vreau mai mult decât cele 5 pagini sau funcții în plus?", a: "Adaugi doar ce-ți trebuie: logo +300 lei, configurare Facebook + Google Business +500 lei, pagină în plus +200 lei, galerie +400 lei, programări online +500 lei, a doua limbă +700 lei, asistent AI +600 lei, promovare în 50 de ziare +1.500 lei. Iar dacă firma crește și vrei Site Custom (de la 3.500 lei), cei 1.500 lei plătiți devin avans — plătești doar diferența." },
 ];
 
@@ -67,7 +67,7 @@ export default function SiteStartPage() {
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-base text-text-muted sm:text-lg">
           Nu șablon de WordPress. Un site construit pe Next.js — aceeași tehnologie ca la marile
-          companii — rapid, modern, al tău cu totul. Cu domeniu și găzduire gratuite primul an.
+          companii — rapid, modern, al tău cu totul. Găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href="/plata-site-start" className="btn-primary text-base">
@@ -90,7 +90,7 @@ export default function SiteStartPage() {
           </p>
           <div className="mt-4 grid gap-2.5 text-sm text-text-muted">
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Site-ul complet, cu 5 pagini + blog, pe brandul tău <b className="text-text">(valoare reală 2.500+ lei)</b></span></p>
-            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Domeniu .ro + găzduire primul an <b className="text-text">(~350 lei)</b></span></p>
+            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Domeniu .ro + găzduire, incluse în administrare <b className="text-text">(de la 100 lei/lună)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🗞️ BONUS: <b className="text-text">un articol de presă despre firma ta, publicat în Botoșani Expres</b> — rețeaua noastră de presă, avantaj pe care nicio altă agenție nu-l are <b className="text-text">(~300 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🔍 BONUS: <b className="text-text">Radiografia Afacerii</b> — analiza completă a firmei tale cu AI: scor, recenzii vs concurență, vizibilitate în ChatGPT, plan de acțiune <b className="text-text">(299 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>💰 Iar dacă firma crește: <b className="text-text">cei {price} lei devin AVANS la site-ul mare</b> — plătești doar diferența</span></p>
@@ -234,7 +234,7 @@ export default function SiteStartPage() {
               {
                 "@type": "Product",
                 name: "Site Start — site de prezentare (5 pagini + blog)",
-                description: "Site profesional cu 5 pagini + blog, construit pe Next.js: domeniu + găzduire gratuite primul an, livrat în câteva zile.",
+                description: "Site profesional cu 5 pagini + blog, construit pe Next.js: domeniu + găzduire incluse în administrare (de la 100 lei/lună), livrat în câteva zile.",
                 brand: { "@type": "Organization", name: "Imperial Media" },
                 offers: {
                   "@type": "Offer",

@@ -156,7 +156,7 @@ export async function createSiteStartCheckoutSession(opts: {
     "line_items[0][price_data][product_data][name]":
       "Site Start — site de prezentare (4 pagini)",
     "line_items[0][price_data][product_data][description]":
-      "Site de prezentare custom: Acasă, Despre, Servicii, Contact. Domeniu + găzduire primul an incluse. Suma se scade integral din site-ul complet în 6 luni.",
+      "Site de prezentare custom: Acasă, Despre, Servicii, Contact. Domeniu + găzduire incluse în administrare (de la 100 lei/lună). Suma se scade integral din site-ul complet în 6 luni.",
   });
   if (opts.email) params.set("customer_email", opts.email);
   billingParams(params);

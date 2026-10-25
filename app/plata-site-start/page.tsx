@@ -15,7 +15,7 @@ export const metadata = {
 const INCLUDED = [
   "Site de prezentare cu 4 pagini: Acasă, Despre, Servicii, Contact (hartă + formular)",
   "Design pe brandul tău, construit pe Next.js — aceeași tehnologie ca site-urile mari, NU WordPress",
-  "Domeniu + găzduire GRATUITE primul an · certificat SSL · optimizare de bază Google",
+  "Domeniu + găzduire incluse în administrare (de la 100 lei/lună) · certificat SSL · optimizare de bază Google",
   "Livrare în câteva zile de la primirea conținutului (texte + poze de la tine)",
   "1 rundă de revizii inclusă + 14 zile corecturi mărunte",
   "Suma se scade INTEGRAL din site-ul complet dacă faci pasul în 6 luni",

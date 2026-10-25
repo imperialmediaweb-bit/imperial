@@ -10,8 +10,8 @@ const items = [
     a: "Pentru un site de prezentare standard durează între 2 și 4 săptămâni de la primirea conținutului. Magazinele online durează 4-8 săptămâni, în funcție de complexitate.",
   },
   {
-    q: "Ce se întâmplă cu domeniul și hostingul după primul an?",
-    a: "Primul an sunt incluse gratuit. După, costul de reînnoire e între 50€ și 80€/an, în funcție de extensia domeniului. Te anunțăm cu o lună înainte.",
+    q: "Cât costă găzduirea și domeniul?",
+    a: "Sunt incluse în administrarea lunară, de la 100 lei/lună, plătită de la lansare — împreună cu backup, actualizări și modificări mici. Cu asistent AI pe site, administrarea e 200 lei/lună.",
   },
   {
     q: "Pot combina mai multe pachete?",

@@ -24,7 +24,7 @@ export async function GET() {
 - Pachet Start Online (Google Business + Facebook, fără site): 500 lei
 
 ### Ce include prețul unui site?
-Design custom pe brandul clientului (nu template), domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO din construcție, versiune perfectă pe telefon, textele scrise de echipă din povestea clientului, imagini profesionale de stock dacă clientul nu are poze. La site-urile complete: campania de presă în 50 de ziare online, cadou.
+Design custom pe brandul clientului (nu template), domeniu .ro + găzduire incluse în administrare (de la 100 lei/lună), certificat SSL, optimizare SEO din construcție, versiune perfectă pe telefon, textele scrise de echipă din povestea clientului, imagini profesionale de stock dacă clientul nu are poze. La site-urile complete: campania de presă în 50 de ziare online, cadou.
 
 ### Cât durează?
 Site Start: câteva zile (3-7 zile lucrătoare) de la primirea conținutului. Site complet: 2-4 săptămâni. Magazin online: 4-8 săptămâni.
@@ -32,8 +32,8 @@ Site Start: câteva zile (3-7 zile lucrătoare) de la primirea conținutului. Si
 ### Pe ce tehnologie sunt construite site-urile?
 Next.js + TypeScript — aceeași tehnologie folosită de Netflix, Nike, TikTok. NU WordPress, NU template-uri. Rezultat: încărcare sub 1 secundă, scor Google PageSpeed 90+, fără plugin-uri vulnerabile, fără mentenanță obligatorie. Site-ul aparține 100% clientului (cod, domeniu, date).
 
-### Ce se întâmplă după primul an?
-Domeniul și găzduirea gratuite expiră. Opțiuni: Administrare Start (200 lei/lună — găzduire + domeniu + credite AI + modificări mici + backup), Administrare Complet (300 lei/lună — tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului + monitorizarea lunară a afacerii) sau reînnoire simplă (~350 lei/an). Clientul e notificat cu 30 de zile înainte; site-ul nu se suspendă fără anunț.
+### Cât costă după lansare?
+Găzduirea și domeniul sunt incluse în administrarea lunară, plătită de la lansare. Opțiuni: Administrare Start (100 lei/lună, de la lansare — găzduire + domeniu + modificări mici + backup), Administrare Complet (300 lei/lună — tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului + monitorizarea lunară a afacerii) sau reînnoire simplă (~350 lei/an). Clientul e notificat cu 30 de zile înainte; site-ul nu se suspendă fără anunț.
 
 ### Ce e Radiografia Afacerii?
 Analiză completă a unei firme generată de AI pe date reale (299 lei): scor 0-100, bilanțuri ANAF pe 3 ani, recenziile Google comparate cu competitorii reali din oraș, site-ul scanat pagină cu pagină, mențiunile din presă, vizibilitatea în recomandările ChatGPT/AI, analiza vitrinei din fotografii, plan de acțiune pe 12 luni. Include articol de promovare publicat în 50 de ziare online. Exemplu complet gratuit: ${siteConfig.url}/service/exemplu

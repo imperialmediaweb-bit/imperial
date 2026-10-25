@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Creare Site Web — custom, pe Next.js, de la 1.500 lei | Imperial Media",
   description:
-    "Creare site web profesional în România: 100% custom pe Next.js (nu WordPress), de la 1.500 lei. Domeniu + găzduire gratuite primul an, SEO inclus, livrare rapidă. 10+ ani, 200+ clienți.",
+    "Creare site web profesional în România: 100% custom pe Next.js (nu WordPress), de la 1.500 lei. Domeniu + găzduire incluse în administrare (de la 100 lei/lună), SEO inclus, livrare rapidă. 10+ ani, 200+ clienți.",
   alternates: { canonical: `${siteConfig.url}/creare-site-web` },
 };
 
@@ -25,7 +25,7 @@ export default function CreareSiteWebPage() {
       bullets={[
         "100% custom — codul, domeniul și datele sunt ale tale",
         "Scor Google PageSpeed 90+ — viteza e criteriu de ranking",
-        "Domeniu + găzduire GRATUITE primul an, SSL inclus",
+        "Domeniu + găzduire incluse în administrare (de la 100 lei/lună), SSL inclus",
         "SEO din construcție, nu adăugat la final",
         "Bonus: promovare în rețeaua noastră de 50 de ziare online",
         "10+ ani de experiență, 200+ clienți, 384+ proiecte livrate",
@@ -56,7 +56,7 @@ export default function CreareSiteWebPage() {
           title: "Ce include orice site făcut de noi",
           body: (
             <>
-              <p>Design unic pe brandul tău · versiune impecabilă pe telefon (acolo e 70% din trafic) · optimizare SEO tehnică din structură (meta, date structurate schema.org, viteză) · certificat SSL · formulare funcționale · domeniu .ro și găzduire gratuite primul an · textele scrise de noi din povestea ta · imagini profesionale dacă nu ai poze.</p>
+              <p>Design unic pe brandul tău · versiune impecabilă pe telefon (acolo e 70% din trafic) · optimizare SEO tehnică din structură (meta, date structurate schema.org, viteză) · certificat SSL · formulare funcționale · domeniu .ro și găzduire incluse în administrare (de la 100 lei/lună) · textele scrise de noi din povestea ta · imagini profesionale dacă nu ai poze.</p>
               <p>Și diferențiatorul pe care nu-l are nicio altă agenție din România: <strong className="text-text">promovarea în propria noastră rețea de presă</strong> — articole despre firma ta în ziare online reale, cu tot cu linkuri. La Site Start primești un articol în ziarul județului tău; la site-urile complete, campania în toate cele 50 de publicații.</p>
             </>
           ),
@@ -72,10 +72,10 @@ export default function CreareSiteWebPage() {
         },
       ]}
       faqs={[
-        { q: "Cât costă un site web?", a: "La Imperial Media: Site Start (5 pagini + blog) — 1.500 lei totul inclus; site de prezentare complet — de la 699€; magazin online — de la 1.200€; aplicații custom — la cerere. Toate includ domeniu + găzduire primul an, SSL și SEO de bază. Estimarea exactă pentru proiectul tău e gratuită și durează 2 minute." },
+        { q: "Cât costă un site web?", a: "La Imperial Media: Site Start (5 pagini + blog) — 1.500 lei totul inclus; site de prezentare complet — de la 699€; magazin online — de la 1.200€; aplicații custom — la cerere. Toate includ SSL și SEO de bază; găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună. Estimarea exactă pentru proiectul tău e gratuită și durează 2 minute." },
         { q: "Cât durează să-mi faceți site-ul?", a: "Site Start: 3-7 zile lucrătoare de la primirea conținutului. Site de prezentare complet: 2-4 săptămâni. Magazin online: 4-8 săptămâni. Termenul curge de când ne trimiți textele și pozele (formular de 5 minute — textele finale le scriem noi)." },
         { q: "Lucrați cu firme din orice oraș?", a: "Da — totul se face online: comandă, plată, contract electronic, brief, livrare. Avem clienți în toată România și diaspora, plus pagini locale dedicate pentru fiecare oraș important, cu proiecte livrate în zonă." },
-        { q: "Site-ul e al meu sau rămân legat de voi?", a: "E 100% al tău: codul, domeniul, datele. Nu există abonament obligatoriu — după primul an alegi singur dacă vrei administrare de la noi (de la 200 lei/lună — credite AI, găzduire și domeniu incluse) sau doar reînnoirea domeniului." },
+        { q: "Site-ul e al meu sau rămân legat de voi?", a: "E 100% al tău: codul, domeniul, datele. Găzduirea și domeniul sunt incluse în administrarea lunară (de la 100 lei/lună); dacă vreodată pleci, îți predăm codul, domeniul și datele." },
         { q: "Faceți și SEO?", a: "Da — fiecare site vine cu SEO tehnic din construcție (structură, meta, date structurate, viteză 90+), iar campaniile de presă din rețeaua noastră de 50 de ziare construiesc autoritatea domeniului. Pentru optimizarea continuă avem serviciul dedicat de optimizare SEO." },
       ]}
       ctaLabel="Primește estimarea gratuită"

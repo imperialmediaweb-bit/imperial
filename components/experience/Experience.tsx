@@ -187,7 +187,7 @@ export function Experience() {
                 ["03", "AI & automatizări", "Asistenți AI pentru clienți și automatizarea proceselor interne.", "/brief"],
                 ["04", "Presă — 50 de ziare", "Articole în rețeaua proprie Media Expres, cu acoperire națională.", "/servicii"],
                 ["05", "SEO + vizibilitate AI", "Poziționare în Google și vizibilitate în ChatGPT și Gemini.", "/optimizare-seo"],
-                ["06", "Administrare lunară", "De la 200 lei/lună — găzduire, domeniu și credite AI incluse.", "/servicii"],
+                ["06", "Administrare lunară", "De la 100 lei/lună, de la lansare — găzduire, domeniu, backup și actualizări.", "/servicii"],
               ].map(([n, title, text, href], i) => (
                 <motion.div
                   key={n}
@@ -337,7 +337,7 @@ export function Experience() {
             </motion.div>
             <div className="mt-10 grid max-w-4xl gap-4 sm:grid-cols-3">
               {[
-                ["Site Start", "1.500 lei", "plată unică — preț fix", ["5 pagini + blog incluse", "Design unic, pe brandul tău", "Găzduire 1 an inclusă"], "/site-start", false],
+                ["Site Start", "1.500 lei", "plată unică — preț fix", ["5 pagini + blog incluse", "Design unic, pe brandul tău", "Găzduire în administrare, de la 100 lei/lună"], "/site-start", false],
                 ["Site Custom", "3.500 lei", "de la (≈ 699 €), plată unică", ["Design unic, creat de la zero", "Pagini nelimitate, panou propriu", "SEO tehnic din construcție"], "/creare-site-web", true],
                 ["Magazin online", "6.000 lei", "de la (≈ 1.200 €), plată unică", ["Plăți cu cardul integrate", "AWB automat la curieri", "Facturare integrată"], "/creare-magazin-online", false],
               ].map(([name, price, per, feats, href, featured], i) => (
@@ -505,7 +505,7 @@ export function Experience() {
 /* FAQ compact pe sticlă — primele 4 întrebări, acordeon */
 const FAQ_ITEMS = [
   ["Cât durează realizarea unui site?", "Un site de prezentare durează 2-4 săptămâni de la primirea conținutului; magazinele online 4-8 săptămâni, în funcție de complexitate."],
-  ["Ce se întâmplă cu domeniul și hostingul după primul an?", "Primul an sunt incluse gratuit. Apoi poți alege Administrarea lunară (de la 200 lei/lună, cu găzduire și domeniu incluse) sau doar reînnoirea anuală. Te anunțăm cu 30 de zile înainte."],
+  ["Cât costă găzduirea și domeniul?", "Sunt incluse în administrarea lunară, de la 100 lei/lună, plătită de la lansare. Include și backup, actualizări și modificări mici. Cu asistent AI pe site, administrarea e 200 lei/lună."],
   ["Cum se face plata?", "50% avans la începerea proiectului, 50% la livrare. Acceptăm transfer bancar și emitem factură."],
   ["Pot face modificări după ce site-ul e gata?", "Da. Modificările minore din primele 30 de zile sunt incluse; ulterior, ele intră în Administrarea lunară."],
 ];

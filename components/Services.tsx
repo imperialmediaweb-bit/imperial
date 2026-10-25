@@ -48,7 +48,7 @@ const small = [
     wash: "from-brand-magenta/[0.16] via-brand-orange/[0.06] to-transparent",
     icon: Wrench,
     name: "Administrare",
-    text: "De la 200 lei/lună — credite AI, găzduire și domeniu incluse din anul 2.",
+    text: "De la 100 lei/lună, de la lansare — găzduire, domeniu, backup și actualizări.",
     href: "/servicii",
   },
 ];
