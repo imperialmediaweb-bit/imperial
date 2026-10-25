@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AnalizaSite } from "@/components/analiza/AnalizaSite";
 
 export const metadata: Metadata = {
-  title: "Ai nevoie de un site? Află în 2 minute | Imperial Media",
+  title: "Ai nevoie de un site? Află în 2 minute",
   description:
     "Analiză gratuită pentru afacerea ta: ce clienți ți-ar aduce un site, din câți clienți se plătește și ce pachet ți se potrivește — salon, cabinet, restaurant, service, servicii sau magazin online.",
   alternates: { canonical: "/analiza" },
