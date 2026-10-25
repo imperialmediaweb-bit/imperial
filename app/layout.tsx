@@ -17,18 +17,21 @@ const instrument = Instrument_Serif({
   style: ["normal", "italic"],
   variable: "--font-instrument",
   display: "swap",
+  preload: false,
 });
 const jetbrains = JetBrains_Mono({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500"],
   variable: "--font-jetbrains",
   display: "swap",
+  preload: false,
 });
 const michroma = Michroma({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-michroma",
   display: "swap",
+  preload: false,
 });
 const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
@@ -41,9 +44,7 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { NoiseOverlay } from "@/components/effects/NoiseOverlay";
 import { MetaPixel } from "@/components/MetaPixel";
-import { ScrollProgress } from "@/components/effects/ScrollProgress";
-import { LightThread } from "@/components/effects/LightThread";
-import { SparkTrail } from "@/components/effects/SparkTrail";
+import { DeferredEffects } from "@/components/effects/DeferredEffects";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -106,13 +107,6 @@ export default function RootLayout({
   return (
     <html lang="ro" className={`${inter.variable} ${archivo.variable} ${instrument.variable} ${jetbrains.variable} ${michroma.variable}`}>
       <head>
-        {/* Font preconnect — elimină latența DNS/TCP pentru Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
         {/* JSON-LD: Organization + LocalBusiness */}
         <script
           type="application/ld+json"
@@ -175,9 +169,9 @@ export default function RootLayout({
       {/* Google Analytics 4 + Google Tag */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-TBV24GHJTD"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="ga4-init" strategy="afterInteractive">
+      <Script id="ga4-init" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -190,9 +184,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg text-text antialiased">
         <MetaPixel />
         <NoiseOverlay />
-        <ScrollProgress />
-        <LightThread />
-        <SparkTrail />
+        <DeferredEffects />
         <Header />
         <div>{children}</div>
         <Footer />

@@ -179,11 +179,12 @@ export const DOMENII: Domeniu[] = [
   },
 ];
 
-export type Prezenta = "recomandari" | "facebook" | "google" | "site-vechi";
+export type Prezenta = "recomandari" | "facebook" | "google" | "site-vechi" | "site-bun";
 
 export const PREZENTA: { key: Prezenta; label: string; gap: string }[] = [
   { key: "recomandari", label: "Doar din recomandări", gap: "Acum depinzi doar de recomandări. Toți cei care te caută pe Google ajung la concurență." },
   { key: "facebook", label: "Am pagină de Facebook", gap: "Facebook ajută, dar nu apari pe Google, iar cine nu are cont nu-ți vede pagina." },
   { key: "google", label: "Sunt pe Google Maps", gap: "Te găsesc pe hartă, dar fără site nu au unde vedea serviciile, prețurile și lucrările tale." },
   { key: "site-vechi", label: "Am un site vechi", gap: "Un site vechi, lent sau nefuncțional pe telefon îndepărtează clienții în loc să-i aducă." },
+  { key: "site-bun", label: "Am un site care merge bine", gap: "Ai deja site — acum contează să fie găsit: pe Google, în răspunsurile ChatGPT și în presa locală." },
 ];

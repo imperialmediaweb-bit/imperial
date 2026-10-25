@@ -185,7 +185,7 @@ export function Experience() {
                 ["01", "Site-uri & aplicații custom", "Design unic, construit de la zero, fără șabloane. De la 3.500 lei.", "/creare-site-web"],
                 ["02", "Magazine online", "Magazin Start cu plată ramburs; opțional plăți cu cardul, AWB și facturare. De la 3.000 lei.", "/creare-magazin-online"],
                 ["03", "AI & automatizări", "Asistenți AI pentru clienți și automatizarea proceselor interne.", "/brief"],
-                ["04", "Presă — 50 de ziare", "Articole în rețeaua proprie Media Expres, cu acoperire națională.", "/servicii"],
+                ["04", "Presă — 50 de ziare", "Articole în rețeaua parteneră Media Expres, cu acoperire națională.", "/servicii"],
                 ["05", "SEO + vizibilitate AI", "Poziționare în Google și vizibilitate în ChatGPT și Gemini.", "/optimizare-seo"],
                 ["06", "Administrare lunară", "De la 100 lei/lună, de la lansare — găzduire, domeniu, backup și actualizări.", "/servicii"],
               ].map(([n, title, text, href], i) => (

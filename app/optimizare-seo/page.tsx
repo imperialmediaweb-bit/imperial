@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Optimizare SEO + vizibilitate în AI (ChatGPT, Gemini) | Imperial Media",
   description:
-    "Optimizare SEO pentru site-uri și afaceri locale din România: tehnic, conținut, autoritate prin presă (rețea proprie de 50 de ziare) și GEO — vizibilitate în ChatGPT, Gemini, Perplexity.",
+    "Optimizare SEO pentru site-uri și afaceri locale din România: tehnic, conținut, autoritate prin presă (rețeaua parteneră Media Expres, 50 de ziare) și GEO — vizibilitate în ChatGPT, Gemini, Perplexity.",
   alternates: { canonical: `${siteConfig.url}/optimizare-seo` },
 };
 
@@ -20,11 +20,11 @@ export default function OptimizareSeoPage() {
       chip="📈 Optimizare SEO + AI"
       h1={<>Optimizare SEO — să te găsească <span className="text-gradient">Google ȘI ChatGPT</span></>}
       h1Plain="Optimizare SEO și vizibilitate în motoarele AI"
-      intro="SEO-ul în 2026 are două fronturi: Google (unde se caută încă cel mai mult) și motoarele AI — ChatGPT, Gemini, Perplexity — unde clienții întreabă direct „ce firmă îmi recomanzi?”. Le acoperim pe amândouă, cu o armă pe care n-o are nimeni: propria rețea de presă."
+      intro="SEO-ul în 2026 are două fronturi: Google (unde se caută încă cel mai mult) și motoarele AI — ChatGPT, Gemini, Perplexity — unde clienții întreabă direct „ce firmă îmi recomanzi?”. Le acoperim pe amândouă, iar pentru autoritate lucrăm cu rețeaua parteneră de presă Media Expres."
       priceText="SEO tehnic inclus la orice site · campanii de autoritate de la 300€"
       bullets={[
         "SEO tehnic: structură, meta, date structurate schema.org, viteză 90+",
-        "Autoritate prin presă REALĂ: rețeaua proprie de 50 de ziare online",
+        "Autoritate prin presă reală: rețeaua parteneră Media Expres, 50 de ziare online",
         "GEO: optimizare pentru ChatGPT, Gemini, Perplexity (llms.txt, date structurate, mențiuni)",
         "SEO local: Google Business, recenzii, pagini de oraș",
         "Conținut care răspunde la întrebări — formatul pe care îl citează AI-urile",
@@ -37,7 +37,7 @@ export default function OptimizareSeoPage() {
             <>
               <p><strong className="text-text">1. Tehnic</strong> — fundația: site rapid (sub 1 secundă), structură corectă, meta și date structurate schema.org pe fiecare pagină. La site-urile noastre e inclus din construcție, nu vândut separat ca „pachet SEO”.</p>
               <p><strong className="text-text">2. Conținut</strong> — pagini care răspund exact la ce caută omul: câte o pagină pe serviciu și pe oraș, întrebări frecvente cu răspunsuri directe, ghiduri reale. Așa am construit și site-ul nostru: pagini dedicate pentru fiecare oraș din România.</p>
-              <p><strong className="text-text">3. Autoritate</strong> — motivul pentru care paginile urcă: linkuri și mențiuni din surse de încredere. Aici e avantajul nostru unic: <strong className="text-text">deținem rețeaua Media Expres — 50 de ziare online</strong> (unul în fiecare județ + 9 naționale). Campaniile de presă pentru clienți pleacă din propria noastră rețea, nu din „parteneriate” negociate scump.</p>
+              <p><strong className="text-text">3. Autoritate</strong> — motivul pentru care paginile urcă: linkuri și mențiuni din surse de încredere. Aici lucrăm cu <strong className="text-text">rețeaua parteneră Media Expres — 50 de ziare online</strong> (unul în fiecare județ + 9 naționale), unde publicăm campaniile de presă pentru clienți.</p>
             </>
           ),
         },
@@ -55,7 +55,7 @@ export default function OptimizareSeoPage() {
           body: (
             <>
               <p>Pentru afaceri locale, bătălia se câștigă pe trei fronturi: profilul Google Business optimizat (categorii, poze, postări), recenziile (volum + prospețime + răspunsuri) și paginile locale de pe site. Ghidul complet, gratuit: <Link href="/blog/seo-local-ghid-romania" className="text-brand-orange hover:underline">SEO local în România →</Link></p>
-              <p>Iar pentru autoritate locală, articolul în ziarul județului tău — din rețeaua noastră — e cel mai puternic semnal pe care îl poți cumpăra cinstit.</p>
+              <p>Iar pentru autoritate locală, articolul în ziarul județului tău — din rețeaua parteneră Media Expres — e cel mai puternic semnal pe care îl poți cumpăra cinstit.</p>
             </>
           ),
         },

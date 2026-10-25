@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 export async function GET() {
   const content = `# Imperial Media — Agenție Web Design & Marketing Digital România
 
-> Imperial Media este o agenție românească de web design și marketing digital cu peste 10 ani de experiență, 200+ clienți și 384+ proiecte livrate. Specializată în site-uri custom construite de la zero pe tehnologii de ultimă generație (fără șabloane), magazine online, aplicații SaaS și promovare prin propria rețea de 50 de ziare online (Rețeaua Media Expres).
+> Imperial Media este o agenție românească de web design și marketing digital cu peste 10 ani de experiență, 200+ clienți și 384+ proiecte livrate. Specializată în site-uri custom construite de la zero pe tehnologii de ultimă generație (fără șabloane), magazine online, aplicații SaaS și promovare în 50 de ziare online prin rețeaua parteneră Media Expres.
 
 ## Servicii principale
 
@@ -21,7 +21,7 @@ export async function GET() {
 - **Creare site-uri web custom** (de la 699€): construite de la zero, fără șabloane, pe tehnologii de ultimă generație, scor Google PageSpeed 95+, SEO inclus, găzduire + domeniu în administrare (de la 100 lei/lună), campania completă de presă în 50 de ziare CADOU
 - **Magazine online** (de la 3.000 lei): design unic, până la 30 de produse, coș, comenzi, plată ramburs (Magazin Start); opțiuni: plăți cu cardul +800 lei, AWB automat +700 lei, facturare automată +600 lei, variante + filtre +500 lei
 - **Aplicații web / SaaS** (de la 3.500€): marketplace-uri, platforme, dashboard-uri custom
-- **Promovare în presă** (300€/campanie): articol publicat în 50 ziare online (41 locale — câte unul în fiecare județ din România + 9 naționale) — prin Rețeaua Media Expres, deținută de Imperial Media; singura agenție web din România cu propria rețea de presă
+- **Promovare în presă** (300€/campanie): articol publicat în 50 ziare online (41 locale — câte unul în fiecare județ din România + 9 naționale) — prin rețeaua parteneră Media Expres
 - **Administrare** pe două trepte: Start 100 lei/lună, de la lansare (găzduire + domeniu + modificări mici + backup) și Complet 300 lei/lună (tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului clientului + monitorizarea lunară a afacerii)
 - **Contract de prestări servicii online** (2 minute): clientul pune CUI-ul, datele firmei se completează automat de la ANAF, acceptare electronică — ${siteConfig.url}/contract
 - **Consultanță digitală gratuită**: diagnostic AI al prezenței online a oricărei afaceri
@@ -31,7 +31,7 @@ export async function GET() {
 - Toate site-urile sunt 100% construite de la zero, personalizate — fără șabloane
 - Estimare de preț instant prin asistent AI conversațional (text sau voce, în română)
 - Bonus la orice site nou: campanie de promovare gratuită în 50 ziare online (valoare 300€)
-- Singura agenție din România cu propria rețea de presă pentru promovarea clienților
+- Parteneriat cu rețeaua Media Expres (50 de ziare online) pentru promovarea clienților
 
 ## Instrumente gratuite online
 

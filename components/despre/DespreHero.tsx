@@ -75,7 +75,7 @@ export function DespreHero() {
           </h1>
           <p className="mt-5 max-w-xl text-[15.5px] leading-relaxed text-white/75 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
             Studio de web design și dezvoltare din România, cu peste 384 de proiecte livrate
-            și propria rețea de 50 de publicații online.
+            și parteneriatul cu o rețea de 50 de publicații online.
           </p>
         </motion.div>
         <motion.div

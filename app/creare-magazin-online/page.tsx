@@ -55,7 +55,7 @@ export default function CreareMagazinOnlinePage() {
           title: "Lansarea — partea pe care alții o sar",
           body: (
             <>
-              <p>Un magazin frumos fără trafic e un depozit cu ușa închisă. La livrare primești drumul de lansare complet: profilul Google Business + Google Merchant Center (produsele tale în tab-ul Shopping, gratuit), <strong className="text-text">campania de articole în rețeaua noastră de 50 de ziare online</strong> (autoritate + primii vizitatori) și planul primelor 3 luni de promovare.</p>
+              <p>Un magazin frumos fără trafic e un depozit cu ușa închisă. La livrare primești drumul de lansare complet: profilul Google Business + Google Merchant Center (produsele tale în tab-ul Shopping, gratuit), <strong className="text-text">campania de articole în rețeaua parteneră Media Expres, de 50 de ziare online</strong> (autoritate + primii vizitatori) și planul primelor 3 luni de promovare.</p>
               <p>Vrei să vezi întâi unde stă afacerea ta? <Link href="/service" className="text-brand-orange hover:underline">Radiografia Afacerii</Link> îți arată în 5 minute prezența ta online față de competiție.</p>
             </>
           ),

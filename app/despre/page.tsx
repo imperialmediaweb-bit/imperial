@@ -8,7 +8,7 @@ import { IconBadge } from "@/components/IconBadge";
 export const metadata = {
   title: "Despre noi — Imperial Media",
   description:
-    "Cu peste 10 ani experiență, 384+ proiecte livrate și o rețea proprie de 50 de ziare online, Imperial Media construiește site-uri, magazine online și campanii care aduc clienți reali.",
+    "Cu peste 10 ani experiență, 384+ proiecte livrate și parteneriatul cu rețeaua Media Expres, de 50 de ziare online, Imperial Media construiește site-uri, magazine online și campanii care aduc clienți reali.",
 };
 
 /* povestea, pe firul de lumină */
@@ -25,8 +25,8 @@ const milestones = [
   },
   {
     k: "Rețeaua",
-    title: "50 de ziare online, ale noastre",
-    text: "Am dezvoltat Media Expres, o rețea proprie de 50 de publicații online locale și naționale. Clienții noștri beneficiază de articole editoriale care cresc vizibilitatea și autoritatea în Google.",
+    title: "Parteneri cu 50 de ziare online",
+    text: "Suntem parteneri cu Media Expres, o rețea de 50 de publicații online locale și naționale. Clienții noștri beneficiază de articole editoriale care cresc vizibilitatea și autoritatea în Google.",
   },
   {
     k: "Azi",
@@ -39,7 +39,7 @@ const services = [
   ["01", "Web design & site-uri de prezentare", "Platforme moderne, rapide, scrise de la zero."],
   ["02", "Magazine online", "Plăți integrate, livrare, panouri de administrare intuitive."],
   ["03", "SEO & vizibilitate AI", "Trafic organic constant + prezență în ChatGPT/Gemini."],
-  ["04", "Promovare în presă", "Articole în rețeaua proprie de 50 de ziare, cu linkuri dofollow."],
+  ["04", "Promovare în presă", "Articole în rețeaua parteneră Media Expres, de 50 de ziare, cu linkuri dofollow."],
   ["05", "Social media & email", "Campanii targetate și automatizări care mențin relația cu clienții."],
   ["06", "Administrare & mentenanță", "Backup-uri, actualizări și suport tehnic permanent."],
 ];
@@ -180,7 +180,7 @@ export default function DesprePage() {
               <IconBadge icon={Newspaper} className="!h-14 !w-14" />
               <div className="min-w-[240px] flex-1">
                 <h2 className="font-display text-2xl font-bold text-text">
-                  Deținem rețeaua <span className="text-gradient">Media Expres</span> — 50 de ziare online.
+                  Suntem parteneri cu rețeaua <span className="text-gradient">Media Expres</span> — 50 de ziare online.
                 </h2>
                 <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-text-muted">
                   Publicații locale și naționale în toată România. Articolele despre clienții noștri
@@ -189,7 +189,7 @@ export default function DesprePage() {
               </div>
               <div className="flex items-center gap-2 text-sm font-semibold text-brand-magenta">
                 <BadgeCheck className="h-5 w-5" />
-                Avantaj exclusiv
+                Partener de presă
               </div>
             </div>
           </div>

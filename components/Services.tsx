@@ -34,7 +34,7 @@ const small = [
     wash: "from-brand-purple/[0.2] via-brand-magenta/[0.06] to-transparent",
     icon: Newspaper,
     name: "Presă — 50 de ziare",
-    text: "Articole editoriale în rețeaua proprie Media Expres — 50 de publicații din toată țara.",
+    text: "Articole editoriale în rețeaua parteneră Media Expres — 50 de publicații din toată țara.",
     href: "/servicii",
   },
   {

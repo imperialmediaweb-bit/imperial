@@ -36,15 +36,23 @@ export function AnalizaSite() {
   const dom = DOMENII.find((d) => d.key === domKey);
   const done = step === 4;
 
+  // Are deja un site bun: nu-i recomandăm alt site, ci să-l facem găsit (AI, presă, asistent)
+  const areSite = prezenta === "site-bun";
   const rezultat = useMemo(() => {
     if (!dom) return null;
+    if (areSite) {
+      const addons = SITE_START_ADDONS.filter((a) => ["geo", "ai", "presa"].includes(a.key));
+      const total = addons.reduce((s, a) => s + a.price, 0);
+      const clientiPtSite = Math.max(1, Math.ceil(total / Math.max(1, valoare)));
+      return { base: 0, pachet: "Creștere pentru site-ul tău", addons, total, clientiPtSite };
+    }
     const base = dom.custom ? SHOP_BASE : 1500;
-    const pachet = dom.custom ? "Magazin online" : "Site Start";
-    const addons = (dom.custom ? SHOP_ADDONS : SITE_START_ADDONS).filter((a) => dom.addons.includes(a.key));
+    const pachet = dom.custom ? "Magazin online" : prezenta === "site-vechi" ? "Site Start (refacerea site-ului)" : "Site Start";
+    const addons = (dom.custom ? SHOP_ADDONS : SITE_START_ADDONS).filter((a) => dom.addons.includes(a.key) && !a.onlyOnPage);
     const total = base + addons.reduce((s, a) => s + a.price, 0);
     const clientiPtSite = Math.max(1, Math.ceil(total / Math.max(1, valoare)));
     return { base, pachet, addons, total, clientiPtSite };
-  }, [dom, valoare]);
+  }, [dom, valoare, areSite, prezenta]);
 
   useEffect(() => {
     if (step !== 4 || !dom || !rezultat) return;
@@ -240,7 +248,7 @@ export function AnalizaSite() {
               ) : null}
               {ai?.intro ? <p className="mt-4 text-[15px] leading-relaxed text-white/80">{ai.intro}</p> : null}
               <h3 className="mt-3 font-display text-2xl font-bold leading-tight text-text sm:text-3xl">
-                Site-ul se plătește din{" "}
+                {areSite ? "Investiția se plătește din " : "Site-ul se plătește din "}
                 <span className="text-gradient">
                   {rezultat.clientiPtSite} {rezultat.clientiPtSite === 1 ? "client" : "clienți"}
                 </span>
@@ -248,7 +256,7 @@ export function AnalizaSite() {
               </h3>
               <p className="mt-3 text-[14.5px] leading-relaxed text-white/70">
                 La o valoare medie de {lei(valoare)} pe {dom.clientLabel}, investiția de {lei(rezultat.total)} se
-                recuperează din primii {rezultat.clientiPtSite} clienți noi aduși de site. Tot ce vine după e câștig.
+                recuperează din primii {rezultat.clientiPtSite} clienți noi{areSite ? " care te găsesc" : " aduși de site"}. Tot ce vine după e câștig.
               </p>
 
               <h4 className="mt-8 font-display text-lg font-bold text-text">Cât ar putea crește afacerea:</h4>
@@ -274,13 +282,13 @@ export function AnalizaSite() {
 
               {prezenta ? (
                 <div className="mt-6 rounded-xl border border-brand-orange/25 bg-brand-orange/[0.06] p-4 text-[14px] leading-relaxed text-white/80">
-                  <b className="text-text">Unde pierzi acum clienți: </b>
+                  <b className="text-text">{areSite ? "Pasul următor: " : "Unde pierzi acum clienți: "}</b>
                   {PREZENTA.find((p) => p.key === prezenta)!.gap}
                 </div>
               ) : null}
 
               <h4 className="mt-8 font-display text-lg font-bold text-text">
-                Ce ți-ar aduce un site, pentru o afacere ca a ta din {oras}:
+                {areSite ? `Ce i-ar aduce în plus site-ului tău, în ${oras}:` : `Ce ți-ar aduce un site, pentru o afacere ca a ta din ${oras}:`}
               </h4>
               <ul className="mt-4 space-y-3">
                 {(ai?.beneficii?.length ? ai.beneficii : dom.benefits).map((b) => (
@@ -320,7 +328,8 @@ export function AnalizaSite() {
                 <span className="font-jmono text-[10px] uppercase tracking-[0.25em] text-white/55">Recomandarea noastră</span>
                 {ai?.concluzie ? <p className="mt-2 text-[14px] leading-relaxed text-white/75">{ai.concluzie}</p> : null}
                 <p className="mt-2 font-display text-xl font-bold text-text">
-                  {rezultat.pachet} — {lei(rezultat.base)}
+                  {rezultat.pachet}
+                  {rezultat.base ? ` — ${lei(rezultat.base)}` : ""}
                 </p>
                 {rezultat.addons.length ? (
                   <ul className="mt-3 space-y-1.5 text-[13.5px] text-white/70">
@@ -338,7 +347,11 @@ export function AnalizaSite() {
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
-                    href={`/brief?sursa=analiza&domeniu=${dom.key}&oras=${encodeURIComponent(oras)}`}
+                    href={
+                      areSite
+                        ? `/brief?sursa=analiza&domeniu=${dom.key}&oras=${encodeURIComponent(oras)}`
+                        : `/estimare?tip=${dom.custom ? "magazin" : "start"}&optiuni=${rezultat.addons.map((a) => a.key).join(",")}&domeniu=${dom.key}`
+                    }
                     className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-[14px] font-semibold text-white shadow-glow-orange transition hover:scale-[1.04]"
                   >
                     <Zap className="h-4 w-4" />

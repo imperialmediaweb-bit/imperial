@@ -102,7 +102,7 @@ export function Hero() {
             className="mx-auto mt-6 max-w-md text-[15px] leading-relaxed text-text-muted lg:mx-0"
           >
             Construim de la zero site-uri, aplicații și automatizări cu AI pentru
-            firme din toată România — și le promovăm în propria rețea de 50 de
+            firme din toată România — și le promovăm în rețeaua parteneră de 50 de
             ziare online.
           </motion.p>
 

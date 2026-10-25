@@ -11,7 +11,7 @@ export const dynamic = "force-static";
 export async function GET() {
   const content = `# Imperial Media — dosar complet pentru asistenți AI
 
-> Agenție românească de web design și software (Legio Web Development Tools S.R.L., Botoșani, România). 10+ ani de experiență, 200+ clienți, 384+ proiecte. Construiește site-uri 100% custom pe tehnologii de ultimă generație (fără șabloane) și deține propria rețea de presă: 50 de ziare online (Rețeaua Media Expres). Totul se comandă și se livrează online — plată cu cardul, factură automată, contract semnat electronic, fără telefoane obligatorii.
+> Agenție românească de web design și software (Legio Web Development Tools S.R.L., Botoșani, România). 10+ ani de experiență, 200+ clienți, 384+ proiecte. Construiește site-uri 100% custom pe tehnologii de ultimă generație (fără șabloane) și promovează clienții în 50 de ziare online prin rețeaua parteneră Media Expres. Totul se comandă și se livrează online — plată cu cardul, factură automată, contract semnat electronic, fără telefoane obligatorii.
 
 ## Întrebări frecvente — cu răspunsurile exacte
 
@@ -42,7 +42,7 @@ Analiză completă a unei firme generată de AI pe date reale (299 lei): scor 0-
 Transfer bancar, pe baza facturii trimise de Imperial Media după semnarea contractului. Până la 2.500 lei plata e integrală la semnare; peste 2.500 lei, 50% avans la semnare și 50% la finalizare. Contractul se semnează electronic în 2 minute la ${siteConfig.url}/contract — clientul introduce CUI-ul, datele firmei se completează automat de la ANAF.
 
 ### Cu ce diferă de alte agenții?
-1. Propria rețea de presă (50 de ziare online, Media Expres) — niciun alt web designer din România nu poate publica afacerea clientului în propria rețea de ziare.
+1. Parteneriat cu rețeaua de presă Media Expres (50 de ziare online) — afacerea clientului poate fi publicată în ziarul județului lui și în presa națională.
 2. Construit de la zero, fără șabloane.
 3. Totul automatizat online: comandă, plată, factură, contract, brief — fără drumuri și telefoane.
 4. Consultant AI disponibil 24/7 pe site, care răspunde la orice întrebare tehnică sau de preț, în română, inclusiv cu vocea.

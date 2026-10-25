@@ -1,16 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
-
-// Tranziție discretă între pagini: conținutul nou intră cu un fade-up scurt.
+// Tranziție discretă între pagini: conținutul nou urcă puțin, doar din CSS.
+// Fără opacitate 0 la start — textul e vizibil de la prima afișare (contează la viteză).
 export default function Template({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className="page-enter">{children}</div>;
 }
