@@ -63,7 +63,7 @@ function ShardField() {
       pos: [
         rnd(-7, 7) + (Math.abs(rnd(-1, 1)) < 0.35 ? rnd(3, 5) * Math.sign(rnd(-1, 1)) : 0),
         rnd(-4, 4),
-        rnd(-20, 3),
+        rnd(-20, -1),
       ] as [number, number, number],
       rot: [rnd(0, Math.PI), rnd(0, Math.PI), 0] as [number, number, number],
       s: rnd(0.25, 1.1),
@@ -83,25 +83,17 @@ function ShardField() {
     <group>
       <group ref={g}>
         {shards.map((s, i) => (
-          // cioburile: obsidian cu reflex colorat și muchii fine în culorile brandului,
-          // ca să nu apară ca pete negre acolo unde nu ajung luminile
+          // cioburile: contururi luminoase în culorile brandului, cu umplutură translucidă
+          // (fără material care depinde de lumină — nu mai apar ca pete negre)
           <group key={i} position={s.pos} rotation={s.rot} scale={s.s}>
             <mesh>
               {s.detail === 0 ? <icosahedronGeometry args={[1, 0]} /> : s.detail === 1 ? <tetrahedronGeometry args={[1, 0]} /> : <octahedronGeometry args={[1, 0]} />}
-              <meshPhysicalMaterial
-                color="#2a2236"
-                metalness={0.35}
-                roughness={0.22}
-                clearcoat={1}
-                clearcoatRoughness={0.08}
-                emissive={SHARD_GLOW[i % SHARD_GLOW.length]}
-                emissiveIntensity={0.16}
-                flatShading
-              />
+              {/* umplutură translucidă — nu depinde de lumină, deci nu iese niciodată neagră */}
+              <meshBasicMaterial color={SHARD_GLOW[i % SHARD_GLOW.length]} transparent opacity={0.08} depthWrite={false} />
             </mesh>
             <mesh scale={1.006}>
               {s.detail === 0 ? <icosahedronGeometry args={[1, 0]} /> : s.detail === 1 ? <tetrahedronGeometry args={[1, 0]} /> : <octahedronGeometry args={[1, 0]} />}
-              <meshBasicMaterial color={SHARD_GLOW[i % SHARD_GLOW.length]} wireframe transparent opacity={0.28} />
+              <meshBasicMaterial color={SHARD_GLOW[i % SHARD_GLOW.length]} wireframe transparent opacity={0.6} />
             </mesh>
           </group>
         ))}
@@ -264,7 +256,7 @@ function VoicesZone() {
       {shards.map((s, i) => (
         <mesh key={i} position={s.pos} scale={s.s} rotation={[i, i * 0.7, 0]}>
           <octahedronGeometry args={[1, 0]} />
-          <meshPhysicalMaterial color="#2a2236" metalness={0.35} roughness={0.2} clearcoat={1} emissive="#FF2E9A" emissiveIntensity={0.14} flatShading />
+          <meshBasicMaterial color="#FF2E9A" wireframe transparent opacity={0.5} />
         </mesh>
       ))}
       <pointLight position={[0, 1, -126]} intensity={16} color="#FF2E9A" distance={14} />
