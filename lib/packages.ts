@@ -32,6 +32,7 @@ export const packages: Package[] = [
       "Domeniu și hosting gratuit 1 an",
       "Logo design (1 draft)",
       "Email personalizat",
+      "Asistent AI pe site inclus",
       "Promovare 1 lună × 50 de ziare",
     ],
   },

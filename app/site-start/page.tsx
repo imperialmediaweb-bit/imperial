@@ -34,6 +34,7 @@ const INCLUDED = [
   "Domeniu (.ro) + găzduire GRATUITE primul an",
   "Certificat SSL (https) și optimizare de bază Google incluse",
   "Perfect pe telefon — acolo unde te caută 70% din clienți",
+  "Asistent AI pe site, inclus — știe tot site-ul și răspunde clienților 24/7",
   "1 rundă de revizii + 14 zile de corecturi mărunte",
 ];
 
