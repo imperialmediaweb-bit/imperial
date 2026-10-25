@@ -78,12 +78,12 @@ const SPAN_CYCLE = [
 ];
 
 const FALLBACK_GRADIENTS = [
-  "from-brand-orange via-pink-500 to-brand-purple",
-  "from-brand-purple to-indigo-600",
-  "from-amber-500 to-brand-orange",
-  "from-emerald-500 to-teal-600",
-  "from-brand-orange to-amber-500",
-  "from-pink-500 via-brand-purple to-indigo-500",
+  "from-[#2a0f1e] via-[#1a0b14] to-[#0d0712]",
+  "from-[#1c0f2e] via-[#120a1e] to-[#0a0712]",
+  "from-[#2b1608] via-[#1c0e08] to-[#120a08]",
+  "from-[#251024] via-[#160a1a] to-[#0c0710]",
+  "from-[#2a1409] via-[#1e0d10] to-[#120812]",
+  "from-[#1f0d28] via-[#150918] to-[#0b060f]",
 ];
 
 export function ProjectCard({
