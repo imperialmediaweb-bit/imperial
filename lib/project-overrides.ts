@@ -696,6 +696,7 @@ export function extractMonthFromImages(images?: string[]): number {
 // Sortează proiectele descrescător după an + lună (cele mai noi primele).
 // Proiectele "featured" (SaaS-uri noi) rămân mereu PRIMELE, în ordinea dată.
 const FEATURED_KEYS = [
+  "teona-ariana",
   "clinica-sf-gheorghe",
   "sarami-media",
   "nexit-marketplace",

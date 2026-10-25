@@ -14,6 +14,8 @@ import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-ov
 // 5. Gradient + inițiale dacă nimic nu merge
 function buildImageChain(p: ImportedProject, w = 1200, h = 750): string[] {
   const chain: string[] = [];
+  // 0. captura reală a site-ului live, salvată local (public/proiecte/<key>/cover.jpg)
+  if (p.externalUrl) chain.push(`/proiecte/${p.key}/cover.jpg`);
   // 1. WP images (funcționează din browser, nu din server)
   if (p.wpImages?.length) {
     chain.push(...p.wpImages);

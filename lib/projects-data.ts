@@ -15,6 +15,16 @@ export type ImportedProject = {
 
 export const importedProjects: ImportedProject[] = [
   {
+    "key": "teona-ariana",
+    "title": "Asociația Teona Ariana Suceava — Site pentru Copii cu Nevoi Speciale",
+    "slug": "site-asociatia-teona-ariana-suceava",
+    "categories": ["Dezvoltare Web", "Website de Prezentare", "SEO"],
+    "image": null,
+    "wpImages": ["/proiecte/teona-ariana/cover.jpg", "/proiecte/teona-ariana/home.jpg"],
+    "externalUrl": "https://teona-ariana.ro",
+    "excerpt": "Site complet pentru Asociația Teona Ariana din Suceava, care sprijină copiii cu autism, sindrom Down și alte nevoi speciale: donații online cu card și PayPal, donație lunară prin SMS (SUSTIN la 8835), redirecționarea celor 3,5%, campanii (Tabăra RESPIRO, Casa Teona), pagină de voluntariat și sponsorizări pentru firme."
+  },
+  {
     "key": "clinica-sf-gheorghe",
     "title": "Site Clinica Sfântul Gheorghe Botoșani",
     "slug": "site-clinica-sfantul-gheorghe-botosani",

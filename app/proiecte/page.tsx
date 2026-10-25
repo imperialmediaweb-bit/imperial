@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Zap } from "lucide-react";
 import { ProjectsListClient } from "@/components/ProjectsList";
+import { FeaturedShowcase } from "@/components/proiecte/FeaturedShowcase";
 import { importedProjects } from "@/lib/projects-data";
 
 export const metadata = {
@@ -60,6 +61,19 @@ export default function ProiectePage() {
         </div>
       </section>
 
+      <FeaturedShowcase />
+
+      {/* ───── toate proiectele ───── */}
+      <div className="container-app pt-24">
+        <div className="flex items-center gap-4">
+          <span className="font-jmono text-[11px] tracking-[0.2em] text-brand-magenta">03</span>
+          <span className="h-px w-14 bg-gradient-to-r from-brand-purple to-brand-glow" />
+          <span className={mono}>Toate proiectele</span>
+        </div>
+        <h2 className="mt-5 font-display text-3xl font-semibold sm:text-4xl">
+          Caută după <span className="font-serifd italic text-gradient">domeniu.</span>
+        </h2>
+      </div>
       <ProjectsListClient />
 
       {/* ───── CTA final ───── */}
