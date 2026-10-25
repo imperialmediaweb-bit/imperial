@@ -12,6 +12,7 @@ import { fbTrack } from "@/lib/fbq";
 import { ConsultantaPanel } from "./ConsultantaPanel";
 import { getPackageByKey, type PackageKey } from "@/lib/packages";
 import { parseConfig, configPriceText, type Config, type ConfigType } from "@/lib/configuratie";
+import { DOMENII } from "@/lib/analiza-domenii";
 
 const CONFIG_PACKAGE: Record<ConfigType, PackageKey> = { start: "website", prezentare: "custom", magazin: "shop" };
 
@@ -122,7 +123,8 @@ export function BriefChat({ mode = "brief", clientContext, compact = false, offe
     const cfg = parseConfig(params.get("tip"), params.get("optiuni"));
     if (cfg) {
       setConfig(cfg);
-      setBrief((b) => ({ ...b, selectedPackage: CONFIG_PACKAGE[cfg.type] as any }));
+      const dom = DOMENII.find((d) => d.key === params.get("domeniu"));
+      setBrief((b) => ({ ...b, selectedPackage: CONFIG_PACKAGE[cfg.type] as any, ...(dom ? { industry: dom.name } : {}) }));
       setUiMessages([
         {
           role: "assistant",

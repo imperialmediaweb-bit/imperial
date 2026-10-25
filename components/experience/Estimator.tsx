@@ -9,9 +9,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { NumberTicker } from "../effects/NumberTicker";
-import { Zap, Check, Info as InfoIcon } from "lucide-react";
+import { Zap, Check, Info as InfoIcon, Sparkles, Lightbulb } from "lucide-react";
 import { InfoModal } from "../InfoModal";
 import { ADDON_INFO, INCLUDED, type Info } from "@/lib/addon-info";
+import { DOMENII } from "@/lib/analiza-domenii";
 import { CONFIG_TYPES, optionsFor, optionPrice, buildConfig, configQuery, parseConfig, type ConfigType } from "@/lib/configuratie";
 
 type TypeKey = ConfigType;
@@ -33,6 +34,15 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
   const [type, setType] = useState<TypeKey>("start");
   const [opts, setOpts] = useState<Record<string, boolean>>({});
   const [info, setInfo] = useState<Info | null>(null);
+  // Domeniul afacerii: recomandă opțiunile potrivite și dă idei de conținut incluse
+  const [dom, setDom] = useState<string>("");
+  const domeniu = DOMENII.find((d) => d.key === dom);
+  const recommended = new Set(domeniu?.addons ?? []);
+  const pickDomain = (key: string) => {
+    setDom(key);
+    const d = DOMENII.find((x) => x.key === key);
+    if (d?.custom) setType("magazin");
+  };
 
   // Revenit din ofertă („Recalculează”): /estimare?tip=...&optiuni=... repune alegerea
   useEffect(() => {
@@ -41,6 +51,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
     if (!c) return;
     setType(c.type);
     setOpts(Object.fromEntries(c.lines.map((l) => [l.key, true])));
+    if (q.get("domeniu")) setDom(q.get("domeniu")!);
   }, []);
 
   const t = TYPES.find((x) => x.key === type)!;
@@ -51,12 +62,32 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
   );
   const { once, monthly } = config;
 
-  const briefHref = `/brief?${configQuery(config)}`;
+  const briefHref = `/brief?${configQuery(config)}${domeniu ? `&domeniu=${domeniu.key}` : ""}`;
 
   return (
     <div className={`pointer-events-auto rounded-2xl border border-white/[0.08] bg-[#09080e]/85 p-6 backdrop-blur-md sm:p-8 ${compact ? "" : "max-w-2xl"}`}>
+      {/* domeniul afacerii */}
+      <p className="font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Ce afacere ai?</p>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {DOMENII.map((d) => (
+          <button
+            key={d.key}
+            type="button"
+            onClick={() => pickDomain(d.key)}
+            className={`rounded-full px-3 py-1.5 text-[12px] font-medium transition ${
+              dom === d.key
+                ? "bg-brand-magenta/20 text-white ring-1 ring-brand-magenta/60"
+                : "border border-white/10 text-white/65 hover:border-brand-magenta/40 hover:text-white"
+            }`}
+          >
+            {d.emoji} {d.name}
+          </button>
+        ))}
+      </div>
+
       {/* tipul de site */}
-      <div className="flex flex-wrap gap-2">
+      <p className="mt-5 font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Ce fel de site</p>
+      <div className="mt-2 flex flex-wrap gap-2">
         {TYPES.map((x) => (
           <button
             key={x.key}
@@ -97,8 +128,38 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
 
+      {/* idei incluse, pe domeniul lui */}
+      {domeniu ? (
+        <div className="mt-5 rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
+          <p className="flex items-center gap-2 text-[13px] font-semibold text-white/90">
+            <Lightbulb className="h-4 w-4 text-brand-orange" />
+            Idei pentru site-ul tău de {domeniu.name.toLowerCase()} — incluse în preț
+          </p>
+          <ul className="mt-2 space-y-1 text-[12.5px] leading-relaxed text-white/70">
+            {domeniu.ideas.map((x) => (
+              <li key={x} className="flex gap-2">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-magenta" />
+                {x}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       {/* opțiunile */}
-      <p className="mt-5 font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Opțiuni la alegere</p>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
+        <p className="font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Opțiuni la alegere</p>
+        {domeniu && options.some((o) => recommended.has(o.key)) ? (
+          <button
+            type="button"
+            onClick={() => setOpts((s) => ({ ...s, ...Object.fromEntries(options.filter((o) => recommended.has(o.key)).map((o) => [o.key, true])) }))}
+            className="inline-flex items-center gap-1.5 rounded-full border border-brand-magenta/50 px-3 py-1 text-[12px] font-medium text-white transition hover:bg-brand-magenta/15"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Bifează ce recomandăm
+          </button>
+        ) : null}
+      </div>
       <div className="mt-2 grid gap-2 sm:grid-cols-2">
         {options.map((o) => {
           const on = !!opts[o.key];
@@ -127,7 +188,19 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
               >
                 {on ? <Check className="h-3.5 w-3.5 text-white" /> : null}
               </span>
-              <span className="flex-1 text-[13px] font-medium text-white/85">{o.name}</span>
+              <span className="flex-1">
+                <span className="block text-[13px] font-medium text-white/85">
+                  {o.name}
+                  {recommended.has(o.key) ? (
+                    <span className="ml-2 rounded-full bg-brand-magenta/20 px-2 py-0.5 align-middle text-[10px] font-semibold uppercase tracking-wide text-brand-magenta">
+                      Recomandat
+                    </span>
+                  ) : null}
+                </span>
+                {recommended.has(o.key) && domeniu?.why[o.key] ? (
+                  <span className="mt-0.5 block text-[11.5px] leading-snug text-white/55">{domeniu.why[o.key]}</span>
+                ) : null}
+              </span>
               <span className="font-jmono text-[11px] text-white/50">
                 {v === 0 ? "inclus" : `+${v} ${t.cur}${o.monthly ? "/lună" : ""}`}
               </span>

@@ -10,6 +10,8 @@ export type Domeniu = {
   clientLabel: string; // cum numim clientul în domeniul respectiv
   benefits: string[];
   addons: string[]; // chei din SITE_START_ADDONS recomandate
+  why: Record<string, string>; // de ce îi folosește fiecare opțiune recomandată, pe domeniul lui
+  ideas: string[]; // idei de conținut incluse în preț, gândite pentru domeniul lui
   custom?: boolean; // are nevoie de Site Custom / magazin, nu de Site Start
 };
 
@@ -27,6 +29,8 @@ export const DOMENII: Domeniu[] = [
       "Apari pe Google când cineva caută „salon” în orașul tău.",
     ],
     addons: ["programari", "galerie", "social"],
+    why: { programari: "Clientele se programează singure, inclusiv seara, fără să te sune în timp ce lucrezi.", galerie: "Lucrările tale (tunsori, manichiură, machiaj) vând mai bine decât orice descriere.", social: "Te găsesc pe Google Maps când caută „salon” în orașul tău, cu recenzii și program." },
+    ideas: ["Listă de prețuri clară, pe categorii (tuns, vopsit, manichiură)", "Galerie „înainte și după” pentru fiecare serviciu", "Prezentarea echipei, cu specializarea fiecăruia", "Buton de WhatsApp pentru întrebări rapide", "Articole pe blog: îngrijirea părului, tendințe de sezon"],
   },
   {
     key: "medical",
@@ -41,6 +45,8 @@ export const DOMENII: Domeniu[] = [
       "Apari pe Google la căutările de tipul „dentist + oraș”.",
     ],
     addons: ["programari", "pagina", "social"],
+    why: { programari: "Pacienții își fac singuri programarea, iar recepția are mai puține telefoane.", pagina: "O pagină pentru fiecare medic sau serviciu important construiește încredere înainte de prima vizită.", social: "Apari pe Google Maps la căutări de tipul „dentist + oraș”, cu program și telefon." },
+    ideas: ["Pagina „Prima vizită”: ce aduci, cât durează, cum se plătește", "Lista de servicii și tarife", "Răspunsuri la întrebările frecvente ale pacienților", "Hartă și indicații de parcare", "Articole pe blog despre prevenție, scrise pe înțelesul tuturor"],
   },
   {
     key: "restaurant",
@@ -55,6 +61,8 @@ export const DOMENII: Domeniu[] = [
       "Evenimentele private (botezuri, aniversări) încep aproape mereu cu o căutare online.",
     ],
     addons: ["programari", "galerie", "social"],
+    why: { programari: "Rezervări de mese online, la orice oră, fără telefoane în orele aglomerate.", galerie: "Pozele cu preparatele și localul îi conving să vină.", social: "Turiștii și oamenii noi din oraș te găsesc pe Google Maps." },
+    ideas: ["Meniul online cu poze, ușor de actualizat", "Pagina pentru evenimente private: botezuri, aniversări, mese de firmă", "Program și zona de livrare, la vedere", "Buton „Sună pentru rezervare” direct de pe telefon", "Ofertele zilei sau meniul zilei pe prima pagină"],
   },
   {
     key: "auto",
@@ -69,6 +77,8 @@ export const DOMENII: Domeniu[] = [
       "Recenziile bune de pe Google cântăresc mai mult decât orice reclamă.",
     ],
     addons: ["programari", "social"],
+    why: { programari: "Clienții își aleg singuri ora pentru revizie sau reparație.", social: "Când cuiva i se strică mașina, caută „service auto” pe hartă — trebuie să apari acolo." },
+    ideas: ["Lista serviciilor cu prețuri orientative (ITP, revizie, schimb ulei)", "Mărcile cu care lucrezi", "Pagina „Ce facem când îți aduci mașina”: pași și durată", "Buton de WhatsApp pentru poze cu problema", "Sfaturi pe blog: întreținere de sezon, anvelope"],
   },
   {
     key: "constructii",
@@ -82,7 +92,9 @@ export const DOMENII: Domeniu[] = [
       "Un formular de cerere ofertă îți aduce lucrări chiar și când ești pe șantier.",
       "Firmele și dezvoltatorii caută colaboratori serioși, cu prezență profesionistă.",
     ],
-    addons: ["galerie", "social"],
+    addons: ["galerie", "pagina", "social"],
+    why: { galerie: "Portofoliul cu lucrări finalizate e argumentul principal pentru un client nou.", social: "Apari pe Google Maps când cineva caută meșteri în zona ta.", pagina: "O pagină pentru fiecare serviciu (acoperișuri, instalații, finisaje) te face găsit pe fiecare căutare." },
+    ideas: ["Portofoliu cu lucrări, pe categorii", "Pagina „Cum lucrăm”: de la evaluare la predare", "Formular de cerere de ofertă cu poze atașate", "Zonele în care lucrezi", "Garanții și materialele folosite, explicate simplu"],
   },
   {
     key: "profesionisti",
@@ -96,7 +108,9 @@ export const DOMENII: Domeniu[] = [
       "Articolele de pe blog răspund la întrebări reale și te aduc în Google.",
       "Formularul de programare a consultației lucrează pentru tine 24/7.",
     ],
-    addons: ["programari", "social"],
+    addons: ["programari", "ai", "geo", "pagina"],
+    why: { programari: "Clienții își programează singuri consultația, fără să sune de mai multe ori.", ai: "Asistentul răspunde la întrebările frecvente (acte necesare, onorarii, program) și preia cererile de consultație.", geo: "Tot mai mulți oameni întreabă ChatGPT „ce avocat bun e în orașul meu?” — pregătim site-ul să poată fi recomandat.", pagina: "O pagină pentru fiecare domeniu de practică (civil, penal, familie, firme) te face găsit pe căutări precise.", social: "Apari pe Google Maps, cu recenzii, program și telefon." },
+    ideas: ["O pagină pentru fiecare domeniu de practică", "Întrebări frecvente: acte necesare, durată, onorarii orientative", "Pagina „Cum decurge prima consultație”", "Articole pe blog despre schimbările legislative, pe înțelesul clienților", "Prezentarea experienței și a specializărilor, fără exagerări"],
   },
   {
     key: "pensiune",
@@ -111,6 +125,8 @@ export const DOMENII: Domeniu[] = [
       "Apari pe Google Maps când cineva caută cazare în zonă.",
     ],
     addons: ["programari", "galerie", "limba", "social"],
+    why: { programari: "Rezervări directe, fără comisionul platformelor de cazare.", galerie: "Camerele și împrejurimile în poze mari decid rezervarea.", limba: "Turiștii străini rezervă doar unde înțeleg ce scrie.", social: "Apari pe Google Maps când caută cazare în zonă." },
+    ideas: ["Pagina fiecărei camere, cu poze și dotări", "Ce poți vizita în zonă: trasee, obiective, restaurante", "Pachete pentru sărbători și weekenduri", "Politica de anulare și check-in, la vedere", "Galerie cu împrejurimile, pe anotimpuri"],
   },
   {
     key: "magazin",
@@ -124,7 +140,9 @@ export const DOMENII: Domeniu[] = [
       "Fiecare produs e o pagină care poate apărea în Google.",
       "Clienții vechi revin mai ușor când pot comanda online.",
     ],
-    addons: ["card", "awb"],
+    addons: ["card", "awb", "factura"],
+    why: { card: "Mulți clienți vor să plătească pe loc cu cardul, nu doar ramburs.", awb: "AWB-ul se generează dintr-un click, iar clientul primește linkul de urmărire.", factura: "Factura pleacă automat la fiecare comandă — mai puțină muncă de birou." },
+    ideas: ["Pagina „Livrare și retur”, clară", "Produsele cele mai vândute pe prima pagină", "Ghid de mărimi sau de alegere a produsului", "Recenziile clienților pe pagina produsului", "Abonare la ofertă prin email"],
     custom: true,
   },
   {
@@ -139,7 +157,9 @@ export const DOMENII: Domeniu[] = [
       "Lucrările și recenziile afișate îți cresc încrederea față de concurență.",
       "Prețurile orientative te scapă de clienții care nu se potrivesc bugetului.",
     ],
-    addons: ["galerie", "social"],
+    addons: ["galerie", "programari", "social"],
+    why: { galerie: "Pozele cu lucrările făcute arată calitatea înainte de primul telefon.", programari: "Clienții rezervă singuri o dată și o oră pentru serviciu.", social: "Apari pe Google Maps când cineva caută serviciul tău în oraș." },
+    ideas: ["Lista serviciilor cu ce include fiecare", "Zona în care lucrezi și programul", "Formular de cerere de ofertă rapidă", "Recenziile clienților", "Întrebări frecvente: cât durează, ce trebuie pregătit"],
   },
   {
     key: "altceva",
@@ -154,6 +174,8 @@ export const DOMENII: Domeniu[] = [
       "Apari pe Google când cineva caută ce oferi tu.",
     ],
     addons: ["social"],
+    why: { social: "Te găsesc pe Google Maps și pe Facebook, cu program și telefon." },
+    ideas: ["Prezentarea clară a serviciilor sau produselor", "Pagina „Despre noi”, cu povestea firmei", "Formular de contact și buton de WhatsApp", "Recenziile clienților", "Articole pe blog care răspund la întrebările clienților tăi"],
   },
 ];
 
