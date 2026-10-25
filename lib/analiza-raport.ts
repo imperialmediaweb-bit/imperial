@@ -15,6 +15,10 @@ export type RaportData = {
   beneficii: string[];
   crestere: string[];
   concluzie?: string;
+  concurenta: { nume: string; observatie: string }[];
+  puncteForte: string[];
+  deImbunatatit: string[];
+  plan30: string[];
   site?: { url: string; tech?: string | null; checks: RaportCheck[]; verdict: string; reasons: string[] } | null;
   pachet: string;
   optiuni: { name: string; price: number }[];
@@ -51,6 +55,10 @@ export function sanitizeRaport(b: any): RaportData | null {
     beneficii: arr(b.beneficii, 6, 300),
     crestere: arr(b.crestere, 6, 300),
     concluzie: str(b.concluzie, 600),
+    concurenta: (Array.isArray(b.concurenta) ? b.concurenta : []).slice(0, 3).map((c: any) => ({ nume: str(c?.nume, 80), observatie: str(c?.observatie, 300) })).filter((c: any) => c.nume),
+    puncteForte: arr(b.puncteForte, 5, 300),
+    deImbunatatit: arr(b.deImbunatatit, 5, 300),
+    plan30: arr(b.plan30, 3, 300),
     site,
     pachet: str(b.pachet, 120),
     optiuni: (Array.isArray(b.optiuni) ? b.optiuni : []).slice(0, 10).map((o: any) => ({ name: str(o?.name, 80), price: Math.max(0, Math.min(100000, Number(o?.price) || 0)) })),
@@ -95,8 +103,12 @@ export function raportHtml(d: RaportData): string {
     ${d.gasit ? `<div style="margin-top:18px;padding:12px 14px;border-radius:8px;background:${C.soft};border-left:4px solid ${C.purple};font:14px/1.6 Arial,sans-serif;color:${C.ink};"><b>Ce am găsit despre tine online:</b> ${esc(d.gasit)}</div>` : ""}
     ${d.intro ? `<div style="margin-top:16px;">${P(esc(d.intro))}</div>` : ""}
     ${site}
+    ${d.puncteForte.length ? h("Ce faci deja bine") + list(d.puncteForte) : ""}
+    ${d.deImbunatatit.length ? h("Ce poți îmbunătăți") + `<table role="presentation" cellpadding="0" cellspacing="0">${d.deImbunatatit.map((x) => bullet(esc(x), "→", C.orange)).join("")}</table>` : ""}
+    ${d.concurenta.length ? h(`Cine apare pe Google în ${esc(d.oras)} în domeniul tău`) + `<table role="presentation" cellpadding="0" cellspacing="0">${d.concurenta.map((c) => bullet(`<b>${esc(c.nume)}</b> — ${esc(c.observatie)}`, "•", C.purple)).join("")}</table>` : ""}
     ${d.beneficii.length ? h("Ce ți-ar aduce") + list(d.beneficii) : ""}
     ${d.crestere.length ? h(`Cum te face cunoscut în ${esc(d.oras)}`) + numbered(d.crestere) : ""}
+    ${d.plan30.length ? h("Planul tău pentru primele 30 de zile") + numbered(d.plan30) : ""}
     ${h("Recomandarea noastră")}
     ${d.concluzie ? P(esc(d.concluzie)) : ""}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:10px;">

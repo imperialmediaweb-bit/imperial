@@ -19,7 +19,17 @@ import { raportHtml, sanitizeRaport } from "@/lib/analiza-raport";
 
 const STEPS = ["Domeniul", "Firma", "Clienții", "Prezența online"] as const;
 
-type AiResult = { gasit: string; intro: string; beneficii: string[]; crestere: string[]; concluzie: string };
+type AiResult = {
+  gasit: string;
+  intro: string;
+  beneficii: string[];
+  crestere: string[];
+  concluzie: string;
+  concurenta?: { nume: string; observatie: string }[];
+  puncteForte?: string[];
+  deImbunatatit?: string[];
+  plan30?: string[];
+};
 
 function lei(n: number) {
   return `${n.toLocaleString("ro-RO")} lei`;
@@ -95,7 +105,7 @@ export function AnalizaSite() {
           valoare,
           prezenta,
           site: check?.reachable
-            ? `Site-ul lui (${check.url}) verificat acum: ${check.checks.map((c) => `${c.label}: ${c.ok ? "da" : "nu"} (${c.detail})`).join("; ")}${check.tech ? `; făcut pe ${check.tech}` : ""}. Verdict: ${check.verdict === "refacere" ? "REFACERE pe tehnologii noi" : "ÎMBUNĂTĂȚIRE a site-ului existent"} — ${check.reasons.join("; ")}.`
+            ? `Site-ul lui (${check.url}) verificat acum: ${check.checks.map((c) => `${c.label}: ${c.ok ? "da" : "nu"} (${c.detail})`).join("; ")}${check.tech ? `; făcut pe ${check.tech}` : ""}. Verdict: ${check.verdict === "refacere" ? "REFACERE pe tehnologii noi" : "ÎMBUNĂTĂȚIRE a site-ului existent"} — ${check.reasons.join("; ")}.\nCe scrie pe site:\n${check.continut ?? ""}`
             : undefined,
         }),
       })
@@ -145,6 +155,10 @@ export function AnalizaSite() {
           beneficii: ai?.beneficii?.length ? ai.beneficii : dom.benefits,
           crestere: ai?.crestere ?? [],
           concluzie: ai?.concluzie,
+          concurenta: ai?.concurenta ?? [],
+          puncteForte: ai?.puncteForte ?? [],
+          deImbunatatit: ai?.deImbunatatit ?? [],
+          plan30: ai?.plan30 ?? [],
           site: siteCheck?.reachable
             ? { url: siteCheck.url, tech: siteCheck.tech, checks: siteCheck.checks, verdict: siteCheck.verdict, reasons: siteCheck.reasons }
             : null,
@@ -389,6 +403,42 @@ export function AnalizaSite() {
                 </div>
               ) : null}
               {ai?.intro ? <p className="mt-4 text-[15px] leading-relaxed text-white/80">{ai.intro}</p> : null}
+              {ai?.puncteForte?.length || ai?.deImbunatatit?.length ? (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {ai?.puncteForte?.length ? (
+                    <div className="rounded-xl border border-green-500/25 bg-green-500/[0.05] p-4">
+                      <p className="text-[13px] font-semibold text-green-300">Ce faci deja bine</p>
+                      <ul className="mt-2 space-y-1.5">
+                        {ai.puncteForte.map((x) => (
+                          <li key={x} className="flex gap-2 text-[13px] leading-snug text-white/75"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-green-400" />{x}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {ai?.deImbunatatit?.length ? (
+                    <div className="rounded-xl border border-brand-orange/30 bg-brand-orange/[0.05] p-4">
+                      <p className="text-[13px] font-semibold text-brand-orange">Ce poți îmbunătăți</p>
+                      <ul className="mt-2 space-y-1.5">
+                        {ai.deImbunatatit.map((x) => (
+                          <li key={x} className="flex gap-2 text-[13px] leading-snug text-white/75"><ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-orange" />{x}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+              {ai?.concurenta?.length ? (
+                <div className="mt-5 rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
+                  <p className="text-[14px] font-semibold text-text">Cine apare pe Google în {oras} în domeniul tău</p>
+                  <ul className="mt-2 space-y-2">
+                    {ai.concurenta.map((c) => (
+                      <li key={c.nume} className="text-[13px] leading-snug text-white/75">
+                        <b className="text-white/90">{c.nume}</b> — {c.observatie}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
               <h3 className="mt-3 font-display text-2xl font-bold leading-tight text-text sm:text-3xl">
                 {areSite ? "Investiția se plătește din " : "Site-ul se plătește din "}
                 <span className="text-gradient">
@@ -465,6 +515,20 @@ export function AnalizaSite() {
                   </li>
                 ))}
               </ol>
+
+              {ai?.plan30?.length ? (
+                <>
+                  <h4 className="mt-8 font-display text-lg font-bold text-text">Planul tău pentru primele 30 de zile:</h4>
+                  <ol className="mt-4 space-y-3">
+                    {ai.plan30.map((x, i) => (
+                      <li key={x} className="flex gap-3 text-[14px] leading-relaxed text-white/75">
+                        <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-brand-orange font-jmono text-[11px] font-bold text-brand-orange">{i + 1}</span>
+                        {x}
+                      </li>
+                    ))}
+                  </ol>
+                </>
+              ) : null}
 
               <div className="mt-8 rounded-2xl border border-brand-magenta/40 bg-gradient-to-b from-brand-magenta/[0.08] to-transparent p-6">
                 <span className="font-jmono text-[10px] uppercase tracking-[0.25em] text-white/55">Recomandarea noastră</span>

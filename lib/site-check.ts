@@ -14,6 +14,7 @@ export type SiteCheck = {
   pagespeed: number | null; // 0-100, mobil
   checks: Check[];
   verdict: "refacere" | "imbunatatire" | "necunoscut";
+  continut?: string; // ce scrie pe site (titlu, descriere, titluri, primul text) — pentru analiza AI
   reasons: string[]; // de ce verdictul, în cuvinte simple
 };
 
@@ -134,5 +135,16 @@ export async function checkSite(raw: string): Promise<SiteCheck | null> {
     reasons.splice(0, reasons.length, fix.length ? `se poate îmbunătăți ce există: ${fix.join(", ")}` : "e într-o formă bună — pasul următor e să fie găsit mai des");
   }
 
-  return { url: finalUrl, reachable: true, responseMs: main.ms, tech, copyrightYear, pagespeed: psi, checks, verdict, reasons };
+  // Conținutul vizibil, ca AI-ul să judece și textele, nu doar tehnica
+  const headings = [...html.matchAll(/<h[12][^>]*>([\s\S]*?)<\/h[12]>/gi)].map((m) => m[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()).filter(Boolean).slice(0, 12);
+  const text = html
+    .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 1800);
+  const continut = `Titlu: ${title || "—"}\nTitluri pe pagină: ${headings.join(" | ") || "—"}\nText de pe prima pagină: ${text}`;
+
+  return { continut, url: finalUrl, reachable: true, responseMs: main.ms, tech, copyrightYear, pagespeed: psi, checks, verdict, reasons };
 }

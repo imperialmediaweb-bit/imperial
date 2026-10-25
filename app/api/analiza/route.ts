@@ -22,20 +22,31 @@ type Body = {
   prezenta?: string;
   pachet?: string;
   total?: number;
-  site?: string; // faptele măsurate pe site-ul lui existent + verdictul
+  site?: string; // faptele măsurate pe site-ul lui existent + verdictul + textul de pe site
 };
 
 const SYSTEM = `Ești consultantul Imperial Media, studio de web design din România (site-uri construite de la zero, promovare prin rețeaua parteneră Media Expres — 50 de ziare online, Botoșani Expres inclus).
-Scrii o analiză scurtă, concretă și caldă pentru patronul unei afaceri mici, ca să înțeleagă ce i-ar aduce un site.
+Scrii o analiză detaliată, concretă și caldă pentru patronul unei afaceri mici, ca să înțeleagă unde e acum online și ce are de câștigat.
 REGULI STRICTE:
 - Română corectă, cu diacritice, ton profesionist dar prietenos, fără sloganuri și fără superlative goale.
-- NU inventa statistici, procente sau cifre de piață. Singurele cifre permise sunt cele primite în date.
-- Concret pe domeniul și orașul lui (ex. ce caută clienții unui salon din acel oraș, ce îi convinge).
+- NU inventa statistici, procente, cifre de piață, firme sau recenzii. Scrii doar ce ai găsit efectiv în căutări sau ce primești în date. Dacă n-ai găsit ceva, spui sincer.
+- Concret pe domeniul și orașul lui.
 - Nu promite poziții în Google și nu garanta rezultate.
-- Dacă primești faptele verificate pe site-ul lui și un verdict (REFACERE sau ÎMBUNĂTĂȚIRE), sprijină-te pe ele: explică pe înțelesul lui ce merge, ce nu și de ce verdictul e acela. Nu adăuga probleme pe care nu le-ai primit. Nu numi tehnologii moderne; spune „tehnologii de ultimă generație”.
-- Dacă patronul spune că ARE DEJA un site care merge bine, NU-i recomanda un site nou: analiza e despre cum îl faci găsit (Google, răspunsurile asistenților AI precum ChatGPT, presa locală, un asistent care răspunde clienților). Dacă are un site vechi, vorbește despre refacerea lui.
+- Nu numi tehnologii moderne de construcție; spune „tehnologii de ultimă generație”.
+- Dacă primești faptele verificate pe site-ul lui și un verdict (REFACERE sau ÎMBUNĂTĂȚIRE), sprijină-te pe ele și pe textul de pe site: explică ce merge, ce nu și de ce verdictul e acela. Nu adăuga probleme tehnice pe care nu le-ai primit.
+- Dacă patronul ARE DEJA un site care merge bine, NU-i recomanda un site nou: analiza e despre cum îl faci găsit și cum transformă vizitatorii în clienți.
+CĂUTĂRI (dacă ai unealta de căutare): caută firma (dacă ai numele) și caută domeniul lui + orașul (ex. „salon Botoșani”) ca să vezi ce firme concurente apar pe Google în orașul lui și ce fac bine (site, recenzii, programări online, prețuri afișate).
 Răspunzi DOAR cu JSON valid, fără alt text:
-{"gasit": "dacă ai primit numele firmei: 1-2 propoziții cu ce ai găsit EFECTIV despre ea pe internet (are site? pagină Facebook activă? apare pe Google Maps, cu ce notă și câte recenzii?). Dacă n-ai găsit nimic sigur, spune sincer că nu ai găsit-o online — și asta e un semnal că pierde clienți. String gol dacă nu ai nume.", "intro": "2-3 propoziții personalizate despre situația lui", "beneficii": ["4 beneficii concrete, câte o propoziție"], "crestere": ["3-4 pași concreți prin care site-ul îi face afacerea cunoscută în orașul lui"], "concluzie": "1-2 propoziții care leagă pachetul recomandat de nevoile lui"}`;
+{"gasit": "1-3 propoziții cu ce ai găsit EFECTIV despre firma lui online (site, Facebook, Google Maps, notă, recenzii); string gol dacă nu ai nume; dacă n-ai găsit-o, spune sincer",
+ "intro": "2-3 propoziții personalizate despre situația lui",
+ "concurenta": [{"nume": "numele real al unei firme găsite", "observatie": "ce face bine online, din ce ai văzut"}],
+ "puncteForte": ["ce face deja bine online (doar din fapte găsite); listă goală dacă nu ai date"],
+ "deImbunatatit": ["3-5 lucruri concrete de îmbunătățit, din fapte"],
+ "beneficii": ["4 beneficii concrete, câte o propoziție"],
+ "crestere": ["3-4 pași concreți prin care devine cunoscut în orașul lui"],
+ "plan30": ["3 acțiuni pentru primele 30 de zile, în ordine"],
+ "concluzie": "1-2 propoziții care leagă recomandarea de nevoile lui"}
+„concurenta”: maximum 3 firme reale găsite; listă goală dacă nu ai găsit sau nu ai căutat.`;
 
 export async function POST(req: NextRequest) {
   if (!rateLimit(`analiza:${getClientIp(req)}`, 8, 10 * 60_000)) {
@@ -71,27 +82,29 @@ export async function POST(req: NextRequest) {
     `Valoarea medie a unui client: ${body.valoare} lei`,
     `Cum îl găsesc clienții acum: ${prez?.label ?? "nespecificat"}`,
     body.pachet ? `Pachet recomandat: ${body.pachet}, total orientativ ${body.total} lei` : null,
-    body.site ? String(body.site).slice(0, 2500) : null,
+    body.site ? String(body.site).slice(0, 5000) : null,
+    `Caută concurenții: „${dom.name} ${oras}” — ce firme apar pe Google și ce fac bine.`,
   ]
     .filter(Boolean)
     .join("\n");
 
   try {
-    const tools: any = firma ? [{ type: "web_search_20250305", name: "web_search", max_uses: 3 }] : undefined;
+    // căutăm mereu: firma (dacă are nume) și concurenții din orașul lui
+    const tools: any = [{ type: "web_search_20250305", name: "web_search", max_uses: firma ? 5 : 3 }];
     let messages: Anthropic.MessageParam[] = [{ role: "user", content: date }];
     let resp = await getAnthropic().messages.create({
       model: CLAUDE_MODEL,
-      max_tokens: 1400,
+      max_tokens: 2600,
       system: SYSTEM,
       messages,
       ...(tools ? { tools } : {}),
     });
     // căutarea web poate cere continuarea turei
-    for (let i = 0; i < 2 && (resp.stop_reason as string) === "pause_turn"; i++) {
+    for (let i = 0; i < 4 && (resp.stop_reason as string) === "pause_turn"; i++) {
       messages = [...messages, { role: "assistant", content: resp.content }];
       resp = await getAnthropic().messages.create({
         model: CLAUDE_MODEL,
-        max_tokens: 1400,
+        max_tokens: 2600,
         system: SYSTEM,
         messages,
         ...(tools ? { tools } : {}),
@@ -110,6 +123,13 @@ export async function POST(req: NextRequest) {
       beneficii: clean(json.beneficii, 4),
       crestere: clean(json.crestere, 4),
       concluzie: typeof json.concluzie === "string" ? json.concluzie : "",
+      concurenta: (Array.isArray(json.concurenta) ? json.concurenta : [])
+        .filter((c: any) => c && typeof c.nume === "string" && typeof c.observatie === "string")
+        .slice(0, 3)
+        .map((c: any) => ({ nume: c.nume.slice(0, 80), observatie: c.observatie.slice(0, 300) })),
+      puncteForte: clean(json.puncteForte, 5),
+      deImbunatatit: clean(json.deImbunatatit, 5),
+      plan30: clean(json.plan30, 3),
     };
 
     // Imperial află de fiecare analiză, chiar dacă omul nu cere ofertă
@@ -136,13 +156,7 @@ export async function POST(req: NextRequest) {
       }).catch(() => {});
     }
 
-    return NextResponse.json({
-      gasit: out.gasit,
-      intro: typeof json.intro === "string" ? json.intro : "",
-      beneficii: clean(json.beneficii, 4),
-      crestere: clean(json.crestere, 4),
-      concluzie: typeof json.concluzie === "string" ? json.concluzie : "",
-    });
+    return NextResponse.json(out);
   } catch (e) {
     console.error("[/api/analiza]", e);
     return NextResponse.json({ error: "ai-eroare" }, { status: 502 });
