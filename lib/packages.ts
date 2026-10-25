@@ -44,7 +44,7 @@ export const packages: Package[] = [
     highlight: "Design unic, de la zero",
     features: [
       "Design unic premium, creat de la zero",
-      "Pagini nelimitate",
+      "Până la 10 pagini (pagină în plus +200 lei)",
       "Panou de administrare propriu",
       "SEO tehnic din construcție",
       "Viteză sub o secundă",
@@ -54,17 +54,15 @@ export const packages: Package[] = [
   {
     key: "shop",
     name: "Magazin Online",
-    price: "6.000 lei",
-    priceNote: "de la (≈ 1.200 €)",
+    price: "4.000 lei",
+    priceNote: "de la (≈ 800 €)",
     features: [
-      "20 produse listate",
-      "Design responsive",
+      "Design unic, creat de la zero",
+      "Până la 50 de produse, încărcate de noi",
+      "Coș, comenzi și plată ramburs / transfer",
+      "Panou pentru produse și comenzi",
       "Găzduire + domeniu în administrare (de la 100 lei/lună)",
-      "Certificat SSL inclus",
-      "Panou administrare produse",
-    ],
-    excluded: [
-      "Plăți cu cardul (doar ramburs / transfer bancar)",
+      "Opțional: plăți cu cardul, AWB automat, facturare automată",
     ],
   },
   {

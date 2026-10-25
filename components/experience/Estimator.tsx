@@ -11,21 +11,23 @@ import Link from "next/link";
 import { NumberTicker } from "../effects/NumberTicker";
 import { Zap, Check } from "lucide-react";
 import { SITE_START_ADDONS } from "@/lib/site-start-addons";
+import { SHOP_ADDONS } from "@/lib/shop-addons";
 
 type TypeKey = "start" | "prezentare" | "magazin";
 
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
   { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic, WhatsApp, articol în Botoșani Expres, campanie 5 zile pe Facebook — de la 1.500 lei" },
-  { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, pagini nelimitate, panou propriu — de la 3.500 lei" },
-  { key: "magazin", name: "Magazin online", base: 6000, cur: "lei", note: "plăți card, AWB, facturare — de la 6.000 lei" },
+  { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, până la 10 pagini, panou propriu — de la 3.500 lei" },
+  { key: "magazin", name: "Magazin online", base: 4000, cur: "lei", note: "design unic, până la 50 de produse, coș, comenzi, plată ramburs — de la 4.000 lei" },
 ];
 
-// opțiunile vin din lista unică a Site Start; la Site Custom / magazin paginile sunt nelimitate
+// Site Start și Site Custom folosesc opțiunile Site Start; magazinul are lista lui
 type Opt = { key: string; name: string; lei: number; monthly?: boolean };
 const ADMIN: Opt = { key: "admin", name: "Administrare lunară — găzduire, domeniu, backup (200 lei/lună cu asistent AI)", lei: 100, monthly: true };
 
 function optionsFor(type: TypeKey): Opt[] {
-  const list = SITE_START_ADDONS.filter((a) => !a.onlyOnPage && (type === "start" || a.key !== "pagina")).map((a) => ({
+  const source = type === "magazin" ? SHOP_ADDONS : SITE_START_ADDONS.filter((a) => !a.onlyOnPage);
+  const list = source.map((a) => ({
     key: a.key,
     name: a.unit ? `${a.name} (per ${a.unit})` : a.name,
     lei: a.price,

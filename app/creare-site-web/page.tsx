@@ -38,7 +38,7 @@ export default function CreareSiteWebPage() {
               <p>Prețul corect depinde de ce are de făcut site-ul, nu de cine îl face. La Imperial Media prețurile sunt publice și fixe:</p>
               <p><strong className="text-text">Site Start — 1.500 lei, totul inclus</strong>: 4 pagini (Acasă, Despre, Servicii, Contact cu hartă), design pe brandul tău, livrat în câteva zile. Pentru firme care vor să existe online corect, repede. <Link href="/site-start" className="text-brand-orange hover:underline">Detalii și comandă →</Link></p>
               <p><strong className="text-text">Site Custom — de la 3.500 lei</strong>: mai multe pagini, funcții dedicate (programări, rezervări, calculatoare), cu campania de presă în toate cele 50 de ziare cadou.</p>
-              <p><strong className="text-text">Magazin online — de la 1.200€</strong> · <strong className="text-text">Aplicații și platforme — la cerere</strong>.</p>
+              <p><strong className="text-text">Magazin online — de la 4.000 lei</strong> · <strong className="text-text">Aplicații și platforme — la cerere</strong>.</p>
               <p>Orice sumă plătită pe o treaptă devine avans pentru următoarea — investiția nu se pierde niciodată.</p>
             </>
           ),
@@ -72,7 +72,7 @@ export default function CreareSiteWebPage() {
         },
       ]}
       faqs={[
-        { q: "Cât costă un site web?", a: "La Imperial Media: Site Start (5 pagini + blog) — 1.500 lei totul inclus; site de prezentare complet — de la 699€; magazin online — de la 1.200€; aplicații custom — la cerere. Toate includ SSL și SEO de bază; găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună. Estimarea exactă pentru proiectul tău e gratuită și durează 2 minute." },
+        { q: "Cât costă un site web?", a: "La Imperial Media: Site Start (5 pagini + blog) — 1.500 lei totul inclus; site de prezentare complet — de la 699€; magazin online — de la 4.000 lei, cu opțiuni la alegere; aplicații custom — la cerere. Toate includ SSL și SEO de bază; găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună. Estimarea exactă pentru proiectul tău e gratuită și durează 2 minute." },
         { q: "Cât durează să-mi faceți site-ul?", a: "Site Start: 3-7 zile lucrătoare de la primirea conținutului. Site de prezentare complet: 2-4 săptămâni. Magazin online: 4-8 săptămâni. Termenul curge de când ne trimiți textele și pozele (formular de 5 minute — textele finale le scriem noi)." },
         { q: "Lucrați cu firme din orice oraș?", a: "Da — totul se face online: comandă, plată, contract electronic, brief, livrare. Avem clienți în toată România și diaspora, plus pagini locale dedicate pentru fiecare oraș important, cu proiecte livrate în zonă." },
         { q: "Site-ul e al meu sau rămân legat de voi?", a: "E 100% al tău: codul, domeniul, datele. Găzduirea și domeniul sunt incluse în administrarea lunară (de la 100 lei/lună); dacă vreodată pleci, îți predăm codul, domeniul și datele." },

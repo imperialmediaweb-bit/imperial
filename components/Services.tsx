@@ -20,7 +20,7 @@ const small = [
     wash: "from-brand-orange/[0.18] via-brand-magenta/[0.06] to-transparent",
     icon: ShoppingBag,
     name: "Magazine online",
-    text: "Plăți cu cardul, AWB automat la curieri, facturare integrată. De la 6.000 lei.",
+    text: "Coș, comenzi și plată ramburs; opțional plăți cu cardul, AWB automat și facturare. De la 4.000 lei.",
     href: "/creare-magazin-online",
   },
   {
