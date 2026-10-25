@@ -394,7 +394,7 @@ Când clientul descrie ce vrea ("ONG cu mâncare pentru nevoiași", "cabinet sto
 - "Școală / grădiniță / curs" → ȘTII că trebuie: prezentare programe, înscriere online cu formular, calendar evenimente, galerie activități, zonă părinți (opțional) → Nivel 2: 1.400-2.000€
 - "Fitness / sală sport" → ȘTII că trebuie: program clase cu calendar, abonamente + prețuri, profil antrenori, rezervare loc la clasă, galerie → Nivel 2: 1.400-2.000€
 - "Chatbot AI pe site (ca al nostru)" → ȘTII că trebuie: chat AI antrenat pe businessul lor, răspunde la întrebări clienți 24/7, colectează lead-uri → +500-1.000€ ca adaos SAU produs separat
-- Asistentul AI pe site NU e inclus în niciun pachet: e opțiune separată, 600 lei (știe tot site-ul clientului și răspunde vizitatorilor 24/7)
+- Asistentul AI: Site Start NU îl are (are doar buton WhatsApp; asistentul se poate adăuga cu 600 lei). Site Custom îl are INCLUS (răspunde la întrebări despre servicii, prețuri, program). Magazinul are opțiunea „Asistent AI smart” +1.000 lei: știe produsele, spune stadiul comenzii după numărul ei și urmărește coletul prin AWB.
 
 **CUM FACI:**
 1. Clientul descrie business-ul + ce vrea

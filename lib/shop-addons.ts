@@ -12,6 +12,6 @@ export const SHOP_ADDONS: Addon[] = [
   { key: "factura", name: "Facturare automată", price: 600, desc: "SmartBill sau Oblio — factura pleacă singură la comandă" },
   { key: "variante", name: "Variante de produs + filtre", price: 500, desc: "mărimi, culori și filtre de căutare în magazin" },
   { key: "produse", name: "Încărcare produse peste 30", price: 200, unit: "30 de produse", desc: "le încărcăm noi, cu poze și descrieri" },
-  { key: "ai", name: "Asistent AI pe site", price: 600, desc: "știe tot magazinul și răspunde clienților 24/7" },
+  { key: "ai-shop", name: "Asistent AI smart (comenzi + urmărire colet)", price: 1000, desc: "răspunde despre produse, spune stadiul comenzii și unde e coletul, după numărul comenzii" },
   { key: "logo", name: "Logo", price: 300, desc: "dacă nu ai deja unul — creat pe brandul tău" },
 ];

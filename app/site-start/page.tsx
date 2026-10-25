@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE_START_ADDONS, addonPriceLabel } from "@/lib/site-start-addons";
+import { AddonGrid } from "@/components/AddonGrid";
 import {
   CheckCircle2,
   Zap,
@@ -35,6 +35,8 @@ const INCLUDED = [
   "Domeniu (.ro) + găzduire incluse în administrare (de la 100 lei/lună)",
   "Certificat SSL (https) și optimizare de bază Google incluse",
   "Perfect pe telefon — acolo unde te caută 70% din clienți",
+  "SEO tehnic, Google Analytics, Google Search Console și sitemap trimis la Google",
+  "Încărcare sub o secundă",
   "Buton WhatsApp — clienții îți scriu direct pe telefon",
   "Email personalizat (nume@firma-ta.ro)",
   "Articol gratuit despre firma ta în Botoșani Expres",
@@ -123,17 +125,7 @@ export default function SiteStartPage() {
           <p className="mx-auto mt-2 max-w-xl text-center text-sm text-text-muted">
             Baza rămâne {price} lei. Extra-opțiunile le alegi după plată, în discuția cu noi — ne spui exact ce vrei în fiecare, le adăugăm la factură.
           </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            {SITE_START_ADDONS.map((a) => ({ name: a.name, price: addonPriceLabel(a), desc: a.desc })).map((a) => (
-              <div key={a.name} className="flex items-start justify-between gap-3 rounded-2xl border border-bg-border bg-bg-card/60 p-4">
-                <div>
-                  <p className="text-sm font-bold text-text">{a.name}</p>
-                  <p className="mt-0.5 text-xs text-text-muted">{a.desc}</p>
-                </div>
-                <span className="flex-shrink-0 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-2.5 py-0.5 text-[11px] font-semibold text-brand-orange">{a.price}</span>
-              </div>
-            ))}
-          </div>
+          <AddonGrid />
           <p className="mt-4 text-center text-xs text-text-subtle">
             Vrei plăți cu cardul, magazin sau funcții speciale? Ăla e <Link href="/brief" className="text-brand-orange hover:underline">Site Custom (de la 3.500 lei)</Link> — iar cei {price} lei se scad integral din el.
           </p>

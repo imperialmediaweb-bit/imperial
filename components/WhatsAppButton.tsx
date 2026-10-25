@@ -4,7 +4,7 @@
 // cu voce), plus scurtături: Radiografia și WhatsApp pentru cine vrea om.
 // Chatul se încarcă leneș (dynamic) — nu îngreunează nicio pagină până la click.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { MessageCircle, X, Sparkles, Radar, ArrowLeft } from "lucide-react";
@@ -21,6 +21,12 @@ const BriefChat = dynamic(() => import("./BriefChat").then((m) => m.BriefChat), 
 
 export function WhatsAppButton() {
   const [view, setView] = useState<"closed" | "menu" | "chat">("closed");
+  // alte componente (ex. calculatorul de preț) pot deschide chatul direct
+  useEffect(() => {
+    const open = () => setView("chat");
+    window.addEventListener("imperial:open-chat", open);
+    return () => window.removeEventListener("imperial:open-chat", open);
+  }, []);
   const waText = encodeURIComponent(
     "Bună! Am văzut site-ul Imperial Media și aș vrea să discutăm despre un site."
   );

@@ -10,6 +10,7 @@ export const SITE_START_ADDONS: Addon[] = [
   { key: "fb-only", name: "Doar pagina de Facebook", price: 350, desc: "creare completă: copertă, descriere, buton de contact", onlyOnPage: true },
   { key: "gb-only", name: "Doar profilul Google Business", price: 200, desc: "firma pe Google Maps, cu program, poze și date de contact", onlyOnPage: true },
   { key: "fb-opt", name: "Optimizare pagină existentă", price: 200, desc: "ai deja pagina? îi facem copertă nouă, descriere și poze optimizate", onlyOnPage: true },
+  { key: "geo", name: "Vizibilitate în ChatGPT, Gemini și Claude", price: 500, desc: "site-ul pregătit să fie înțeles și recomandat de asistenții AI" },
   { key: "pagina", name: "Pagină în plus", price: 200, unit: "pagină", desc: "orice pagină extra, cu conținutul dorit" },
   { key: "galerie", name: "Galerie foto / portofoliu", price: 400, desc: "lucrările tale, prezentate profesionist" },
   { key: "programari", name: "Programări / rezervări online", price: 500, desc: "clienții se programează singuri, tu primești notificare" },

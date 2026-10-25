@@ -36,7 +36,7 @@ export default function CreareMagazinOnlinePage() {
           body: (
             <>
               <p><strong className="text-text">3.000 lei — Magazin Start</strong>: design unic, până la 30 de produse încărcate de noi, coș, comenzi, plata ramburs, panou pentru produse și comenzi.</p>
-              <p><strong className="text-text">Opțiuni la alegere</strong>: plăți online cu cardul +800 lei · AWB automat la curieri +700 lei · facturare automată +600 lei · variante de produs și filtre +500 lei · produse peste 30: +200 lei la fiecare 30 · asistent AI +600 lei · logo +300 lei.</p>
+              <p><strong className="text-text">Opțiuni la alegere</strong>: plăți online cu cardul +800 lei · AWB automat la curieri +700 lei · facturare automată +600 lei · variante de produs și filtre +500 lei · produse peste 30: +200 lei la fiecare 30 · asistent AI smart (comenzi + urmărire colet) +1.000 lei · logo +300 lei.</p>
               <p><strong className="text-text">Exemplu</strong>: Magazin Start + plăți cu cardul + AWB + facturare = 5.100 lei. Magazinele avansate (mii de produse, import de la furnizori, integrare cu gestiunea) au ofertă personalizată.</p>
               <p>Costuri lunare reale, spuse cinstit: procesatorul de plăți ia 1-2% pe tranzacție (al lui, nu al nostru); administrarea de la 100 lei/lună (include găzduirea). Ghidul complet de prețuri: <Link href="/blog/cat-costa-magazin-online-romania" className="text-brand-orange hover:underline">Preț magazin online 2026 →</Link></p>
             </>
