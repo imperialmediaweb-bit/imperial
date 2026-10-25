@@ -30,7 +30,9 @@ const TYPES = (Object.keys(CONFIG_TYPES) as TypeKey[]).map((key) => ({
   note: NOTES[key],
 }));
 
-export function Estimator({ compact = false }: { compact?: boolean }) {
+export function Estimator({ compact = false, variant = "full" }: { compact?: boolean; variant?: "full" | "home" }) {
+  // „home”: varianta scurtă de pe prima pagină — domeniu din listă, opțiuni ca butoane mici
+  const home = variant === "home";
   const [type, setType] = useState<TypeKey>("start");
   const [opts, setOpts] = useState<Record<string, boolean>>({});
   const [info, setInfo] = useState<Info | null>(null);
@@ -68,6 +70,21 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
     <div className={`pointer-events-auto rounded-2xl border border-white/[0.08] bg-[#09080e]/85 p-6 backdrop-blur-md sm:p-8 ${compact ? "" : "max-w-2xl"}`}>
       {/* domeniul afacerii */}
       <p className="font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Ce afacere ai?</p>
+      {home ? (
+        <select
+          aria-label="Ce afacere ai?"
+          value={dom}
+          onChange={(e) => pickDomain(e.target.value)}
+          className="input mt-2 rounded-full py-2.5 text-[13px]"
+        >
+          <option value="">Alege domeniul afacerii</option>
+          {DOMENII.map((d) => (
+            <option key={d.key} value={d.key}>
+              {d.emoji} {d.name}
+            </option>
+          ))}
+        </select>
+      ) : (
       <div className="mt-2 flex flex-wrap gap-1.5">
         {DOMENII.map((d) => (
           <button
@@ -84,6 +101,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
           </button>
         ))}
       </div>
+      )}
 
       {/* tipul de site */}
       <p className="mt-5 font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Ce fel de site</p>
@@ -103,14 +121,22 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
         ))}
       </div>
       <p className="mt-2 text-[12px] text-white/50">{t.note}</p>
+      {home ? null : (
       <p className="mt-1.5 text-[12px] text-white/50">
         Ai nevoie de o aplicație, o platformă SaaS sau alt program la comandă?{" "}
         <Link href="/brief" className="font-medium text-brand-orange hover:underline">
           Descrie proiectul și primești oferta personalizată
         </Link>
       </p>
+      )}
 
       {/* ce e inclus în orice site */}
+      {home ? (
+        <p className="mt-4 flex items-start gap-2 text-[12px] leading-relaxed text-white/60">
+          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-magenta" />
+          Inclus în orice site: {INCLUDED.map((x) => x.name).join(" · ")}.
+        </p>
+      ) : (
       <div className="mt-5">
         <p className="font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Inclus în orice site</p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -127,9 +153,10 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
           ))}
         </div>
       </div>
+      )}
 
       {/* idei incluse, pe domeniul lui */}
-      {domeniu ? (
+      {domeniu && !home ? (
         <div className="mt-5 rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
           <p className="flex items-center gap-2 text-[13px] font-semibold text-white/90">
             <Lightbulb className="h-4 w-4 text-brand-orange" />
@@ -160,6 +187,36 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
           </button>
         ) : null}
       </div>
+      {home ? (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {options.map((o) => {
+            const on = !!opts[o.key];
+            const v = optionPrice(o, type, opts);
+            const short = o.key === "admin" ? "Administrare lunară" : o.name.replace(/ \(per .*\)$/, "");
+            return (
+              <button
+                key={o.key}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setOpts((st) => ({ ...st, [o.key]: !st[o.key] }))}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium transition ${
+                  on
+                    ? "bg-orange-gradient text-white"
+                    : recommended.has(o.key)
+                      ? "border border-brand-magenta/60 text-white hover:bg-brand-magenta/10"
+                      : "border border-white/10 text-white/70 hover:border-white/25 hover:text-white"
+                }`}
+              >
+                {on ? <Check className="h-3 w-3" /> : null}
+                {short}
+                <span className={on ? "text-white/80" : "text-white/45"}>
+                  {v === 0 ? "inclus" : `+${v}${o.monthly ? "/lună" : ""}`}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
       <div className="mt-2 grid gap-2 sm:grid-cols-2">
         {options.map((o) => {
           const on = !!opts[o.key];
@@ -221,6 +278,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
           );
         })}
       </div>
+      )}
 
       {/* sugestie: Site Start încărcat cu opțiuni ajunge aproape de Site Custom */}
       {type === "start" && once >= 2300 ? (
@@ -275,6 +333,14 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
           Primește oferta exactă
         </Link>
       </div>
+      {home ? (
+        <Link
+          href={`/estimare?${configQuery(config)}${domeniu ? `&domeniu=${domeniu.key}` : ""}`}
+          className="mt-3 inline-block text-[12.5px] font-medium text-brand-orange underline underline-offset-2"
+        >
+          Vezi calculatorul complet, cu explicații pentru fiecare opțiune
+        </Link>
+      ) : null}
       <p className="mt-3 text-[12px] leading-relaxed text-white/60">
         Găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună, plătită lunar de la lansare.
       </p>

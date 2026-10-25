@@ -56,12 +56,12 @@ export default function BriefPage() {
         {/* Fallback footer */}
         <p className="mt-8 text-center text-xs text-text-subtle">
           Preferi să ne scrii direct?{" "}
-          <a href="/contact" className="text-brand-orange hover:underline">
+          <a href="/contact" className="text-brand-orange underline underline-offset-2">
             Formular clasic
           </a>
           {"  ·  "}
           Sau sună la{" "}
-          <a href="tel:0758169388" className="text-brand-orange hover:underline">
+          <a href="tel:0758169388" className="text-brand-orange underline underline-offset-2">
             0758 169 388
           </a>
         </p>

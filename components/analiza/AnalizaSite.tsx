@@ -9,11 +9,13 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, Loader2, MessageCircle, Search, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Download, Loader2, Mail, MessageCircle, Search, Zap } from "lucide-react";
 import { DOMENII, PREZENTA, type Prezenta } from "@/lib/analiza-domenii";
 import { SITE_START_ADDONS } from "@/lib/site-start-addons";
 import { SHOP_ADDONS, SHOP_BASE } from "@/lib/shop-addons";
 import { siteConfig } from "@/lib/site";
+import type { SiteCheck } from "@/lib/site-check";
+import { raportHtml, sanitizeRaport } from "@/lib/analiza-raport";
 
 const STEPS = ["Domeniul", "Firma", "Clienții", "Prezența online"] as const;
 
@@ -32,12 +34,22 @@ export function AnalizaSite() {
   const [aiLoading, setAiLoading] = useState(false);
   const [valoare, setValoare] = useState(150);
   const [prezenta, setPrezenta] = useState<Prezenta | null>(null);
+  // Site-ul existent: îl verificăm cu fapte măsurate și decidem îmbunătățire sau refacere
+  const [siteUrl, setSiteUrl] = useState("");
+  const [siteCheck, setSiteCheck] = useState<SiteCheck | null>(null);
+  const areSiteAles = prezenta === "site-bun" || prezenta === "site-vechi";
+  // Raportul: PDF descărcat sau trimis pe email (cu reamintiri, doar dacă le cere)
+  const [emailRaport, setEmailRaport] = useState("");
+  const [reamintiri, setReamintiri] = useState(false);
+  const [trimis, setTrimis] = useState<"idle" | "busy" | "ok" | string>("idle");
 
   const dom = DOMENII.find((d) => d.key === domKey);
   const done = step === 4;
 
   // Are deja un site bun: nu-i recomandăm alt site, ci să-l facem găsit (AI, presă, asistent)
-  const areSite = prezenta === "site-bun";
+  const areSite =
+    (prezenta === "site-bun" && siteCheck?.verdict !== "refacere") ||
+    (prezenta === "site-vechi" && siteCheck?.verdict === "imbunatatire");
   const rezultat = useMemo(() => {
     if (!dom) return null;
     if (areSite) {
@@ -47,37 +59,51 @@ export function AnalizaSite() {
       return { base: 0, pachet: "Creștere pentru site-ul tău", addons, total, clientiPtSite };
     }
     const base = dom.custom ? SHOP_BASE : 1500;
-    const pachet = dom.custom ? "Magazin online" : prezenta === "site-vechi" ? "Site Start (refacerea site-ului)" : "Site Start";
+    const pachet = dom.custom ? "Magazin online" : areSiteAles ? "Site Start (refacerea site-ului)" : "Site Start";
     const addons = (dom.custom ? SHOP_ADDONS : SITE_START_ADDONS).filter((a) => dom.addons.includes(a.key) && !a.onlyOnPage);
     const total = base + addons.reduce((s, a) => s + a.price, 0);
     const clientiPtSite = Math.max(1, Math.ceil(total / Math.max(1, valoare)));
     return { base, pachet, addons, total, clientiPtSite };
-  }, [dom, valoare, areSite, prezenta]);
+  }, [dom, valoare, areSite, areSiteAles]);
 
   useEffect(() => {
-    if (step !== 4 || !dom || !rezultat) return;
+    if (step !== 4 || !dom) return;
     let cancelled = false;
     setAi(null);
+    setSiteCheck(null);
     setAiLoading(true);
-    fetch("/api/analiza", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firma,
-        domeniu: dom.key,
-        oras,
-        valoare,
-        prezenta,
-        pachet: rezultat.pachet + (rezultat.addons.length ? " + " + rezultat.addons.map((a) => a.name).join(", ") : ""),
-        total: rezultat.total,
-      }),
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => {
-        if (!cancelled && j && !j.error) setAi(j);
+    (async () => {
+      let check: SiteCheck | null = null;
+      if (areSiteAles && siteUrl.trim()) {
+        check = await fetch("/api/analiza/site", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: siteUrl }),
+        })
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null);
+        if (cancelled) return;
+        setSiteCheck(check);
+      }
+      const r = await fetch("/api/analiza", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firma,
+          domeniu: dom.key,
+          oras,
+          valoare,
+          prezenta,
+          site: check?.reachable
+            ? `Site-ul lui (${check.url}) verificat acum: ${check.checks.map((c) => `${c.label}: ${c.ok ? "da" : "nu"} (${c.detail})`).join("; ")}${check.tech ? `; făcut pe ${check.tech}` : ""}. Verdict: ${check.verdict === "refacere" ? "REFACERE pe tehnologii noi" : "ÎMBUNĂTĂȚIRE a site-ului existent"} — ${check.reasons.join("; ")}.`
+            : undefined,
+        }),
       })
-      .catch(() => {})
-      .finally(() => !cancelled && setAiLoading(false));
+        .then((x) => (x.ok ? x.json() : null))
+        .catch(() => null);
+      if (!cancelled && r && !r.error) setAi(r);
+      if (!cancelled) setAiLoading(false);
+    })();
     return () => {
       cancelled = true;
     };
@@ -99,6 +125,64 @@ export function AnalizaSite() {
           ` — ${lei(rezultat.total)}. Aș vrea o ofertă.`
       )
     : "";
+  const ofertaHref =
+    dom && rezultat
+      ? areSite
+        ? `/brief?sursa=analiza&domeniu=${dom.key}&oras=${encodeURIComponent(oras)}`
+        : `/estimare?tip=${dom.custom ? "magazin" : "start"}&optiuni=${rezultat.addons.map((a) => a.key).join(",")}&domeniu=${dom.key}`
+      : "/estimare";
+
+  // Datele raportului — aceleași pentru PDF și email
+  const raportData = () =>
+    dom && rezultat
+      ? {
+          firma,
+          domeniu: dom.name,
+          oras,
+          prezenta: PREZENTA.find((p) => p.key === prezenta)?.label ?? "",
+          gasit: ai?.gasit,
+          intro: ai?.intro,
+          beneficii: ai?.beneficii?.length ? ai.beneficii : dom.benefits,
+          crestere: ai?.crestere ?? [],
+          concluzie: ai?.concluzie,
+          site: siteCheck?.reachable
+            ? { url: siteCheck.url, tech: siteCheck.tech, checks: siteCheck.checks, verdict: siteCheck.verdict, reasons: siteCheck.reasons }
+            : null,
+          pachet: rezultat.base ? `${rezultat.pachet} — ${lei(rezultat.base)}` : rezultat.pachet,
+          optiuni: rezultat.addons.map((a) => ({ name: a.name, price: a.price })),
+          total: rezultat.total,
+          ofertaUrl: ofertaHref,
+        }
+      : null;
+
+  const descarca = () => {
+    const d = sanitizeRaport(raportData());
+    if (!d) return;
+    const w = window.open("", "_blank");
+    if (!w) return;
+    w.document.write(
+      `<!doctype html><html lang="ro"><head><meta charset="utf-8"><title>Analiza ${d.firma || "afacerii tale"} — Imperial Media</title><style>*{-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{margin:12mm}</style></head><body style="margin:0;">${raportHtml(d)}</body></html>`
+    );
+    w.document.close();
+    w.focus();
+    w.print();
+  };
+
+  const trimitePeEmail = async () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailRaport.trim())) {
+      setTrimis("Scrie o adresă de email validă.");
+      return;
+    }
+    setTrimis("busy");
+    const r = await fetch("/api/analiza/trimite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: emailRaport.trim(), reamintiri, raport: raportData() }),
+    }).catch(() => null);
+    const j = await r?.json().catch(() => null);
+    setTrimis(r?.ok ? "ok" : j?.error ?? "Nu am putut trimite. Încearcă din nou.");
+  };
+
   const phone = (siteConfig as { phone?: string }).phone?.replace(/[^0-9]/g, "") ?? "";
   const waHref = phone ? `https://wa.me/${phone.startsWith("0") ? "4" + phone : phone}?text=${waText}` : "/contact";
 
@@ -223,6 +307,24 @@ export function AnalizaSite() {
                   </button>
                 ))}
               </div>
+              {areSiteAles ? (
+                <div className="mt-5">
+                  <label htmlFor="analiza-site-url" className="text-[13px] font-semibold text-white/85">
+                    Adresa site-ului tău — îl verificăm acum (opțional)
+                  </label>
+                  <input
+                    id="analiza-site-url"
+                    value={siteUrl}
+                    onChange={(e) => setSiteUrl(e.target.value)}
+                    placeholder="ex: firma-ta.ro"
+                    inputMode="url"
+                    className="input mt-2 rounded-2xl"
+                  />
+                  <p className="mt-1.5 text-[12px] text-white/50">
+                    Măsurăm viteza, versiunea de telefon, ce vede Google și pe ce e construit — și îți spunem dacă merită îmbunătățit sau refăcut.
+                  </p>
+                </div>
+              ) : null}
             </>
           ) : null}
 
@@ -234,7 +336,11 @@ export function AnalizaSite() {
               {aiLoading ? (
                 <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 text-[14px] text-white/70">
                   <Loader2 className="h-4 w-4 animate-spin text-brand-magenta" />
-                  {firma ? `Căutăm „${firma}” pe internet și pregătim analiza...` : "Pregătim analiza personalizată..."}
+                  {areSiteAles && siteUrl.trim()
+                    ? "Verificăm site-ul tău (viteză, telefon, Google) — durează până la un minut..."
+                    : firma
+                      ? `Căutăm „${firma}” pe internet și pregătim analiza...`
+                      : "Pregătim analiza personalizată..."}
                 </div>
               ) : null}
               {ai?.gasit ? (
@@ -244,6 +350,42 @@ export function AnalizaSite() {
                     <b className="text-text">Ce am găsit despre tine online: </b>
                     {ai.gasit}
                   </span>
+                </div>
+              ) : null}
+              {siteCheck ? (
+                <div className="mt-4 rounded-xl border border-white/[0.1] bg-white/[0.03] p-4">
+                  <p className="text-[14px] font-semibold text-text">
+                    Ce am găsit pe {siteCheck.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                    {siteCheck.tech ? <span className="font-normal text-white/60"> · făcut pe {siteCheck.tech}</span> : null}
+                  </p>
+                  {siteCheck.reachable ? (
+                    <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
+                      {siteCheck.checks.map((c) => (
+                        <li key={c.key} className="flex gap-2 text-[13px] leading-snug text-white/75">
+                          <span className={c.ok ? "text-green-400" : "text-red-400"}>{c.ok ? "✓" : "✗"}</span>
+                          <span>
+                            <b className="font-medium text-white/90">{c.label}</b> — {c.detail}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  <div
+                    className={`mt-4 rounded-lg p-3 text-[14px] leading-relaxed ${
+                      siteCheck.verdict === "refacere"
+                        ? "border border-brand-orange/40 bg-brand-orange/[0.08]"
+                        : "border border-green-500/30 bg-green-500/[0.06]"
+                    }`}
+                  >
+                    <b className="text-text">
+                      {siteCheck.verdict === "refacere"
+                        ? "Verdict: merită refăcut, construit de la zero pe tehnologii de ultimă generație."
+                        : siteCheck.verdict === "imbunatatire"
+                          ? "Verdict: îl îmbunătățim, nu e nevoie să-l refaci."
+                          : "Nu am putut verifica site-ul acum."}
+                    </b>{" "}
+                    <span className="text-white/75">{siteCheck.reasons.join("; ")}.</span>
+                  </div>
                 </div>
               ) : null}
               {ai?.intro ? <p className="mt-4 text-[15px] leading-relaxed text-white/80">{ai.intro}</p> : null}
@@ -347,11 +489,7 @@ export function AnalizaSite() {
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
-                    href={
-                      areSite
-                        ? `/brief?sursa=analiza&domeniu=${dom.key}&oras=${encodeURIComponent(oras)}`
-                        : `/estimare?tip=${dom.custom ? "magazin" : "start"}&optiuni=${rezultat.addons.map((a) => a.key).join(",")}&domeniu=${dom.key}`
-                    }
+                    href={ofertaHref}
                     className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-6 py-3 text-[14px] font-semibold text-white shadow-glow-orange transition hover:scale-[1.04]"
                   >
                     <Zap className="h-4 w-4" />
@@ -367,6 +505,53 @@ export function AnalizaSite() {
                     Scrie-ne pe WhatsApp
                   </a>
                 </div>
+              </div>
+
+              {/* păstrează analiza: PDF sau email */}
+              <div className="mt-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5">
+                <p className="text-[14px] font-semibold text-text">Păstrează analiza</p>
+                <button
+                  type="button"
+                  onClick={descarca}
+                  disabled={aiLoading}
+                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-[13.5px] font-medium text-white/90 transition hover:border-brand-orange/60 disabled:opacity-50"
+                >
+                  <Download className="h-4 w-4" />
+                  Descarcă analiza (PDF)
+                </button>
+                {trimis === "ok" ? (
+                  <p className="mt-4 text-[14px] text-green-400">Gata — analiza e în emailul tău.</p>
+                ) : (
+                  <div className="mt-4">
+                    <label htmlFor="analiza-email" className="text-[13px] text-white/70">
+                      Sau primește-o pe email:
+                    </label>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <input
+                        id="analiza-email"
+                        type="email"
+                        value={emailRaport}
+                        onChange={(e) => setEmailRaport(e.target.value)}
+                        placeholder="emailul tău"
+                        className="input min-w-[200px] flex-1 rounded-full"
+                      />
+                      <button
+                        type="button"
+                        onClick={trimitePeEmail}
+                        disabled={trimis === "busy" || aiLoading}
+                        className="inline-flex items-center gap-2 rounded-full bg-orange-gradient px-5 py-2.5 text-[13.5px] font-semibold text-white disabled:opacity-60"
+                      >
+                        {trimis === "busy" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+                        Trimite-mi analiza
+                      </button>
+                    </div>
+                    <label className="mt-3 flex cursor-pointer items-start gap-2 text-[12.5px] leading-snug text-white/60">
+                      <input type="checkbox" checked={reamintiri} onChange={(e) => setReamintiri(e.target.checked)} className="mt-0.5 h-4 w-4 accent-orange-500" />
+                      Vreau și două reamintiri scurte pe email (după 3 și 14 zile). Mă pot dezabona oricând.
+                    </label>
+                    {trimis !== "idle" && trimis !== "busy" ? <p className="mt-2 text-[13px] text-red-400">{trimis}</p> : null}
+                  </div>
+                )}
               </div>
               <button
                 onClick={() => {

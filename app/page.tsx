@@ -25,7 +25,7 @@ export default function HomePage() {
                   Cât ar costa <span className="text-gradient">site-ul tău?</span>
                 </h2>
                 <div className="mt-8">
-                  <Estimator compact />
+                  <Estimator compact variant="home" />
                 </div>
               </div>
             </section>

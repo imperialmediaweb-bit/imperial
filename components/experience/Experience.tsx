@@ -402,7 +402,7 @@ export function Experience() {
               </p>
             </motion.div>
             <motion.div {...fade} transition={{ duration: 0.7, delay: 0.15 }} className="mt-7">
-              <Estimator />
+              <Estimator variant="home" />
             </motion.div>
           </div>
         </Chapter>

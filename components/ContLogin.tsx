@@ -81,7 +81,7 @@ export function ContLogin({ expired = false }: { expired?: boolean }) {
             )}
             <p className="text-[11px] leading-snug text-text-subtle">
               Fără parole — primești un link pe email și intri direct. Nu ai niciun raport încă?{" "}
-              <a href="/service" className="text-brand-orange hover:underline">Fă-ți auditul aici</a>.
+              <a href="/service" className="text-brand-orange underline underline-offset-2">Fă-ți auditul aici</a>.
             </p>
           </form>
         )}

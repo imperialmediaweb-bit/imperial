@@ -49,12 +49,12 @@ export default function ConsultantaPage() {
 
         <p className="mt-8 text-center text-xs text-text-subtle">
           Știi deja ce vrei?{" "}
-          <a href="/brief" className="text-brand-orange hover:underline">
+          <a href="/brief" className="text-brand-orange underline underline-offset-2">
             Cere estimare directă
           </a>
           {"  ·  "}
           Vrei să-ți scanăm site-ul actual?{" "}
-          <a href="/audit" className="text-brand-orange hover:underline">
+          <a href="/audit" className="text-brand-orange underline underline-offset-2">
             Audit gratuit
           </a>
         </p>

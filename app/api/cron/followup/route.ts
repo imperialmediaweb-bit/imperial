@@ -294,5 +294,61 @@ async function handle(req: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, candidates: res.rows.length, sent, unpaidReminders: sentUnpaid });
+  // REAMINTIRI DUPĂ ANALIZA GRATUITĂ — doar pentru cei care le-au cerut (bifă + email):
+  // după 3 zile și după 14 zile. Se opresc dacă între timp a cerut ofertă sau s-a dezabonat.
+  let analizaReminders = 0;
+  try {
+    await pool.query(`CREATE TABLE IF NOT EXISTS ops_markers (key TEXT PRIMARY KEY, value TEXT)`);
+    const { stopUrl } = await import("@/lib/analiza-follow");
+    for (const [stage, interval] of [["r1", "3 days"], ["r2", "14 days"]] as const) {
+      const rows = await pool.query(
+        `SELECT DISTINCT ON (LOWER(b.email)) b.email, b.name, b.industry, b.message
+         FROM briefs b
+         WHERE b.source = 'analiza-email-reamintiri' AND b.email LIKE '%@%' AND b.created_at < NOW() - $1::interval
+           AND NOT EXISTS (SELECT 1 FROM briefs c WHERE LOWER(c.email) = LOWER(b.email) AND c.source NOT LIKE 'analiza%' AND c.created_at > b.created_at)
+           AND NOT EXISTS (SELECT 1 FROM ops_markers m WHERE m.key = 'analiza-stop:' || LOWER(b.email))
+           AND NOT EXISTS (SELECT 1 FROM ops_markers m WHERE m.key = 'analiza-${stage}:' || LOWER(b.email))
+         ORDER BY LOWER(b.email), b.created_at DESC LIMIT 50`,
+        [interval]
+      );
+      for (const r of rows.rows) {
+        const oferta = String(r.message ?? "").match(/oferta: (\S+)/)?.[1] ?? `${siteConfig.url}/estimare`;
+        const firma = r.name && !String(r.name).includes("@") ? String(r.name) : "afacerea ta";
+        const html =
+          stage === "r1"
+            ? WRAP(`
+              <h2 style="margin:0 0 12px;">Știi ce pierde ${firma} fără un site?</h2>
+              <p>Acum câteva zile ai făcut analiza gratuită pe imperial-media.ro. Între timp, oamenii din orașul tău au continuat să caute pe Google ce oferi tu — și au ajuns la cei care apar acolo.</p>
+              <p>Recomandarea pentru tine e pregătită: deschizi linkul, vezi totalul și, dacă îți convine, ceri oferta în două minute.</p>
+              <p>${BTN(oferta, "Vezi recomandarea și cere oferta")}</p>
+              <p style="font-size:13px;color:#666;">Ai întrebări? Răspunde la acest email sau sună la ${siteConfig.phone}.</p>`)
+            : WRAP(`
+              <h2 style="margin:0 0 12px;">Încă te gândești la site?</h2>
+              <p>Dacă bugetul e problema, putem porni simplu: Site Start, de la 1.500 lei, cu opțiunile adăugate mai târziu, când ai nevoie de ele.</p>
+              <p>${BTN(`${siteConfig.url}/estimare?tip=start`, "Calculează prețul pe loc")}</p>
+              <p style="font-size:13px;color:#666;">Acesta e ultimul nostru mesaj despre analiză.</p>`);
+        try {
+          await sendSimpleEmail({
+            to: r.email,
+            subject: stage === "r1" ? `Știi ce pierde ${firma} fără un site?` : "Încă te gândești la site? Poți porni simplu",
+            html: html.replace(
+              "</div>",
+              `<p style="color:#aaa;font-size:11px;margin-top:20px;">Primești acest email pentru că ai cerut analiza și reamintirile pe imperial-media.ro. <a href="${stopUrl(r.email)}" style="color:#aaa;">Dezabonează-te</a>.</p></div>`
+            ),
+          });
+          await pool.query(`INSERT INTO ops_markers (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING`, [
+            `analiza-${stage}:${String(r.email).toLowerCase()}`,
+            new Date().toISOString(),
+          ]);
+          analizaReminders++;
+        } catch (e) {
+          console.error(`[cron/followup] analiza reminder ${stage} failed for ${r.email}:`, e);
+        }
+      }
+    }
+  } catch (e) {
+    console.error("[cron/followup] analiza reminders failed:", e);
+  }
+
+  return NextResponse.json({ ok: true, candidates: res.rows.length, sent, unpaidReminders: sentUnpaid, analizaReminders });
 }

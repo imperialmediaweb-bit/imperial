@@ -127,7 +127,7 @@ export default function SiteStartPage() {
           </p>
           <AddonGrid />
           <p className="mt-4 text-center text-xs text-text-subtle">
-            Vrei plăți cu cardul, magazin sau funcții speciale? Ăla e <Link href="/brief" className="text-brand-orange hover:underline">Site Custom (de la 3.500 lei)</Link> — iar cei {price} lei se scad integral din el.
+            Vrei plăți cu cardul, magazin sau funcții speciale? Ăla e <Link href="/brief" className="text-brand-orange underline underline-offset-2">Site Custom (de la 3.500 lei)</Link> — iar cei {price} lei se scad integral din el.
           </p>
         </div>
       </section>

@@ -346,6 +346,7 @@ export function World({
       dpr={[1, 1.5]}
       camera={{ fov: 62, near: 0.1, far: 60, position: [0, 0, 8] }}
       style={{ position: "fixed", inset: 0, zIndex: 0 }}
+      role="img"
       aria-label="Călătorie 3D prin universul Imperial Media"
     >
       <color attach="background" args={["#050507"]} />

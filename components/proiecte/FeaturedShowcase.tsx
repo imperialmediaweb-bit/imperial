@@ -71,9 +71,9 @@ function Slide({ p, i }: { p: (typeof featured)[number]; i: number }) {
         <p className="mt-4 font-jmono text-[10px] uppercase tracking-[0.25em] text-white/55">
           {p.categories.slice(0, 3).join(" · ")}
         </p>
-        <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-text sm:text-[1.9rem]">
+        <h2 className="mt-3 font-display text-2xl font-semibold leading-tight text-text sm:text-[1.9rem]">
           {p.title.split(" — ")[0]}
-        </h3>
+        </h2>
         {p.excerpt ? (
           <p className="mt-4 line-clamp-4 text-[14.5px] leading-relaxed text-white/70">{p.excerpt}</p>
         ) : null}

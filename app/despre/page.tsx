@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, BadgeCheck, Newspaper, Zap } from "lucide-react";
 import { DespreHero } from "@/components/despre/DespreHero";
@@ -125,8 +126,7 @@ export default function DesprePage() {
 
       {/* ───── BANDA FOTO — atelierul noaptea ───── */}
       <section className="relative h-[340px] overflow-hidden sm:h-[420px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/video/hero-poster.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <Image src="/video/hero-poster.jpg" alt="" fill sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050507] via-transparent to-[#050507]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.6)_100%)]" />
         <div className="container-app relative z-10 flex h-full items-end pb-10">

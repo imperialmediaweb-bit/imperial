@@ -545,14 +545,14 @@ export function ServiceReportView({
           </form>
         )}
         <p className="mt-4 text-xs text-text-subtle">
-          Sau <Link href="/brief" className="text-brand-orange hover:underline">cere estimare direct</Link> pentru Faza 1
+          Sau <Link href="/brief" className="text-brand-orange underline underline-offset-2">cere estimare direct</Link> pentru Faza 1
         </p>
       </motion.div>
 
       <p className="text-center text-xs text-text-subtle print:hidden">
         <MessageCircle className="mr-1 inline h-3.5 w-3.5" />
         Toate rapoartele + notificările tale de monitorizare + consultantul dedicat:{" "}
-        <Link href="/cont" className="text-brand-orange hover:underline">intră în contul tău</Link>
+        <Link href="/cont" className="text-brand-orange underline underline-offset-2">intră în contul tău</Link>
       </p>
 
       {error && <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-300">{error}</p>}

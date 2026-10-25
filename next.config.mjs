@@ -2,7 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
+  // CSS-ul intră direct în pagină — fără cereri care blochează prima afișare
+  experimental: { inlineCss: true },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "www.imperial-media.ro" },
       { protocol: "https", hostname: "imperial-media.ro" },

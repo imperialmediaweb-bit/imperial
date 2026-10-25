@@ -36,7 +36,7 @@ export default function CreareSiteWebPage() {
           body: (
             <>
               <p>Prețul corect depinde de ce are de făcut site-ul, nu de cine îl face. La Imperial Media prețurile sunt publice și fixe:</p>
-              <p><strong className="text-text">Site Start — 1.500 lei, totul inclus</strong>: 4 pagini (Acasă, Despre, Servicii, Contact cu hartă), design pe brandul tău, livrat în câteva zile. Pentru firme care vor să existe online corect, repede. <Link href="/site-start" className="text-brand-orange hover:underline">Detalii și comandă →</Link></p>
+              <p><strong className="text-text">Site Start — 1.500 lei, totul inclus</strong>: 4 pagini (Acasă, Despre, Servicii, Contact cu hartă), design pe brandul tău, livrat în câteva zile. Pentru firme care vor să existe online corect, repede. <Link href="/site-start" className="text-brand-orange underline underline-offset-2">Detalii și comandă →</Link></p>
               <p><strong className="text-text">Site Custom — de la 3.500 lei</strong>: mai multe pagini, funcții dedicate (programări, rezervări, calculatoare), cu campania de presă în toate cele 50 de ziare cadou.</p>
               <p><strong className="text-text">Magazin online — de la 3.000 lei</strong> · <strong className="text-text">Aplicații și platforme — la cerere</strong>.</p>
               <p>Orice sumă plătită pe o treaptă devine avans pentru următoarea — investiția nu se pierde niciodată.</p>
@@ -65,7 +65,7 @@ export default function CreareSiteWebPage() {
           title: "Cum lucrăm — totul online, fără drumuri",
           body: (
             <>
-              <p>1) Primești <Link href="/brief" className="text-brand-orange hover:underline">estimarea gratuită în 2 minute</Link> cu asistentul AI (scrii sau vorbești). 2) Oferta fermă vine pe email în 24h. 3) Plătești online, semnezi <Link href="/contract" className="text-brand-orange hover:underline">contractul electronic</Link> în 2 minute (CUI → datele se completează de la ANAF). 4) Ne trimiți conținutul printr-un formular de 5 minute. 5) Preview → o rundă de revizii → LIVE.</p>
+              <p>1) Primești <Link href="/brief" className="text-brand-orange underline underline-offset-2">estimarea gratuită în 2 minute</Link> cu asistentul AI (scrii sau vorbești). 2) Oferta fermă vine pe email în 24h. 3) Plătești online, semnezi <Link href="/contract" className="text-brand-orange underline underline-offset-2">contractul electronic</Link> în 2 minute (CUI → datele se completează de la ANAF). 4) Ne trimiți conținutul printr-un formular de 5 minute. 5) Preview → o rundă de revizii → LIVE.</p>
               <p>Site Start: 3-7 zile de la conținut. Site complet: 2-4 săptămâni. Magazin: 4-8 săptămâni.</p>
             </>
           ),

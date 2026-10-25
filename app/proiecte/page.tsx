@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Zap } from "lucide-react";
 import { ProjectsListClient } from "@/components/ProjectsList";
@@ -23,12 +24,7 @@ export default function ProiectePage() {
       {/* ───── HERO — galeria se deschide ───── */}
       <section className="relative overflow-hidden">
         {/* fundalul cu panglicile de lumină ale brandului */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/video/hero-poster.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
-        />
+        <Image src="/video/hero-poster.jpg" alt="" fill priority sizes="100vw" className="object-cover opacity-70" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,5,7,0.25)_20%,rgba(5,5,7,0.92)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050507] to-transparent" />
 

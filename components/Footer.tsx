@@ -35,9 +35,9 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Newsletter */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-text">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-text">
               Newsletter
-            </h4>
+            </h2>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <p className="mt-4 text-sm leading-relaxed text-text-muted">
               Abonează-te la newsletter și primește cele mai noi știri,
@@ -78,9 +78,9 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-text">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-text">
               Services
-            </h4>
+            </h2>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">
               {[
@@ -108,9 +108,9 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-text">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-text">
               Contact
-            </h4>
+            </h2>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">
               <li>
@@ -154,12 +154,13 @@ export function Footer() {
             </p>
             <div className="mt-5 flex gap-2">
               {[
-                { href: siteConfig.social.facebook, Icon: Facebook },
-                { href: siteConfig.social.instagram, Icon: Instagram },
-              ].map(({ href, Icon }, i) => (
+                { href: siteConfig.social.facebook, Icon: Facebook, label: "Imperial Media pe Facebook" },
+                { href: siteConfig.social.instagram, Icon: Instagram, label: "Imperial Media pe Instagram" },
+              ].map(({ href, Icon, label }, i) => (
                 <Link
                   key={i}
                   href={href}
+                  aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="grid h-9 w-9 place-items-center rounded-full border border-bg-border bg-white/5 text-text-muted transition hover:border-brand-orange hover:bg-brand-orange/10 hover:text-brand-orange"
@@ -195,7 +196,7 @@ export function Footer() {
               { slug: "arad", name: "Arad" },
               { slug: "alba-iulia", name: "Alba Iulia" },
             ].map((c) => (
-              <Link key={c.slug} href={`/creare-site-web/${c.slug}`} className="transition hover:text-brand-orange">
+              <Link key={c.slug} href={`/creare-site-web/${c.slug}`} className="inline-block py-1.5 transition hover:text-brand-orange">
                 Creare site web {c.name}
               </Link>
             ))}
@@ -204,10 +205,10 @@ export function Footer() {
 
         <div className="mt-8 border-t border-bg-border/60 pt-6">
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-subtle">
-            <Link href="/termeni" className="transition hover:text-brand-orange">Termeni și condiții</Link>
-            <Link href="/confidentialitate" className="transition hover:text-brand-orange">Politica de confidențialitate</Link>
-            <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="noopener noreferrer" className="transition hover:text-brand-orange">ANPC — SAL</a>
-            <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="transition hover:text-brand-orange">Soluționarea online a litigiilor (SOL)</a>
+            <Link href="/termeni" className="inline-block py-1.5 transition hover:text-brand-orange">Termeni și condiții</Link>
+            <Link href="/confidentialitate" className="inline-block py-1.5 transition hover:text-brand-orange">Politica de confidențialitate</Link>
+            <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="noopener noreferrer" className="inline-block py-1.5 transition hover:text-brand-orange">ANPC — SAL</a>
+            <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="inline-block py-1.5 transition hover:text-brand-orange">Soluționarea online a litigiilor (SOL)</a>
           </div>
           <p className="mt-4 text-center text-xs text-text-subtle">
             Copyright Imperial Media © {new Date().getFullYear()}. Toate

@@ -5,6 +5,7 @@
  * glossy + scântei), dar cu povestea noastră în prim-plan. Mobil: poster static.
  */
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
@@ -60,8 +61,7 @@ export function DespreHero() {
           <Lights />
         </FloatingRocks>
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src="/video/hero-poster.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-80" />
+        <Image src="/video/hero-poster.jpg" alt="" fill priority sizes="100vw" className="object-cover opacity-80" />
       )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(5,5,7,0.8)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050507] to-transparent" />

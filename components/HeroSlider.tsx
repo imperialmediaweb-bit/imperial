@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -57,8 +58,7 @@ function VideoSlide({ isDesktop }: { isDesktop: boolean }) {
           <source src="/video/hero-loop.mp4" type="video/mp4" />
         </video>
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src="/video/hero-poster.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <Image src="/video/hero-poster.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
       )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.8)_100%)]" />
 

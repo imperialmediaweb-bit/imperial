@@ -388,7 +388,7 @@ export function ContDashboard({
               </p>
             </div>
             <p className="mt-4 border-t border-bg-border/50 pt-3 text-xs text-text-subtle">
-              Întrebări despre comandă? <a href="/cont/consultant" className="text-brand-orange hover:underline">Consultantul tău</a> îți răspunde pe loc — știe exact stadiul.
+              Întrebări despre comandă? <a href="/cont/consultant" className="text-brand-orange underline underline-offset-2">Consultantul tău</a> îți răspunde pe loc — știe exact stadiul.
             </p>
           </div>
         )}

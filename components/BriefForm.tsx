@@ -320,8 +320,9 @@ export function BriefForm() {
                       />
                     </div>
                     <div>
-                      <label className="label">Număr pagini estimate</label>
+                      <label className="label" htmlFor="brief-pagini">Număr pagini estimate</label>
                       <select
+                        id="brief-pagini"
                         className="input"
                         value={data.pages}
                         onChange={(e) => update("pages", e.target.value)}
@@ -334,8 +335,9 @@ export function BriefForm() {
                       </select>
                     </div>
                     <div>
-                      <label className="label">Termen dorit</label>
+                      <label className="label" htmlFor="brief-termen">Termen dorit</label>
                       <select
+                        id="brief-termen"
                         className="input"
                         value={data.deadline}
                         onChange={(e) => update("deadline", e.target.value)}

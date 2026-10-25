@@ -185,7 +185,7 @@ export default function ContractPage() {
               </p>
             </div>
           ) : (
-            <select className="input rounded-2xl" value={service} onChange={(e) => setService(e.target.value)}>
+            <select aria-label="Pachetul contractat" className="input rounded-2xl" value={service} onChange={(e) => setService(e.target.value)}>
               {SERVICES.map((s) => (
                 <option key={s.key} value={s.key}>{s.key} — {s.price}</option>
               ))}
@@ -223,7 +223,7 @@ export default function ContractPage() {
           ) : null}
           <p className="mt-3 text-[12px] leading-relaxed text-text-subtle">
             Preferi să-l semnezi de mână? Descarcă-l, semnează-l și trimite-l scanat sau fotografiat la{" "}
-            <a href={`mailto:${siteConfig.email}`} className="text-brand-orange hover:underline">{siteConfig.email}</a>.
+            <a href={`mailto:${siteConfig.email}`} className="text-brand-orange underline underline-offset-2">{siteConfig.email}</a>.
           </p>
         </div>
 
@@ -231,8 +231,8 @@ export default function ContractPage() {
           <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} className="mt-0.5 h-4 w-4 accent-orange-500" />
           <span>
             Am citit și accept <b className="text-text">contractul de prestări servicii</b> (îl primesc integral pe email),{" "}
-            <a href="/termeni" target="_blank" className="text-brand-orange hover:underline">termenii și condițiile</a> și{" "}
-            <a href="/confidentialitate" target="_blank" className="text-brand-orange hover:underline">politica de confidențialitate</a>.
+            <a href="/termeni" target="_blank" className="text-brand-orange underline underline-offset-2">termenii și condițiile</a> și{" "}
+            <a href="/confidentialitate" target="_blank" className="text-brand-orange underline underline-offset-2">politica de confidențialitate</a>.
             Acceptarea electronică ține loc de semnătură.
           </span>
         </label>

@@ -82,9 +82,9 @@ export function LiveBriefCard({ brief, onSubmit, submitting, offer }: Props) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-brand-orange" />
-              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-text">
+              <h2 className="font-display text-sm font-bold uppercase tracking-wider text-text">
                 Brief-ul tău
-              </h3>
+              </h2>
             </div>
             <p className="mt-1 text-xs text-text-muted">
               {progress < 30

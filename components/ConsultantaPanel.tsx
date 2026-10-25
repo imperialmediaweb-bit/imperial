@@ -35,9 +35,9 @@ export function ConsultantaPanel({ brief, onSubmit, submitting }: Props) {
           <div className="flex items-center gap-3">
             <Target className="h-5 w-5 text-brand-orange" />
             <div>
-              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-text">
+              <h2 className="font-display text-sm font-bold uppercase tracking-wider text-text">
                 Diagnosticul tău
-              </h3>
+              </h2>
               <p className="text-[11px] text-text-muted">
                 {!hasAnyData
                   ? "Răspunde la întrebări — diagnosticul se construiește live"

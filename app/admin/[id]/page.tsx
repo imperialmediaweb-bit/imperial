@@ -136,7 +136,7 @@ export default async function BriefDetailPage(
             <Row icon={Phone} label="Telefon">
               <a
                 href={`tel:${b.phone}`}
-                className="text-brand-orange hover:underline"
+                className="text-brand-orange underline underline-offset-2"
               >
                 {b.phone}
               </a>

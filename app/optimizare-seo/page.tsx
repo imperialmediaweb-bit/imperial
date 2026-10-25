@@ -46,7 +46,7 @@ export default function OptimizareSeoPage() {
           body: (
             <>
               <p>Tot mai mulți clienți nu mai caută pe Google — întreabă AI-ul: „ce service auto îmi recomanzi în Botoșani?”, „o firmă bună de site-uri?”. Motoarele AI răspund cu nume concrete, alese după trei semnale: <strong className="text-text">mențiuni în surse de încredere</strong> (presa — exact ce publicăm pentru clienți), <strong className="text-text">date structurate</strong> pe site (schema.org, llms.txt) și <strong className="text-text">conținut citabil</strong> (răspunsuri clare, cu cifre).</p>
-              <p>Vrei să vezi unde stai ACUM? <Link href="/service" className="text-brand-orange hover:underline">Radiografia Afacerii</Link> include testul real: întrebăm un AI cu căutare web dacă te recomandă pe tine sau concurența — și îți dăm planul să intri în recomandări.</p>
+              <p>Vrei să vezi unde stai ACUM? <Link href="/service" className="text-brand-orange underline underline-offset-2">Radiografia Afacerii</Link> include testul real: întrebăm un AI cu căutare web dacă te recomandă pe tine sau concurența — și îți dăm planul să intri în recomandări.</p>
             </>
           ),
         },
@@ -54,7 +54,7 @@ export default function OptimizareSeoPage() {
           title: "SEO local — prima pagină în orașul tău",
           body: (
             <>
-              <p>Pentru afaceri locale, bătălia se câștigă pe trei fronturi: profilul Google Business optimizat (categorii, poze, postări), recenziile (volum + prospețime + răspunsuri) și paginile locale de pe site. Ghidul complet, gratuit: <Link href="/blog/seo-local-ghid-romania" className="text-brand-orange hover:underline">SEO local în România →</Link></p>
+              <p>Pentru afaceri locale, bătălia se câștigă pe trei fronturi: profilul Google Business optimizat (categorii, poze, postări), recenziile (volum + prospețime + răspunsuri) și paginile locale de pe site. Ghidul complet, gratuit: <Link href="/blog/seo-local-ghid-romania" className="text-brand-orange underline underline-offset-2">SEO local în România →</Link></p>
               <p>Iar pentru autoritate locală, articolul în ziarul județului tău — din rețeaua parteneră Media Expres — e cel mai puternic semnal pe care îl poți cumpăra cinstit.</p>
             </>
           ),

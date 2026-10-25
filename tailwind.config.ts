@@ -26,7 +26,7 @@ const config: Config = {
         text: {
           DEFAULT: "#F7F6FA",
           muted: "#A6A3B2",
-          subtle: "#6F6B7C",
+          subtle: "#8C889A",
         },
       },
       fontFamily: {

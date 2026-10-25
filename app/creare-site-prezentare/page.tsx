@@ -36,7 +36,7 @@ export default function CreareSitePrezentarePage() {
           body: (
             <>
               <p>Patru lucruri decid dacă site-ul aduce clienți sau doar există: <strong className="text-text">claritatea</strong> (în 5 secunde vizitatorul înțelege ce faci și pentru cine), <strong className="text-text">încrederea</strong> (poze reale, recenzii, povestea firmei), <strong className="text-text">acțiunea</strong> (telefon click-to-call, formular, hartă — la un deget distanță pe mobil) și <strong className="text-text">viteza</strong> (peste 3 secunde la încărcare = 53% din vizitatori pierduți).</p>
-              <p>Structura standard care funcționează: Acasă · Despre · Servicii · Contact cu hartă și formular — exact ce include <Link href="/site-start" className="text-brand-orange hover:underline">Site Start, la 1.500 lei totul inclus</Link>.</p>
+              <p>Structura standard care funcționează: Acasă · Despre · Servicii · Contact cu hartă și formular — exact ce include <Link href="/site-start" className="text-brand-orange underline underline-offset-2">Site Start, la 1.500 lei totul inclus</Link>.</p>
             </>
           ),
         },
@@ -54,7 +54,7 @@ export default function CreareSitePrezentarePage() {
           title: "De ce la noi se livrează în zile, nu în luni",
           body: (
             <>
-              <p>Pentru că procesul e construit să nu se blocheze: plătești online → semnezi <Link href="/contract" className="text-brand-orange hover:underline">contractul electronic</Link> în 2 minute → ne povestești firma printr-un formular de 5 minute (textele finale le scriem noi) → urci pozele din cont sau folosim stock profesional → preview → o rundă de revizii → live. Fără ședințe, fără telefoane obligatorii, fără „vă mai sunăm noi”.</p>
+              <p>Pentru că procesul e construit să nu se blocheze: plătești online → semnezi <Link href="/contract" className="text-brand-orange underline underline-offset-2">contractul electronic</Link> în 2 minute → ne povestești firma printr-un formular de 5 minute (textele finale le scriem noi) → urci pozele din cont sau folosim stock profesional → preview → o rundă de revizii → live. Fără ședințe, fără telefoane obligatorii, fără „vă mai sunăm noi”.</p>
             </>
           ),
         },

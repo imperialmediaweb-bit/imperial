@@ -186,8 +186,9 @@ export function ContactSection() {
               </div>
             </div>
             <div>
-              <label className="label">Tip site</label>
+              <label className="label" htmlFor="contact-tip-site">Tip site</label>
               <select
+                id="contact-tip-site"
                 className="input"
                 value={data.siteType}
                 onChange={(e) => update("siteType", e.target.value)}
