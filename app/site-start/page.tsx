@@ -19,7 +19,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Site de prezentare — 1.500 lei, gata în câteva zile | Imperial Media",
   description:
-    "Site profesional cu 5 pagini + blog: 1.500 lei, domeniu + găzduire incluse în administrare (de la 100 lei/lună), livrat în câteva zile. Construit de la zero, fără șabloane, nu WordPress. Suma se scade din site-ul complet.",
+    "Site profesional cu 5 pagini + blog: 1.500 lei, domeniu + găzduire incluse în administrare (de la 100 lei/lună), livrat în câteva zile. Construit de la zero, fără șabloane. Suma se scade din Site Custom.",
   alternates: { canonical: `${siteConfig.url}/site-start` },
 };
 
