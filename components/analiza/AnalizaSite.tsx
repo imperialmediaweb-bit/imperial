@@ -14,7 +14,7 @@ import { DOMENII, PREZENTA, type Prezenta } from "@/lib/analiza-domenii";
 import { SITE_START_ADDONS } from "@/lib/site-start-addons";
 import { SHOP_ADDONS, SHOP_BASE } from "@/lib/shop-addons";
 import { siteConfig } from "@/lib/site";
-import type { SiteCheck } from "@/lib/site-check";
+import { reparatiiNecesare, REPARATIE_PLAFON, type SiteCheck } from "@/lib/site-check";
 import { raportHtml, sanitizeRaport } from "@/lib/analiza-raport";
 
 const STEPS = ["Domeniul", "Firma", "Clienții", "Prezența online"] as const;
@@ -62,19 +62,27 @@ export function AnalizaSite() {
     (prezenta === "site-vechi" && siteCheck?.verdict === "imbunatatire");
   const rezultat = useMemo(() => {
     if (!dom) return null;
+    // are site bun, dar verificarea a găsit probleme: reparații, plătite după ce le facem
+    const reparatii = areSite && siteCheck?.reachable ? reparatiiNecesare(siteCheck) : [];
+    if (reparatii.length) {
+      const suma = reparatii.reduce((t, r) => t + r.price, 0);
+      const total = Math.min(suma, REPARATIE_PLAFON);
+      const clientiPtSite = Math.max(1, Math.ceil(total / Math.max(1, valoare)));
+      return { base: 0, pachet: suma > REPARATIE_PLAFON ? `Reparație completă (plafon ${lei(REPARATIE_PLAFON)})` : "Reparațiile site-ului tău", addons: reparatii, total, clientiPtSite, reparatii: true };
+    }
     if (areSite) {
       const addons = SITE_START_ADDONS.filter((a) => ["geo", "ai", "presa"].includes(a.key));
       const total = addons.reduce((s, a) => s + a.price, 0);
       const clientiPtSite = Math.max(1, Math.ceil(total / Math.max(1, valoare)));
-      return { base: 0, pachet: "Creștere pentru site-ul tău", addons, total, clientiPtSite };
+      return { base: 0, pachet: "Creștere pentru site-ul tău", addons, total, clientiPtSite, reparatii: false };
     }
     const base = dom.custom ? SHOP_BASE : 1500;
     const pachet = dom.custom ? "Magazin online" : areSiteAles ? "Site Start (refacerea site-ului)" : "Site Start";
     const addons = (dom.custom ? SHOP_ADDONS : SITE_START_ADDONS).filter((a) => dom.addons.includes(a.key) && !a.onlyOnPage);
     const total = base + addons.reduce((s, a) => s + a.price, 0);
     const clientiPtSite = Math.max(1, Math.ceil(total / Math.max(1, valoare)));
-    return { base, pachet, addons, total, clientiPtSite };
-  }, [dom, valoare, areSite, areSiteAles]);
+    return { base, pachet, addons, total, clientiPtSite, reparatii: false };
+  }, [dom, valoare, areSite, areSiteAles, siteCheck]);
 
   useEffect(() => {
     if (step !== 4 || !dom) return;
@@ -155,7 +163,9 @@ export function AnalizaSite() {
           beneficii: ai?.beneficii?.length ? ai.beneficii : dom.benefits,
           crestere: ai?.crestere ?? [],
           concluzie: ai?.concluzie,
-          recomandare: areSite
+          recomandare: rezultat.reparatii
+            ? "Îți recomandăm să-ți reparăm site-ul — nu e nevoie de unul nou. Plătești după ce reparăm și îți arătăm raportul înainte / după."
+            : areSite
             ? "Îți recomandăm să-ți faci site-ul mai ușor de găsit — nu un site nou."
             : areSiteAles
               ? "Îți recomandăm să-ți refaci site-ul de la zero, personalizat, pe tehnologii de ultimă generație folosite de YouTube și Netflix: rapid, perfect pe telefon și ușor de găsit pe Google."
@@ -538,7 +548,9 @@ export function AnalizaSite() {
               <div className="mt-8 rounded-2xl border border-brand-magenta/40 bg-gradient-to-b from-brand-magenta/[0.08] to-transparent p-6">
                 <span className="font-jmono text-[10px] uppercase tracking-[0.25em] text-white/55">Recomandarea noastră</span>
                 <p className="mt-2 font-display text-lg font-bold leading-snug text-text">
-                  {areSite
+                  {rezultat.reparatii
+                    ? "Îți recomandăm să-ți reparăm site-ul — nu e nevoie de unul nou."
+                    : areSite
                     ? "Îți recomandăm să-ți faci site-ul mai ușor de găsit — nu un site nou."
                     : areSiteAles
                       ? "Îți recomandăm să-ți refaci site-ul de la zero, personalizat, pe tehnologii de ultimă generație folosite de YouTube și Netflix: rapid, perfect pe telefon și ușor de găsit pe Google."
@@ -563,6 +575,12 @@ export function AnalizaSite() {
                   <span className="text-sm text-white/60">Total orientativ</span>
                   <span className="font-display text-3xl font-extrabold text-gradient">{lei(rezultat.total)}</span>
                 </div>
+                {rezultat.reparatii ? (
+                  <p className="mt-3 text-[13px] leading-relaxed text-white/70">
+                    <b className="text-text">Plătești după</b> ce reparăm totul și îți arătăm raportul „înainte / după”, cu scorul măsurat din nou.
+                    {rezultat.total >= REPARATIE_PLAFON ? ` Pentru ${lei(1500 - REPARATIE_PLAFON)} în plus ai un site nou, construit de la zero (Site Start, ${lei(1500)}).` : ""}
+                  </p>
+                ) : null}
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
                     href={ofertaHref}

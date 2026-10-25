@@ -5,6 +5,26 @@
 
 export type Check = { key: string; label: string; ok: boolean; detail: string };
 
+// Reparațiile pe care le oferim, legate de verificarea care le declanșează. Prețuri în lei.
+// Toate împreună au plafon (REPARATIE_PLAFON) — sub prețul unui site nou.
+export const REPARATII: { key: string; name: string; price: number; checks: string[]; doarWordPress?: boolean }[] = [
+  { key: "viteza", name: "Optimizare viteză", price: 350, checks: ["viteza", "pagespeed"] },
+  { key: "seo", name: "SEO de bază (titluri, descrieri, hartă site, date firmă)", price: 250, checks: ["titlu", "descriere", "h1", "sitemap", "schema"] },
+  { key: "wordpress", name: "Securizare WordPress (actualizări, backup)", price: 250, checks: [], doarWordPress: true },
+  { key: "legal", name: "Conformitate legală (cookies, GDPR, ANPC)", price: 200, checks: ["legal"] },
+  { key: "imagini", name: "Descrieri la imagini", price: 100, checks: ["alt"] },
+  { key: "https", name: "Certificat HTTPS", price: 100, checks: ["https"] },
+  { key: "statistici", name: "Statistici Google (Analytics + Search Console)", price: 100, checks: ["statistici"] },
+  { key: "distribuire", name: "Imagine la distribuire + iconiță", price: 100, checks: ["distribuire"] },
+  { key: "linkuri", name: "Legături stricate", price: 100, checks: ["linkuri"] },
+];
+export const REPARATIE_PLAFON = 990;
+
+export function reparatiiNecesare(c: SiteCheck): { key: string; name: string; price: number }[] {
+  const failed = new Set(c.checks.filter((x) => !x.ok).map((x) => x.key));
+  return REPARATII.filter((r) => (r.doarWordPress ? c.tech === "WordPress" : r.checks.some((k) => failed.has(k)))).map(({ key, name, price }) => ({ key, name, price }));
+}
+
 export type SiteCheck = {
   url: string;
   reachable: boolean;
@@ -97,7 +117,9 @@ export async function checkSite(raw: string): Promise<SiteCheck | null> {
   const imgs = html.match(/<img\b[^>]*>/gi) ?? [];
   const noAlt = imgs.filter((t) => !/\balt\s*=\s*["'][^"']+["']/i.test(t)).length;
   const desc = /<meta[^>]+name=["']description["'][^>]*content=["'][^"']{30,}/i.test(html) || /<meta[^>]+content=["'][^"']{30,}["'][^>]*name=["']description["']/i.test(html);
-  const title = (html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1] ?? "").trim();
+  const decode = (t: string) =>
+    t.replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n))).replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#039;|&apos;/g, "'").replace(/&nbsp;/g, " ");
+  const title = decode((html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1] ?? "").trim());
   const h1 = (html.match(/<h1\b/gi) ?? []).length;
   const viewport = /<meta[^>]+name=["']viewport["']/i.test(html);
   const https = finalUrl.startsWith("https://");
@@ -105,6 +127,24 @@ export async function checkSite(raw: string): Promise<SiteCheck | null> {
   const sitemapOk = !!sitemap.res?.ok && /<(urlset|sitemapindex)/i.test((await sitemap.res.text()).slice(0, 2000));
   const flashOrTables = /\.swf\b|<frameset|<table[^>]+width=["']?\d{3}/i.test(html);
   const oldJquery = /jquery[.-]?1\.\d/i.test(html);
+
+  // Distribuire, iconiță, statistici, conformitate legală — din HTML
+  const ogImage = /<meta[^>]+property=["']og:image["']/i.test(html);
+  const favicon = /<link[^>]+rel=["'][^"']*icon[^"']*["']/i.test(html);
+  const analytics = /googletagmanager\.com|google-analytics\.com|gtag\(/i.test(html);
+  const cookies = /cookie/i.test(html);
+  const gdpr = /confiden[tț]ialitate|gdpr|privacy|date(lor)? cu caracter personal/i.test(html);
+  const anpc = /anpc/i.test(html);
+
+  // Legături interne stricate: verificăm până la 12 linkuri de pe prima pagină
+  const origin = new URL(finalUrl).origin;
+  const links = [...new Set([...html.matchAll(/href=["']([^"'#]+)["']/gi)].map((m) => m[1]))]
+    .map((h) => { try { return new URL(h, finalUrl); } catch { return null; } })
+    .filter((x): x is URL => !!x && x.origin === origin && !/\.(jpg|jpeg|png|gif|webp|svg|pdf|css|js|xml|ico)$/i.test(x.pathname))
+    .map((x) => x.toString())
+    .slice(0, 12);
+  const linkResults = await Promise.all(links.map((l) => timedFetch(l, 6000).then((r) => (r.res ? r.res.status : 0))));
+  const broken = linkResults.filter((st) => st >= 400).length;
 
   const checks: Check[] = [
     { key: "viteza", label: "Răspuns rapid", ok: main.ms < 1500, detail: `a răspuns în ${(main.ms / 1000).toFixed(1)} s` },
@@ -117,6 +157,10 @@ export async function checkSite(raw: string): Promise<SiteCheck | null> {
     { key: "sitemap", label: "Harta site-ului pentru Google", ok: sitemapOk, detail: sitemapOk ? "există" : "lipsește" },
     { key: "schema", label: "Date despre firmă pentru Google și AI", ok: schema, detail: schema ? "există" : "lipsesc" },
     { key: "alt", label: "Descrieri la imagini", ok: imgs.length === 0 || noAlt / imgs.length < 0.2, detail: imgs.length ? `${noAlt} din ${imgs.length} imagini fără descriere` : "fără imagini" },
+    { key: "distribuire", label: "Imagine la distribuire și iconiță", ok: ogImage && favicon, detail: ogImage && favicon ? "există" : !ogImage && !favicon ? "lipsesc amândouă" : !ogImage ? "lipsește imaginea pentru Facebook/WhatsApp" : "lipsește iconița" },
+    { key: "statistici", label: "Statistici Google", ok: analytics, detail: analytics ? "instalate" : "lipsesc — nu știi câți vizitatori ai" },
+    { key: "legal", label: "Cookies, GDPR, ANPC", ok: cookies && gdpr && anpc, detail: [!cookies ? "fără mesaj cookies" : "", !gdpr ? "fără politică de confidențialitate" : "", !anpc ? "fără linkurile ANPC" : ""].filter(Boolean).join(", ") || "în regulă" },
+    ...(links.length ? [{ key: "linkuri", label: "Legături care funcționează", ok: broken === 0, detail: broken ? `${broken} din ${links.length} legături verificate dau eroare` : `${links.length} legături verificate, toate funcționează` }] : []),
     ...(copyrightYear ? [{ key: "an", label: "Actualizat recent", ok: copyrightYear >= now - 1, detail: `anul din subsol: ${copyrightYear}` }] : []),
   ];
 
@@ -131,8 +175,8 @@ export async function checkSite(raw: string): Promise<SiteCheck | null> {
   if (!https) reasons.push("nu are conexiune sigură");
   const verdict: SiteCheck["verdict"] = reasons.length >= 2 || !viewport ? "refacere" : "imbunatatire";
   if (verdict === "imbunatatire") {
-    const fix = checks.filter((c) => !c.ok).map((c) => c.label.toLowerCase());
-    reasons.splice(0, reasons.length, fix.length ? `se poate îmbunătăți ce există: ${fix.join(", ")}` : "e într-o formă bună — pasul următor e să fie găsit mai des");
+    const fix = checks.filter((c) => !c.ok).map((c) => c.label);
+    reasons.splice(0, reasons.length, fix.length ? `baza e bună; de reparat: ${fix.join(" · ")}` : "e într-o formă bună — pasul următor e să fie găsit mai des");
   }
 
   // Conținutul vizibil, ca AI-ul să judece și textele, nu doar tehnica
