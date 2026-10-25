@@ -87,7 +87,7 @@ export function raportHtml(d: RaportData): string {
        <div style="font:12px Arial,sans-serif;color:${C.muted};margin:-4px 0 8px;">${esc(d.site.url)}</div>
        <table role="presentation" cellpadding="0" cellspacing="0">${d.site.checks.map((c) => bullet(`<b>${esc(c.label)}</b> — ${esc(c.detail)}`, c.ok ? "✓" : "✗", c.ok ? "#16a34a" : "#dc2626")).join("")}</table>
        <div style="margin-top:12px;padding:12px 14px;border-radius:8px;background:${d.site.verdict === "refacere" ? "#fff6ec" : "#effaf3"};border-left:4px solid ${d.site.verdict === "refacere" ? C.orange : "#16a34a"};font:14px/1.6 Arial,sans-serif;color:${C.ink};">
-         <b>${d.site.verdict === "refacere" ? "Verdict: merită refăcut, construit de la zero pe tehnologii de ultimă generație." : d.site.verdict === "imbunatatire" ? "Verdict: îl îmbunătățim, nu e nevoie să-l refaci." : "Nu am putut verifica site-ul."}</b> ${esc(d.site.reasons.join("; "))}.
+         <b>${d.site.verdict === "refacere" ? "Verdict: merită refăcut de la zero, personalizat, pe tehnologii de ultimă generație folosite de YouTube și Netflix." : d.site.verdict === "imbunatatire" ? "Verdict: îl îmbunătățim, nu e nevoie să-l refaci." : "Nu am putut verifica site-ul."}</b> ${esc(d.site.reasons.join("; "))}.
        </div>`
     : "";
 

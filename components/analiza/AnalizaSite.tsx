@@ -158,7 +158,7 @@ export function AnalizaSite() {
           recomandare: areSite
             ? "Îți recomandăm să-ți faci site-ul mai ușor de găsit — nu un site nou."
             : areSiteAles
-              ? "Îți recomandăm să-ți refaci site-ul, de la zero, pe tehnologii de ultimă generație."
+              ? "Îți recomandăm să-ți refaci site-ul de la zero, personalizat, pe tehnologii de ultimă generație folosite de YouTube și Netflix: rapid, perfect pe telefon și ușor de găsit pe Google."
               : `Îți recomandăm să-ți faci un site pentru ${firma || "afacerea ta"}.`,
           concurenta: ai?.concurenta ?? [],
           puncteForte: ai?.puncteForte ?? [],
@@ -398,7 +398,7 @@ export function AnalizaSite() {
                   >
                     <b className="text-text">
                       {siteCheck.verdict === "refacere"
-                        ? "Verdict: merită refăcut, construit de la zero pe tehnologii de ultimă generație."
+                        ? "Verdict: merită refăcut de la zero, personalizat, pe tehnologii de ultimă generație folosite de YouTube și Netflix."
                         : siteCheck.verdict === "imbunatatire"
                           ? "Verdict: îl îmbunătățim, nu e nevoie să-l refaci."
                           : "Nu am putut verifica site-ul acum."}
@@ -541,7 +541,7 @@ export function AnalizaSite() {
                   {areSite
                     ? "Îți recomandăm să-ți faci site-ul mai ușor de găsit — nu un site nou."
                     : areSiteAles
-                      ? "Îți recomandăm să-ți refaci site-ul, de la zero, pe tehnologii de ultimă generație."
+                      ? "Îți recomandăm să-ți refaci site-ul de la zero, personalizat, pe tehnologii de ultimă generație folosite de YouTube și Netflix: rapid, perfect pe telefon și ușor de găsit pe Google."
                       : `Îți recomandăm să-ți faci un site pentru ${firma || "afacerea ta"}.`}
                 </p>
                 {ai?.concluzie ? <p className="mt-2 text-[14px] leading-relaxed text-white/75">{ai.concluzie}</p> : null}
