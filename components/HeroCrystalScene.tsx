@@ -62,7 +62,7 @@ export default function HeroCrystalScene() {
       speed={1.25}
       drift={0.8}
       roughness={0.12}
-      color="#0d0b12"
+      color="#2a2236"
       accent="#FF2E9A"
       background="#050507"
       quality="medium"

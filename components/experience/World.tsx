@@ -12,6 +12,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Sparkles, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
+// culorile reflexelor pe cioburi — portocaliu, magenta, violet, ca în logo
+const SHARD_GLOW = ["#FF6B1A", "#FF2E9A", "#8B2FF7"];
+
 export type CameraMap = { ps: number[]; zs: number[] };
 
 const BRAND = ["#FF6B1A", "#FF2E9A", "#8B2FF7"] as const;
@@ -80,10 +83,27 @@ function ShardField() {
     <group>
       <group ref={g}>
         {shards.map((s, i) => (
-          <mesh key={i} position={s.pos} rotation={s.rot} scale={s.s}>
-            {s.detail === 0 ? <icosahedronGeometry args={[1, 0]} /> : s.detail === 1 ? <tetrahedronGeometry args={[1, 0]} /> : <octahedronGeometry args={[1, 0]} />}
-            <meshPhysicalMaterial color="#0d0b12" metalness={0.5} roughness={0.12} clearcoat={1} clearcoatRoughness={0.06} flatShading />
-          </mesh>
+          // cioburile: obsidian cu reflex colorat și muchii fine în culorile brandului,
+          // ca să nu apară ca pete negre acolo unde nu ajung luminile
+          <group key={i} position={s.pos} rotation={s.rot} scale={s.s}>
+            <mesh>
+              {s.detail === 0 ? <icosahedronGeometry args={[1, 0]} /> : s.detail === 1 ? <tetrahedronGeometry args={[1, 0]} /> : <octahedronGeometry args={[1, 0]} />}
+              <meshPhysicalMaterial
+                color="#2a2236"
+                metalness={0.35}
+                roughness={0.22}
+                clearcoat={1}
+                clearcoatRoughness={0.08}
+                emissive={SHARD_GLOW[i % SHARD_GLOW.length]}
+                emissiveIntensity={0.16}
+                flatShading
+              />
+            </mesh>
+            <mesh scale={1.006}>
+              {s.detail === 0 ? <icosahedronGeometry args={[1, 0]} /> : s.detail === 1 ? <tetrahedronGeometry args={[1, 0]} /> : <octahedronGeometry args={[1, 0]} />}
+              <meshBasicMaterial color={SHARD_GLOW[i % SHARD_GLOW.length]} wireframe transparent opacity={0.28} />
+            </mesh>
+          </group>
         ))}
       </group>
       {/* cristalul-far cu muchii neon */}
@@ -244,7 +264,7 @@ function VoicesZone() {
       {shards.map((s, i) => (
         <mesh key={i} position={s.pos} scale={s.s} rotation={[i, i * 0.7, 0]}>
           <octahedronGeometry args={[1, 0]} />
-          <meshPhysicalMaterial color="#0d0b12" metalness={0.5} roughness={0.1} clearcoat={1} flatShading />
+          <meshPhysicalMaterial color="#2a2236" metalness={0.35} roughness={0.2} clearcoat={1} emissive="#FF2E9A" emissiveIntensity={0.14} flatShading />
         </mesh>
       ))}
       <pointLight position={[0, 1, -126]} intensity={16} color="#FF2E9A" distance={14} />
@@ -352,6 +372,7 @@ export function World({
       <color attach="background" args={["#050507"]} />
       <fog attach="fog" args={["#050507", 8, 34]} />
       <ambientLight intensity={0.3} />
+      <hemisphereLight args={["#ff9ad5", "#1a0f2e", 0.7]} />
       <CameraRig progressRef={progressRef} mapRef={mapRef} />
       <ShardField />
       <Tunnel />
