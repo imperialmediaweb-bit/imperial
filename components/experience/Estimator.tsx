@@ -20,15 +20,7 @@ const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; not
 ];
 
 // adaosuri orientative per monedă [lei, €]; monthly = se plătește lunar
-type Opt = { key: string; name: string; lei: number; eur: number; monthly?: boolean };
-
-// la Site Start, asistentul AI e inclus în preț
-function optPrice(o: Opt, type: string, cur: "lei" | "€") {
-  if (o.key === "ai" && type === "start") return 0;
-  return cur === "lei" ? o.lei : o.eur;
-}
-
-const OPTIONS: Opt[] = [
+const OPTIONS: { key: string; name: string; lei: number; eur: number; monthly?: boolean }[] = [
   { key: "ai", name: "Asistent AI pe site — știe tot site-ul și răspunde clienților 24/7", lei: 600, eur: 120 },
   { key: "presa", name: "Promovare în 50 de ziare (Media Expres)", lei: 1500, eur: 300 },
   { key: "admin", name: "Administrare lunară (cu credite AI)", lei: 200, eur: 40, monthly: true },
@@ -44,7 +36,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
     let monthly = 0;
     for (const o of OPTIONS) {
       if (!opts[o.key]) continue;
-      const v = optPrice(o, type, t.cur);
+      const v = t.cur === "lei" ? o.lei : o.eur;
       if (o.monthly) monthly += v;
       else once += v;
     }
@@ -77,7 +69,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
       <div className="mt-5 grid gap-2 sm:grid-cols-2">
         {OPTIONS.map((o) => {
           const on = !!opts[o.key];
-          const v = optPrice(o, type, t.cur);
+          const v = t.cur === "lei" ? o.lei : o.eur;
           return (
             <button
               key={o.key}
@@ -95,7 +87,8 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
               </span>
               <span className="flex-1 text-[13px] font-medium text-white/85">{o.name}</span>
               <span className="font-jmono text-[11px] text-white/50">
-                {v === 0 ? "inclus" : `+${v} ${t.cur}${o.monthly ? "/lună" : ""}`}
+                +{v} {t.cur}
+                {o.monthly ? "/lună" : ""}
               </span>
             </button>
           );
