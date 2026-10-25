@@ -12,7 +12,7 @@ const navLinks = [
   { href: "/despre", label: "Despre", hint: "Cine suntem și cum lucrăm" },
   { href: "/estimare", label: "Estimare", hint: "Calculezi prețul pe loc, în lei" },
   { href: "/servicii", label: "Servicii", hint: "Site-uri, aplicații, AI, automatizări" },
-  { href: "/proiecte", label: "Proiecte", hint: "384+ proiecte livrate" },
+  { href: "/proiecte", label: "Portofoliu", hint: "384+ proiecte livrate" },
   { href: "/site-start", label: "Site Start", hint: "Site-ul tău — 1.500 lei, totul inclus" },
   { href: "/service", label: "Radiografia Afacerii", hint: "Vezi unde stă firma ta online" },
   { href: "/blog", label: "Blog", hint: "Ghiduri și prețuri reale" },
@@ -41,7 +41,7 @@ export function Header() {
         <Logo size="lg" />
 
         <nav className="hidden items-center gap-7 lg:flex">
-          {navLinks.slice(0, 3).map((l) => (
+          {["/servicii", "/proiecte", "/despre", "/estimare", "/contact"].map((h) => navLinks.find((n) => n.href === h)!).map((l) => (
             <Link
               key={l.href}
               href={l.href}
