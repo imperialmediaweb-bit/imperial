@@ -30,9 +30,9 @@ export const packages: Package[] = [
       "5 pagini + blog",
       "Design unic, pe brandul tău",
       "Domeniu și hosting gratuit 1 an",
-      "Logo design (1 draft)",
+      "Buton WhatsApp inclus",
       "Email personalizat",
-      "Promovare 1 lună × 50 de ziare",
+      "Articol gratuit în ziarul județului tău (ex. Botoșani Expres)",
     ],
   },
   {
@@ -80,7 +80,7 @@ export const packages: Package[] = [
       "Raport complet în 24h",
       "Distribuire Facebook pe fiecare publicație",
       "Text inclus sau vii cu textul tău",
-      "GRATUIT la orice site nou",
+      "GRATUIT la Site Custom și magazine online",
     ],
   },
   {

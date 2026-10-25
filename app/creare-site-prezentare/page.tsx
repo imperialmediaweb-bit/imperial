@@ -60,7 +60,7 @@ export default function CreareSitePrezentarePage() {
         },
       ]}
       faqs={[
-        { q: "Cât costă un site de prezentare?", a: "La Imperial Media: Site Start — 1.500 lei totul inclus (4 pagini, domeniu + găzduire primul an, SSL, SEO de bază); site de prezentare complet, cu mai multe pagini și funcții — de la 699€, cu campania de presă în 50 de ziare cadou." },
+        { q: "Cât costă un site de prezentare?", a: "La Imperial Media: Site Start — 1.500 lei (5 pagini + blog, domeniu + găzduire primul an, SSL, SEO de bază, articol gratuit în ziarul județului); Site Custom, cu design creat de la zero, pagini nelimitate și funcții — de la 3.500 lei, cu campania de presă în 50 de ziare cadou." },
         { q: "În cât timp e gata?", a: "Site Start: 3-7 zile lucrătoare de la primirea conținutului. Site-ul complet: 2-4 săptămâni. Procesul e integral online, fără drumuri." },
         { q: "Pot adăuga programări online?", a: "Da — modulul de programări/rezervări costă +700 lei la Site Start și e inclus în multe configurații ale site-ului complet. Clienții se programează singuri, tu primești notificare." },
         { q: "N-am nici texte, nici poze. Se poate?", a: "Da — fix pentru asta e făcut procesul: tu ne povestești firma cu cuvintele tale (5 minute), textele de site le scriem noi; iar dacă nu ai poze, folosim imagini profesionale de stock, incluse, pe care le poți înlocui oricând cu ale tale." },

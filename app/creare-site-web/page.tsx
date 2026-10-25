@@ -37,7 +37,7 @@ export default function CreareSiteWebPage() {
             <>
               <p>Prețul corect depinde de ce are de făcut site-ul, nu de cine îl face. La Imperial Media prețurile sunt publice și fixe:</p>
               <p><strong className="text-text">Site Start — 1.500 lei, totul inclus</strong>: 4 pagini (Acasă, Despre, Servicii, Contact cu hartă), design pe brandul tău, livrat în câteva zile. Pentru firme care vor să existe online corect, repede. <Link href="/site-start" className="text-brand-orange hover:underline">Detalii și comandă →</Link></p>
-              <p><strong className="text-text">Site de prezentare complet — de la 699€</strong>: mai multe pagini, funcții dedicate (programări, rezervări, calculatoare), cu campania de presă în toate cele 50 de ziare cadou.</p>
+              <p><strong className="text-text">Site Custom — de la 3.500 lei</strong>: mai multe pagini, funcții dedicate (programări, rezervări, calculatoare), cu campania de presă în toate cele 50 de ziare cadou.</p>
               <p><strong className="text-text">Magazin online — de la 1.200€</strong> · <strong className="text-text">Aplicații și platforme — la cerere</strong>.</p>
               <p>Orice sumă plătită pe o treaptă devine avans pentru următoarea — investiția nu se pierde niciodată.</p>
             </>

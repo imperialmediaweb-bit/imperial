@@ -3,6 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_START_ADDONS, addonPriceLabel } from "@/lib/site-start-addons";
 import {
   CheckCircle2,
   Zap,
@@ -30,10 +31,13 @@ const STEPS = [
 
 const INCLUDED = [
   "5 pagini: Acasă, Despre, Servicii, Blog, Contact (cu hartă și formular)",
-  "Design pe brandul tău — culori, logo, poze",
+  "Design unic pe brandul tău — culorile și pozele tale",
   "Domeniu (.ro) + găzduire GRATUITE primul an",
   "Certificat SSL (https) și optimizare de bază Google incluse",
   "Perfect pe telefon — acolo unde te caută 70% din clienți",
+  "Buton WhatsApp — clienții îți scriu direct pe telefon",
+  "Email personalizat (nume@firma-ta.ro)",
+  "Articol gratuit despre firma ta în ziarul județului (ex. Botoșani Expres)",
   "1 rundă de revizii + 14 zile de corecturi mărunte",
 ];
 
@@ -43,7 +47,7 @@ const SITE_START_FAQ = [
   { q: "Nu am texte sau poze bune. E o problemă?", a: "Deloc. Textele le scriem noi din ce ne povestești despre firmă (nu trebuie să scrii nimic «frumos»), iar dacă nu ai poze folosim imagini profesionale de stock, incluse în preț. Pozele tale reale le poți adăuga oricând mai târziu." },
   { q: "E făcut pe WordPress?", a: "Nu. Site-ul e scris custom pe Next.js — aceeași tehnologie folosită de Netflix și Nike. Se încarcă sub o secundă, nu are plugin-uri care se strică și nu cere mentenanță lunară obligatorie. Codul, domeniul și datele sunt 100% ale tale." },
   { q: "Ce se întâmplă după primul an?", a: "Domeniul și găzduirea gratuite expiră după 12 luni. Alegi atunci: Administrare Start (200 lei/lună — găzduire, domeniu, credite AI pentru asistent, modificări mici, backup), Administrare Complet (300 lei/lună — tot ce e la Start, plus mentenanță deplină, un articol de presă pe lună în ziarul județului tău și monitorizarea lunară a afacerii) sau reînnoirea simplă (~350 lei/an). Te anunțăm cu 30 de zile înainte — site-ul nu se oprește niciodată fără știrea ta." },
-  { q: "Dacă vreau mai mult decât cele 5 pagini sau funcții în plus?", a: "Adaugi doar ce-ți trebuie: pagină în plus +200 lei, programări online +700 lei, galerie foto +400 lei, a doua limbă +700 lei, logo +300 lei. Iar dacă firma crește și vrei site-ul mare (de la 699€), cei 1.500 lei plătiți devin avans — plătești doar diferența." },
+  { q: "Dacă vreau mai mult decât cele 5 pagini sau funcții în plus?", a: "Adaugi doar ce-ți trebuie: logo +300 lei, configurare Facebook + Google Business +500 lei, pagină în plus +200 lei, galerie +400 lei, programări online +500 lei, a doua limbă +700 lei, asistent AI +600 lei, promovare în 50 de ziare +1.500 lei. Iar dacă firma crește și vrei Site Custom (de la 3.500 lei), cei 1.500 lei plătiți devin avans — plătești doar diferența." },
 ];
 
 export default function SiteStartPage() {
@@ -119,13 +123,7 @@ export default function SiteStartPage() {
             Baza rămâne {price} lei. Extra-opțiunile le alegi după plată, în discuția cu noi — ne spui exact ce vrei în fiecare, le adăugăm la factură.
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            {[
-              { name: "Pagină în plus", price: "+200 lei / pagină", desc: "orice pagină extra — ne zici tu ce să conțină" },
-              { name: "Programări / rezervări online", price: "+700 lei", desc: "clienții se programează singuri, tu primești notificare" },
-              { name: "Galerie foto / portofoliu", price: "+400 lei", desc: "lucrările tale, prezentate să vândă" },
-              { name: "A doua limbă (EN/altă limbă)", price: "+700 lei", desc: "pentru turism, pensiuni, clienți străini" },
-              { name: "Logo simplu", price: "+300 lei", desc: "dacă nu ai deja unul — curat, pe brandul tău" },
-            ].map((a) => (
+            {SITE_START_ADDONS.map((a) => ({ name: a.name, price: addonPriceLabel(a), desc: a.desc })).map((a) => (
               <div key={a.name} className="flex items-start justify-between gap-3 rounded-2xl border border-bg-border bg-bg-card/60 p-4">
                 <div>
                   <p className="text-sm font-bold text-text">{a.name}</p>
@@ -136,7 +134,7 @@ export default function SiteStartPage() {
             ))}
           </div>
           <p className="mt-4 text-center text-xs text-text-subtle">
-            Vrei plăți cu cardul, magazin sau funcții speciale? Ăla e <Link href="/brief" className="text-brand-orange hover:underline">site-ul complet (de la 699€)</Link> — iar cei {price} lei se scad integral din el.
+            Vrei plăți cu cardul, magazin sau funcții speciale? Ăla e <Link href="/brief" className="text-brand-orange hover:underline">Site Custom (de la 3.500 lei)</Link> — iar cei {price} lei se scad integral din el.
           </p>
         </div>
       </section>

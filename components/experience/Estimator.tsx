@@ -10,38 +10,46 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { NumberTicker } from "../effects/NumberTicker";
 import { Zap, Check } from "lucide-react";
+import { SITE_START_ADDONS } from "@/lib/site-start-addons";
 
 type TypeKey = "start" | "prezentare" | "magazin";
 
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
-  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic — 1.500 lei fix" },
-  { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, pagini nelimitate, panou propriu — de la 3.500 lei (≈ 699 €)" },
-  { key: "magazin", name: "Magazin online", base: 6000, cur: "lei", note: "plăți card, AWB, facturare — ≈ 1.200 €" },
+  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic, domeniu + găzduire 1 an, WhatsApp — de la 1.500 lei" },
+  { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, pagini nelimitate, panou propriu — de la 3.500 lei" },
+  { key: "magazin", name: "Magazin online", base: 6000, cur: "lei", note: "plăți card, AWB, facturare — de la 6.000 lei" },
 ];
 
-// adaosuri orientative per monedă [lei, €]; monthly = se plătește lunar
-const OPTIONS: { key: string; name: string; lei: number; eur: number; monthly?: boolean }[] = [
-  { key: "ai", name: "Asistent AI pe site — știe tot site-ul și răspunde clienților 24/7", lei: 600, eur: 120 },
-  { key: "presa", name: "Promovare în 50 de ziare (Media Expres)", lei: 1500, eur: 300 },
-  { key: "admin", name: "Administrare lunară (cu credite AI)", lei: 200, eur: 40, monthly: true },
-];
+// opțiunile vin din lista unică a Site Start; la Site Custom / magazin paginile sunt nelimitate
+type Opt = { key: string; name: string; lei: number; monthly?: boolean };
+const ADMIN: Opt = { key: "admin", name: "Administrare lunară (cu credite AI)", lei: 200, monthly: true };
+
+function optionsFor(type: TypeKey): Opt[] {
+  const list = SITE_START_ADDONS.filter((a) => !a.onlyOnPage && (type === "start" || a.key !== "pagina")).map((a) => ({
+    key: a.key,
+    name: a.unit ? `${a.name} (per ${a.unit})` : a.name,
+    lei: a.price,
+  }));
+  return [...list, ADMIN];
+}
 
 export function Estimator({ compact = false }: { compact?: boolean }) {
-  const [type, setType] = useState<TypeKey>("prezentare");
+  const [type, setType] = useState<TypeKey>("start");
   const [opts, setOpts] = useState<Record<string, boolean>>({});
 
   const t = TYPES.find((x) => x.key === type)!;
+  const options = optionsFor(type);
   const { once, monthly } = useMemo(() => {
     let once = t.base;
     let monthly = 0;
-    for (const o of OPTIONS) {
+    for (const o of optionsFor(type)) {
       if (!opts[o.key]) continue;
-      const v = t.cur === "lei" ? o.lei : o.eur;
+      const v = o.lei;
       if (o.monthly) monthly += v;
       else once += v;
     }
     return { once, monthly };
-  }, [t, opts]);
+  }, [t, type, opts]);
 
   const briefHref = `/brief?tip=${type}&optiuni=${Object.keys(opts).filter((k) => opts[k]).join(",")}`;
 
@@ -67,9 +75,9 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
 
       {/* opțiunile */}
       <div className="mt-5 grid gap-2 sm:grid-cols-2">
-        {OPTIONS.map((o) => {
+        {options.map((o) => {
           const on = !!opts[o.key];
-          const v = t.cur === "lei" ? o.lei : o.eur;
+          const v = o.lei;
           return (
             <button
               key={o.key}
