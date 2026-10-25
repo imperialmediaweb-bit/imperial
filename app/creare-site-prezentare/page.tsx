@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Creare Site de Prezentare — de la 1.500 lei, gata în câteva zile | Imperial Media",
   description:
-    "Site de prezentare profesional pentru firma ta: de la 1.500 lei totul inclus (găzduire + domeniu în administrare de la 100 lei/lună), custom pe Next.js, livrat în câteva zile. Cu formular, hartă, programări opționale.",
+    "Site de prezentare profesional pentru firma ta: de la 1.500 lei totul inclus (găzduire + domeniu în administrare de la 100 lei/lună), custom pe tehnologii de ultimă generație, livrat în câteva zile. Cu formular, hartă, programări opționale.",
   alternates: { canonical: `${siteConfig.url}/creare-site-prezentare` },
 };
 

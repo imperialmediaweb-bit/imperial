@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Creare Magazin Online — de la 3.000 lei, opțiuni la alegere | Imperial Media",
   description:
-    "Creare magazin online în România: plăți cu cardul, integrare curieri cu AWB automat, facturare automată. Prețuri transparente de la 1.200€, custom pe Next.js. Promovare în 50 de ziare inclusă.",
+    "Creare magazin online în România: plăți cu cardul, integrare curieri cu AWB automat, facturare automată. Prețuri transparente de la 1.200€, custom pe tehnologii de ultimă generație. Promovare în 50 de ziare inclusă.",
   alternates: { canonical: `${siteConfig.url}/creare-magazin-online` },
 };
 
@@ -20,7 +20,7 @@ export default function CreareMagazinOnlinePage() {
       chip="🛒 Creare magazin online"
       h1={<>Magazin online care <span className="text-gradient">chiar vinde</span> — de la 3.000 lei</>}
       h1Plain="Creare magazin online"
-      intro="Magazine online construite custom pe Next.js, cu design unic și viteză sub o secundă. Pornești de la 3.000 lei, cu plata ramburs, și adaugi doar ce îți trebuie: plăți cu cardul, AWB automat, facturare automată. Prețuri publice, fără costuri ascunse — și campania de promovare în 50 de ziare online, cadou."
+      intro="Magazine online construite de la zero, personalizate, pe tehnologii de ultimă generație, folosite de YouTube și Netflix, cu design unic și viteză sub o secundă. Pornești de la 3.000 lei, cu plata ramburs, și adaugi doar ce îți trebuie: plăți cu cardul, AWB automat, facturare automată. Prețuri publice, fără costuri ascunse — și campania de promovare în 50 de ziare online, cadou."
       priceText="de la 3.000 lei + opțiunile pe care le alegi"
       bullets={[
         "Magazin Start, 3.000 lei: design unic, până la 30 de produse, coș, comenzi, plată ramburs",
@@ -47,7 +47,7 @@ export default function CreareMagazinOnlinePage() {
           body: (
             <>
               <p><strong className="text-text">Shopify</strong>: pornești repede, dar plătești abonament pentru totdeauna (29-300$/lună) plus comisioane — iar magazinul nu e cu adevărat al tău. <strong className="text-text">WooCommerce</strong>: ieftin la instalare, scump la întreținere — plugin-uri, actualizări, securitate pe capul tău, și viteză mediocră exact unde contează.</p>
-              <p>Magazinul custom pe Next.js: fără abonamente la platformă, viteza maximă posibilă (Google Shopping și clienții o simt), orice funcție construită exact pe fluxul tău de lucru — și e proprietatea ta deplină.</p>
+              <p>Magazinul construit de la zero, fără șabloane: fără abonamente la platformă, viteza maximă posibilă (Google Shopping și clienții o simt), orice funcție construită exact pe fluxul tău de lucru — și e proprietatea ta deplină.</p>
             </>
           ),
         },

@@ -7,9 +7,9 @@ import { ServiceLanding } from "@/components/ServiceLanding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Creare Site Web — custom, pe Next.js, de la 1.500 lei | Imperial Media",
+  title: "Creare Site Web — de la zero, fără șabloane, de la 1.500 lei | Imperial Media",
   description:
-    "Creare site web profesional în România: 100% custom pe Next.js (nu WordPress), de la 1.500 lei. Domeniu + găzduire incluse în administrare (de la 100 lei/lună), SEO inclus, livrare rapidă. 10+ ani, 200+ clienți.",
+    "Creare site web profesional în România: construit 100% de la zero, fără șabloane, de la 1.500 lei. Domeniu + găzduire incluse în administrare (de la 100 lei/lună), SEO inclus, livrare rapidă. 10+ ani, 200+ clienți.",
   alternates: { canonical: `${siteConfig.url}/creare-site-web` },
 };
 
@@ -20,8 +20,8 @@ export default function CreareSiteWebPage() {
       chip="💻 Creare site web"
       h1={<>Creare site web <span className="text-gradient">profesional</span> — custom, nu șablon</>}
       h1Plain="Creare site web profesional"
-      intro="Construim site-uri de la zero pe Next.js — tehnologia folosită de Netflix și Nike — pentru firme din toată România. De la site-ul de prezentare de 1.500 lei la platforme complexe. Fără WordPress, fără template-uri, fără surprize."
-      priceText="de la 1.500 lei (Site Start) · site complet de la 699€"
+      intro="Construim site-uri de la zero, personalizate pentru fiecare firmă, pe tehnologii de ultimă generație, folosite de YouTube și Netflix. De la site-ul de prezentare de 1.500 lei la platforme complexe. Fără șabloane, fără template-uri, fără surprize."
+      priceText="de la 1.500 lei (Site Start) · Site Custom de la 3.500 lei"
       bullets={[
         "100% custom — codul, domeniul și datele sunt ale tale",
         "Scor Google PageSpeed 90+ — viteza e criteriu de ranking",
@@ -44,11 +44,11 @@ export default function CreareSiteWebPage() {
           ),
         },
         {
-          title: "De ce custom pe Next.js, nu WordPress?",
+          title: "De ce construit de la zero, nu pe șablon?",
           body: (
             <>
               <p>WordPress cu temă e standardul pieței pentru că e ieftin DE FĂCUT — nu pentru că e bun DE AVUT. Un șablon folosit de alte mii de site-uri, 2-4 MB de cod inutil pe fiecare pagină, plugin-uri care cer actualizări lunare și se sparg exact când nu trebuie.</p>
-              <p>Site-urile noastre sunt scrise de la zero pe Next.js: se încarcă sub o secundă, nu au plugin-uri vulnerabile, nu „mor” dacă nu le atinge nimeni un an. Google măsoară viteza și o răsplătește cu poziții — iar clienții tăi o simt în prima secundă.</p>
+              <p>Site-urile noastre sunt construite de la zero, pe tehnologii de ultimă generație, folosite de YouTube și Netflix: se încarcă sub o secundă, nu au plugin-uri vulnerabile, nu „mor” dacă nu le atinge nimeni un an. Google măsoară viteza și o răsplătește cu poziții — iar clienții tăi o simt în prima secundă.</p>
             </>
           ),
         },

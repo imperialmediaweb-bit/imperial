@@ -86,9 +86,9 @@ export function Services() {
                     </h3>
                   </div>
                   <p className="mt-3 max-w-md text-[15px] leading-relaxed text-text-muted">
-                    Scrise de la zero pe Next.js — tehnologia Netflix și Nike. Fără
-                    WordPress, fără șabloane: viteză sub o secundă, SEO din
-                    construcție, panou de administrare propriu.
+                    Construite de la zero, personalizate, pe tehnologii de ultimă
+                    generație folosite de YouTube și Netflix. Fără șabloane: viteză sub o
+                    secundă, SEO din construcție, panou de administrare propriu.
                   </p>
                   <ul className="mt-5 space-y-2 text-sm text-text-muted">
                     <li>· Site Start — <strong className="text-text">1.500 lei</strong>, gata în câteva zile</li>

@@ -90,7 +90,7 @@ export function HeroVisual() {
           <p className="text-[10px] uppercase tracking-wider text-text-subtle">
             Cod curat
           </p>
-          <p className="text-xs font-bold text-text">Next.js + React</p>
+          <p className="text-xs font-bold text-text">Tehnologie YouTube & Netflix</p>
         </div>
       </motion.div>
 

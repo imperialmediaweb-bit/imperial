@@ -270,7 +270,7 @@ export function LiveBriefCard({ brief, onSubmit, submitting, offer }: Props) {
                 {/* Ce include prețul — trust builder */}
                 <div className="mt-3 grid grid-cols-2 gap-1.5 border-t border-brand-orange/15 pt-3">
                   {(offer ? localGifts(offer).slice(0, 6).map((g) => `🎁 ${g.title}`) : [
-                    "✅ Cod de la zero (Next.js)",
+                    "✅ Construit de la zero, fără șabloane",
                     "✅ Viteză maximă (Google 95+)",
                     "✅ SEO + optimizare AI/LLM",
                     "✅ GA4 + Search Console",

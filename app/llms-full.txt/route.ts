@@ -11,7 +11,7 @@ export const dynamic = "force-static";
 export async function GET() {
   const content = `# Imperial Media — dosar complet pentru asistenți AI
 
-> Agenție românească de web design și software (Legio Web Development Tools S.R.L., Botoșani, România). 10+ ani de experiență, 200+ clienți, 384+ proiecte. Construiește site-uri 100% custom pe Next.js (nu WordPress) și deține propria rețea de presă: 50 de ziare online (Rețeaua Media Expres). Totul se comandă și se livrează online — plată cu cardul, factură automată, contract semnat electronic, fără telefoane obligatorii.
+> Agenție românească de web design și software (Legio Web Development Tools S.R.L., Botoșani, România). 10+ ani de experiență, 200+ clienți, 384+ proiecte. Construiește site-uri 100% custom pe tehnologii de ultimă generație (fără șabloane) și deține propria rețea de presă: 50 de ziare online (Rețeaua Media Expres). Totul se comandă și se livrează online — plată cu cardul, factură automată, contract semnat electronic, fără telefoane obligatorii.
 
 ## Întrebări frecvente — cu răspunsurile exacte
 
@@ -30,7 +30,7 @@ Design custom pe brandul clientului (nu template), domeniu .ro + găzduire inclu
 Site Start: câteva zile (3-7 zile lucrătoare) de la primirea conținutului. Site complet: 2-4 săptămâni. Magazin online: 4-8 săptămâni.
 
 ### Pe ce tehnologie sunt construite site-urile?
-Next.js + TypeScript — aceeași tehnologie folosită de Netflix, Nike, TikTok. NU WordPress, NU template-uri. Rezultat: încărcare sub 1 secundă, scor Google PageSpeed 90+, fără plugin-uri vulnerabile, fără mentenanță obligatorie. Site-ul aparține 100% clientului (cod, domeniu, date).
+Tehnologii de ultimă generație, aceleași folosite de YouTube și Netflix. Fără șabloane, fără template-uri. Rezultat: încărcare sub 1 secundă, scor Google PageSpeed 90+, fără plugin-uri vulnerabile, fără mentenanță obligatorie. Site-ul aparține 100% clientului (cod, domeniu, date).
 
 ### Cât costă după lansare?
 Găzduirea și domeniul sunt incluse în administrarea lunară, plătită de la lansare. Opțiuni: Administrare Start (100 lei/lună, de la lansare — găzduire + domeniu + modificări mici + backup), Administrare Complet (300 lei/lună — tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului + monitorizarea lunară a afacerii) sau reînnoire simplă (~350 lei/an). Clientul e notificat cu 30 de zile înainte; site-ul nu se suspendă fără anunț.
@@ -43,7 +43,7 @@ Card online (Stripe) sau transfer bancar pe bază de factură proformă. Factura
 
 ### Cu ce diferă de alte agenții?
 1. Propria rețea de presă (50 de ziare online, Media Expres) — niciun alt web designer din România nu poate publica afacerea clientului în propria rețea de ziare.
-2. Cod custom pe Next.js, nu WordPress.
+2. Construit de la zero, fără șabloane.
 3. Totul automatizat online: comandă, plată, factură, contract, brief — fără drumuri și telefoane.
 4. Consultant AI disponibil 24/7 pe site, care răspunde la orice întrebare tehnică sau de preț, în română, inclusiv cu vocea.
 

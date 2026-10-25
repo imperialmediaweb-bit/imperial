@@ -31,7 +31,7 @@ const milestones = [
   {
     k: "Azi",
     title: "384+ proiecte livrate",
-    text: "Astăzi lucrăm cu tehnologii moderne — Next.js, 3D, inteligență artificială — și oferim tot ce ține de prezența online: design, dezvoltare, SEO, presă și administrare.",
+    text: "Astăzi construim totul de la zero, pe tehnologii de ultimă generație, folosite de YouTube și Netflix, cu 3D și inteligență artificială, și oferim tot ce ține de prezența online: design, dezvoltare, SEO, presă și administrare.",
   },
 ];
 
