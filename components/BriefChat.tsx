@@ -10,7 +10,10 @@ import { LiveBriefCard } from "./LiveBriefCard";
 import { type LocalOffer, computeLocalEstimate } from "@/lib/local-offer";
 import { fbTrack } from "@/lib/fbq";
 import { ConsultantaPanel } from "./ConsultantaPanel";
-import { getPackageByKey } from "@/lib/packages";
+import { getPackageByKey, type PackageKey } from "@/lib/packages";
+import { parseConfig, configPriceText, type Config, type ConfigType } from "@/lib/configuratie";
+
+const CONFIG_PACKAGE: Record<ConfigType, PackageKey> = { start: "website", prezentare: "custom", magazin: "shop" };
 
 function renderMarkdown(text: string): string {
   return text
@@ -99,6 +102,8 @@ export function BriefChat({ mode = "brief", clientContext, compact = false, offe
   const [error, setError] = useState<string | null>(null);
   const [listening, setListening] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(false);
+  // Configurația venită din calculator (/brief?tip=...&optiuni=...)
+  const [config, setConfig] = useState<Config | null>(null);
 
   // State pentru multi-select: { msgIdx: number; selected: Set<string> }
   const [multiDraft, setMultiDraft] = useState<{
@@ -114,6 +119,18 @@ export function BriefChat({ mode = "brief", clientContext, compact = false, offe
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
+    const cfg = parseConfig(params.get("tip"), params.get("optiuni"));
+    if (cfg) {
+      setConfig(cfg);
+      setBrief((b) => ({ ...b, selectedPackage: CONFIG_PACKAGE[cfg.type] as any }));
+      setUiMessages([
+        {
+          role: "assistant",
+          text: `Am primit configurația ta: ${cfg.typeName}, total ${configPriceText(cfg)} 🎯 Ca să-ți trimit oferta scrisă pe email, spune-mi cum te numești, emailul și telefonul. Dacă ai întrebări despre opțiuni, întreabă-mă oricând.`,
+        },
+      ]);
+      return;
+    }
     const pachet = params.get("pachet");
     if (!pachet) return;
     const pkg = getPackageByKey(pachet);
@@ -290,7 +307,7 @@ export function BriefChat({ mode = "brief", clientContext, compact = false, offe
       const resp = await fetch("/api/brief-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newHistory, mode, ...(clientContext ? { clientContext } : {}), ...(offer ? { local: offer.slug } : {}) }),
+        body: JSON.stringify({ messages: newHistory, mode, ...(clientContext ? { clientContext } : {}), ...(offer ? { local: offer.slug } : {}), ...(config ? { config: { tip: config.type, optiuni: config.lines.map((l) => l.key) } } : {}) }),
       });
       const data = await resp.json();
       if (!resp.ok) {
@@ -477,6 +494,7 @@ Vreau ceva în aceeași direcție.`;
           aiRecommendedReason: brief.recommendedReason,
           source: mode === "consultanta" ? "consultanta" : "ai-chat",
           ...(offer ? { offer: offer.slug, estimateCurrency: "lei" } : {}),
+          ...(config ? { config: { tip: config.type, optiuni: config.lines.map((l) => l.key) } } : {}),
         }),
       });
       if (!res.ok) {
@@ -533,6 +551,20 @@ Vreau ceva în aceeași direcție.`;
             </p>
           </div>
         </div>
+
+        {/* configurația din calculator */}
+        {config ? (
+          <div className="border-b border-bg-border/60 px-5 py-3.5">
+            <p className="text-[12.5px] text-text-muted">
+              Configurația ta: <b className="text-text">{config.typeName}</b>
+              {config.lines.filter((l) => !l.monthly).length
+                ? ` + ${config.lines.filter((l) => !l.monthly).map((l) => l.name.replace(/ \(per .*\)$/, "")).join(", ")}`
+                : ""}
+              {" · "}
+              <b className="text-gradient">{configPriceText(config)}</b>
+            </p>
+          </div>
+        ) : null}
 
         {/* Messages */}
         <div className="flex-1 space-y-4 overflow-y-auto p-5 sm:p-6">

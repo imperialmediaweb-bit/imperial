@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { sendLeadEmails } from "@/lib/email";
+import { parseConfig, configSummary, configPriceText } from "@/lib/configuratie";
 import { insertBrief } from "@/lib/briefs";
 import { hasDb } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
@@ -88,6 +89,15 @@ export async function POST(req: Request) {
     }
   }
 
+  // Configurația din calculator — totalul se recalculează aici din cheile opțiunilor
+  const config = parseConfig(body?.config?.tip, body?.config?.optiuni);
+  // Numărul ofertei: clientul îl spune când ne sună, ca să știm imediat cine e și ce a ales
+  const offerNo = config
+    ? `O-${new Date().toISOString().slice(2, 10).replace(/-/g, "")}-${(phone || email).replace(/\D/g, "").slice(-3).padStart(3, "0")}${Math.floor(Math.random() * 10)}`
+    : "";
+  const configLine = config ? `\n\n─── Din calculator ───\n▸ Oferta ${offerNo}: ${configSummary(config)} — ${configPriceText(config)}` : "";
+  aiBlock += configLine;
+
   const userMessage = String(body?.message ?? "").trim().slice(0, 4000);
   const finalMessage = (userMessage + aiBlock).trim();
 
@@ -95,7 +105,7 @@ export async function POST(req: Request) {
     name,
     phone: phone || "—",
     email,
-    selectedPackage: String(body?.selectedPackage ?? "personalizat"),
+    selectedPackage: config ? configSummary(config) : String(body?.selectedPackage ?? "personalizat"),
     industry: String(body?.industry ?? "").trim(),
     currentSite: String(body?.currentSite ?? "").trim(),
     pages: String(body?.pages ?? "").trim(),
@@ -105,6 +115,8 @@ export async function POST(req: Request) {
     features,
     inspiration: String(body?.inspiration ?? "").trim(),
     message: finalMessage.slice(0, 6000),
+    config,
+    offerNo,
   };
 
   // ─── Salvează în DB dacă există (nu blochează pe eroare DB) ───
@@ -128,7 +140,7 @@ export async function POST(req: Request) {
         colors_preference: payload.colorsPreference,
         features,
         inspiration: payload.inspiration,
-        message: userMessage,
+        message: (userMessage + configLine).trim(),
         ai_estimate_min: aiEstimateMin,
         ai_estimate_max: aiEstimateMax,
         ai_estimate_reason: aiEstimateReason || undefined,

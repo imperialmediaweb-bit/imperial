@@ -6,7 +6,8 @@ import { insertBrief } from "@/lib/briefs";
 import { sendSimpleEmail, ownerEmail } from "@/lib/email";
 import { hasDb } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
-import { contractHtml, contractNumber, type ContractInput } from "@/lib/contract";
+import { parseConfig, configSummary, configPriceText } from "@/lib/configuratie";
+import { contractHtml, contractNumber, PRAG_AVANS, type ContractInput } from "@/lib/contract";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,16 +26,19 @@ export async function POST(req: Request) {
   }
 
   const clientEmail = String(b?.clientEmail ?? "").trim().toLowerCase();
+  // Din oferta trimisă pe email: pachetul și prețul se recalculează aici, nu se iau din browser
+  const config = parseConfig(b?.config?.tip, b?.config?.optiuni);
   const input: ContractInput = {
     clientName: String(b?.clientName ?? "").trim().slice(0, 200),
     clientCui: String(b?.clientCui ?? "").replace(/\D/g, "").slice(0, 10),
     clientAddress: String(b?.clientAddress ?? "").trim().slice(0, 300),
     clientRep: String(b?.clientRep ?? "").trim().slice(0, 120),
     clientEmail,
-    service: String(b?.service ?? "").trim().slice(0, 120),
-    price: String(b?.price ?? "").trim().slice(0, 60),
+    service: config ? configSummary(config).slice(0, 400) : String(b?.service ?? "").trim().slice(0, 120),
+    price: config ? configPriceText(config) : String(b?.price ?? "").trim().slice(0, 60),
     acceptedAt: new Date(),
     ip,
+    config,
   };
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(clientEmail)) {
@@ -69,6 +73,13 @@ export async function POST(req: Request) {
       subject: `📜 CONTRACT ACCEPTAT — ${input.clientName} (${nr})`,
       html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
         <p><b>${input.clientName}</b> (CUI ${input.clientCui}) a acceptat contractul pentru „${input.service}" — reprezentant: ${input.clientRep}, email: ${clientEmail}, IP: ${ip}.</p>
+        <p>Preț: <b>${input.price}</b>. <b>Pasul tău:</b> trimite-i factura proformă ${
+          config && config.once > PRAG_AVANS
+            ? `de avans 50%: <b>${Math.round(config.once / 2).toLocaleString("ro-RO")} lei</b> (restul la finalizare)`
+            : config
+              ? `pentru întreaga sumă: <b>${config.once.toLocaleString("ro-RO")} lei</b>`
+              : "conform ofertei"
+        }${config && config.monthly > 0 ? `; administrarea de ${config.monthly} lei/lună se facturează de la lansare` : ""}.</p>
         <hr/>${html}</div>`,
       replyTo: clientEmail,
     });

@@ -6,60 +6,52 @@
  * Prețurile sunt cele din pachetele existente, afișate „de la".
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { NumberTicker } from "../effects/NumberTicker";
 import { Zap, Check, Info as InfoIcon } from "lucide-react";
 import { InfoModal } from "../InfoModal";
 import { ADDON_INFO, INCLUDED, type Info } from "@/lib/addon-info";
-import { SITE_START_ADDONS } from "@/lib/site-start-addons";
-import { SHOP_ADDONS } from "@/lib/shop-addons";
+import { CONFIG_TYPES, optionsFor, optionPrice, buildConfig, configQuery, parseConfig, type ConfigType } from "@/lib/configuratie";
 
-type TypeKey = "start" | "prezentare" | "magazin";
+type TypeKey = ConfigType;
 
-const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
-  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic, buton WhatsApp, articol în Botoșani Expres, campanie 5 zile pe Facebook — de la 1.500 lei" },
-  { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, până la 10 pagini, panou propriu, asistent AI inclus — de la 3.500 lei" },
-  { key: "magazin", name: "Magazin online", base: 3000, cur: "lei", note: "Magazin Start: design unic, până la 30 de produse, coș, comenzi, plată ramburs — de la 3.000 lei" },
-];
-
-// Site Start și Site Custom folosesc opțiunile Site Start; magazinul are lista lui
-type Opt = { key: string; name: string; lei: number; monthly?: boolean };
-const ADMIN: Opt = { key: "admin", name: "Administrare lunară — găzduire, domeniu, backup (200 lei/lună cu asistent AI)", lei: 100, monthly: true };
-
-function optionsFor(type: TypeKey): Opt[] {
-  const source =
-    type === "magazin"
-      ? SHOP_ADDONS
-      : SITE_START_ADDONS.filter((a) => !a.onlyOnPage && !(type === "prezentare" && a.key === "ai"));
-  const list = source.map((a) => ({
-    key: a.key,
-    name: a.unit ? `${a.name} (per ${a.unit})` : a.name,
-    lei: a.price,
-  }));
-  return [...list, ADMIN];
-}
+const NOTES: Record<TypeKey, string> = {
+  start: "5 pagini + blog, design unic, buton WhatsApp, articol în Botoșani Expres, campanie 5 zile pe Facebook — de la 1.500 lei",
+  prezentare: "design unic de la zero, până la 10 pagini, panou propriu, asistent AI inclus — de la 3.500 lei",
+  magazin: "Magazin Start: design unic, până la 30 de produse, coș, comenzi, plată ramburs — de la 3.000 lei",
+};
+const TYPES = (Object.keys(CONFIG_TYPES) as TypeKey[]).map((key) => ({
+  key,
+  name: CONFIG_TYPES[key].name,
+  base: CONFIG_TYPES[key].base,
+  cur: "lei" as const,
+  note: NOTES[key],
+}));
 
 export function Estimator({ compact = false }: { compact?: boolean }) {
   const [type, setType] = useState<TypeKey>("start");
   const [opts, setOpts] = useState<Record<string, boolean>>({});
   const [info, setInfo] = useState<Info | null>(null);
 
+  // Revenit din ofertă („Recalculează”): /estimare?tip=...&optiuni=... repune alegerea
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const c = parseConfig(q.get("tip"), q.get("optiuni"));
+    if (!c) return;
+    setType(c.type);
+    setOpts(Object.fromEntries(c.lines.map((l) => [l.key, true])));
+  }, []);
+
   const t = TYPES.find((x) => x.key === type)!;
   const options = optionsFor(type);
-  const { once, monthly } = useMemo(() => {
-    let once = t.base;
-    let monthly = 0;
-    for (const o of optionsFor(type)) {
-      if (!opts[o.key]) continue;
-      const v = o.key === "ai" && type === "prezentare" ? 0 : o.key === "admin" && (opts.ai || type === "prezentare") ? 200 : o.lei;
-      if (o.monthly) monthly += v;
-      else once += v;
-    }
-    return { once, monthly };
-  }, [t, type, opts]);
+  const config = useMemo(
+    () => buildConfig(type, Object.keys(opts).filter((k) => opts[k])),
+    [type, opts]
+  );
+  const { once, monthly } = config;
 
-  const briefHref = `/brief?tip=${type}&optiuni=${Object.keys(opts).filter((k) => opts[k]).join(",")}`;
+  const briefHref = `/brief?${configQuery(config)}`;
 
   return (
     <div className={`pointer-events-auto rounded-2xl border border-white/[0.08] bg-[#09080e]/85 p-6 backdrop-blur-md sm:p-8 ${compact ? "" : "max-w-2xl"}`}>
@@ -104,7 +96,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
       <div className="mt-2 grid gap-2 sm:grid-cols-2">
         {options.map((o) => {
           const on = !!opts[o.key];
-          const v = o.key === "ai" && type === "prezentare" ? 0 : o.key === "admin" && (opts.ai || type === "prezentare") ? 200 : o.lei;
+          const v = optionPrice(o, type, opts);
           return (
             <div
               key={o.key}

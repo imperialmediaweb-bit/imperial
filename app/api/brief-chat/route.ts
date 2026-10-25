@@ -9,6 +9,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { ANTHROPIC_TOOLS, CLAUDE_MODEL, SYSTEM_PROMPT, CONSULTANTA_PROMPT, getAnthropic } from "@/lib/ai";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { getLocalOffer, localOfferPrompt } from "@/lib/local-offer";
+import { parseConfig, configSummary, configPriceText } from "@/lib/configuratie";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { messages?: Anthropic.MessageParam[]; mode?: string; clientContext?: string; local?: string };
+  let body: { messages?: Anthropic.MessageParam[]; mode?: string; clientContext?: string; local?: string; config?: { tip?: string; optiuni?: string[] } };
   try {
     body = await req.json();
   } catch {
@@ -64,6 +65,12 @@ export async function POST(req: Request) {
 
   // Oferta locală pe județ: prețurile în lei înlocuiesc lista în euro.
   const localOffer = mode === "brief" ? getLocalOffer(body.local) : undefined;
+
+  // Configurația aleasă în calculator — prețul e recalculat aici, nu luat din browser
+  const config = mode === "brief" ? parseConfig(body.config?.tip, body.config?.optiuni) : null;
+  const configPrompt = config
+    ? `\nCONFIGURAȚIA ALEASĂ DE CLIENT ÎN CALCULATOR: ${configSummary(config)} — total ${configPriceText(config)}. Nu-l mai întreba ce pachet vrea; pune selected_package "${configSummary(config)}" în update_brief și setează estimarea la acest total. Strânge doar datele de contact (nume, email, telefon) și ce face firma, apoi request_submit când confirmă. Spune-i că primește imediat pe email oferta scrisă cu fiecare opțiune și totalul; dacă e în regulă, apasă butonul din email, semnează contractul online și începem proiectul (plata prin transfer, pe factură proformă). Pentru întrebări ne scrie pe WhatsApp sau răspunde la email. Răspunde la orice întrebare despre opțiuni și prețuri.`
+    : "";
 
   if (messages.length === 0) {
     return NextResponse.json({ error: "Niciun mesaj." }, { status: 400 });
@@ -128,6 +135,7 @@ export async function POST(req: Request) {
             cache_control: { type: "ephemeral" },
           },
           ...(localOffer ? [{ type: "text" as const, text: localOfferPrompt(localOffer) }] : []),
+          ...(configPrompt ? [{ type: "text" as const, text: configPrompt }] : []),
           ...(clientContext
             ? [
                 {

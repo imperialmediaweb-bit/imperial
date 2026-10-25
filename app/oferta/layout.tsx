@@ -1,0 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Oferta ta",
+  robots: { index: false, follow: false },
+};
+
+export default function OfertaLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}
