@@ -13,18 +13,18 @@ export const metadata: Metadata = {
 const steps = [
   {
     icon: Zap,
-    title: "Calculezi pe loc",
-    text: "Bifezi ce îți trebuie și vezi instant estimarea orientativă, în lei.",
+    title: "Estimare instantă",
+    text: "Alegi tipul de site și opțiunile dorite și vezi imediat costul orientativ, în lei.",
   },
   {
     icon: MessageCircle,
-    title: "Ne spui despre proiect",
-    text: "Apeși „Primește oferta exactă” și ne lași câteva detalii în formular.",
+    title: "Detaliile proiectului",
+    text: "Completezi un scurt formular cu cerințele tale prin butonul „Primește oferta exactă”.",
   },
   {
     icon: Clock,
-    title: "Oferta vine azi",
-    text: "Îți răspundem în aceeași zi cu oferta personalizată — gratuit, fără obligații.",
+    title: "Ofertă în aceeași zi",
+    text: "Primești oferta personalizată în aceeași zi lucrătoare — gratuit și fără obligații.",
   },
 ];
 

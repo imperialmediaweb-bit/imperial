@@ -9,26 +9,26 @@ const reasons = [
   {
     icon: Award,
     wash: "from-brand-orange/[0.14] via-brand-magenta/[0.05] to-transparent",
-    title: "Ne ținem de cuvânt",
-    text: "Termene reale, prețuri spuse de la început, fără surprize pe factură.",
+    title: "Termene și prețuri clare",
+    text: "Oferta stabilește de la început costul și calendarul. Fără costuri ascunse.",
   },
   {
     icon: Zap,
     wash: "from-brand-magenta/[0.14] via-brand-purple/[0.05] to-transparent",
-    title: "Rezultate, nu vorbe",
-    text: "Rezervări dublate, programări zilnice, magazine care chiar vând. Cu astea ne lăudăm.",
+    title: "Rezultate măsurabile",
+    text: "Rezervări dublate, programări online zilnice, magazine cu vânzări constante.",
   },
   {
     icon: HeartHandshake,
     wash: "from-brand-purple/[0.15] via-brand-magenta/[0.05] to-transparent",
-    title: "Clienții rămân cu anii",
-    text: "200+ de firme lucrează cu noi și azi. Site-ul e începutul, nu finalul.",
+    title: "Colaborări pe termen lung",
+    text: "Peste 200 de clienți activi, mulți alături de noi de ani de zile.",
   },
   {
     icon: Layers,
     wash: "from-brand-orange/[0.12] via-brand-purple/[0.06] to-transparent",
-    title: "Totul în casă",
-    text: "Design, cod, SEO, presă, reclame — nu dăm nimic mai departe. Facem noi.",
+    title: "Echipă completă, internă",
+    text: "Design, dezvoltare, SEO, presă și marketing — fără subcontractori.",
   },
 ];
 

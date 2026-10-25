@@ -16,22 +16,22 @@ const milestones = [
   {
     k: "2014",
     title: "Începutul",
-    text: "Am pornit în 2014 — câțiva oameni care făceau site-uri seara, după muncă. Fără birouri de sticlă, fără clienți celebri. Doar convingerea că un site bun poate schimba o afacere.",
+    text: "Imperial Media a pornit în 2014 ca o echipă mică de designeri și programatori, cu un obiectiv simplu: site-uri care aduc rezultate reale pentru afacerile locale.",
   },
   {
     k: "Creșterea",
     title: "Din recomandare în recomandare",
-    text: "N-am dat niciodată reclamă agresivă. Primul client a venit din recomandare — la fel și al zecelea. Un restaurant care și-a dublat rezervările. O clinică plină de programări online. Un magazin de cartier care azi livrează în toată țara.",
+    text: "Am crescut în primul rând din recomandări. Un restaurant care și-a dublat rezervările, o clinică cu programări online zilnice, un magazin local care astăzi livrează în toată țara.",
   },
   {
     k: "Rețeaua",
     title: "50 de ziare online, ale noastre",
-    text: "Ne-am construit propria rețea de presă: Media Expres, 50 de ziare online. Când lucrezi cu noi, firma ta apare în articole adevărate, nu în bannere pe care nu dă nimeni click.",
+    text: "Am dezvoltat Media Expres, o rețea proprie de 50 de publicații online locale și naționale. Clienții noștri beneficiază de articole editoriale care cresc vizibilitatea și autoritatea în Google.",
   },
   {
     k: "Azi",
-    title: "384+ proiecte, aceeași obsesie",
-    text: "384 de proiecte mai târziu, suntem aceeași echipă încăpățânată. Doar că acum construim cu aceleași unelte ca Netflix și Nike — Next.js, 3D, AI. Și tot nu livrăm nimic până nu arată exact cum trebuie.",
+    title: "384+ proiecte livrate",
+    text: "Astăzi lucrăm cu tehnologii moderne — Next.js, 3D, inteligență artificială — și oferim tot ce ține de prezența online: design, dezvoltare, SEO, presă și administrare.",
   },
 ];
 
@@ -105,8 +105,7 @@ export default function DesprePage() {
           </div>
 
           <blockquote className="mt-16 max-w-2xl border-l-2 border-brand-magenta/60 pl-6 font-serifd text-2xl italic leading-snug text-white/85 sm:text-[1.7rem]">
-            „Nu vindem site-uri. Construim instrumente care aduc clienți reali,
-            cât timp dormi.”
+            „Un site bun nu se măsoară în pagini, ci în clienții pe care îi aduce.”
           </blockquote>
         </div>
       </section>
@@ -117,7 +116,7 @@ export default function DesprePage() {
           <div className="max-w-xl">
             <span className="chip">De ce Imperial Media</span>
             <h2 className="section-title mt-4">
-              Mai mult decât o <span className="font-serifd italic text-gradient">agenție.</span>
+              De ce să <span className="font-serifd italic text-gradient">lucrezi cu noi.</span>
             </h2>
           </div>
           <ReasonsCards />
@@ -132,7 +131,7 @@ export default function DesprePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,7,0.6)_100%)]" />
         <div className="container-app relative z-10 flex h-full items-end pb-10">
           <p className="max-w-md font-serifd text-xl italic leading-snug text-white/90 [text-shadow:0_2px_14px_rgba(0,0,0,0.9)] sm:text-2xl">
-            Lucrăm până arată <span className="text-gradient">exact</span> cum trebuie.
+            Atenție la <span className="text-gradient">detalii</span>, de la machetă la lansare.
           </p>
         </div>
       </section>
@@ -184,8 +183,8 @@ export default function DesprePage() {
                   Deținem rețeaua <span className="text-gradient">Media Expres</span> — 50 de ziare online.
                 </h2>
                 <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-text-muted">
-                  Firma ta, în presă adevărată — articole reale, cu linkuri care contează
-                  în Google. Nicio altă agenție de web design din România nu poate oferi asta.
+                  Publicații locale și naționale în toată România. Articolele despre clienții noștri
+                  aduc vizibilitate reală și linkuri valoroase pentru poziționarea în Google.
                 </p>
               </div>
               <div className="flex items-center gap-2 text-sm font-semibold text-brand-magenta">
@@ -206,7 +205,7 @@ export default function DesprePage() {
             Hai să vorbim
           </span>
           <h2 className="section-title mt-5 !text-4xl sm:!text-5xl">
-            Ai o idee? <span className="font-serifd italic text-gradient">O aducem la viață.</span>
+            Ai un proiect în minte? <span className="font-serifd italic text-gradient">Hai să-l discutăm.</span>
           </h2>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Link

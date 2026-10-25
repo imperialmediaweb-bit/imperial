@@ -71,11 +71,11 @@ export function DespreHero() {
           <span className="chip">Despre noi</span>
           <h1 className="mt-5 max-w-2xl font-display text-[clamp(2rem,4.5vw,3.6rem)] font-semibold leading-[1.08] tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.85)]">
             Suntem Imperial Media.{" "}
-            <span className="font-serifd italic text-gradient">Construim ce alții doar promit.</span>
+            <span className="font-serifd italic text-gradient">Construim site-uri și magazine online din 2014.</span>
           </h1>
           <p className="mt-5 max-w-xl text-[15.5px] leading-relaxed text-white/75 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]">
-            De 10 ani facem site-uri și magazine pentru firme din toată România.
-            Și da — avem propria rețea de 50 de ziare online.
+            Studio de web design și dezvoltare din România, cu peste 384 de proiecte livrate
+            și propria rețea de 50 de publicații online.
           </p>
         </motion.div>
         <motion.div

@@ -133,7 +133,7 @@ export function Experience() {
               transition={{ duration: 0.9, delay: 0.28 }}
               className="mt-5 max-w-md text-[15px] leading-relaxed text-white/75 sm:text-base"
             >
-              Studio de web design & development. Derulează — site-ul ăsta e chiar demonstrația.
+              Studio de web design și dezvoltare. Construim site-uri, magazine online și aplicații pentru firme din toată România.
             </motion.p>
             <motion.div {...fade} transition={{ duration: 0.9, delay: 0.4 }} className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
@@ -163,7 +163,7 @@ export function Experience() {
               ))}
             </motion.div>
           </div>
-          <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 ${mono}`}>scroll — intri în lume ↓</div>
+          <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 ${mono}`}>Derulează ↓</div>
         </Chapter>
 
         {/* ───── 02 TUNELUL / SERVICII ───── */}
@@ -182,12 +182,12 @@ export function Experience() {
             </motion.div>
             <div className="mt-8">
               {[
-                ["01", "Site-uri & aplicații custom", "Design unic pe Next.js — tehnologia Netflix și Nike. De la 3.500 lei.", "/creare-site-web"],
-                ["02", "Magazine online", "Plăți cu cardul, AWB automat, facturare. De la 6.000 lei.", "/creare-magazin-online"],
-                ["03", "AI & automatizări", "Consultanți AI pe site, fluxuri care lucrează singure.", "/brief"],
-                ["04", "Presă — 50 de ziare", "Rețeaua Media Expres: articole reale, în toată România.", "/servicii"],
-                ["05", "SEO + vizibilitate AI", "Autoritate în Google și prezență în ChatGPT / Gemini.", "/optimizare-seo"],
-                ["06", "Administrare lunară", "De la 200 lei/lună — credite AI, găzduire și domeniu incluse.", "/servicii"],
+                ["01", "Site-uri & aplicații custom", "Design unic și cod scris de la zero, pe Next.js. De la 3.500 lei.", "/creare-site-web"],
+                ["02", "Magazine online", "Plăți cu cardul, AWB automat și facturare integrată. De la 6.000 lei.", "/creare-magazin-online"],
+                ["03", "AI & automatizări", "Asistenți AI pentru clienți și automatizarea proceselor interne.", "/brief"],
+                ["04", "Presă — 50 de ziare", "Articole în rețeaua proprie Media Expres, cu acoperire națională.", "/servicii"],
+                ["05", "SEO + vizibilitate AI", "Poziționare în Google și vizibilitate în ChatGPT și Gemini.", "/optimizare-seo"],
+                ["06", "Administrare lunară", "De la 200 lei/lună — găzduire, domeniu și credite AI incluse.", "/servicii"],
               ].map(([n, title, text, href], i) => (
                 <motion.div
                   key={n}
@@ -226,11 +226,11 @@ export function Experience() {
                 <span className={mono}>Proiecte</span>
               </div>
               <h2 className="mt-5 font-display text-3xl font-semibold sm:text-4xl">
-                Treci prin <span className="font-serifd italic text-gradient">galeria lucrărilor.</span>
+                Proiecte <span className="font-serifd italic text-gradient">livrate.</span>
               </h2>
               <p className="mt-4 text-[14.5px] leading-relaxed text-white/75">
-                Portalurile din jur sunt proiecte reale, livrate — clinici, agenții, branduri.
-                384+ până acum.
+                Site-uri și platforme realizate pentru clinici, agenții, ONG-uri și branduri locale —
+                peste 384 de proiecte finalizate.
               </p>
               <Link
                 href="/proiecte"
@@ -295,15 +295,15 @@ export function Experience() {
                 <span className={mono}>Proces</span>
               </div>
               <h2 className="mt-5 font-display text-3xl font-semibold sm:text-4xl">
-                De la idee la lansare, <span className="font-serifd italic text-gradient">pe un singur fir.</span>
+                De la idee la lansare, <span className="font-serifd italic text-gradient">în patru pași.</span>
               </h2>
             </motion.div>
             <div className="mt-10 grid gap-8 sm:grid-cols-4">
               {[
-                ["Pas 01", "Consultanță", "Identificăm nevoile și propunem soluția potrivită."],
-                ["Pas 02", "Design", "Modele și design personalizat pentru brandul tău."],
-                ["Pas 03", "Dezvoltare", "Implementăm și testăm pentru performanță optimă."],
-                ["Pas 04", "Lansare & suport", "Lansăm și oferim mentenanță continuă."],
+                ["Pas 01", "Consultanță", "Analizăm obiectivele afacerii și stabilim soluția potrivită."],
+                ["Pas 02", "Design", "Propunem macheta și o rafinăm împreună până la aprobare."],
+                ["Pas 03", "Dezvoltare", "Scriem codul, integrăm funcțiile și testăm pe toate dispozitivele."],
+                ["Pas 04", "Lansare & suport", "Publicăm site-ul și rămânem alături pentru actualizări."],
               ].map(([k, t, d], i) => (
                 <motion.div
                   key={k}
@@ -355,7 +355,7 @@ export function Experience() {
                 >
                   {featured ? (
                     <span className="absolute -top-2.5 left-6 rounded-full bg-orange-gradient px-3 py-1 font-jmono text-[8.5px] uppercase tracking-[0.18em] text-white">
-                      Cel mai ales
+                      Cel mai solicitat
                     </span>
                   ) : null}
                   <h3 className="font-display text-lg font-bold">{name}</h3>
@@ -480,10 +480,10 @@ export function Experience() {
               <motion.div {...fade} transition={{ duration: 0.8 }}>
                 <span className={mono}>Hai să vorbim</span>
                 <h2 className="mt-5 font-display text-4xl font-semibold sm:text-5xl">
-                  Construim ceva <span className="font-serifd italic text-gradient">memorabil?</span>
+                  Ai un proiect în minte? <span className="font-serifd italic text-gradient">Hai să-l discutăm.</span>
                 </h2>
                 <p className="mx-auto mt-4 max-w-sm text-[14.5px] text-white/75">
-                  Răspundem în aceeași zi. Estimarea e gratuită.
+                  Răspundem în aceeași zi lucrătoare. Estimarea este gratuită și fără obligații.
                 </p>
                 <Link
                   href="/brief"
@@ -505,9 +505,9 @@ export function Experience() {
 /* FAQ compact pe sticlă — primele 4 întrebări, acordeon */
 const FAQ_ITEMS = [
   ["Cât durează realizarea unui site?", "Un site de prezentare durează 2-4 săptămâni de la primirea conținutului; magazinele online 4-8 săptămâni, în funcție de complexitate."],
-  ["Ce se întâmplă cu domeniul și hostingul după primul an?", "Primul an sunt incluse gratuit. După, reînnoirea costă 50-80€/an, în funcție de extensie. Te anunțăm cu o lună înainte."],
+  ["Ce se întâmplă cu domeniul și hostingul după primul an?", "Primul an sunt incluse gratuit. Apoi poți alege Administrarea lunară (de la 200 lei/lună, cu găzduire și domeniu incluse) sau doar reînnoirea anuală. Te anunțăm cu 30 de zile înainte."],
   ["Cum se face plata?", "50% avans la începerea proiectului, 50% la livrare. Acceptăm transfer bancar și emitem factură."],
-  ["Pot face modificări după ce site-ul e gata?", "Da — modificările minore în primele 30 de zile sunt gratuite; pentru ulterior recomandăm Administrarea lunară."],
+  ["Pot face modificări după ce site-ul e gata?", "Da. Modificările minore din primele 30 de zile sunt incluse; ulterior, ele intră în Administrarea lunară."],
 ];
 
 function MiniFAQ() {
