@@ -69,7 +69,7 @@ export async function POST(req: Request) {
   // Configurația aleasă în calculator — prețul e recalculat aici, nu luat din browser
   const config = mode === "brief" ? parseConfig(body.config?.tip, body.config?.optiuni) : null;
   const configPrompt = config
-    ? `\nCONFIGURAȚIA ALEASĂ DE CLIENT ÎN CALCULATOR: ${configSummary(config)} — total ${configPriceText(config)}. Nu-l mai întreba ce pachet vrea; pune selected_package "${configSummary(config)}" în update_brief și setează estimarea la acest total. Strânge doar datele de contact (nume, email, telefon) și ce face firma, apoi request_submit când confirmă. Spune-i că primește imediat pe email oferta scrisă cu fiecare opțiune și totalul; dacă e în regulă, apasă butonul din email, semnează contractul online și începem proiectul (plata prin transfer, pe factură proformă). Pentru întrebări ne scrie pe WhatsApp sau răspunde la email. Răspunde la orice întrebare despre opțiuni și prețuri.`
+    ? `\nCONFIGURAȚIA ALEASĂ DE CLIENT ÎN CALCULATOR: ${configSummary(config)} — total ${configPriceText(config)}. Nu-l mai întreba ce pachet vrea; pune selected_package "${configSummary(config)}" în update_brief și setează estimarea la acest total. Strânge doar datele de contact (nume, email, telefon) și ce face firma, apoi request_submit când confirmă. Spune-i că primește imediat pe email oferta scrisă cu fiecare opțiune și totalul; dacă e în regulă, apasă butonul din email, semnează contractul online și începem proiectul (plata prin transfer bancar, pe factura pe care i-o trimitem). Pentru întrebări ne scrie pe WhatsApp sau răspunde la email. Răspunde la orice întrebare despre opțiuni și prețuri.`
     : "";
 
   if (messages.length === 0) {

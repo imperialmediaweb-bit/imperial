@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 const STEPS = [
-  { nr: "1", title: "Plătești online, în 1 minut", text: "Cu cardul (Stripe, securizat) sau prin transfer bancar pe bază de factură proformă. Factura vine pe email." },
+  { nr: "1", title: "Alegi și primești oferta", text: "Bifezi opțiunile în calculator, primești oferta pe email, semnezi contractul online și plătești prin transfer bancar, pe factură." },
   { nr: "2", title: "Ne trimiți textele și pozele", text: "Câteva rânduri despre firmă + pozele tale, direct pe email și în cont. Nu trebuie să fie perfecte — le șlefuim noi." },
   { nr: "3", title: "Site-ul e LIVE în câteva zile", text: "Primești linkul de previzualizare, ceri o rundă de modificări, apoi îl publicăm pe domeniul tău." },
 ];
@@ -82,7 +82,7 @@ export default function SiteStartPage() {
           </Link>
         </div>
         <p className="mt-4 text-xs text-text-subtle">
-          💰 Banii nu se pierd: dacă treci la site-ul mare în 6 luni, cei plătiți devin AVANS · plată securizată Stripe · factură automată
+          💰 Banii nu se pierd: dacă treci la site-ul mare în 6 luni, cei plătiți devin AVANS · plată prin transfer bancar, pe factură
         </p>
 
         {/* MEGA OFERTA — stiva de valoare, cu bonusul pe care nu-l are nicio agenție */}

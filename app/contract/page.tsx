@@ -126,7 +126,7 @@ export default function ContractPage() {
           <CheckCircle2 className="mx-auto h-10 w-10 text-green-400" />
           <h1 className="mt-3 font-display text-xl font-extrabold text-text">Contract semnat! 📜</h1>
           <p className="mt-2 text-sm text-text-muted">
-            Numărul contractului: <b className="text-text">{done}</b>. Exemplarul tău e pe email — păstrează-l. Îți trimitem factura proformă pe email, iar plata se face prin transfer bancar.
+            Numărul contractului: <b className="text-text">{done}</b>. Exemplarul tău e pe email — păstrează-l. Îți trimitem factura pe email, iar plata se face prin transfer bancar în contul firmei.
             O copie identică a ajuns și la noi.
           </p>
           <a href="/site-start/date" className="btn-primary mt-5 inline-flex">Continuă — datele site-ului →</a>
@@ -172,7 +172,7 @@ export default function ContractPage() {
             <div className="rounded-2xl border border-bg-border bg-bg-card/60 px-4 py-3 text-sm leading-relaxed text-text">
               {configSummary(config)} — <b>{configPriceText(config)}</b>
               <p className="mt-2 text-[13px] text-text-muted">
-                Plata, prin transfer pe factură proformă:{" "}
+                Plata, prin transfer bancar, pe factură:{" "}
                 {config.once > PRAG_AVANS
                   ? `50% avans la semnare (${Math.round(config.once / 2).toLocaleString("ro-RO")} lei) și 50% la finalizare, înainte de publicare.`
                   : `integral la semnare (${config.once.toLocaleString("ro-RO")} lei).`}

@@ -120,7 +120,7 @@ export function contractHtml(i: ContractInput): string {
 
   const steps = [
     "Semnarea contractului (acceptare electronică).",
-    "Prestatorul trimite factura proformă; Beneficiarul plătește suma de la semnare.",
+    "Prestatorul trimite factura; Beneficiarul plătește prin transfer bancar suma de la semnare.",
     "Beneficiarul trimite conținutul: datele firmei prin formularul dedicat, textele și pozele.",
     "Prestatorul construiește site-ul și trimite linkul de previzualizare.",
     "O rundă de revizii consolidate, pe baza observațiilor Beneficiarului.",
@@ -179,7 +179,7 @@ export function contractHtml(i: ContractInput): string {
     ${section("III", "Prețul și plata", `
       ${P(`Prețul serviciilor este de <b>${esc(i.price)}</b>.`)}
       ${payTable}
-      ${P(`Plata se face prin transfer bancar în contul Prestatorului${bankLine() ? ` (${esc(bankLine())})` : ""}, pe baza facturii proforme trimise de Prestator. Factura fiscală se emite la încasare. Lucrul începe după încasarea plății de la semnare. Opțiunile suplimentare cerute ulterior de Beneficiar se facturează separat, la prețurile comunicate în scris înainte de execuție.`)}`)}
+      ${P(`Plata se face prin transfer bancar în contul Prestatorului${bankLine() ? ` (${esc(bankLine())})` : ""}, pe baza facturii emise de Prestator. Lucrul începe după încasarea plății de la semnare. Opțiunile suplimentare cerute ulterior de Beneficiar se facturează separat, la prețurile comunicate în scris înainte de execuție.`)}`)}
 
     ${section("IV", "Pașii proiectului, termene și livrare", `
       ${stepsTable}

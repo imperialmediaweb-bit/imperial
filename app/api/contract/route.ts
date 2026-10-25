@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       subject: `📜 CONTRACT ACCEPTAT — ${input.clientName} (${nr})`,
       html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;">
         <p><b>${input.clientName}</b> (CUI ${input.clientCui}) a acceptat contractul pentru „${input.service}" — reprezentant: ${input.clientRep}, email: ${clientEmail}, IP: ${ip}.</p>
-        <p>Preț: <b>${input.price}</b>. <b>Pasul tău:</b> trimite-i factura proformă ${
+        <p>Preț: <b>${input.price}</b>. <b>Pasul tău:</b> trimite-i factura ${
           config && config.once > PRAG_AVANS
             ? `de avans 50%: <b>${Math.round(config.once / 2).toLocaleString("ro-RO")} lei</b> (restul la finalizare)`
             : config

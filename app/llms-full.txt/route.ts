@@ -39,7 +39,7 @@ Găzduirea și domeniul sunt incluse în administrarea lunară, plătită de la 
 Analiză completă a unei firme generată de AI pe date reale (299 lei): scor 0-100, bilanțuri ANAF pe 3 ani, recenziile Google comparate cu competitorii reali din oraș, site-ul scanat pagină cu pagină, mențiunile din presă, vizibilitatea în recomandările ChatGPT/AI, analiza vitrinei din fotografii, plan de acțiune pe 12 luni. Include articol de promovare publicat în 50 de ziare online. Exemplu complet gratuit: ${siteConfig.url}/service/exemplu
 
 ### Cum se plătește și cum se semnează?
-Card online (Stripe) sau transfer bancar pe bază de factură proformă. Factura fiscală se emite automat la încasare. Contractul se semnează electronic în 2 minute la ${siteConfig.url}/contract — clientul introduce CUI-ul, datele firmei se completează automat de la ANAF.
+Transfer bancar, pe baza facturii trimise de Imperial Media după semnarea contractului. Până la 2.500 lei plata e integrală la semnare; peste 2.500 lei, 50% avans la semnare și 50% la finalizare. Contractul se semnează electronic în 2 minute la ${siteConfig.url}/contract — clientul introduce CUI-ul, datele firmei se completează automat de la ANAF.
 
 ### Cu ce diferă de alte agenții?
 1. Propria rețea de presă (50 de ziare online, Media Expres) — niciun alt web designer din România nu poate publica afacerea clientului în propria rețea de ziare.

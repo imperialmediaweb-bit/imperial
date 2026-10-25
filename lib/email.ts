@@ -206,7 +206,7 @@ function clientOfferBlock(c: Config, p: LeadPayload): string {
           <p style="margin:20px 0 8px;font-size:15px;"><strong>Cum lucrăm, pas cu pas</strong></p>
           <table style="border-collapse:collapse;">
             ${step(1, "Accepți oferta din butonul de mai jos. Citești contractul complet (îl poți și descărca), apoi îl semnezi online, cu CUI-ul firmei.")}
-            ${step(2, `Îți trimitem factura proformă. Plătești prin transfer bancar în contul firmei: ${plata}.`)}
+            ${step(2, `Îți trimitem factura. Plătești prin transfer bancar în contul firmei: ${plata}.`)}
             ${step(3, "Ne trimiți datele firmei, textele și pozele, printr-un formular simplu.")}
             ${step(4, "Construim site-ul și îți trimitem linkul de previzualizare.")}
             ${step(5, "O rundă de modificări, pe observațiile tale.")}
