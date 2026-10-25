@@ -38,6 +38,7 @@ const INCLUDED = [
   "Buton WhatsApp — clienții îți scriu direct pe telefon",
   "Email personalizat (nume@firma-ta.ro)",
   "Articol gratuit despre firma ta în Botoșani Expres",
+  "Campanie de promovare de 5 zile pe Facebook, la lansare",
   "1 rundă de revizii + 14 zile de corecturi mărunte",
 ];
 

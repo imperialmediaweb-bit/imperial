@@ -33,6 +33,7 @@ export const packages: Package[] = [
       "Buton WhatsApp inclus",
       "Email personalizat",
       "Articol gratuit în Botoșani Expres",
+      "Campanie de 5 zile pe Facebook",
     ],
   },
   {
