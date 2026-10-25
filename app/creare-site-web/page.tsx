@@ -72,7 +72,7 @@ export default function CreareSiteWebPage() {
         },
       ]}
       faqs={[
-        { q: "Cât costă un site web?", a: "La Imperial Media: Site Start (4 pagini) — 1.500 lei totul inclus; site de prezentare complet — de la 699€; magazin online — de la 1.200€; aplicații custom — la cerere. Toate includ domeniu + găzduire primul an, SSL și SEO de bază. Estimarea exactă pentru proiectul tău e gratuită și durează 2 minute." },
+        { q: "Cât costă un site web?", a: "La Imperial Media: Site Start (5 pagini + blog) — 1.500 lei totul inclus; site de prezentare complet — de la 699€; magazin online — de la 1.200€; aplicații custom — la cerere. Toate includ domeniu + găzduire primul an, SSL și SEO de bază. Estimarea exactă pentru proiectul tău e gratuită și durează 2 minute." },
         { q: "Cât durează să-mi faceți site-ul?", a: "Site Start: 3-7 zile lucrătoare de la primirea conținutului. Site de prezentare complet: 2-4 săptămâni. Magazin online: 4-8 săptămâni. Termenul curge de când ne trimiți textele și pozele (formular de 5 minute — textele finale le scriem noi)." },
         { q: "Lucrați cu firme din orice oraș?", a: "Da — totul se face online: comandă, plată, contract electronic, brief, livrare. Avem clienți în toată România și diaspora, plus pagini locale dedicate pentru fiecare oraș important, cu proiecte livrate în zonă." },
         { q: "Site-ul e al meu sau rămân legat de voi?", a: "E 100% al tău: codul, domeniul, datele. Nu există abonament obligatoriu — după primul an alegi singur dacă vrei administrare de la noi (de la 100 lei/lună, cu găzduire și domeniu incluse) sau doar reînnoirea domeniului." },

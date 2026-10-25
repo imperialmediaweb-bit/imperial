@@ -1,5 +1,6 @@
 export type PackageKey =
   | "website"
+  | "custom"
   | "shop"
   | "promo"
   | "admin"
@@ -20,18 +21,33 @@ export type Package = {
 export const packages: Package[] = [
   {
     key: "website",
-    name: "Website Prezentare",
-    price: "3.500 lei",
-    priceNote: "de la (≈ 699 €)",
+    name: "Site Start",
+    price: "1.500 lei",
+    priceNote: "plată unică",
     popular: true,
     highlight: "Cel mai popular",
     features: [
-      "5 pagini",
-      "Design predefinit",
+      "5 pagini + blog",
+      "Design pe șablon premium, adaptat brandului",
       "Domeniu și hosting gratuit 1 an",
       "Logo design (1 draft)",
       "Email personalizat",
       "Promovare 1 lună × 50 de ziare",
+    ],
+  },
+  {
+    key: "custom",
+    name: "Site Custom",
+    price: "3.500 lei",
+    priceNote: "de la (≈ 699 €)",
+    highlight: "Design unic, de la zero",
+    features: [
+      "Design unic, creat de la zero (nu șablon)",
+      "Pagini nelimitate",
+      "Panou de administrare propriu",
+      "SEO tehnic din construcție",
+      "Viteză sub o secundă",
+      "Domeniu și hosting gratuit 1 an",
     ],
   },
   {

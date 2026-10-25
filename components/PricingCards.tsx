@@ -22,7 +22,7 @@ export function PricingCards() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {packages.map((pkg, idx) => (
             <motion.div
               key={pkg.key}

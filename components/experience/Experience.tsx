@@ -182,7 +182,7 @@ export function Experience() {
             </motion.div>
             <div className="mt-8">
               {[
-                ["01", "Site-uri & aplicații custom", "Next.js — tehnologia Netflix și Nike. De la 3.500 lei.", "/creare-site-web"],
+                ["01", "Site-uri & aplicații custom", "Design unic pe Next.js — tehnologia Netflix și Nike. De la 3.500 lei.", "/creare-site-web"],
                 ["02", "Magazine online", "Plăți cu cardul, AWB automat, facturare. De la 6.000 lei.", "/creare-magazin-online"],
                 ["03", "AI & automatizări", "Consultanți AI pe site, fluxuri care lucrează singure.", "/brief"],
                 ["04", "Presă — 50 de ziare", "Rețeaua Media Expres: articole reale, în toată România.", "/servicii"],
@@ -337,8 +337,8 @@ export function Experience() {
             </motion.div>
             <div className="mt-10 grid max-w-4xl gap-4 sm:grid-cols-3">
               {[
-                ["Site Start", "1.500 lei", "plată unică", ["5 pagini + blog incluse", "Gata în câteva zile", "Găzduire 1 an inclusă"], "/site-start", false],
-                ["Site de prezentare", "3.500 lei", "de la (≈ 699 €), plată unică", ["Pagini nelimitate, design unic", "Panou de administrare propriu", "SEO tehnic din construcție"], "/creare-site-web", true],
+                ["Site Start", "1.500 lei", "plată unică — preț fix", ["5 pagini + blog incluse", "Design pe șablon premium, adaptat", "Găzduire 1 an inclusă"], "/site-start", false],
+                ["Site Custom", "3.500 lei", "de la (≈ 699 €), plată unică", ["Design unic, creat de la zero", "Pagini nelimitate, panou propriu", "SEO tehnic din construcție"], "/creare-site-web", true],
                 ["Magazin online", "6.000 lei", "de la (≈ 1.200 €), plată unică", ["Plăți cu cardul integrate", "AWB automat la curieri", "Facturare integrată"], "/creare-magazin-online", false],
               ].map(([name, price, per, feats, href, featured], i) => (
                 <motion.div
