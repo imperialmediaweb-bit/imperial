@@ -111,13 +111,13 @@ export function Experience() {
             <div className={scrim} />
             <motion.div {...fade} transition={{ duration: 0.9 }}>
               <Image
-                src="/brand/logo-round-200.png"
+                src="/brand/logo-liniar.png"
                 alt="Imperial Media"
-                width={200}
-                height={200}
+                width={1400}
+                height={258}
                 unoptimized
                 priority
-                className="mx-auto h-32 w-32 rounded-full drop-shadow-[0_0_45px_rgba(255,46,154,0.55)] sm:h-40 sm:w-40 animate-[pulse_4s_ease-in-out_infinite]"
+                className="mx-auto h-24 w-auto drop-shadow-[0_0_45px_rgba(255,46,154,0.5)] sm:h-32 animate-[pulse_4s_ease-in-out_infinite]"
               />
             </motion.div>
             <motion.h1

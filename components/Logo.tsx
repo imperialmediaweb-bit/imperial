@@ -59,9 +59,9 @@ export function Mark({ className }: { className?: string }) {
 }
 
 export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  // doar sigla rotundă — numele e deja scris în interiorul ei
+  // logo-ul LINIAR oficial (coroană + IMPERIAL MEDIA) — lizibil la orice mărime
   const mark =
-    size === "lg" ? "h-14 w-14 sm:h-16 sm:w-16" : size === "sm" ? "h-11 w-11" : "h-12 w-12 sm:h-14 sm:w-14";
+    size === "lg" ? "h-11 sm:h-12" : size === "sm" ? "h-8" : "h-9 sm:h-10";
 
   return (
     <Link
@@ -70,14 +70,14 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       aria-label="Imperial Media — Tu ai ideea. Noi o aducem la viață."
     >
       <Image
-        src="/brand/logo-round-200.png"
+        src="/brand/logo-liniar-480.png"
         alt="Imperial Media"
-        width={200}
-        height={200}
+        width={480}
+        height={88}
         quality={100}
         unoptimized
         priority
-        className={`${mark} rounded-full drop-shadow-[0_0_14px_rgba(255,46,154,0.35)] transition duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_24px_rgba(255,46,154,0.6)]`}
+        className={`${mark} w-auto drop-shadow-[0_0_14px_rgba(255,46,154,0.3)] transition duration-300 group-hover:drop-shadow-[0_0_22px_rgba(255,46,154,0.55)]`}
       />
     </Link>
   );
