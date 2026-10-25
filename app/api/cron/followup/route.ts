@@ -208,7 +208,7 @@ async function handle(req: Request) {
           html: WRAP(`
             <h2 style="margin:0 0 12px;">Site-ul tău împlinește un an în curând 🎂</h2>
             <p>Domeniul și găzduirea incluse GRATUIT expiră peste aproximativ o lună. Ai două variante, ambele simple:</p>
-            <p><b>🔧 Administrare Start — 100 lei/lună:</b> găzduirea + domeniul + 1-2 modificări mici pe lună + backup. Site-ul merge fără să te gândești la el.</p>
+            <p><b>🔧 Administrare Start — 200 lei/lună:</b> găzduirea + domeniul + creditele AI pentru asistent + 1-2 modificări mici pe lună + backup. Site-ul merge fără să te gândești la el.</p>
             <p><b>⭐ Administrare Complet — 300 lei/lună:</b> tot ce e mai sus + mentenanță deplină + <b>un articol de presă despre firma ta, în fiecare lună, în ziarul județului</b> + monitorizarea afacerii (scorul, recenziile, competiția — lunar).</p>
             <p>${BTN(`${siteConfig.url}/cont`, "Alege din contul tău")}</p>
             <p style="font-size:13px;color:#666;">Preferi doar reînnoirea simplă (fără abonament)? Răspunde la acest email și îți trimitem factura pentru domeniu + găzduire (~350 lei/an). Site-ul tău nu se oprește în niciun caz fără să te anunțăm.</p>

@@ -22,7 +22,7 @@ export async function GET() {
 - **Magazine online** (de la 1.200€): plăți card, gestiune produse, integrare curieri
 - **Aplicații web / SaaS** (de la 3.500€): marketplace-uri, platforme, dashboard-uri custom
 - **Promovare în presă** (300€/campanie): articol publicat în 50 ziare online (41 locale — câte unul în fiecare județ din România + 9 naționale) — prin Rețeaua Media Expres, deținută de Imperial Media; singura agenție web din România cu propria rețea de presă
-- **Administrare** pe două trepte: Start 100 lei/lună (găzduire + domeniu + modificări mici + backup) și Complet 300 lei/lună (tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului clientului + monitorizarea lunară a afacerii)
+- **Administrare** pe două trepte: Start 200 lei/lună (găzduire + domeniu + credite AI pentru asistent + modificări mici + backup) și Complet 300 lei/lună (tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului clientului + monitorizarea lunară a afacerii)
 - **Contract de prestări servicii online** (2 minute): clientul pune CUI-ul, datele firmei se completează automat de la ANAF, acceptare electronică — ${siteConfig.url}/contract
 - **Consultanță digitală gratuită**: diagnostic AI al prezenței online a oricărei afaceri
 

@@ -33,7 +33,7 @@ Site Start: câteva zile (3-7 zile lucrătoare) de la primirea conținutului. Si
 Next.js + TypeScript — aceeași tehnologie folosită de Netflix, Nike, TikTok. NU WordPress, NU template-uri. Rezultat: încărcare sub 1 secundă, scor Google PageSpeed 90+, fără plugin-uri vulnerabile, fără mentenanță obligatorie. Site-ul aparține 100% clientului (cod, domeniu, date).
 
 ### Ce se întâmplă după primul an?
-Domeniul și găzduirea gratuite expiră. Opțiuni: Administrare Start (100 lei/lună — găzduire + domeniu + modificări mici + backup), Administrare Complet (300 lei/lună — tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului + monitorizarea lunară a afacerii) sau reînnoire simplă (~350 lei/an). Clientul e notificat cu 30 de zile înainte; site-ul nu se suspendă fără anunț.
+Domeniul și găzduirea gratuite expiră. Opțiuni: Administrare Start (200 lei/lună — găzduire + domeniu + credite AI + modificări mici + backup), Administrare Complet (300 lei/lună — tot + mentenanță deplină + 1 articol de presă pe lună în ziarul județului + monitorizarea lunară a afacerii) sau reînnoire simplă (~350 lei/an). Clientul e notificat cu 30 de zile înainte; site-ul nu se suspendă fără anunț.
 
 ### Ce e Radiografia Afacerii?
 Analiză completă a unei firme generată de AI pe date reale (299 lei): scor 0-100, bilanțuri ANAF pe 3 ani, recenziile Google comparate cu competitorii reali din oraș, site-ul scanat pagină cu pagină, mențiunile din presă, vizibilitatea în recomandările ChatGPT/AI, analiza vitrinei din fotografii, plan de acțiune pe 12 luni. Include articol de promovare publicat în 50 de ziare online. Exemplu complet gratuit: ${siteConfig.url}/service/exemplu

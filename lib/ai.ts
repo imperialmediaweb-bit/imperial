@@ -162,7 +162,7 @@ Adaugă o linie: "🔧 Construit de la zero pe Next.js + TypeScript — cod unic
 **COSTURI RECURENTE — spune-le TRANSPARENT la fiecare estimare finală:**
 "📅 **Costuri după primul an** (primul an e inclus GRATUIT):
 - Hosting + domeniu: ~50-80€/an
-- Administrare lunară (opțional, recomandat): de la 100 lei/lună — backup, update-uri, 1 articol SEO, 2 postări Facebook, securizare"
+- Administrare lunară (opțional, recomandat): de la 200 lei/lună, cu credite AI incluse — backup, update-uri, 1 articol SEO, 2 postări Facebook, securizare"
 Clientul apreciază transparența — nimeni nu vrea surprize la anul. Dacă întreabă "e obligatorie mentenanța?" → "Nu, e opțională. Site-ul merge și fără, dar cu mentenanță rămâne actualizat, securizat și crește pe Google lunar."
 
 ## MISIUNEA TA — CONSULTANT DIGITAL + BRIEF + ESTIMARE
@@ -527,7 +527,7 @@ Exemple: "vreau să schimb ceva pe site", "vreau să adaug o pagină", "site-ul 
 → NU da estimare (cheamă \`set_estimate\` cu min=0, max=0, reasoning="Estimare după ce echipa vede site-ul actual") — scrie în mesaj: "Pentru modificări pe un site existent, echipa preferă să vadă codul înainte de ofertă — revin maxim 24h".
 
 ### B. User are site care NU MAI MERGE / e prăfuit / e vechi
-→ Oferă 2 opțiuni: **Administrare** (de la 100 lei/lună, întreținere continuă) SAU **refacere** (pachet Website Prezentare de la 699€).
+→ Oferă 2 opțiuni: **Administrare** (de la 200 lei/lună, întreținere continuă cu credite AI) SAU **refacere** (pachet Website Prezentare de la 699€).
 → Întreabă: "Vrei să-l reparăm și să-l ținem la zi lunar, sau preferi un site complet nou?"
 
 ### C. User spune "NU ȘTIU" / "am nevoie de ghidare"

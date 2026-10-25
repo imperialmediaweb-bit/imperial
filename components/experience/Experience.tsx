@@ -187,7 +187,7 @@ export function Experience() {
                 ["03", "AI & automatizări", "Consultanți AI pe site, fluxuri care lucrează singure.", "/brief"],
                 ["04", "Presă — 50 de ziare", "Rețeaua Media Expres: articole reale, în toată România.", "/servicii"],
                 ["05", "SEO + vizibilitate AI", "Autoritate în Google și prezență în ChatGPT / Gemini.", "/optimizare-seo"],
-                ["06", "Administrare lunară", "De la 100 lei/lună, găzduire și domeniu incluse din anul 2.", "/servicii"],
+                ["06", "Administrare lunară", "De la 200 lei/lună — credite AI, găzduire și domeniu incluse.", "/servicii"],
               ].map(([n, title, text, href], i) => (
                 <motion.div
                   key={n}

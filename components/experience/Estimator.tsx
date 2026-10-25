@@ -24,7 +24,7 @@ const OPTIONS: { key: string; name: string; lei: number; eur: number; monthly?: 
   { key: "ai", name: "Consultant AI pe site", lei: 1000, eur: 200 },
   { key: "seo", name: "Campanie SEO + vizibilitate AI", lei: 750, eur: 150, monthly: true },
   { key: "presa", name: "Articole în presă (Media Expres)", lei: 500, eur: 100 },
-  { key: "admin", name: "Administrare lunară", lei: 100, eur: 20, monthly: true },
+  { key: "admin", name: "Administrare lunară (cu credite AI)", lei: 200, eur: 40, monthly: true },
 ];
 
 export function Estimator({ compact = false }: { compact?: boolean }) {

@@ -86,16 +86,16 @@ export const packages: Package[] = [
   {
     key: "admin",
     name: "Administrare",
-    price: "100 lei",
+    price: "200 lei",
     priceUnit: "/lună",
     priceNote: "de la",
     features: [
-      "Backup site lunar",
-      "Update site",
+      "Credite AI incluse (asistentul de pe site)",
+      "Găzduire + domeniu incluse (din anul 2)",
+      "Backup lunar + update-uri",
       "1 articol SEO pe site",
       "2 postări Facebook",
-      "Securizare",
-      "Raport lunar trafic",
+      "Securizare + raport lunar trafic",
     ],
   },
 ];
