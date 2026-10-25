@@ -59,16 +59,19 @@ function CameraRig({
 function ShardField() {
   const shards = useMemo(() => {
     const rnd = (a: number, b: number) => a + Math.random() * (b - a);
-    return Array.from({ length: 44 }, (_, i) => ({
-      pos: [
-        rnd(-7, 7) + (Math.abs(rnd(-1, 1)) < 0.35 ? rnd(3, 5) * Math.sign(rnd(-1, 1)) : 0),
-        rnd(-4, 4),
-        rnd(-20, -1),
-      ] as [number, number, number],
+    // cioburile apropiate stau pe margini, ca să nu treacă peste logo și text;
+    // în centru apar doar cele îndepărtate (mici și estompate de distanță)
+    return Array.from({ length: 44 }, (_, i) => {
+      const z = rnd(-20, -1);
+      let x = rnd(-8, 8);
+      if (z > -12 && Math.abs(x) < 4.2) x = (4.2 + rnd(0, 3.5)) * (x < 0 ? -1 : 1);
+      return {
+      pos: [x, rnd(-4, 4), z] as [number, number, number],
       rot: [rnd(0, Math.PI), rnd(0, Math.PI), 0] as [number, number, number],
       s: rnd(0.25, 1.1),
       detail: i % 3,
-    }));
+      };
+    });
   }, []);
   const g = useRef<THREE.Group>(null);
   useFrame(({ clock }) => {
@@ -93,7 +96,7 @@ function ShardField() {
             </mesh>
             <mesh scale={1.006}>
               {s.detail === 0 ? <icosahedronGeometry args={[1, 0]} /> : s.detail === 1 ? <tetrahedronGeometry args={[1, 0]} /> : <octahedronGeometry args={[1, 0]} />}
-              <meshBasicMaterial color={SHARD_GLOW[i % SHARD_GLOW.length]} wireframe transparent opacity={0.6} />
+              <meshBasicMaterial color={SHARD_GLOW[i % SHARD_GLOW.length]} wireframe transparent opacity={0.45} />
             </mesh>
           </group>
         ))}
