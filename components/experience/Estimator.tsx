@@ -21,7 +21,7 @@ const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; not
 
 // adaosuri orientative per monedă [lei, €]; monthly = se plătește lunar
 const OPTIONS: { key: string; name: string; lei: number; eur: number; monthly?: boolean }[] = [
-  { key: "ai", name: "Consultant AI pe site", lei: 1000, eur: 200 },
+  { key: "ai", name: "Asistent AI pe site — știe tot site-ul și răspunde clienților 24/7", lei: 600, eur: 120 },
   { key: "presa", name: "Promovare în 50 de ziare (Media Expres)", lei: 1500, eur: 300 },
   { key: "admin", name: "Administrare lunară (cu credite AI)", lei: 200, eur: 40, monthly: true },
 ];
