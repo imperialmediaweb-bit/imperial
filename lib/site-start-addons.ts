@@ -13,9 +13,9 @@ export const SITE_START_ADDONS: Addon[] = [
   { key: "pagina", name: "Pagină în plus", price: 200, unit: "pagină", desc: "orice pagină extra, cu conținutul dorit" },
   { key: "galerie", name: "Galerie foto / portofoliu", price: 400, desc: "lucrările tale, prezentate profesionist" },
   { key: "programari", name: "Programări / rezervări online", price: 500, desc: "clienții se programează singuri, tu primești notificare" },
-  { key: "limba", name: "A doua limbă", price: 700, desc: "pentru turism, pensiuni sau clienți străini" },
+  { key: "limba", name: "A doua limbă", price: 700, desc: "pentru turism, pensiuni sau clienți străini" , onlyOnPage: true },
   { key: "ai", name: "Asistent AI pe site", price: 600, desc: "știe tot site-ul și răspunde clienților 24/7" },
-  { key: "presa", name: "Promovare în 50 de ziare", price: 1500, desc: "articol în toată rețeaua Media Expres, cu linkuri dofollow" },
+  { key: "presa", name: "Promovare în 50 de ziare", price: 1500, desc: "articol în toată rețeaua Media Expres, cu linkuri dofollow" , onlyOnPage: true },
 ];
 
 export function addonPriceLabel(a: Addon) {

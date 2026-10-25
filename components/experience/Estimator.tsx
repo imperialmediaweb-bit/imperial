@@ -82,7 +82,7 @@ export function Estimator({ compact = false }: { compact?: boolean }) {
             <button
               key={o.key}
               onClick={() => setOpts((s) => ({ ...s, [o.key]: !s[o.key] }))}
-              className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${
+              className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${o.key === "admin" ? "sm:col-span-2" : ""} ${
                 on ? "border-brand-magenta/60 bg-brand-magenta/[0.08]" : "border-white/[0.08] bg-white/[0.02] hover:border-white/20"
               }`}
             >
