@@ -1,15 +1,22 @@
 "use client";
 
-// Formularul de conținut Site Start — clientul completează AICI tot ce ne trebuie
-// ca să-i construim site-ul. Linkuit din emailul de confirmare de după plată.
+// Formularul cu datele site-ului — clientul completează AICI tot ce ne trebuie ca să-i construim site-ul.
+// Linkuit de pe pagina de după semnarea contractului (/site-start/date?tip=...&optiuni=...&e=email).
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Send, Loader2 } from "lucide-react";
+import { parseConfig, configSummary, type Config } from "@/lib/configuratie";
 
 const FIELDS_INIT = {
   email: "", companyName: "", industry: "", domain: "", description: "", services: "",
   schedule: "", phone: "", address: "", colors: "", hasLogo: "", photosWhere: "", extras: "", other: "",
+  hasDomain: "", oferta: "",
 };
+
+const choice = (on: boolean) =>
+  `flex-1 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition ${
+    on ? "border-brand-orange bg-brand-orange/15 text-text" : "border-bg-border bg-bg-card/60 text-text-muted hover:border-brand-orange/50"
+  }`;
 
 export default function SiteStartDatePage() {
   const [f, setF] = useState(FIELDS_INIT);
@@ -17,10 +24,24 @@ export default function SiteStartDatePage() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const set = (k: keyof typeof FIELDS_INIT, v: string) => setF((p) => ({ ...p, [k]: v }));
+  // Ce a ales în ofertă — vine din linkul de după semnare
+  const [config, setConfig] = useState<Config | null>(null);
+  const logoOrdered = !!config?.lines.some((l) => l.key === "logo");
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const c = parseConfig(q.get("tip"), q.get("optiuni"));
+    setConfig(c);
+    setF((p) => ({
+      ...p,
+      email: q.get("e") ?? p.email,
+      oferta: c ? configSummary(c) : "",
+      hasLogo: c?.lines.some((l) => l.key === "logo") ? "L-am comandat în ofertă" : p.hasLogo,
+    }));
+  }, []);
 
   async function submit() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) {
-      setError("Lasă emailul cu care ai plătit — după el legăm comanda.");
+      setError("Lasă emailul cu care ai semnat contractul — după el legăm comanda.");
       return;
     }
     if (!f.companyName.trim() || !f.description.trim()) {
@@ -68,19 +89,24 @@ export default function SiteStartDatePage() {
 
   return (
     <main className="container-app max-w-2xl py-12">
-      <span className="chip">🏗️ Site Start — datele site-ului tău</span>
+      <span className="chip">🏗️ Datele site-ului tău</span>
       <h1 className="mt-3 font-display text-2xl font-extrabold text-text sm:text-3xl">
         Spune-ne ce să punem în site
       </h1>
       <p className="mt-2 text-sm text-text-muted">
         5 minute, o singură dată. <b className="text-text">Textele site-ului le scriem NOI</b> din ce ne
         povestești aici — tu nu trebuie să scrii nimic „frumos", doar să ne spui despre firmă, cu cuvintele tale.
-        Pozele le urci separat, din contul tău.
+        Pozele și logo-ul le urci separat, din contul tău.
       </p>
+      {config ? (
+        <div className="mt-5 rounded-2xl border border-bg-border bg-bg-card/60 px-4 py-3 text-sm text-text">
+          Ai ales: <b>{configSummary(config)}</b>
+        </div>
+      ) : null}
 
       <div className="mt-8 grid gap-5">
         <div>
-          <L>Emailul cu care ai plătit *</L>
+          <L>Emailul cu care ai semnat contractul *</L>
           <input className="input rounded-2xl" type="email" value={f.email} onChange={(e) => set("email", e.target.value)} placeholder="emailul comenzii" />
         </div>
         <div>
@@ -92,8 +118,23 @@ export default function SiteStartDatePage() {
           <input className="input rounded-2xl" value={f.industry} onChange={(e) => set("industry", e.target.value)} placeholder="ex: restaurant, service auto, salon, construcții, avocatură..." />
         </div>
         <div>
-          <L>Ce domeniu (adresă web) ți-ai dori?</L>
-          <input className="input rounded-2xl" value={f.domain} onChange={(e) => set("domain", e.target.value)} placeholder="ex: pizzerialamario.ro — îl verificăm și îl luăm noi (inclus primul an)" />
+          <L>Adresa site-ului (domeniul)</L>
+          <div className="mb-2 flex gap-2">
+            {["Am deja domeniu", "Nu am încă"].map((o) => (
+              <button key={o} type="button" onClick={() => set("hasDomain", o)} className={choice(f.hasDomain === o)}>
+                {o}
+              </button>
+            ))}
+          </div>
+          <input className="input rounded-2xl" value={f.domain} onChange={(e) => set("domain", e.target.value)}
+            placeholder={
+              f.hasDomain === "Am deja domeniu"
+                ? "ex: firma-mea.ro — și unde e înregistrat, dacă știi (ROTLD, GoDaddy...)"
+                : "ex: pizzerialamario.ro — o verificăm și o înregistrăm noi (inclusă în administrare)"
+            } />
+          {f.hasDomain === "Am deja domeniu" ? (
+            <p className="mt-1.5 text-[11px] text-text-subtle">Te ajutăm noi să-l legi de site-ul nou — îți spunem exact ce ai de făcut.</p>
+          ) : null}
         </div>
         <div>
           <L>Descrie firma ta — ce faci, pentru cine, de când *</L>
@@ -125,15 +166,17 @@ export default function SiteStartDatePage() {
             <input className="input rounded-2xl" value={f.colors} onChange={(e) => set("colors", e.target.value)} placeholder="ex: verde închis + auriu, elegant" />
           </div>
           <div>
-            <L>Ai logo?</L>
+            <L>Logo</L>
             <div className="flex gap-2">
-              {["Da — îl urc la poze", "Nu — vreau logo (+300 lei)"].map((o) => (
-                <button key={o} type="button" onClick={() => set("hasLogo", o)}
-                  className={`flex-1 rounded-2xl border px-3 py-2.5 text-xs font-semibold transition ${f.hasLogo === o ? "border-brand-orange bg-brand-orange/15 text-text" : "border-bg-border bg-bg-card/60 text-text-muted hover:border-brand-orange/50"}`}>
+              {(logoOrdered ? ["L-am comandat în ofertă"] : ["Am logo — îl urc la poze", "Nu am logo"]).map((o) => (
+                <button key={o} type="button" onClick={() => set("hasLogo", o)} className={choice(f.hasLogo === o)}>
                   {o}
                 </button>
               ))}
             </div>
+            {f.hasLogo === "Nu am logo" ? (
+              <p className="mt-1.5 text-[11px] text-text-subtle">Ți-l putem crea noi: +300 lei. Scrie-ne mai jos dacă îl vrei.</p>
+            ) : null}
           </div>
         </div>
         <div>
@@ -145,9 +188,10 @@ export default function SiteStartDatePage() {
           </p>
         </div>
         <div>
-          <L>Vrei extra-opțiuni? (se facturează separat)</L>
+          <L>Vrei ceva în plus față de oferta ta?</L>
           <textarea className="input min-h-[70px] resize-y rounded-2xl" maxLength={800} value={f.extras} onChange={(e) => set("extras", e.target.value)}
-            placeholder="ex: pagină în plus cu Galerie (+200) · programări online (+700) · blog (+500)... scrie ce vrei și ce să conțină" />
+            placeholder="ex: o pagină în plus cu galerie, a doua limbă... scrie ce vrei și ce să conțină" />
+          <p className="mt-1.5 text-[11px] text-text-subtle">Îți spunem prețul în scris înainte să ne apucăm; se facturează separat.</p>
         </div>
         <div>
           <L>Altceva ce trebuie să știm?</L>
@@ -162,7 +206,7 @@ export default function SiteStartDatePage() {
           Trimite datele — ne apucăm de site
         </button>
         <p className="text-center text-[11px] text-text-subtle">
-          După trimitere: urci pozele din cont → primești linkul de previzualizare pe email în câteva zile.
+          După trimitere: urci pozele și logo-ul din cont → primești linkul de previzualizare pe email.
         </p>
       </div>
     </main>

@@ -5,7 +5,7 @@
 // (ție și nouă). Linkuit din emailul de confirmare a plății.
 
 import { useEffect, useRef, useState } from "react";
-import { parseConfig, configSummary, configPriceText, type Config } from "@/lib/configuratie";
+import { parseConfig, configSummary, configPriceText, configQuery, type Config } from "@/lib/configuratie";
 import { PRAG_AVANS, contractHtml } from "@/lib/contract";
 import { siteConfig } from "@/lib/site";
 import { CheckCircle2, Loader2, FileSignature, FileText, Download } from "lucide-react";
@@ -129,7 +129,12 @@ export default function ContractPage() {
             Numărul contractului: <b className="text-text">{done}</b>. Exemplarul tău e pe email — păstrează-l. Îți trimitem factura pe email, iar plata se face prin transfer bancar în contul firmei.
             O copie identică a ajuns și la noi.
           </p>
-          <a href="/site-start/date" className="btn-primary mt-5 inline-flex">Continuă — datele site-ului →</a>
+          <a
+            href={`/site-start/date?${config ? `${configQuery(config)}&` : ""}e=${encodeURIComponent(email.trim())}`}
+            className="btn-primary mt-5 inline-flex"
+          >
+            Continuă — datele site-ului, domeniul și logo-ul →
+          </a>
         </div>
       </main>
     );

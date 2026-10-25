@@ -32,7 +32,8 @@ export async function POST(req: Request) {
   const detalii = [
     `FIRMA: ${companyName}`,
     `DOMENIU DE ACTIVITATE: ${F("industry", 150) || "—"}`,
-    `DOMENIU DORIT: ${F("domain", 200) || "—"}`,
+    `OFERTA ACCEPTATĂ: ${F("oferta", 400) || "—"}`,
+    `DOMENIU WEB: ${F("hasDomain", 40) || "—"} — ${F("domain", 200) || "—"}`,
     `DESCRIERE: ${description}`,
     `SERVICII: ${F("services", 1500) || "—"}`,
     `PROGRAM: ${F("schedule", 200) || "—"}`,
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
       await insertBrief({
         name: companyName,
         email,
-        selected_package: "Site Start — DATELE SITE-ULUI",
+        selected_package: `${F("oferta", 400) || "Site"} — DATELE SITE-ULUI`,
         industry: F("industry", 150),
         message: `📋 Conținutul pentru construcție:\n${detalii}\n\n(Pozele: emailurile „📸 a urcat poze" / Cloudinary pe emailul lui.)`,
         source: "site-start-continut",
@@ -64,7 +65,7 @@ export async function POST(req: Request) {
   try {
     await sendSimpleEmail({
       to: ownerEmail(),
-      subject: `📋 DATELE SITE-ULUI — ${companyName} (Site Start)`,
+      subject: `📋 DATELE SITE-ULUI — ${companyName}${F("oferta", 400) ? ` (${F("oferta", 400)})` : ""}`,
       html: `<div style="font-family:Inter,Arial,sans-serif;font-size:14px;color:#111;line-height:1.6;">
         <h2>📋 Conținutul pentru site-ul „${companyName}"</h2>
         <p><b>Client:</b> ${email}</p>
