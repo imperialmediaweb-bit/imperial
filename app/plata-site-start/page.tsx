@@ -1,67 +1,8 @@
-// Pagina de plată Site Start — consultantul/estimatorul trimite clientul aici după comandă.
+// Plata se face acum doar prin transfer, după ofertă și contract — un singur drum pentru orice pachet:
+// calculator → ofertă pe email → contract → factură proformă. Linkurile vechi duc în calculator.
 
-import { getClientEmail } from "@/lib/client-auth";
-import { siteStartPriceRon } from "@/lib/stripe";
-import { StartCheckout } from "@/components/StartCheckout";
-import { CheckCircle2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export const metadata = {
-  title: "Site Start — plată | Imperial Media",
-  robots: { index: false, follow: false },
-};
-
-const INCLUDED = [
-  "Site de prezentare cu 4 pagini: Acasă, Despre, Servicii, Contact (hartă + formular)",
-  "Design pe brandul tău, construit de la zero, fără șabloane, pe tehnologii de ultimă generație, folosite de YouTube și Netflix",
-  "Domeniu + găzduire incluse în administrare (de la 100 lei/lună) · certificat SSL · optimizare de bază Google",
-  "Livrare în câteva zile de la primirea conținutului (texte + poze de la tine)",
-  "1 rundă de revizii inclusă + 14 zile corecturi mărunte",
-  "Suma se scade INTEGRAL din site-ul complet dacă faci pasul în 6 luni",
-];
-
-export default async function PlataSiteStartPage() {
-  let email: string | null = null;
-  try {
-    email = await getClientEmail();
-  } catch {
-    email = null;
-  }
-  const price = siteStartPriceRon();
-
-  return (
-    <main className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-gradient" />
-      <section className="container-app flex min-h-[75vh] items-center justify-center py-14">
-        <div className="w-full max-w-lg rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-8 text-center shadow-card">
-          <span className="chip">🏗️ Site Start</span>
-          <h1 className="mt-3 font-display text-2xl font-extrabold text-text sm:text-3xl">
-            Site-ul tău de prezentare, gata în câteva zile
-          </h1>
-          <p className="mt-2 font-display text-3xl font-extrabold text-brand-orange">{price} lei</p>
-          <ul className="mx-auto mt-5 max-w-md space-y-2 text-left text-sm text-text-muted">
-            {INCLUDED.map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /> {item}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-6">
-            <StartCheckout initialEmail={email ?? ""} price={price} endpoint="/api/site-start-checkout" />
-          </div>
-          <p className="mt-3 text-[11px] text-text-subtle">
-            Plată securizată prin Stripe · factura vine pe email · fără telefoane, totul online
-          </p>
-          <p className="mt-4 border-t border-bg-border/50 pt-4 text-xs text-text-muted">
-            🏦 <b className="text-text">Preferi transfer bancar?</b> Trimite un email la{" "}
-            <a href="mailto:office@imperial-media.ro?subject=Site%20Start%20%E2%80%94%20plata%20prin%20transfer" className="text-brand-orange hover:underline">
-              office@imperial-media.ro
-            </a>{" "}
-            cu numele firmei și CUI-ul — primești factura proformă cu datele contului, iar lucrul începe imediat ce plata intră.
-          </p>
-        </div>
-      </section>
-    </main>
-  );
+export default function PlataSiteStartPage() {
+  redirect("/estimare?tip=start");
 }

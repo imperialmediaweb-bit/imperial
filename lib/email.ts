@@ -191,7 +191,6 @@ function clientOfferBlock(c: Config, p: LeadPayload): string {
   const who = `n=${encodeURIComponent(p.name)}&e=${encodeURIComponent(p.email)}&t=${encodeURIComponent(p.phone === "—" ? "" : p.phone)}`;
   const refuseUrl = `${siteConfig.url}/oferta/raspuns?${who}&${configQuery(c)}`;
   const waText = encodeURIComponent(`Bună! Am primit oferta pentru ${configSummary(c)} și am o întrebare:`);
-  const startDirect = c.type === "start" && !c.lines.some((l) => !l.monthly);
   const lei = (n: number) => `${n.toLocaleString("ro-RO")} lei`;
   const avans = Math.round(c.once / 2);
   const plata =
@@ -207,7 +206,7 @@ function clientOfferBlock(c: Config, p: LeadPayload): string {
           <p style="margin:20px 0 8px;font-size:15px;"><strong>Cum lucrăm, pas cu pas</strong></p>
           <table style="border-collapse:collapse;">
             ${step(1, "Accepți oferta din butonul de mai jos. Citești contractul complet (îl poți și descărca), apoi îl semnezi online, cu CUI-ul firmei.")}
-            ${step(2, `Îți trimitem factura proformă. Plata, prin transfer bancar: ${plata}.`)}
+            ${step(2, `Îți trimitem factura proformă. Plătești prin transfer bancar în contul firmei: ${plata}.`)}
             ${step(3, "Ne trimiți datele firmei, textele și pozele, printr-un formular simplu.")}
             ${step(4, "Construim site-ul și îți trimitem linkul de previzualizare.")}
             ${step(5, "O rundă de modificări, pe observațiile tale.")}
@@ -217,12 +216,6 @@ function clientOfferBlock(c: Config, p: LeadPayload): string {
           <p style="margin:16px 0 12px;">
             <a href="${contractUrl}" style="display:inline-block;background:#111;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;">📜 Accept oferta și semnez contractul</a>
           </p>
-          ${
-            startDirect
-              ? `<p style="margin:0 0 12px;font-size:14px;line-height:1.6;color:#444;">Site Start are preț fix — poți plăti și direct cu cardul, fără să mai aștepți:
-            <a href="${siteConfig.url}/plata-site-start" style="color:#FF6B1A;font-weight:600;">plătește 1.500 lei online</a>.</p>`
-              : ""
-          }
           <p style="margin:20px 0 8px;font-size:15px;line-height:1.6;"><strong>Ai întrebări sau vrei să schimbi ceva?</strong> Sună-ne și spune numărul ofertei, <strong>${p.offerNo ?? ""}</strong> — știm imediat ce ai ales.</p>
           <p style="margin:0 0 12px;">
             <a href="tel:${siteConfig.phoneRaw}" style="display:inline-block;background:#FF6B1A;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;margin:0 6px 6px 0;">📞 Sună-ne: ${siteConfig.phone}</a>

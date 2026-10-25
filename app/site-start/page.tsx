@@ -72,9 +72,9 @@ export default function SiteStartPage() {
           rapid, modern, al tău cu totul. Găzduirea și domeniul sunt incluse în administrare, de la 100 lei/lună.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/plata-site-start" className="btn-primary text-base">
+          <Link href="/estimare?tip=start" className="btn-primary text-base">
             <Zap className="h-5 w-5" />
-            Comandă acum — {price} lei
+            Alege opțiunile și cere oferta — de la {price} lei
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link href="/consultanta" className="btn-ghost">
@@ -204,9 +204,9 @@ export default function SiteStartPage() {
         <div className="container-app text-center">
           <h2 className="section-title">Firma ta merită să existe online. Azi.</h2>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Link href="/plata-site-start" className="btn-primary text-base">
+            <Link href="/estimare?tip=start" className="btn-primary text-base">
               <Sparkles className="h-5 w-5" />
-              Comandă Site Start — {price} lei
+              Configurează Site Start — de la {price} lei
             </Link>
           </div>
           <p className="mt-3 text-xs text-text-subtle">

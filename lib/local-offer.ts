@@ -155,7 +155,7 @@ Calculul e o ADUNARE simplă: 1.500 lei + fiecare opțiune aleasă, o singură d
 - site + logo + programări + blog = 2.297 lei
 Verifică suma de două ori înainte s-o scrii. Când chemi set_estimate, min și max sunt ÎN LEI și egale cu suma din text.
 Nu promite nimic ce nu e în listă: fără SMS, fără aplicații mobile, fără „poziția 1 în Google". Reamintirile de programare se trimit pe email.
-Clientul poate comanda direct cu cardul la imperial-media.ro/plata-site-start (1.500 lei, factură automată) sau trimite brief-ul și primește oferta pe email în 24h.`;
+Clientul își alege opțiunile în calculatorul de la imperial-media.ro/estimare și primește imediat oferta scrisă pe email; dacă e în regulă, semnează contractul online și plătește prin transfer bancar, pe factura proformă.`;
 }
 
 // ─── Configuratorul (brief-ul cu bife) ───

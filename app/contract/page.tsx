@@ -75,7 +75,7 @@ export default function ContractPage() {
     const w = window.open("", "_blank");
     if (!w) return;
     w.document.write(
-      `<!doctype html><html lang="ro"><head><meta charset="utf-8"><title>Contract Imperial Media</title></head><body style="margin:32px;">${previewHtml()}</body></html>`
+      `<!doctype html><html lang="ro"><head><meta charset="utf-8"><title>Contract Imperial Media</title><style>*{-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{margin:14mm}</style></head><body style="margin:0;">${previewHtml()}</body></html>`
     );
     w.document.close();
     w.focus();
@@ -212,7 +212,7 @@ export default function ContractPage() {
           </div>
           {showContract ? (
             <div
-              className="mt-4 max-h-[480px] overflow-y-auto rounded-xl bg-white p-5 [&_h2]:mb-3 [&_h2]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pl-6"
+              className="mt-4 max-h-[520px] overflow-y-auto rounded-xl bg-white"
               dangerouslySetInnerHTML={{ __html: previewHtml() }}
             />
           ) : null}
