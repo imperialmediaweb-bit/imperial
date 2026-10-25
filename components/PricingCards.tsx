@@ -17,7 +17,7 @@ export function PricingCards() {
             Alege <span className="text-gradient">soluția digitală</span> ideală
           </h2>
           <p className="section-subtitle mx-auto">
-            Patru pachete clare. Poți alege unul sau combina mai multe — îți
+            Cinci pachete clare. Poți alege unul sau combina mai multe — îți
             facem ofertă personalizată după ce completezi briefingul.
           </p>
         </div>
