@@ -1,6 +1,6 @@
 // Opțiunile Site Start — sursă unică pentru pagina /site-start, calculator și consultantul AI.
 // Baza de 1.500 lei include: 5 pagini + blog, design unic, domeniu + găzduire 1 an,
-// email personalizat, buton WhatsApp și un articol gratuit în ziarul județului (ex. Botoșani Expres).
+// email personalizat, buton WhatsApp și un articol gratuit în Botoșani Expres.
 
 export type Addon = { key: string; name: string; price: number; unit?: string; desc: string; onlyOnPage?: boolean };
 

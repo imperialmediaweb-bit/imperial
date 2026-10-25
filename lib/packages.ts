@@ -32,7 +32,7 @@ export const packages: Package[] = [
       "Domeniu și hosting gratuit 1 an",
       "Buton WhatsApp inclus",
       "Email personalizat",
-      "Articol gratuit în ziarul județului tău (ex. Botoșani Expres)",
+      "Articol gratuit în Botoșani Expres",
     ],
   },
   {

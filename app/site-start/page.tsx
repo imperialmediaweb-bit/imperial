@@ -37,12 +37,12 @@ const INCLUDED = [
   "Perfect pe telefon — acolo unde te caută 70% din clienți",
   "Buton WhatsApp — clienții îți scriu direct pe telefon",
   "Email personalizat (nume@firma-ta.ro)",
-  "Articol gratuit despre firma ta în ziarul județului (ex. Botoșani Expres)",
+  "Articol gratuit despre firma ta în Botoșani Expres",
   "1 rundă de revizii + 14 zile de corecturi mărunte",
 ];
 
 const SITE_START_FAQ = [
-  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 5 pagini (Acasă, Despre, Servicii, Blog cu articole, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în ziarul online al județului + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
+  { q: "Ce primesc exact pentru 1.500 lei?", a: "Un site de prezentare cu 5 pagini (Acasă, Despre, Servicii, Blog cu articole, Contact cu hartă și formular), design pe brandul tău, domeniu .ro + găzduire gratuite primul an, certificat SSL, optimizare SEO de bază și versiune perfectă pe telefon. Bonus de lansare: un articol despre firma ta în Botoșani Expres + Radiografia Afacerii (analiza completă cu AI, 299 lei) — cadou." },
   { q: "În cât timp e gata site-ul?", a: "În 3-7 zile lucrătoare de la primirea conținutului (formularul de 5 minute + pozele). Plătești azi, ne trimiți datele, primești linkul de previzualizare, ceri o rundă de modificări și site-ul e live." },
   { q: "Nu am texte sau poze bune. E o problemă?", a: "Deloc. Textele le scriem noi din ce ne povestești despre firmă (nu trebuie să scrii nimic «frumos»), iar dacă nu ai poze folosim imagini profesionale de stock, incluse în preț. Pozele tale reale le poți adăuga oricând mai târziu." },
   { q: "E făcut pe WordPress?", a: "Nu. Site-ul e scris custom pe Next.js — aceeași tehnologie folosită de Netflix și Nike. Se încarcă sub o secundă, nu are plugin-uri care se strică și nu cere mentenanță lunară obligatorie. Codul, domeniul și datele sunt 100% ale tale." },
@@ -90,7 +90,7 @@ export default function SiteStartPage() {
           <div className="mt-4 grid gap-2.5 text-sm text-text-muted">
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Site-ul complet, cu 5 pagini + blog, pe brandul tău <b className="text-text">(valoare reală 2.500+ lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>Domeniu .ro + găzduire primul an <b className="text-text">(~350 lei)</b></span></p>
-            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🗞️ BONUS: <b className="text-text">un articol de presă despre firma ta, publicat în ziarul online al județului tău</b> — rețeaua noastră de presă, avantaj pe care nicio altă agenție nu-l are <b className="text-text">(~300 lei)</b></span></p>
+            <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🗞️ BONUS: <b className="text-text">un articol de presă despre firma ta, publicat în Botoșani Expres</b> — rețeaua noastră de presă, avantaj pe care nicio altă agenție nu-l are <b className="text-text">(~300 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>🔍 BONUS: <b className="text-text">Radiografia Afacerii</b> — analiza completă a firmei tale cu AI: scor, recenzii vs concurență, vizibilitate în ChatGPT, plan de acțiune <b className="text-text">(299 lei)</b></span></p>
             <p className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" /><span>💰 Iar dacă firma crește: <b className="text-text">cei {price} lei devin AVANS la site-ul mare</b> — plătești doar diferența</span></p>
           </div>

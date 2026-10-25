@@ -27,7 +27,7 @@ export default function CreareSitePrezentarePage() {
         "Domeniu .ro + găzduire gratuite primul an · SSL inclus",
         "Textele le scriem noi; fără poze? punem imagini profesionale",
         "Programări online, galerie, blog — se adaugă modular",
-        "Bonus: articol de presă despre firma ta în ziarul județului",
+        "Bonus: articol de presă despre firma ta în Botoșani Expres",
         "Radiografia Afacerii (299 lei) cadou la livrare",
       ]}
       sections={[
@@ -60,11 +60,11 @@ export default function CreareSitePrezentarePage() {
         },
       ]}
       faqs={[
-        { q: "Cât costă un site de prezentare?", a: "La Imperial Media: Site Start — 1.500 lei (5 pagini + blog, domeniu + găzduire primul an, SSL, SEO de bază, articol gratuit în ziarul județului); Site Custom, cu design creat de la zero, pagini nelimitate și funcții — de la 3.500 lei, cu campania de presă în 50 de ziare cadou." },
+        { q: "Cât costă un site de prezentare?", a: "La Imperial Media: Site Start — 1.500 lei (5 pagini + blog, domeniu + găzduire primul an, SSL, SEO de bază, articol gratuit în Botoșani Expres); Site Custom, cu design creat de la zero, pagini nelimitate și funcții — de la 3.500 lei, cu campania de presă în 50 de ziare cadou." },
         { q: "În cât timp e gata?", a: "Site Start: 3-7 zile lucrătoare de la primirea conținutului. Site-ul complet: 2-4 săptămâni. Procesul e integral online, fără drumuri." },
         { q: "Pot adăuga programări online?", a: "Da — modulul de programări/rezervări costă +700 lei la Site Start și e inclus în multe configurații ale site-ului complet. Clienții se programează singuri, tu primești notificare." },
         { q: "N-am nici texte, nici poze. Se poate?", a: "Da — fix pentru asta e făcut procesul: tu ne povestești firma cu cuvintele tale (5 minute), textele de site le scriem noi; iar dacă nu ai poze, folosim imagini profesionale de stock, incluse, pe care le poți înlocui oricând cu ale tale." },
-        { q: "Ce primesc pe lângă site?", a: "Bonusuri reale: un articol de presă despre firma ta publicat în ziarul online al județului (rețeaua noastră Media Expres) și Radiografia Afacerii (analiza completă a firmei cu AI, 299 lei) — cadou la livrare." },
+        { q: "Ce primesc pe lângă site?", a: "Bonusuri reale: un articol de presă despre firma ta publicat în Botoșani Expres (rețeaua noastră Media Expres) și Radiografia Afacerii (analiza completă a firmei cu AI, 299 lei) — cadou la livrare." },
       ]}
       ctaLabel="Comandă Site Start — 1.500 lei"
       ctaHref="/site-start"
