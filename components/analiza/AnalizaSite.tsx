@@ -155,6 +155,11 @@ export function AnalizaSite() {
           beneficii: ai?.beneficii?.length ? ai.beneficii : dom.benefits,
           crestere: ai?.crestere ?? [],
           concluzie: ai?.concluzie,
+          recomandare: areSite
+            ? "Îți recomandăm să-ți faci site-ul mai ușor de găsit — nu un site nou."
+            : areSiteAles
+              ? "Îți recomandăm să-ți refaci site-ul, de la zero, pe tehnologii de ultimă generație."
+              : `Îți recomandăm să-ți faci un site pentru ${firma || "afacerea ta"}.`,
           concurenta: ai?.concurenta ?? [],
           puncteForte: ai?.puncteForte ?? [],
           deImbunatatit: ai?.deImbunatatit ?? [],
@@ -532,6 +537,13 @@ export function AnalizaSite() {
 
               <div className="mt-8 rounded-2xl border border-brand-magenta/40 bg-gradient-to-b from-brand-magenta/[0.08] to-transparent p-6">
                 <span className="font-jmono text-[10px] uppercase tracking-[0.25em] text-white/55">Recomandarea noastră</span>
+                <p className="mt-2 font-display text-lg font-bold leading-snug text-text">
+                  {areSite
+                    ? "Îți recomandăm să-ți faci site-ul mai ușor de găsit — nu un site nou."
+                    : areSiteAles
+                      ? "Îți recomandăm să-ți refaci site-ul, de la zero, pe tehnologii de ultimă generație."
+                      : `Îți recomandăm să-ți faci un site pentru ${firma || "afacerea ta"}.`}
+                </p>
                 {ai?.concluzie ? <p className="mt-2 text-[14px] leading-relaxed text-white/75">{ai.concluzie}</p> : null}
                 <p className="mt-2 font-display text-xl font-bold text-text">
                   {rezultat.pachet}

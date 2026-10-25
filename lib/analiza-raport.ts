@@ -15,6 +15,7 @@ export type RaportData = {
   beneficii: string[];
   crestere: string[];
   concluzie?: string;
+  recomandare: string;
   concurenta: { nume: string; observatie: string }[];
   puncteForte: string[];
   deImbunatatit: string[];
@@ -55,6 +56,7 @@ export function sanitizeRaport(b: any): RaportData | null {
     beneficii: arr(b.beneficii, 6, 300),
     crestere: arr(b.crestere, 6, 300),
     concluzie: str(b.concluzie, 600),
+    recomandare: str(b.recomandare, 200),
     concurenta: (Array.isArray(b.concurenta) ? b.concurenta : []).slice(0, 3).map((c: any) => ({ nume: str(c?.nume, 80), observatie: str(c?.observatie, 300) })).filter((c: any) => c.nume),
     puncteForte: arr(b.puncteForte, 5, 300),
     deImbunatatit: arr(b.deImbunatatit, 5, 300),
@@ -110,6 +112,7 @@ export function raportHtml(d: RaportData): string {
     ${d.crestere.length ? h(`Cum te face cunoscut în ${esc(d.oras)}`) + numbered(d.crestere) : ""}
     ${d.plan30.length ? h("Planul tău pentru primele 30 de zile") + numbered(d.plan30) : ""}
     ${h("Recomandarea noastră")}
+    ${d.recomandare ? `<p style="margin:0 0 10px;font:700 16px/1.5 Arial,sans-serif;color:${C.ink};">${esc(d.recomandare)}</p>` : ""}
     ${d.concluzie ? P(esc(d.concluzie)) : ""}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.line};border-radius:10px;">
       <tr><td style="padding:10px 14px;border-bottom:1px solid ${C.line};font:700 14px Arial,sans-serif;color:${C.ink};" colspan="2">${esc(d.pachet)}</td></tr>
