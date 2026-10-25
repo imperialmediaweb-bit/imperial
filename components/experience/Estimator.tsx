@@ -14,7 +14,7 @@ import { Zap, Check } from "lucide-react";
 type TypeKey = "start" | "prezentare" | "magazin";
 
 const TYPES: { key: TypeKey; name: string; base: number; cur: "lei" | "€"; note: string }[] = [
-  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design pe șablon premium — 1.500 lei fix" },
+  { key: "start", name: "Site Start", base: 1500, cur: "lei", note: "5 pagini + blog, design unic — 1.500 lei fix" },
   { key: "prezentare", name: "Site Custom", base: 3500, cur: "lei", note: "design unic de la zero, pagini nelimitate, panou propriu — de la 3.500 lei (≈ 699 €)" },
   { key: "magazin", name: "Magazin online", base: 6000, cur: "lei", note: "plăți card, AWB, facturare — ≈ 1.200 €" },
 ];

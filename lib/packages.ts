@@ -28,7 +28,7 @@ export const packages: Package[] = [
     highlight: "Cel mai popular",
     features: [
       "5 pagini + blog",
-      "Design pe șablon premium, adaptat brandului",
+      "Design unic, pe brandul tău",
       "Domeniu și hosting gratuit 1 an",
       "Logo design (1 draft)",
       "Email personalizat",
@@ -42,7 +42,7 @@ export const packages: Package[] = [
     priceNote: "de la (≈ 699 €)",
     highlight: "Design unic, de la zero",
     features: [
-      "Design unic, creat de la zero (nu șablon)",
+      "Design unic premium, creat de la zero",
       "Pagini nelimitate",
       "Panou de administrare propriu",
       "SEO tehnic din construcție",
