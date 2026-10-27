@@ -32,7 +32,7 @@ function Slide({ p, i }: { p: (typeof featured)[number]; i: number }) {
       {/* rama de browser cu captura reală */}
       <div className="relative lg:w-[62%]">
         <div
-          className="pointer-events-none absolute -inset-10 -z-10 rounded-full opacity-40 blur-3xl"
+          className="pointer-events-none absolute -inset-16 -z-10 rounded-full opacity-40"
           style={{ background: `radial-gradient(circle, ${glow}55, transparent 65%)` }}
         />
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0d0c12] shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
@@ -57,7 +57,7 @@ function Slide({ p, i }: { p: (typeof featured)[number]; i: number }) {
                   img.src = p.wpImages[0];
                 }
               }}
-              className="showcase-img absolute inset-0 h-full w-full object-cover object-top"
+              className="showcase-img absolute inset-0 h-full w-full object-cover object-top will-change-transform"
             />
           </div>
         </div>
@@ -167,7 +167,7 @@ export function FeaturedShowcase() {
 
       <div
         ref={track}
-        className="flex flex-col gap-20 px-4 py-16 sm:px-8 lg:h-full lg:flex-row lg:items-center lg:gap-[10vw] lg:px-[11vw] lg:py-0 lg:pt-16"
+        className="flex flex-col gap-20 px-4 py-16 sm:px-8 lg:h-full lg:flex-row lg:items-center lg:gap-[10vw] lg:px-[11vw] lg:py-0 lg:pt-16 lg:will-change-transform"
       >
         {featured.map((p, i) => (
           <Slide key={p.key} p={p} i={i} />

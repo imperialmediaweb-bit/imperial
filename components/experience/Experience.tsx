@@ -28,7 +28,7 @@ const mono = "font-jmono text-[10px] uppercase tracking-[0.3em] text-white/60";
 
 /* panou de sticlă întunecată sub blocurile de text — efectele rămân vizibile în jur */
 const panel =
-  "rounded-2xl border border-white/[0.06] bg-[#050507]/70 p-7 backdrop-blur-md sm:p-9";
+  "rounded-2xl border border-white/[0.06] bg-[#050507]/90 p-7 sm:p-9";
 /* scrim radial pentru textul centrat (intro/final) */
 const scrim =
   "pointer-events-none absolute -inset-x-28 -inset-y-14 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(5,5,7,0.88)_0%,rgba(5,5,7,0.5)_55%,transparent_80%)]";
@@ -347,7 +347,7 @@ export function Experience() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, margin: "-20% 0px -20% 0px" }}
                   transition={{ duration: 0.55, delay: i * 0.1 }}
-                  className={`pointer-events-auto relative rounded-2xl border p-6 backdrop-blur-md ${
+                  className={`pointer-events-auto relative rounded-2xl border p-6 bg-[#09080e]/90 ${
                     featured
                       ? "border-brand-magenta/50 bg-[#0d0812]/85"
                       : "border-white/10 bg-[#0a090f]/80"
@@ -515,7 +515,7 @@ function MiniFAQ() {
   return (
     <div className="pointer-events-auto space-y-2.5">
       {FAQ_ITEMS.map(([q, a], i) => (
-        <div key={q} className="overflow-hidden rounded-xl border border-white/[0.08] bg-[#09080e]/80 backdrop-blur-md">
+        <div key={q} className="overflow-hidden rounded-xl border border-white/[0.08] bg-[#09080e]/92">
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"

@@ -67,7 +67,7 @@ export function Estimator({ compact = false, variant = "full" }: { compact?: boo
   const briefHref = `/brief?${configQuery(config)}${domeniu ? `&domeniu=${domeniu.key}` : ""}`;
 
   return (
-    <div className={`pointer-events-auto rounded-2xl border border-white/[0.08] bg-[#09080e]/85 p-6 backdrop-blur-md sm:p-8 ${compact ? "" : "max-w-2xl"}`}>
+    <div className={`pointer-events-auto rounded-2xl border border-white/[0.08] bg-[#09080e]/95 p-6 sm:p-8 ${compact ? "" : "max-w-2xl"}`}>
       {/* domeniul afacerii */}
       <p className="font-jmono text-[10px] uppercase tracking-[0.22em] text-white/50">Ce afacere ai?</p>
       {home ? (

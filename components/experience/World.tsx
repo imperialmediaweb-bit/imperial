@@ -7,9 +7,9 @@
  * Breakpoint-urile camerei vin din DOM (Experience.tsx) ca perechi p→z.
  */
 
-import { useMemo, useRef, Suspense } from "react";
+import { useMemo, useRef, useState, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Sparkles, useTexture } from "@react-three/drei";
+import { PerformanceMonitor, Sparkles, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 // culorile reflexelor pe cioburi — portocaliu, magenta, violet, ca în logo
@@ -116,8 +116,8 @@ function ShardField() {
       <pointLight position={[4, 2, -2]} intensity={26} color="#FF2E9A" distance={16} />
       <pointLight position={[-5, -1, -6]} intensity={20} color="#FF6B1A" distance={16} />
       <pointLight position={[0, 4, -14]} intensity={16} color="#8B2FF7" distance={18} />
-      <Sparkles count={110} scale={[16, 10, 26]} position={[0, 0, -8]} size={2.2} speed={0.45} color="#FFB020" opacity={0.7} />
-      <Sparkles count={60} scale={[16, 10, 26]} position={[0, 0, -8]} size={1.8} speed={0.3} color="#B06CFF" opacity={0.5} />
+      <Sparkles count={55} scale={[16, 10, 26]} position={[0, 0, -8]} size={2.2} speed={0.45} color="#FFB020" opacity={0.7} />
+      <Sparkles count={30} scale={[16, 10, 26]} position={[0, 0, -8]} size={1.8} speed={0.3} color="#B06CFF" opacity={0.5} />
     </group>
   );
 }
@@ -158,7 +158,7 @@ function Tunnel() {
       ))}
       <pointLight position={[0, 0, -38]} intensity={26} color="#FF2E9A" distance={20} />
       <pointLight position={[0, 0, -56]} intensity={22} color="#8B2FF7" distance={20} />
-      <Sparkles count={90} scale={[5, 5, 40]} position={[0, 0, -45]} size={1.6} speed={0.6} color="#FF9ADF" opacity={0.6} />
+      <Sparkles count={45} scale={[5, 5, 40]} position={[0, 0, -45]} size={1.6} speed={0.6} color="#FF9ADF" opacity={0.6} />
     </group>
   );
 }
@@ -200,7 +200,7 @@ function GalleryInner() {
           </group>
         );
       })}
-      <Sparkles count={70} scale={[10, 7, 48]} position={[0, 0, -94]} size={1.7} speed={0.35} color="#FFB020" opacity={0.5} />
+      <Sparkles count={35} scale={[10, 7, 48]} position={[0, 0, -94]} size={1.7} speed={0.35} color="#FFB020" opacity={0.5} />
     </group>
   );
 }
@@ -240,7 +240,7 @@ function Thread() {
           <pointLight intensity={10} color={NODE_COLORS[i]} distance={6} />
         </group>
       ))}
-      <Sparkles count={40} scale={[8, 6, 26]} position={[0, 0, -150]} size={1.5} speed={0.3} color="#FF9ADF" opacity={0.5} />
+      <Sparkles count={20} scale={[8, 6, 26]} position={[0, 0, -150]} size={1.5} speed={0.3} color="#FF9ADF" opacity={0.5} />
     </group>
   );
 }
@@ -263,7 +263,7 @@ function VoicesZone() {
         </mesh>
       ))}
       <pointLight position={[0, 1, -126]} intensity={16} color="#FF2E9A" distance={14} />
-      <Sparkles count={60} scale={[12, 7, 18]} position={[0, 0, -127]} size={1.8} speed={0.35} color="#FFB020" opacity={0.6} />
+      <Sparkles count={30} scale={[12, 7, 18]} position={[0, 0, -127]} size={1.8} speed={0.35} color="#FFB020" opacity={0.6} />
     </group>
   );
 }
@@ -288,7 +288,7 @@ function OrbitRing() {
         ))}
       </group>
       <pointLight intensity={18} color="#FF2E9A" distance={14} />
-      <Sparkles count={50} scale={[10, 7, 14]} size={1.8} speed={0.4} color="#B06CFF" opacity={0.55} />
+      <Sparkles count={25} scale={[10, 7, 14]} size={1.8} speed={0.4} color="#B06CFF" opacity={0.55} />
     </group>
   );
 }
@@ -318,8 +318,8 @@ function Finale() {
       <pointLight intensity={28} color="#FF2E9A" distance={12} />
       <pointLight position={[4, 2, 3]} intensity={20} color="#FF6B1A" distance={14} />
       <pointLight position={[-4, -2, 3]} intensity={18} color="#8B2FF7" distance={14} />
-      <Sparkles count={120} scale={[14, 9, 18]} size={2.4} speed={0.5} color="#FFB020" opacity={0.75} />
-      <Sparkles count={70} scale={[16, 10, 20]} size={2} speed={0.35} color="#B06CFF" opacity={0.55} />
+      <Sparkles count={60} scale={[14, 9, 18]} size={2.4} speed={0.5} color="#FFB020" opacity={0.75} />
+      <Sparkles count={35} scale={[16, 10, 20]} size={2} speed={0.35} color="#B06CFF" opacity={0.55} />
     </group>
   );
 }
@@ -340,8 +340,8 @@ function Grid() {
 function DeepEnd() {
   return (
     <group position={[0, 0, -206]}>
-      <Sparkles count={90} scale={[16, 10, 16]} size={2.2} speed={0.4} color="#FFB020" opacity={0.65} />
-      <Sparkles count={50} scale={[18, 11, 18]} size={1.8} speed={0.3} color="#B06CFF" opacity={0.5} />
+      <Sparkles count={45} scale={[16, 10, 16]} size={2.2} speed={0.4} color="#FFB020" opacity={0.65} />
+      <Sparkles count={25} scale={[18, 11, 18]} size={1.8} speed={0.3} color="#B06CFF" opacity={0.5} />
       <pointLight intensity={16} color="#FF6B1A" distance={16} position={[3, 2, 2]} />
       <pointLight intensity={14} color="#8B2FF7" distance={16} position={[-3, -2, 2]} />
     </group>
@@ -355,15 +355,18 @@ export function World({
   progressRef: React.MutableRefObject<number>;
   mapRef: React.MutableRefObject<CameraMap>;
 }) {
+  const [dpr, setDpr] = useState(1.25);
   return (
     <Canvas
-      gl={{ antialias: true, powerPreference: "high-performance" }}
-      dpr={[1, 1.5]}
+      gl={{ antialias: false, powerPreference: "high-performance", stencil: false }}
+      dpr={dpr}
       camera={{ fov: 62, near: 0.1, far: 60, position: [0, 0, 8] }}
       style={{ position: "fixed", inset: 0, zIndex: 0 }}
       role="img"
       aria-label="Călătorie 3D prin universul Imperial Media"
     >
+      {/* rezoluția scade singură pe calculatoarele care nu țin 60 de cadre/s — derularea rămâne fluentă */}
+      <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(1.25)} flipflops={3} onFallback={() => setDpr(0.85)} />
       <color attach="background" args={["#050507"]} />
       <fog attach="fog" args={["#050507", 8, 34]} />
       <ambientLight intensity={0.3} />
