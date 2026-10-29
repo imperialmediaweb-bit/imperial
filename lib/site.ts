@@ -5,9 +5,9 @@ export const siteConfig = {
   name: "Imperial Media",
   tagline: "Soluții web personalizate",
   url: "https://imperial-media.ro",
-  phone: "0758 169 388",
-  phoneRaw: "0758169388",
-  whatsapp: "40758169388", // format internațional fără +
+  phone: "0741 970 247",
+  phoneRaw: "0741970247",
+  whatsapp: "40741970247", // format internațional fără +
   email: "office@imperial-media.ro",
   mainSite: "https://www.imperial-media.ro",
   social: {

@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     });
   } catch (e) {
     console.error("[oferta/raspuns] email failed:", e);
-    return NextResponse.json({ error: "Nu am putut trimite. Sună-ne la 0758 169 388." }, { status: 500 });
+    return NextResponse.json({ error: "Nu am putut trimite. Sună-ne la 0741 970 247." }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
 }

@@ -501,7 +501,7 @@ Vreau ceva în aceeași direcție.`;
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        throw new Error(j?.error || "Nu am putut trimite. Sună la 0758 169 388.");
+        throw new Error(j?.error || "Nu am putut trimite. Sună la 0741 970 247.");
       }
       if (mode === "consultanta") {
         // NU navigăm — consultantul tocmai îi dă pașii de plată/poze; chatul rămâne deschis.

@@ -101,7 +101,7 @@ export function LocalConfigurator({ offer }: { offer: LocalOffer }) {
       fbTrack("Lead", { content_name: `oferta-${offer.slug}`, currency: "RON", value: data.total });
       router.push("/multumim");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nu am putut trimite. Sună la 0758 169 388.");
+      setError(err instanceof Error ? err.message : "Nu am putut trimite. Sună la 0741 970 247.");
       setSending(false);
     }
   }

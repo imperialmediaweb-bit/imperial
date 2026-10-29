@@ -139,7 +139,7 @@ export async function POST(req: Request) {
       <p><b>Total: ${esc(totalText)}</b></p>
       <p>Cadou: articol de lansare în ${esc(offer.newspaper.name)}, campanie pe Facebook de 5 zile, buton WhatsApp pe site și 30 de zile de modificări.</p>
       <p>Pașii: vorbim pe scurt, în 5 zile vezi site-ul pe o adresă de probă, iar după ce îți place îl publicăm pe domeniul tău — în maximum 14 zile.</p>
-      <p>Imperial Media · 0758 169 388 · office@imperial-media.ro</p>
+      <p>Imperial Media · 0741 970 247 · office@imperial-media.ro</p>
     </div>`;
 
   await Promise.all([

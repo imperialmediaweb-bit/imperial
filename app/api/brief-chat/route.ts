@@ -81,7 +81,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "Am strâns deja multe detalii — hai să finalizăm! Apasă 'Trimite brief-ul' sau sună direct la 0758 169 388.",
+          "Am strâns deja multe detalii — hai să finalizăm! Apasă 'Trimite brief-ul' sau sună direct la 0741 970 247.",
       },
       { status: 429 }
     );
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "Asistentul AI nu e configurat momentan. Te rugăm să folosești formularul clasic de mai jos sau sună la 0758 169 388.",
+          "Asistentul AI nu e configurat momentan. Te rugăm să folosești formularul clasic de mai jos sau sună la 0741 970 247.",
       },
       { status: 503 }
     );

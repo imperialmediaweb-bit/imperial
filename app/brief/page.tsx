@@ -61,8 +61,8 @@ export default function BriefPage() {
           </a>
           {"  ·  "}
           Sau sună la{" "}
-          <a href="tel:0758169388" className="text-brand-orange underline underline-offset-2">
-            0758 169 388
+          <a href="tel:0741970247" className="text-brand-orange underline underline-offset-2">
+            0741 970 247
           </a>
         </p>
       </section>
