@@ -214,6 +214,7 @@ export async function ensureSchema(): Promise<void> {
     );
     CREATE INDEX IF NOT EXISTS idx_fin_inv_date ON fin_invoices(issue_date DESC);
     CREATE INDEX IF NOT EXISTS idx_fin_inv_tx ON fin_invoices(transaction_id);
+    ALTER TABLE fin_invoices ADD COLUMN IF NOT EXISTS cloud_public_id TEXT;
     CREATE TABLE IF NOT EXISTS fin_mailboxes (
       id SERIAL PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

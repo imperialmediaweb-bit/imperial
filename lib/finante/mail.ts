@@ -7,6 +7,7 @@ import { simpleParser } from "mailparser";
 import { getPool, ensureSchema } from "@/lib/db";
 import { decrypt } from "./auth";
 import { CLAUDE_MODEL, getAnthropic } from "@/lib/ai";
+import { storeFile } from "./storage";
 
 const WORDS = ["factura", "factură", "invoice", "receipt", "chitanta", "chitanță", "bon fiscal", "billing", "plată", "payment"];
 
@@ -71,12 +72,16 @@ export async function syncMailbox(mb: { id: number; email: string; host: string;
           const extId = `mail:${mb.email}:${parsed.messageId ?? uid}:${a.filename ?? a.checksum}`;
           const exists = await pool.query(`SELECT 1 FROM fin_invoices WHERE ext_id = $1`, [extId]);
           if (exists.rowCount) continue;
-          const fromName = parsed.from?.value?.[0]?.name || parsed.from?.value?.[0]?.address || null;
+          const fromAddr = parsed.from?.value?.[0]?.address ?? "";
+          // Meta trimite „Meta Invoice …” de pe facebookmail.com; numele real al emitentului e Meta Platforms Ireland
+          const fromName = /facebookmail\.com$/i.test(fromAddr) ? "Meta Platforms Ireland" : parsed.from?.value?.[0]?.name || fromAddr || null;
           const x = await readInvoice(a.content, `trimisă de ${fromName ?? "?"}, subiect „${parsed.subject ?? ""}”`);
+          const issue = x.issue_date ?? (parsed.date ? parsed.date.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10));
+          const cloudId = await storeFile(a.content, a.filename ?? "factura.pdf", "application/pdf", `imperial-finante/${issue.slice(0, 7)}/primite`).catch(() => null);
           await pool.query(
-            `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, file_name, file_mime, file_data, link)
-             VALUES ('primita', 'email', $1, $2, $3, $4, $5, $6, $7, 'application/pdf', $8, $9) ON CONFLICT (ext_id) DO NOTHING`,
-            [extId, x.partner ?? fromName, x.number, x.issue_date ?? (parsed.date ? parsed.date.toISOString().slice(0, 10) : null), x.amount, x.currency ?? "RON", a.filename ?? "factura.pdf", a.content, `${mb.email} · ${parsed.subject ?? ""}`.slice(0, 300)]
+            `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, file_name, file_mime, file_data, cloud_public_id, link)
+             VALUES ('primita', 'email', $1, $2, $3, $4, $5, $6, $7, 'application/pdf', $8, $9, $10) ON CONFLICT (ext_id) DO NOTHING`,
+            [extId, /facebookmail/i.test(fromAddr) ? "Meta Platforms Ireland" : x.partner ?? fromName, x.number, issue, x.amount, x.currency ?? "RON", a.filename ?? "factura.pdf", cloudId ? null : a.content, cloudId, `${mb.email} · ${parsed.subject ?? ""}`.slice(0, 300)]
           );
           added++;
         }

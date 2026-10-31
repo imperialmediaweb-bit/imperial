@@ -4,6 +4,7 @@ import JSZip from "jszip";
 import { getPool } from "@/lib/db";
 import { audit, requireUser } from "@/lib/finante/auth";
 import { lunaRange } from "@/lib/finante/luna";
+import { fetchFile } from "@/lib/finante/storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,7 +26,7 @@ export async function GET(req: Request) {
     [r.from, r.to]
   );
   const inv = await pool.query(
-    `SELECT i.id, i.kind, i.source, i.partner, i.number, i.issue_date, i.amount, i.currency, i.file_name, i.file_data, i.link, t.booking_date AS plata
+    `SELECT i.id, i.kind, i.source, i.partner, i.number, i.issue_date, i.amount, i.currency, i.file_name, i.file_data, i.cloud_public_id, i.link, t.booking_date AS plata
      FROM fin_invoices i LEFT JOIN bank_transactions t ON t.id = i.transaction_id
      WHERE (i.issue_date BETWEEN $1 AND $2) OR (t.booking_date BETWEEN $1 AND $2)
      ORDER BY i.kind, i.issue_date, i.id`,
@@ -48,10 +49,11 @@ export async function GET(req: Request) {
     ])
   );
   for (const i of inv.rows) {
-    if (!i.file_data) continue;
+    const data: Buffer | null = i.file_data ?? (i.cloud_public_id ? await fetchFile(i.cloud_public_id) : null);
+    if (!data) continue;
     const folder = i.kind === "emisa" ? "facturi-emise" : "facturi-primite";
     const date = i.issue_date ? new Date(i.issue_date).toISOString().slice(0, 10) : "fara-data";
-    zip.file(`${folder}/${date}_${safe(i.partner ?? "partener")}_${i.id}_${safe(i.file_name ?? "factura.pdf")}`, i.file_data);
+    zip.file(`${folder}/${date}_${safe(i.partner ?? "partener")}_${i.id}_${safe(i.file_name ?? "factura.pdf")}`, data);
   }
   const buf = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
   await audit(u.email, "export", r.luna);

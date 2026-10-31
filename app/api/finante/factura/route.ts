@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { getPool } from "@/lib/db";
 import { audit, requireUser } from "@/lib/finante/auth";
+import { storeFile } from "@/lib/finante/storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,10 +34,13 @@ export async function POST(req: Request) {
     partner = partner ?? rows[0].counterparty ?? (rows[0].description ? String(rows[0].description).replace(/^(plata card|plata|incasare( op)?( de la)?)\s+/i, "").slice(0, 60) : null);
   }
   if (!["primita", "emisa"].includes(kind)) kind = "primita";
+  const buf = Buffer.from(await file.arrayBuffer());
+  const day = date ?? new Date().toISOString().slice(0, 10);
+  const cloudId = await storeFile(buf, file.name, file.type, `imperial-finante/${day.slice(0, 7)}/${kind === "emisa" ? "emise" : "primite"}`).catch(() => null);
   const { rows } = await pool.query(
-    `INSERT INTO fin_invoices (kind, source, partner, number, issue_date, amount, currency, file_name, file_mime, file_data, transaction_id, match_kind, uploaded_by)
-     VALUES ($1, 'manual', $2, $3, $4, $5, 'RON', $6, $7, $8, $9, $10, $11) RETURNING id`,
-    [kind, partner, String(form.get("number") ?? "") || null, date, amount, file.name.slice(0, 200), file.type, Buffer.from(await file.arrayBuffer()), txId, txId ? "manual" : null, u.email]
+    `INSERT INTO fin_invoices (kind, source, partner, number, issue_date, amount, currency, file_name, file_mime, file_data, cloud_public_id, transaction_id, match_kind, uploaded_by)
+     VALUES ($1, 'manual', $2, $3, $4, $5, 'RON', $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
+    [kind, partner, String(form.get("number") ?? "") || null, date, amount, file.name.slice(0, 200), file.type, cloudId ? null : buf, cloudId, txId, txId ? "manual" : null, u.email]
   );
   await audit(u.email, "factura-incarcata", `${file.name}${txId ? ` → tranzacția ${txId}` : ""}`);
   return NextResponse.json({ ok: true, id: rows[0].id });
