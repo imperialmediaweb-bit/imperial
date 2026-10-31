@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const u = await requireUser("admin");
   const url = new URL(req.url);
-  const back = (msg: string) => NextResponse.redirect(new URL(`/setari?banca=${encodeURIComponent(msg)}`, url.origin.replace("http://", "https://")));
+  const back = (msg: string) => NextResponse.redirect(new URL(`/finante/setari?banca=${encodeURIComponent(msg)}`, url.origin.replace("http://", "https://")));
   if (!u) return back("Autentifică-te întâi în panou, apoi reconectează banca.");
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state") ?? "";

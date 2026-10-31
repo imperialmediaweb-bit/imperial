@@ -14,7 +14,7 @@ export function LoginForm() {
     setErr(null);
     const r = await fetch("/api/finante/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
     const j = await r.json().catch(() => ({}));
-    if (r.ok) window.location.href = "/";
+    if (r.ok) window.location.href = "/finante";
     else {
       setErr(j.error ?? "Nu a mers.");
       setBusy(false);

@@ -1,36 +1,33 @@
-// Panoul Finanțe trăiește doar pe finante.imperial-media.ro.
-// Pe subdomeniu: orice cale se rescrie spre /finante/* (și /api/finante/*), nimic din site-ul public.
-// Pe orice alt host: /finante și /api/finante nu există (404) — panoul nu se poate găsi din site.
+// Panoul Finanțe: imperial-media.ro/finante (și, opțional, finante.imperial-media.ro).
+// Nu există niciun link spre el din site; accesul e doar cu login. Pe toate căile panoului:
+// noindex (nu apare în Google) și fără cache.
 
 import { NextResponse, type NextRequest } from "next/server";
 
 const FINANTE_HOSTS = ["finante.imperial-media.ro", "finante.localhost"];
 
-export function proxy(request: NextRequest) {
-  const host = (request.headers.get("host") ?? "").split(":")[0].toLowerCase();
-  const { pathname } = request.nextUrl;
-  const peFinante = FINANTE_HOSTS.includes(host);
-  const caleFinante = pathname === "/finante" || pathname.startsWith("/finante/") || pathname.startsWith("/api/finante");
-
-  if (!peFinante) {
-    if (caleFinante) return new NextResponse("Not Found", { status: 404 });
-    return NextResponse.next();
-  }
-
-  // pe subdomeniu: tot ce nu e deja /finante sau /api/finante se rescrie spre panou
-  let res: NextResponse;
-  if (caleFinante) {
-    res = NextResponse.next();
-  } else if (pathname.startsWith("/api/")) {
-    res = new NextResponse("Not Found", { status: 404 });
-  } else {
-    const url = request.nextUrl.clone();
-    url.pathname = pathname === "/" ? "/finante" : `/finante${pathname}`;
-    res = NextResponse.rewrite(url);
-  }
+function privat(res: NextResponse): NextResponse {
   res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   res.headers.set("Cache-Control", "private, no-store");
   return res;
+}
+
+export function proxy(request: NextRequest) {
+  const host = (request.headers.get("host") ?? "").split(":")[0].toLowerCase();
+  const { pathname } = request.nextUrl;
+  const peSubdomeniu = FINANTE_HOSTS.includes(host);
+  const caleFinante = pathname === "/finante" || pathname.startsWith("/finante/") || pathname.startsWith("/api/finante");
+
+  if (!peSubdomeniu) {
+    return caleFinante ? privat(NextResponse.next()) : NextResponse.next();
+  }
+
+  // pe subdomeniu: tot ce nu e deja /finante sau /api/finante se rescrie spre panou
+  if (caleFinante) return privat(NextResponse.next());
+  if (pathname.startsWith("/api/")) return privat(new NextResponse("Not Found", { status: 404 }));
+  const url = request.nextUrl.clone();
+  url.pathname = pathname === "/" ? "/finante" : `/finante${pathname}`;
+  return privat(NextResponse.rewrite(url));
 }
 
 export const config = {

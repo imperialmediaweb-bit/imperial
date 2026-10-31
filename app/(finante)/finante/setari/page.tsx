@@ -12,8 +12,8 @@ export const dynamic = "force-dynamic";
 
 export default async function SetariPage(props: { searchParams: Promise<{ banca?: string }> }) {
   const user = await currentUser();
-  if (!user) redirect("/login");
-  if (user.role !== "admin") redirect("/");
+  if (!user) redirect("/finante/login");
+  if (user.role !== "admin") redirect("/finante");
   const sp = await props.searchParams;
   const pool = getPool()!;
   const firme = await listCompanies();

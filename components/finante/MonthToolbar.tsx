@@ -47,15 +47,15 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin, firma }
     if (!r.ok) return setMsg(j.error ?? "Importul a eșuat.");
     const mails = (j.email ?? []).map((x: any) => (x.error ? `${x.email}: eroare` : `${x.email}: ${x.added} facturi noi`)).join(" · ");
     setMsg(`${j.added} tranzacții noi din ${j.total} (${j.from} → ${j.to}) · ${mails || "nicio căsuță de email adăugată"} · ${j.potrivite} potrivite automat`);
-    setTimeout(() => (window.location.href = `/?firma=${firma}&luna=${String(j.to).slice(0, 7)}`), 1500);
+    setTimeout(() => (window.location.href = `/finante?firma=${firma}&luna=${String(j.to).slice(0, 7)}`), 1500);
   }
 
   return (
     <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <a href={`/?firma=${firma}&luna=${prev}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">←</a>
+        <a href={`/finante?firma=${firma}&luna=${prev}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">←</a>
         <h1 className="min-w-[180px] text-center text-xl font-bold capitalize">{LUNI[m - 1]} {y}</h1>
-        <a href={`/?firma=${firma}&luna=${next}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">→</a>
+        <a href={`/finante?firma=${firma}&luna=${next}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">→</a>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         {isAdmin ? (

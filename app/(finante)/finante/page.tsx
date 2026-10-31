@@ -17,7 +17,7 @@ const lei = (n: number) => `${n.toLocaleString("ro-RO", { minimumFractionDigits:
 
 export default async function FinantePage(props: { searchParams: Promise<{ luna?: string; firma?: string }> }) {
   const user = await currentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/finante/login");
   const sp = await props.searchParams;
   const firme = await companiesFor(user);
   if (!firme.length) return <main className="p-8 text-white/70">Contul tău nu are acces la nicio firmă.</main>;
@@ -54,7 +54,7 @@ export default async function FinantePage(props: { searchParams: Promise<{ luna?
 
       {!conn && isAdmin ? (
         <p className="mt-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200">
-          Banca nu e conectată automat. Poți apăsa „Încarcă extrasul BT” (CSV sau PDF din BT24) sau o conectezi din <a className="underline" href="/setari">Setări</a>.
+          Banca nu e conectată automat. Poți apăsa „Încarcă extrasul BT” (CSV sau PDF din BT24) sau o conectezi din <a className="underline" href="/finante/setari">Setări</a>.
         </p>
       ) : null}
 

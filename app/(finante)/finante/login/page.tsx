@@ -5,7 +5,7 @@ import { LoginForm } from "@/components/finante/LoginForm";
 export const dynamic = "force-dynamic";
 
 export default async function LoginPage() {
-  if (await currentUser()) redirect("/");
+  if (await currentUser()) redirect("/finante");
   return (
     <main className="grid min-h-screen place-items-center px-4">
       <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/[0.03] p-7">
