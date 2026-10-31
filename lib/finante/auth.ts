@@ -7,7 +7,7 @@ import { cookies, headers } from "next/headers";
 import { getPool, ensureSchema } from "@/lib/db";
 
 export type FinRole = "admin" | "contabil";
-export type FinUser = { id: number; email: string; name: string | null; role: FinRole };
+export type FinUser = { id: number; email: string; name: string | null; role: FinRole; company_ids?: number[] | null };
 
 export const FIN_COOKIE = "finante_sesiune";
 const MAX_AGE = 60 * 60 * 12;
@@ -91,7 +91,7 @@ export async function currentUser(): Promise<FinUser | null> {
   const pool = getPool();
   if (!pool) return null;
   await ensureSchema();
-  const { rows } = await pool.query(`SELECT id, email, name, role FROM finance_users WHERE id = $1 AND active = TRUE`, [id]);
+  const { rows } = await pool.query(`SELECT id, email, name, role, company_ids FROM finance_users WHERE id = $1 AND active = TRUE`, [id]);
   return rows[0] ?? null;
 }
 

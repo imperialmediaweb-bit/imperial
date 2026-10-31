@@ -15,6 +15,7 @@ export async function POST(req: Request) {
   const password = String(b?.password ?? "").replace(/\s+/g, "");
   const host = String(b?.host ?? "").trim() || (email.endsWith("@gmail.com") ? "imap.gmail.com" : "");
   const port = Number(b?.port) || 993;
+  const companyId = Number(b?.companyId) || null;
   if (!email || !password || !host) return NextResponse.json({ error: "Completează emailul, parola de aplicație și serverul IMAP." }, { status: 400 });
   // verificăm conectarea înainte să salvăm
   try {
@@ -26,9 +27,9 @@ export async function POST(req: Request) {
   }
   await ensureSchema();
   await getPool()!.query(
-    `INSERT INTO fin_mailboxes (email, host, port, password_enc) VALUES ($1, $2, $3, $4)
-     ON CONFLICT (email) DO UPDATE SET host = EXCLUDED.host, port = EXCLUDED.port, password_enc = EXCLUDED.password_enc, last_error = NULL`,
-    [email, host, port, encrypt(password)]
+    `INSERT INTO fin_mailboxes (email, host, port, password_enc, company_id) VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET host = EXCLUDED.host, port = EXCLUDED.port, password_enc = EXCLUDED.password_enc, company_id = EXCLUDED.company_id, last_error = NULL`,
+    [email, host, port, encrypt(password), companyId]
   );
   await audit(u.email, "casuta-adaugata", email);
   return NextResponse.json({ ok: true });

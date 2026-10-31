@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getPool } from "@/lib/db";
 import { audit, requireUser } from "@/lib/finante/auth";
 import { signedUrl } from "@/lib/finante/storage";
+import { canSee } from "@/lib/finante/companies";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,9 +12,9 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   const u = await requireUser();
   if (!u) return new NextResponse("Neautorizat", { status: 401 });
   const id = Number((await ctx.params).id);
-  const { rows } = await getPool()!.query(`SELECT file_name, file_mime, file_data, cloud_public_id, link FROM fin_invoices WHERE id = $1`, [id]);
+  const { rows } = await getPool()!.query(`SELECT file_name, file_mime, file_data, cloud_public_id, link, company_id FROM fin_invoices WHERE id = $1`, [id]);
   const f = rows[0];
-  if (!f) return new NextResponse("Nu există", { status: 404 });
+  if (!f || !(await canSee(u, f.company_id))) return new NextResponse("Nu există", { status: 404 });
   if (f.cloud_public_id) {
     await audit(u.email, "factura-descarcata", String(id));
     return NextResponse.redirect(signedUrl(f.cloud_public_id));

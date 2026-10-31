@@ -19,7 +19,7 @@ export async function GET(req: Request) {
     return back(url.searchParams.get("error_description") ?? "Conectarea a fost anulată sau a expirat.");
   }
   try {
-    await createSession(code);
+    await createSession(code, Number(nonce.split("-")[1]) || null);
     await audit(u.email, "banca-conectata");
     return back("ok");
   } catch (e: any) {

@@ -12,7 +12,9 @@ export async function POST(req: Request) {
   if (!u) return NextResponse.json({ error: "Neautorizat" }, { status: 401 });
   if (!bankingConfigured()) return NextResponse.json({ error: "Lipsesc ENABLEBANKING_APP_ID / ENABLEBANKING_PRIVATE_KEY în Railway." }, { status: 503 });
   const origin = new URL(req.url).origin.replace("http://", "https://");
-  const state = signState(`${Date.now()}-${randomBytes(6).toString("hex")}`);
+  const b = await req.json().catch(() => ({}));
+  const firma = Number(b?.firma) || 0;
+  const state = signState(`${Date.now()}-${firma}-${randomBytes(6).toString("hex")}`);
   try {
     const url = await startAuth(`${origin}/api/finante/banca/callback`, state);
     await audit(u.email, "banca-conectare-start");

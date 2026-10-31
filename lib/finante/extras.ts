@@ -125,7 +125,7 @@ export async function parsePdf(pdf: Buffer): Promise<ParsedTx[]> {
     .filter((t: ParsedTx) => t.date && Number.isFinite(t.amount) && t.amount !== 0);
 }
 
-export async function saveParsed(list: ParsedTx[], iban: string | null): Promise<{ added: number; total: number }> {
+export async function saveParsed(list: ParsedTx[], iban: string | null, companyId: number | null = null): Promise<{ added: number; total: number }> {
   const pool = getPool();
   if (!pool) throw new Error("Baza de date lipsește");
   await ensureSchema();
@@ -134,9 +134,9 @@ export async function saveParsed(list: ParsedTx[], iban: string | null): Promise
     // id stabil: referința băncii sau amprenta rândului, ca reimportul să nu dubleze
     const fp = t.ref ? `ref:${t.ref}` : createHash("sha1").update(`${t.date}|${t.amount}|${t.description}|${t.counterparty ?? ""}`).digest("hex");
     const res = await pool.query(
-      `INSERT INTO bank_transactions (ext_id, account_iban, booking_date, amount, currency, counterparty, description, raw)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (ext_id) DO NOTHING`,
-      [`extras:${fp}`, iban, t.date, t.amount, t.currency, t.counterparty, t.description, JSON.stringify({ sursa: "extras" })]
+      `INSERT INTO bank_transactions (ext_id, account_iban, booking_date, amount, currency, counterparty, description, raw, company_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (ext_id) DO NOTHING`,
+      [`extras:${companyId ?? 0}:${fp}`, iban, t.date, t.amount, t.currency, t.counterparty, t.description, JSON.stringify({ sursa: "extras" }), companyId]
     );
     added += res.rowCount ?? 0;
   }

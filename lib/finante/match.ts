@@ -32,21 +32,22 @@ function partnerScore(txText: string, partner: string | null): number {
   return words(txText).some((w) => p.has(w)) ? 1 : 0;
 }
 
-export async function autoMatch(from: string, to: string): Promise<number> {
+export async function autoMatch(from: string, to: string, companyId: number | null = null): Promise<number> {
   const pool = getPool();
   if (!pool) return 0;
   const tx = (
     await pool.query(
-      `SELECT t.id, to_char(t.booking_date, 'YYYY-MM-DD') AS d, t.amount::float AS amount, t.currency, COALESCE(t.counterparty, '') || ' ' || COALESCE(t.description, '') AS text
+      `SELECT t.id, t.company_id, to_char(t.booking_date, 'YYYY-MM-DD') AS d, t.amount::float AS amount, t.currency, COALESCE(t.counterparty, '') || ' ' || COALESCE(t.description, '') AS text
        FROM bank_transactions t
        WHERE t.booking_date BETWEEN $1::date AND $2::date AND NOT t.fara_factura
+         AND ($3::int IS NULL OR t.company_id = $3)
          AND NOT EXISTS (SELECT 1 FROM fin_invoices x WHERE x.transaction_id = t.id)`,
-      [from, to]
+      [from, to, companyId]
     )
   ).rows;
   const inv = (
     await pool.query(
-      `SELECT id, kind, partner, to_char(issue_date, 'YYYY-MM-DD') AS d, amount::float AS amount, COALESCE(currency, 'RON') AS currency
+      `SELECT id, kind, company_id, partner, to_char(issue_date, 'YYYY-MM-DD') AS d, amount::float AS amount, COALESCE(currency, 'RON') AS currency
        FROM fin_invoices WHERE transaction_id IS NULL AND amount IS NOT NULL
          AND (issue_date IS NULL OR issue_date BETWEEN ($1::date - 45) AND ($2::date + 10))`,
       [from, to]
@@ -59,6 +60,8 @@ export async function autoMatch(from: string, to: string): Promise<number> {
     const abs = Math.abs(t.amount);
     for (const i of inv) {
       if (i.kind !== (t.amount < 0 ? "primita" : "emisa")) continue;
+      // factura altei firme nu se leagă niciodată; factura nealocată poate fi legată doar dacă plata are firmă
+      if (i.company_id != null && t.company_id != null && i.company_id !== t.company_id) continue;
       if (i.d) {
         const diff = (Date.parse(t.d) - Date.parse(i.d)) / 864e5;
         if (diff > 45 || diff < -10) continue;
@@ -85,7 +88,10 @@ export async function autoMatch(from: string, to: string): Promise<number> {
     if (usedTx.has(c.tx) || usedInv.has(c.inv)) continue;
     const rivals = cands.filter((x) => x.tx === c.tx && !usedInv.has(x.inv) && x.inv !== c.inv && Math.abs(x.score - c.score) < 0.5);
     if (rivals.length) continue;
-    await pool.query(`UPDATE fin_invoices SET transaction_id = $1, match_kind = 'auto' WHERE id = $2 AND transaction_id IS NULL`, [c.tx, c.inv]);
+    await pool.query(
+      `UPDATE fin_invoices SET transaction_id = $1, match_kind = 'auto', company_id = COALESCE(company_id, (SELECT company_id FROM bank_transactions WHERE id = $1)) WHERE id = $2 AND transaction_id IS NULL`,
+      [c.tx, c.inv]
+    );
     usedTx.add(c.tx);
     usedInv.add(c.inv);
     n++;

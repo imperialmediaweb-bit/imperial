@@ -2,7 +2,13 @@
 
 import type { FinUser } from "@/lib/finante/auth";
 
-export function FinNav({ user, active }: { user: FinUser; active: "luna" | "setari" }) {
+type Firma = { id: number; name: string };
+
+export function FinNav({ user, active, firme = [], firma, luna }: { user: FinUser; active: "luna" | "setari"; firme?: Firma[]; firma?: number; luna?: string }) {
+  function alegeFirma(id: string) {
+    document.cookie = `fin_firma=${id}; path=/; max-age=31536000; samesite=strict; secure`;
+    window.location.href = `/?firma=${id}${luna ? `&luna=${luna}` : ""}`;
+  }
   async function logout() {
     await fetch("/api/finante/logout", { method: "POST" });
     window.location.href = "/login";
@@ -18,6 +24,15 @@ export function FinNav({ user, active }: { user: FinUser; active: "luna" | "seta
         <span className="mr-3 text-lg font-bold">Imperial <span className="text-orange-400">Finanțe</span></span>
         {tab("/", "luna", "Luna")}
         {user.role === "admin" ? tab("/setari", "setari", "Setări") : null}
+        {firme.length > 1 && firma ? (
+          <select aria-label="Firma" value={firma} onChange={(e) => alegeFirma(e.target.value)} className="ml-3 rounded-full border border-white/15 bg-black/40 px-3 py-2 text-sm font-semibold">
+            {firme.map((f) => (
+              <option key={f.id} value={f.id}>{f.name}</option>
+            ))}
+          </select>
+        ) : firme.length === 1 ? (
+          <span className="ml-3 text-sm font-semibold text-white/80">{firme[0].name}</span>
+        ) : null}
       </div>
       <div className="flex items-center gap-3 text-sm text-white/60">
         <span>

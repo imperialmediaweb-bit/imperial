@@ -8,17 +8,23 @@ import { FinNav } from "@/components/finante/FinNav";
 import { MonthToolbar } from "@/components/finante/MonthToolbar";
 import { TxTable } from "@/components/finante/TxTable";
 import { UnmatchedList } from "@/components/finante/UnmatchedList";
+import { companiesFor } from "@/lib/finante/companies";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
 const lei = (n: number) => `${n.toLocaleString("ro-RO", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} lei`;
 
-export default async function FinantePage(props: { searchParams: Promise<{ luna?: string }> }) {
+export default async function FinantePage(props: { searchParams: Promise<{ luna?: string; firma?: string }> }) {
   const user = await currentUser();
   if (!user) redirect("/login");
   const sp = await props.searchParams;
-  const d = await monthData(sp.luna);
-  const conn = await activeConnection().catch(() => null);
+  const firme = await companiesFor(user);
+  if (!firme.length) return <main className="p-8 text-white/70">Contul tău nu are acces la nicio firmă.</main>;
+  const pref = Number(sp.firma ?? (await cookies()).get("fin_firma")?.value);
+  const firma = firme.find((f) => f.id === pref) ?? firme[0];
+  const d = await monthData(sp.luna, firma.id);
+  const conn = await activeConnection(firma.id).catch(() => null);
   const next = (() => {
     const [y, m] = d.luna.split("-").map(Number);
     const n = new Date(Date.UTC(y, m, 1));
@@ -29,8 +35,8 @@ export default async function FinantePage(props: { searchParams: Promise<{ luna?
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
-      <FinNav user={user} active="luna" />
-      <MonthToolbar luna={d.luna} prev={lunaAnterioara(d.luna)} next={next} bankConnected={!!conn} isAdmin={isAdmin} />
+      <FinNav user={user} active="luna" firme={firme} firma={firma.id} luna={d.luna} />
+      <MonthToolbar luna={d.luna} prev={lunaAnterioara(d.luna)} next={next} bankConnected={!!conn} isAdmin={isAdmin} firma={firma.id} />
 
       <div className="mt-6 grid gap-3 sm:grid-cols-4">
         {[
@@ -53,7 +59,7 @@ export default async function FinantePage(props: { searchParams: Promise<{ luna?
       ) : null}
 
       <TxTable rows={d.tx} isAdmin={isAdmin} />
-      <UnmatchedList rows={d.unmatched} isAdmin={isAdmin} txOptions={txOptions} />
+      <UnmatchedList rows={d.unmatched} isAdmin={isAdmin} txOptions={txOptions} firme={firme} firma={firma.id} />
     </main>
   );
 }

@@ -215,6 +215,19 @@ export async function ensureSchema(): Promise<void> {
     CREATE INDEX IF NOT EXISTS idx_fin_inv_date ON fin_invoices(issue_date DESC);
     CREATE INDEX IF NOT EXISTS idx_fin_inv_tx ON fin_invoices(transaction_id);
     ALTER TABLE fin_invoices ADD COLUMN IF NOT EXISTS cloud_public_id TEXT;
+    CREATE TABLE IF NOT EXISTS fin_companies (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      cui TEXT,
+      aliases TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    ALTER TABLE bank_transactions ADD COLUMN IF NOT EXISTS company_id INTEGER;
+    ALTER TABLE fin_invoices ADD COLUMN IF NOT EXISTS company_id INTEGER;
+    ALTER TABLE fin_invoices ADD COLUMN IF NOT EXISTS buyer_name TEXT;
+    ALTER TABLE fin_invoices ADD COLUMN IF NOT EXISTS buyer_cui TEXT;
+    ALTER TABLE bank_connections ADD COLUMN IF NOT EXISTS company_id INTEGER;
+    ALTER TABLE finance_users ADD COLUMN IF NOT EXISTS company_ids INTEGER[];
     CREATE TABLE IF NOT EXISTS fin_mailboxes (
       id SERIAL PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -225,6 +238,7 @@ export async function ensureSchema(): Promise<void> {
       last_sync TIMESTAMPTZ,
       last_error TEXT
     );
+    ALTER TABLE fin_mailboxes ADD COLUMN IF NOT EXISTS company_id INTEGER;
   `;
 
   try {

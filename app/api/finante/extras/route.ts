@@ -25,13 +25,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Nu am putut citi extrasul: ${String(e?.message ?? e).slice(0, 200)}` }, { status: 400 });
   }
   if (!list.length) return NextResponse.json({ error: "Nu am găsit tranzacții în fișier. Încearcă exportul CSV din BT24." }, { status: 400 });
-  const saved = await saveParsed(list, null);
+  const companyId = Number(form?.get("firma")) || null;
+  if (!companyId) return NextResponse.json({ error: "Alege firma pentru extras." }, { status: 400 });
+  const saved = await saveParsed(list, null, companyId);
   const dates = list.map((t) => t.date).sort();
   const from = dates[0];
   const to = dates[dates.length - 1];
   // caută facturile din aceeași perioadă (±10 zile) și potrivește
   const email = await syncAllMailboxes(new Date(Date.parse(from) - 10 * 864e5), new Date(Date.parse(to) + 11 * 864e5));
-  const potrivite = await autoMatch(from, to);
+  const potrivite = await autoMatch(from, to, companyId);
   await audit(u.email, "extras-importat", `${file.name}: ${saved.added}/${saved.total} (${from} → ${to})`);
   return NextResponse.json({ ...saved, from, to, email, potrivite });
 }

@@ -4,13 +4,17 @@
 import { useState } from "react";
 import type { InvRow } from "@/lib/finante/data";
 
-export function UnmatchedList({ rows, isAdmin, txOptions }: { rows: InvRow[]; isAdmin: boolean; txOptions: { id: number; label: string }[] }) {
+export function UnmatchedList({ rows, isAdmin, txOptions, firme, firma }: { rows: InvRow[]; isAdmin: boolean; txOptions: { id: number; label: string }[]; firme: { id: number; name: string }[]; firma: number }) {
   const [sel, setSel] = useState<Record<number, string>>({});
 
   async function link(invoiceId: number) {
     const tx = Number(sel[invoiceId]);
     if (!tx) return;
     await fetch("/api/finante/potrivire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ invoiceId, transactionId: tx }) });
+    window.location.reload();
+  }
+  async function aloca(invoiceId: number, companyId: string) {
+    await fetch("/api/finante/factura-firma", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ invoiceId, companyId: Number(companyId) || null }) });
     window.location.reload();
   }
   async function del(id: number) {
@@ -39,7 +43,15 @@ export function UnmatchedList({ rows, isAdmin, txOptions }: { rows: InvRow[]; is
             {rows.map((i) => (
               <tr key={i.id} className="border-t border-white/[0.06]">
                 <td className="px-3 py-3 text-xs uppercase text-white/50">{i.kind === "emisa" ? "emisă" : "primită"} · {i.source}</td>
-                <td className="px-3 py-3">{i.partner ?? "—"}</td>
+                <td className="px-3 py-3">
+                  {i.partner ?? "—"}
+                  {i.company_id == null ? (
+                    <span className="mt-1 block text-xs text-amber-300">
+                      Nealocată{i.buyer_name ? ` · emisă pe „${i.buyer_name}”` : ""}
+                      {i.buyer_name && !/\b(srl|sa|pfa|asocia)/i.test(i.buyer_name) ? " — pare pe persoană fizică, nu pe firmă" : ""}
+                    </span>
+                  ) : null}
+                </td>
                 <td className="px-3 py-3 text-white/70">
                   {i.has_file || i.link?.startsWith("https://") ? (
                     <a href={`/api/finante/factura/${i.id}`} target="_blank" rel="noopener" className="underline underline-offset-2">{i.number ?? "vezi"}</a>
@@ -59,6 +71,14 @@ export function UnmatchedList({ rows, isAdmin, txOptions }: { rows: InvRow[]; is
                         ))}
                       </select>
                       <button onClick={() => link(i.id)} className="rounded-full bg-white/10 px-3 py-1.5 text-xs hover:bg-white/15">Leagă</button>
+                      {i.company_id == null ? (
+                        <select defaultValue="" onChange={(e) => aloca(i.id, e.target.value)} className="rounded-lg border border-amber-500/40 bg-black/40 px-2 py-1.5 text-xs" aria-label="Alocă firmei">
+                          <option value="">Alocă firmei…</option>
+                          {firme.map((f) => (
+                            <option key={f.id} value={f.id}>{f.name}</option>
+                          ))}
+                        </select>
+                      ) : null}
                       <button onClick={() => del(i.id)} className="text-xs text-white/40 hover:text-rose-300">Șterge</button>
                     </div>
                   ) : null}

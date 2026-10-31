@@ -6,6 +6,7 @@ import { activeConnection, syncTransactions } from "@/lib/finante/enablebanking"
 import { syncAllMailboxes } from "@/lib/finante/mail";
 import { syncStartco } from "@/lib/finante/startco";
 import { autoMatch } from "@/lib/finante/match";
+import { canSee } from "@/lib/finante/companies";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,12 +17,14 @@ export async function POST(req: Request) {
   if (!u) return NextResponse.json({ error: "Neautorizat" }, { status: 401 });
   const b = await req.json().catch(() => ({}));
   const r = lunaRange(b?.luna);
+  const firma = Number(b?.firma) || null;
+  if (firma && !(await canSee(u, firma))) return NextResponse.json({ error: "Fără acces la firmă" }, { status: 403 });
   const out: Record<string, unknown> = { luna: r.luna };
 
   // banca: luna + 7 zile după, ca să prindem plățile întârziate
   try {
-    out.banca = (await activeConnection())
-      ? await syncTransactions(r.from, new Date(Math.min(Date.now(), r.toDate.getTime() + 7 * 864e5)).toISOString().slice(0, 10))
+    out.banca = (await activeConnection(firma))
+      ? await syncTransactions(r.from, new Date(Math.min(Date.now(), r.toDate.getTime() + 7 * 864e5)).toISOString().slice(0, 10), firma)
       : { note: "Banca nu e conectată" };
   } catch (e: any) {
     out.banca = { error: String(e?.message ?? e).slice(0, 300) };
@@ -33,7 +36,7 @@ export async function POST(req: Request) {
   } catch (e: any) {
     out.startco = { error: String(e?.message ?? e).slice(0, 300) };
   }
-  out.potrivite = await autoMatch(r.from, r.to);
+  out.potrivite = await autoMatch(r.from, r.to, firma);
   await audit(u.email, "sincronizare", r.luna);
   return NextResponse.json(out);
 }

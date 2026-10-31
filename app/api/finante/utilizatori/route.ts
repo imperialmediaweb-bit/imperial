@@ -12,12 +12,13 @@ export async function POST(req: Request) {
   const email = String(b?.email ?? "").trim().toLowerCase();
   const password = String(b?.password ?? "");
   const role = b?.role === "admin" ? "admin" : "contabil";
+  const companyIds = Array.isArray(b?.companyIds) ? b.companyIds.map(Number).filter((n: number) => n > 0) : [];
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return NextResponse.json({ error: "Email invalid." }, { status: 400 });
   if (password.length < 12) return NextResponse.json({ error: "Parola trebuie să aibă minimum 12 caractere." }, { status: 400 });
   await getPool()!.query(
-    `INSERT INTO finance_users (email, name, role, password_hash) VALUES ($1, $2, $3, $4)
-     ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash, role = EXCLUDED.role, name = EXCLUDED.name, active = TRUE`,
-    [email, String(b?.name ?? "").slice(0, 80) || null, role, hashPassword(password)]
+    `INSERT INTO finance_users (email, name, role, password_hash, company_ids) VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash, role = EXCLUDED.role, name = EXCLUDED.name, company_ids = EXCLUDED.company_ids, active = TRUE`,
+    [email, String(b?.name ?? "").slice(0, 80) || null, role, hashPassword(password), companyIds.length ? companyIds : null]
   );
   await audit(u.email, "utilizator-salvat", `${email} (${role})`);
   return NextResponse.json({ ok: true });

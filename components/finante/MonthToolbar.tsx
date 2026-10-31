@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 
 const LUNI = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"];
 
-export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin }: { luna: string; prev: string; next: string; bankConnected: boolean; isAdmin: boolean }) {
+export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin, firma }: { luna: string; prev: string; next: string; bankConnected: boolean; isAdmin: boolean; firma: number }) {
   const extrasRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin }: { lun
   async function sync() {
     setBusy(true);
     setMsg("Sincronizez banca, emailurile și StartCo… poate dura un minut.");
-    const r = await fetch("/api/finante/sincronizare", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ luna }) });
+    const r = await fetch("/api/finante/sincronizare", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ luna, firma }) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) {
       setMsg(j.error ?? "Sincronizarea a eșuat.");
@@ -40,21 +40,22 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin }: { lun
     setMsg(`Citesc extrasul „${f.name}” și caut facturile… poate dura un minut.`);
     const fd = new FormData();
     fd.append("file", f);
+    fd.append("firma", String(firma));
     const r = await fetch("/api/finante/extras", { method: "POST", body: fd });
     const j = await r.json().catch(() => ({}));
     setBusy(false);
     if (!r.ok) return setMsg(j.error ?? "Importul a eșuat.");
     const mails = (j.email ?? []).map((x: any) => (x.error ? `${x.email}: eroare` : `${x.email}: ${x.added} facturi noi`)).join(" · ");
     setMsg(`${j.added} tranzacții noi din ${j.total} (${j.from} → ${j.to}) · ${mails || "nicio căsuță de email adăugată"} · ${j.potrivite} potrivite automat`);
-    setTimeout(() => (window.location.href = `/?luna=${String(j.to).slice(0, 7)}`), 1500);
+    setTimeout(() => (window.location.href = `/?firma=${firma}&luna=${String(j.to).slice(0, 7)}`), 1500);
   }
 
   return (
     <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <a href={`/?luna=${prev}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">←</a>
+        <a href={`/?firma=${firma}&luna=${prev}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">←</a>
         <h1 className="min-w-[180px] text-center text-xl font-bold capitalize">{LUNI[m - 1]} {y}</h1>
-        <a href={`/?luna=${next}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">→</a>
+        <a href={`/?firma=${firma}&luna=${next}`} className="rounded-full border border-white/15 px-3 py-1.5 text-sm hover:border-white/40">→</a>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         {isAdmin ? (
@@ -68,7 +69,7 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin }: { lun
         <button onClick={sync} disabled={busy} className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/15 disabled:opacity-50">
           {busy ? "Se sincronizează…" : bankConnected ? "Sincronizează luna" : "Caută facturile din email"}
         </button>
-        <a href={`/api/finante/export?luna=${luna}`} className="rounded-full bg-gradient-to-r from-orange-500 to-fuchsia-600 px-4 py-2 text-sm font-semibold">
+        <a href={`/api/finante/export?luna=${luna}&firma=${firma}`} className="rounded-full bg-gradient-to-r from-orange-500 to-fuchsia-600 px-4 py-2 text-sm font-semibold">
           Descarcă pachetul pentru contabilitate
         </a>
       </div>

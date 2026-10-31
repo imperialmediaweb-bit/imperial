@@ -6,6 +6,7 @@ import { activeConnection, bankingConfigured } from "@/lib/finante/enablebanking
 import { startcoConfigured } from "@/lib/finante/startco";
 import { FinNav } from "@/components/finante/FinNav";
 import { SettingsPanels } from "@/components/finante/SettingsPanels";
+import { listCompanies } from "@/lib/finante/companies";
 
 export const dynamic = "force-dynamic";
 
@@ -15,10 +16,11 @@ export default async function SetariPage(props: { searchParams: Promise<{ banca?
   if (user.role !== "admin") redirect("/");
   const sp = await props.searchParams;
   const pool = getPool()!;
-  const [conn, users, boxes, log] = await Promise.all([
-    activeConnection().catch(() => null),
-    pool.query(`SELECT id, email, name, role, active, to_char(last_login, 'YYYY-MM-DD HH24:MI') AS last_login FROM finance_users ORDER BY id`),
-    pool.query(`SELECT id, email, host, to_char(last_sync, 'YYYY-MM-DD HH24:MI') AS last_sync, last_error FROM fin_mailboxes ORDER BY id`),
+  const firme = await listCompanies();
+  const [conns, users, boxes, log] = await Promise.all([
+    Promise.all(firme.map((f) => activeConnection(f.id).catch(() => null))),
+    pool.query(`SELECT id, email, name, role, active, company_ids, to_char(last_login, 'YYYY-MM-DD HH24:MI') AS last_login FROM finance_users ORDER BY id`),
+    pool.query(`SELECT id, email, host, company_id, to_char(last_sync, 'YYYY-MM-DD HH24:MI') AS last_sync, last_error FROM fin_mailboxes ORDER BY id`),
     pool.query(`SELECT to_char(at, 'YYYY-MM-DD HH24:MI') AS at, user_email, action, detail, ip FROM finance_audit ORDER BY at DESC LIMIT 40`),
   ]);
   return (
@@ -31,7 +33,12 @@ export default async function SetariPage(props: { searchParams: Promise<{ banca?
       ) : null}
       <SettingsPanels
         me={user.id}
-        bank={{ configured: bankingConfigured(), connected: !!conn, validUntil: conn?.valid_until ? new Date(conn.valid_until).toISOString().slice(0, 10) : null, lastSync: conn?.last_sync ? new Date(conn.last_sync).toISOString().slice(0, 16).replace("T", " ") : null, accounts: (conn?.accounts ?? []).map((a: any) => a.iban ?? a.name ?? a.uid) }}
+        firme={firme}
+        bankConfigured={bankingConfigured()}
+        banks={firme.map((f, i) => {
+          const c = conns[i];
+          return { firma: f.id, connected: !!c, validUntil: c?.valid_until ? new Date(c.valid_until).toISOString().slice(0, 10) : null, lastSync: c?.last_sync ? new Date(c.last_sync).toISOString().slice(0, 16).replace("T", " ") : null, accounts: (c?.accounts ?? []).map((a: any) => a.iban ?? a.name ?? a.uid) };
+        })}
         users={users.rows}
         boxes={boxes.rows}
         startco={startcoConfigured()}

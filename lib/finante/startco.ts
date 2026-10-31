@@ -62,8 +62,8 @@ export async function syncStartco(from: string, to: string): Promise<{ added: nu
     const series = pick(inv, ["series", "serie"]);
     const num = pick(inv, ["number", "numar", "no"]);
     const res = await pool.query(
-      `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, link)
-       VALUES ('emisa', 'startco', $1, $2, $3, $4, $5, $6, $7) ON CONFLICT (ext_id) DO NOTHING`,
+      `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, link, company_id)
+       VALUES ('emisa', 'startco', $1, $2, $3, $4, $5, $6, $7, (SELECT id FROM fin_companies WHERE cui = '46466484' LIMIT 1)) ON CONFLICT (ext_id) DO NOTHING`,
       [
         `startco:${id ?? `${series}${num}`}`,
         pick(inv, ["client.name", "partner.name", "client_name", "partner_name", "customer.name"]),

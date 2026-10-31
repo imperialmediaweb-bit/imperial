@@ -107,8 +107,8 @@ export async function issueInvoice(opts: {
         const invId = extractId(invoiceData);
         const num = invoiceData?.number ?? invoiceData?.data?.number ?? null;
         await pool.query(
-          `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, link)
-           VALUES ('emisa', 'startco', $1, $2, $3, $4, $5, 'RON', $6) ON CONFLICT (ext_id) DO NOTHING`,
+          `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, link, company_id)
+           VALUES ('emisa', 'startco', $1, $2, $3, $4, $5, 'RON', $6, (SELECT id FROM fin_companies WHERE cui = '46466484' LIMIT 1)) ON CONFLICT (ext_id) DO NOTHING`,
           [`startco:${invId ?? `${today}:${opts.client.name}:${opts.priceRon}`}`, opts.client.name || null, num ? `${process.env.STARTCO_SERIES ?? ""} ${num}`.trim() : null, today, opts.priceRon, link ? String(link) : null]
         );
       }
