@@ -97,6 +97,25 @@ export async function issueInvoice(opts: {
 
     const link =
       invoiceData?.pdf ?? invoiceData?.data?.pdf ?? invoiceData?.link ?? invoiceData?.data?.link ?? undefined;
+
+    // păstrăm factura emisă și în panoul Finanțe, ca s-o potrivim cu încasarea
+    try {
+      const { getPool, ensureSchema } = await import("@/lib/db");
+      const pool = getPool();
+      if (pool) {
+        await ensureSchema();
+        const invId = extractId(invoiceData);
+        const num = invoiceData?.number ?? invoiceData?.data?.number ?? null;
+        await pool.query(
+          `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, link)
+           VALUES ('emisa', 'startco', $1, $2, $3, $4, $5, 'RON', $6) ON CONFLICT (ext_id) DO NOTHING`,
+          [`startco:${invId ?? `${today}:${opts.client.name}:${opts.priceRon}`}`, opts.client.name || null, num ? `${process.env.STARTCO_SERIES ?? ""} ${num}`.trim() : null, today, opts.priceRon, link ? String(link) : null]
+        );
+      }
+    } catch (e) {
+      console.error("[invoicing] salvarea în Finanțe a eșuat:", e);
+    }
+
     return { issued: true, link: link ? String(link) : undefined };
   } catch (e: any) {
     console.error("[invoicing/startco] failed:", e?.message ?? e);

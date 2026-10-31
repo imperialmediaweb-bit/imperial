@@ -15,8 +15,11 @@
     "@react-three/fiber": "^9.8.2",
     "framer-motion": "^14.6.0",
     "gsap": "^3.13.0",
+    "imapflow": "^2.10.0",
+    "jszip": "^3.10.2",
     "lenis": "^1.1.18",
     "lucide-react": "^0.363.0",
+    "mailparser": "^3.14.1",
     "next": "^16.4.3",
     "pg": "^8.13.1",
     "qrcode": "^1.5.4",
@@ -26,6 +29,7 @@
     "three": "^0.186.0"
   },
   "devDependencies": {
+    "@types/mailparser": "^3.9.0",
     "@types/node": "20.12.7",
     "@types/pg": "^8.11.10",
     "@types/qrcode": "^1.5.6",

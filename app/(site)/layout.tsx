@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Archivo, Instrument_Serif, Inter, JetBrains_Mono, Michroma } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 // Fonturile sunt servite de pe domeniul nostru (next/font) — fără cereri către
 // Google la încărcare, fără FOUT; Archivo e fontul display din noul branding.

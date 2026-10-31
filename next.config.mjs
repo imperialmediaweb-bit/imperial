@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
   // CSS-ul intră direct în pagină — fără cereri care blochează prima afișare
-  experimental: { inlineCss: true },
+  experimental: { inlineCss: true, globalNotFound: true },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

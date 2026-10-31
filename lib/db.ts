@@ -147,6 +147,83 @@ export async function ensureSchema(): Promise<void> {
       published_urls JSONB NOT NULL DEFAULT '[]'::jsonb
     );
     CREATE INDEX IF NOT EXISTS idx_press_articles_status ON press_articles(status, created_at DESC);
+
+    -- ───── Finanțe (finante.imperial-media.ro) ─────
+    CREATE TABLE IF NOT EXISTS finance_users (
+      id SERIAL PRIMARY KEY,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      email TEXT NOT NULL UNIQUE,
+      name TEXT,
+      role TEXT NOT NULL DEFAULT 'contabil',
+      password_hash TEXT NOT NULL,
+      active BOOLEAN NOT NULL DEFAULT TRUE,
+      last_login TIMESTAMPTZ
+    );
+    CREATE TABLE IF NOT EXISTS finance_audit (
+      id SERIAL PRIMARY KEY,
+      at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      user_email TEXT,
+      action TEXT NOT NULL,
+      detail TEXT,
+      ip TEXT
+    );
+    CREATE TABLE IF NOT EXISTS bank_connections (
+      id SERIAL PRIMARY KEY,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      bank TEXT NOT NULL,
+      session_id TEXT NOT NULL,
+      accounts JSONB NOT NULL DEFAULT '[]'::jsonb,
+      valid_until TIMESTAMPTZ,
+      last_sync TIMESTAMPTZ,
+      active BOOLEAN NOT NULL DEFAULT TRUE
+    );
+    CREATE TABLE IF NOT EXISTS bank_transactions (
+      id SERIAL PRIMARY KEY,
+      ext_id TEXT NOT NULL UNIQUE,
+      account_uid TEXT,
+      account_iban TEXT,
+      booking_date DATE NOT NULL,
+      amount NUMERIC(14,2) NOT NULL,
+      currency TEXT NOT NULL DEFAULT 'RON',
+      counterparty TEXT,
+      description TEXT,
+      raw JSONB,
+      note TEXT,
+      fara_factura BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_bank_tx_date ON bank_transactions(booking_date DESC);
+    CREATE TABLE IF NOT EXISTS fin_invoices (
+      id SERIAL PRIMARY KEY,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      kind TEXT NOT NULL,
+      source TEXT NOT NULL,
+      ext_id TEXT UNIQUE,
+      partner TEXT,
+      number TEXT,
+      issue_date DATE,
+      amount NUMERIC(14,2),
+      currency TEXT DEFAULT 'RON',
+      file_name TEXT,
+      file_mime TEXT,
+      file_data BYTEA,
+      link TEXT,
+      transaction_id INTEGER REFERENCES bank_transactions(id) ON DELETE SET NULL,
+      match_kind TEXT,
+      uploaded_by TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_fin_inv_date ON fin_invoices(issue_date DESC);
+    CREATE INDEX IF NOT EXISTS idx_fin_inv_tx ON fin_invoices(transaction_id);
+    CREATE TABLE IF NOT EXISTS fin_mailboxes (
+      id SERIAL PRIMARY KEY,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      email TEXT NOT NULL UNIQUE,
+      host TEXT NOT NULL DEFAULT 'imap.gmail.com',
+      port INTEGER NOT NULL DEFAULT 993,
+      password_enc TEXT NOT NULL,
+      last_sync TIMESTAMPTZ,
+      last_error TEXT
+    );
   `;
 
   try {
