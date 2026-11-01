@@ -103,11 +103,11 @@ export async function syncStartco(from: string, to: string): Promise<{ added: nu
       date,
       Number(pick(inv, ["total", "totalAmount", "total_amount", "totalValue", "amount", "value", "grand_total", "totals.total"])) || null,
       pick(inv, ["currency", "moneda"]) ?? "RON",
-      pick(inv, ["pdf", "pdf_url", "pdfUrl", "link", "url", "public_url", "download_url"]),
+      pick(inv, ["shareUrl", "downloadUrl", "pdf", "pdf_url", "pdfUrl", "link", "url", "public_url", "download_url"]),
     ];
     // fără dată sau din altă lună: doar completăm o factură deja salvată, nu adăugăm una nouă
     if (!date || date < from || date > to) {
-      if (date) await pool.query(`UPDATE fin_invoices SET issue_date = $2 WHERE ext_id = $1 AND issue_date IS NULL`, [extId, date]);
+      if (date) await pool.query(`UPDATE fin_invoices SET issue_date = $2, link = COALESCE(link, $3) WHERE ext_id = $1 AND issue_date IS NULL`, [extId, date, values[5]]);
       continue;
     }
     inRange++;
@@ -115,7 +115,7 @@ export async function syncStartco(from: string, to: string): Promise<{ added: nu
       `INSERT INTO fin_invoices (kind, source, ext_id, partner, number, issue_date, amount, currency, link, company_id)
        VALUES ('emisa', 'startco', $1, $2, $3, $4, $5, $6, $7, (SELECT id FROM fin_companies WHERE cui = '46466484' LIMIT 1))
        ON CONFLICT (ext_id) DO UPDATE SET issue_date = COALESCE(fin_invoices.issue_date, EXCLUDED.issue_date),
-         amount = COALESCE(fin_invoices.amount, EXCLUDED.amount), partner = COALESCE(fin_invoices.partner, EXCLUDED.partner)
+         amount = COALESCE(fin_invoices.amount, EXCLUDED.amount), partner = COALESCE(fin_invoices.partner, EXCLUDED.partner), link = COALESCE(fin_invoices.link, EXCLUDED.link)
        RETURNING (xmax = 0) AS nou`,
       [extId, ...values]
     );
