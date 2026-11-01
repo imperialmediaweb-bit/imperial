@@ -44,7 +44,7 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin, firma }
     const r = await fetch("/api/finante/extras", { method: "POST", body: fd });
     const j = await r.json().catch(() => ({}));
     setBusy(false);
-    if (!r.ok) return setMsg(j.error ?? "Importul a eșuat.");
+    if (!r.ok) return setMsg(`⚠️ ${j.error ?? `Importul a eșuat (cod ${r.status}).`}`);
     const mails = (j.email ?? []).map((x: any) => (x.error ? `${x.email}: eroare` : `${x.email}: ${x.added} facturi noi`)).join(" · ");
     setMsg(`${j.added} tranzacții noi din ${j.total} (${j.from} → ${j.to}) · ${mails || "nicio căsuță de email adăugată"} · ${j.potrivite} potrivite automat`);
     setTimeout(() => (window.location.href = `/finante?firma=${firma}&luna=${String(j.to).slice(0, 7)}`), 1500);
@@ -60,7 +60,7 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin, firma }
       <div className="flex flex-wrap items-center gap-2">
         {isAdmin ? (
           <>
-            <input ref={extrasRef} type="file" accept=".csv,text/csv,application/pdf,.pdf" className="hidden" onChange={uploadExtras} />
+            <input ref={extrasRef} type="file" accept=".csv,text/csv,application/pdf,.pdf,.xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.txt" className="hidden" onChange={uploadExtras} />
             <button onClick={() => extrasRef.current?.click()} disabled={busy} className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold hover:border-white/40 disabled:opacity-50">
               Încarcă extrasul BT
             </button>
@@ -73,7 +73,7 @@ export function MonthToolbar({ luna, prev, next, bankConnected, isAdmin, firma }
           Descarcă pachetul pentru contabilitate
         </a>
       </div>
-      {msg ? <p className="w-full text-sm text-white/60">{msg}</p> : null}
+      {msg ? <p className={`w-full rounded-lg px-3 py-2 text-sm ${msg.startsWith("⚠️") ? "bg-red-500/15 text-red-200" : "bg-white/5 text-white/70"}`}>{msg}</p> : null}
     </div>
   );
 }

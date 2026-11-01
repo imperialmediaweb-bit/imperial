@@ -1,7 +1,7 @@
 // Încarcă extrasul BT (CSV sau PDF): importă tranzacțiile, caută facturile în emailuri și potrivește automat.
 import { NextResponse } from "next/server";
 import { audit, requireUser } from "@/lib/finante/auth";
-import { parseCsv, parsePdf, saveParsed } from "@/lib/finante/extras";
+import { parseCsv, parsePdf, parseTextWithAi, parseXlsx, saveParsed } from "@/lib/finante/extras";
 import { syncAllMailboxes } from "@/lib/finante/mail";
 import { autoMatch } from "@/lib/finante/match";
 
@@ -17,14 +17,27 @@ export async function POST(req: Request) {
   if (!(file instanceof File)) return NextResponse.json({ error: "Alege fișierul extrasului." }, { status: 400 });
   if (file.size > 15 * 1024 * 1024) return NextResponse.json({ error: "Fișier prea mare (maximum 15 MB)." }, { status: 400 });
   const buf = Buffer.from(await file.arrayBuffer());
-  const isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+  const isPdf = buf.subarray(0, 5).toString() === "%PDF-" || /\.pdf$/i.test(file.name);
+  const isXlsx = buf.subarray(0, 2).toString() === "PK" || /\.xlsx$/i.test(file.name);
   let list;
   try {
-    list = isPdf ? await parsePdf(buf) : parseCsv(buf.toString("utf8"));
+    if (isPdf) list = await parsePdf(buf);
+    else if (isXlsx) list = await parseXlsx(buf);
+    else {
+      // BT exportă uneori în Windows-1250: dacă UTF-8 strică diacriticele, recitim
+      let text = buf.toString("utf8");
+      if (text.includes("\uFFFD")) text = new TextDecoder("windows-1250").decode(buf);
+      list = parseCsv(text);
+      if (!list.length) list = await parseTextWithAi(text);
+    }
   } catch (e: any) {
-    return NextResponse.json({ error: `Nu am putut citi extrasul: ${String(e?.message ?? e).slice(0, 200)}` }, { status: 400 });
+    console.error("[finante/extras] citire eșuată:", file.name, e?.message ?? e);
+    return NextResponse.json({ error: `Nu am putut citi extrasul „${file.name}”: ${String(e?.message ?? e).slice(0, 200)}` }, { status: 400 });
   }
-  if (!list.length) return NextResponse.json({ error: "Nu am găsit tranzacții în fișier. Încearcă exportul CSV din BT24." }, { status: 400 });
+  if (!list.length) {
+    console.error("[finante/extras] fără tranzacții:", file.name, file.type, buf.length);
+    return NextResponse.json({ error: `Extrasul „${file.name}” nu conține nicio plată sau încasare (de exemplu contul în EUR fără mișcări). Urcă extrasul contului curent în lei (RON) pe aceeași lună.` }, { status: 400 });
+  }
   const companyId = Number(form?.get("firma")) || null;
   if (!companyId) return NextResponse.json({ error: "Alege firma pentru extras." }, { status: 400 });
   const saved = await saveParsed(list, null, companyId);

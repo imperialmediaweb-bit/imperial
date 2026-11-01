@@ -4,7 +4,7 @@
 
 import { createHash } from "crypto";
 import { getPool, ensureSchema } from "@/lib/db";
-import { getAnthropic } from "@/lib/ai";
+import { CLAUDE_MODEL, REPORT_MODEL, getAnthropic } from "@/lib/ai";
 
 export type ParsedTx = { date: string; amount: number; currency: string; counterparty: string | null; description: string; ref: string | null };
 
@@ -93,26 +93,13 @@ export function parseCsv(text: string, currency = "RON"): ParsedTx[] {
   return out;
 }
 
-export async function parsePdf(pdf: Buffer): Promise<ParsedTx[]> {
-  if (!process.env.ANTHROPIC_API_KEY) throw new Error("Pentru extrasul PDF e nevoie de ANTHROPIC_API_KEY");
-  const r = await getAnthropic().messages.create({
-    model: "claude-sonnet-4-5",
-    max_tokens: 16000,
-    messages: [
-      {
-        role: "user",
-        content: [
-          { type: "document", source: { type: "base64", media_type: "application/pdf", data: pdf.toString("base64") } } as any,
-          {
-            type: "text",
-            text: `Este un extras de cont Banca Transilvania. Extrage TOATE tranzacțiile, fără să inventezi și fără să sari peste vreuna. Răspunde DOAR cu un JSON array: [{"date":"AAAA-LL-ZZ","amount": număr (NEGATIV la plăți/debit, POZITIV la încasări/credit),"currency":"RON","counterparty":"beneficiar sau plătitor","description":"detaliile tranzacției","ref":"referința dacă există"}]. Nu include soldurile, doar tranzacțiile.`,
-          },
-        ],
-      },
-    ],
-  });
-  const text = r.content.filter((c) => c.type === "text").map((c: any) => c.text).join("");
-  const arr = JSON.parse(text.slice(text.indexOf("["), text.lastIndexOf("]") + 1));
+const PROMPT = `Este un extras de cont Banca Transilvania. Extrage TOATE tranzacțiile, fără să inventezi și fără să sari peste vreuna. Răspunde DOAR cu un JSON array: [{"date":"AAAA-LL-ZZ","amount": număr (NEGATIV la plăți/debit, POZITIV la încasări/credit),"currency":"RON","counterparty":"beneficiar sau plătitor","description":"detaliile tranzacției","ref":"referința dacă există"}]. Nu include soldurile, doar tranzacțiile.`;
+
+function fromJson(text: string): ParsedTx[] {
+  const a = text.indexOf("[");
+  const b = text.lastIndexOf("]");
+  if (a < 0 || b < a) return [];
+  const arr = JSON.parse(text.slice(a, b + 1));
   return (Array.isArray(arr) ? arr : [])
     .map((t: any) => ({
       date: date(String(t.date ?? "")) ?? "",
@@ -123,6 +110,57 @@ export async function parsePdf(pdf: Buffer): Promise<ParsedTx[]> {
       ref: t.ref ? String(t.ref).slice(0, 100) : null,
     }))
     .filter((t: ParsedTx) => t.date && Number.isFinite(t.amount) && t.amount !== 0);
+}
+
+// Claude citește extrasul; încercăm modelul mare, apoi cel de rezervă (dacă primul nu e disponibil pe cont)
+async function askClaude(content: any[]): Promise<ParsedTx[]> {
+  if (!process.env.ANTHROPIC_API_KEY) throw new Error("lipsește ANTHROPIC_API_KEY în Railway");
+  const models = Array.from(new Set([REPORT_MODEL, "claude-sonnet-4-5", CLAUDE_MODEL]));
+  let last: any = null;
+  for (const model of models) {
+    try {
+      const r = await getAnthropic().messages.create({ model, max_tokens: 32000, messages: [{ role: "user", content }] });
+      const text = r.content.filter((c) => c.type === "text").map((c: any) => c.text).join("");
+      return fromJson(text);
+    } catch (e: any) {
+      last = e;
+      console.error(`[finante/extras] ${model}:`, e?.status ?? "", String(e?.message ?? e).slice(0, 300));
+      if (e instanceof SyntaxError) throw new Error("răspuns incomplet la citirea extrasului; încearcă exportul CSV/Excel din BT24");
+    }
+  }
+  throw new Error(String(last?.message ?? last).slice(0, 200));
+}
+
+export async function parsePdf(pdf: Buffer): Promise<ParsedTx[]> {
+  return askClaude([
+    { type: "document", source: { type: "base64", media_type: "application/pdf", data: pdf.toString("base64") } },
+    { type: "text", text: PROMPT },
+  ]);
+}
+
+// Excel (BT24 → Export .xlsx): îl transformăm în CSV și folosim același cititor
+export async function parseXlsx(buf: Buffer): Promise<ParsedTx[]> {
+  const ExcelJS = (await import("exceljs")).default;
+  const wb = new ExcelJS.Workbook();
+  await wb.xlsx.load(buf as any);
+  const lines: string[] = [];
+  wb.eachSheet((ws) => {
+    ws.eachRow({ includeEmpty: false }, (row) => {
+      const vals = (row.values as any[]).slice(1).map((v) => {
+        if (v instanceof Date) return v.toISOString().slice(0, 10);
+        if (v && typeof v === "object") v = v.result ?? v.text ?? (v.richText ? v.richText.map((x: any) => x.text).join("") : "");
+        const s = String(v ?? "").replace(/"/g, '""');
+        return /[;"\n]/.test(s) ? `"${s}"` : s;
+      });
+      lines.push(vals.join(";"));
+    });
+  });
+  return parseCsv(lines.join("\n"));
+}
+
+// CSV/text în alt format decât ne așteptăm: îl lăsăm pe Claude să-l citească
+export async function parseTextWithAi(text: string): Promise<ParsedTx[]> {
+  return askClaude([{ type: "text", text: `${PROMPT}\n\nExtrasul:\n${text.slice(0, 150000)}` }]);
 }
 
 export async function saveParsed(list: ParsedTx[], iban: string | null, companyId: number | null = null): Promise<{ added: number; total: number }> {
