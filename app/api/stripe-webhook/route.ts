@@ -76,6 +76,12 @@ export async function POST(req: Request) {
 
   // ═══ ABONAMENT monitorizare ═══
   if (session.mode === "subscription") {
+    // 06.11.2026: contul Stripe e comun cu MediaExpres (abonamentul promo de 400 lei/lună
+    // ajungea aici și era luat drept monitorizare Imperial). Doar abonamentele pornite de
+    // pe Imperial au metadata.plan; restul nu sunt ale noastre.
+    if (!["lunar", "anual", "premium", "premium-anual"].includes(String(session.metadata?.plan ?? ""))) {
+      return NextResponse.json({ received: true, ignored: "not-imperial" });
+    }
     const email = billing.email ?? String(session.client_reference_id ?? "");
     const plan = String(session.metadata?.plan ?? "lunar");
     // Idempotență vs UPGRADE: relivrarea aceluiași eveniment are ACELAȘI subscription id

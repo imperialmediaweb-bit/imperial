@@ -4,7 +4,7 @@
 
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
-import { upsertSubscriber } from "@/lib/subscribers";
+import { upsertSubscriber, deactivateByEmail } from "@/lib/subscribers";
 import { insertNotification } from "@/lib/monitoring";
 import { hasDb } from "@/lib/db";
 
@@ -24,6 +24,16 @@ export async function GET(req: Request) {
   const plan = searchParams.get("plan") === "premium" ? "premium-cadou" : "cadou";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     return NextResponse.json({ folosire: "adaugă ?email=adresa@client.ro și opțional &plan=premium" });
+  }
+
+  // 06.11.2026: &scoate=1 dezactivează abonamentul (ex. plăți MediaExpres luate greșit drept Imperial).
+  if (searchParams.get("scoate") === "1") {
+    try {
+      const n = await deactivateByEmail(email);
+      return NextResponse.json({ ok: true, mesaj: n ? `✅ ${email} nu mai e abonat la monitorizare.` : `${email} nu avea abonament activ.` });
+    } catch (e: any) {
+      return NextResponse.json({ error: String(e?.message ?? e) }, { status: 500 });
+    }
   }
 
   try {

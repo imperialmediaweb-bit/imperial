@@ -30,6 +30,17 @@ export async function deactivateBySubscriptionId(stripeSubscriptionId: string): 
   );
 }
 
+export async function deactivateByEmail(email: string): Promise<number> {
+  const pool = getPool();
+  if (!pool) return 0;
+  await ensureSchema();
+  const r = await pool.query(
+    `UPDATE subscribers SET active = FALSE, updated_at = NOW() WHERE lower(email) = lower($1) AND active`,
+    [email]
+  );
+  return r.rowCount ?? 0;
+}
+
 export async function getSubscription(
   email: string
 ): Promise<{ active: boolean; plan: string | null; stripe_subscription_id: string | null } | null> {
