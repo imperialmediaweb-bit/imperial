@@ -7,8 +7,6 @@ import dynamic from "next/dynamic";
 import { useAfterInteraction } from "../ids/hooks";
 
 const ScrollProgress = dynamic(() => import("./ScrollProgress").then((m) => m.ScrollProgress), { ssr: false });
-const LightThread = dynamic(() => import("./LightThread").then((m) => m.LightThread), { ssr: false });
-const SparkTrail = dynamic(() => import("./SparkTrail").then((m) => m.SparkTrail), { ssr: false });
 
 export function DeferredEffects() {
   const ready = useAfterInteraction();
@@ -16,8 +14,6 @@ export function DeferredEffects() {
   return (
     <>
       <ScrollProgress />
-      <LightThread />
-      <SparkTrail />
     </>
   );
 }
