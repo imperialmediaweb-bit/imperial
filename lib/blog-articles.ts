@@ -51,7 +51,7 @@ const GENERAL_ARTICLES: BlogArticle[] = [
   {
     slug: "site-web-pentru-restaurant",
     title: "Site web pentru restaurant: meniu, rezervări, comenzi — prețuri 2026",
-    description: "Ghid complet: meniu digital, rezervări online, galerie, comenzi. Ce funcționalități are nevoie un restaurant, cât costă (de la 699€) și ce greșeli să eviți.",
+    description: "Ghid complet: meniu digital, rezervări online, galerie, comenzi. Ce funcționalități are nevoie un restaurant, cât costă (de la 1.500 lei) și ce greșeli să eviți.",
     category: "Industrii",
     date: "2026-08-16",
     readTime: "7 min",
@@ -60,7 +60,7 @@ const GENERAL_ARTICLES: BlogArticle[] = [
   {
     slug: "site-web-pentru-cabinet-medical",
     title: "Site web cabinet medical / stomatologic: preț, programări, GDPR — ghid 2026",
-    description: "Programări online, profil medici, secțiune servicii, GDPR. Cât costă un site medical profesional (699-1.500€) și ce trebuie să conțină obligatoriu.",
+    description: "Programări online, profil medici, secțiune servicii, GDPR. Cât costă un site medical profesional (de la 1.500 lei) și ce trebuie să conțină obligatoriu.",
     category: "Industrii",
     date: "2026-08-16",
     readTime: "7 min",
@@ -69,7 +69,7 @@ const GENERAL_ARTICLES: BlogArticle[] = [
   {
     slug: "site-web-pentru-salon-beauty",
     title: "Site web pentru salon de beauty / coafor / spa: ce trebuie și cât costă",
-    description: "Programări online, portofoliu, prețuri servicii, Instagram integrat. Ghid 2026 pentru saloane care vor clienți din online — de la 699€.",
+    description: "Programări online, portofoliu, prețuri servicii, Instagram integrat. Ghid 2026 pentru saloane care vor clienți din online — de la 1.500 lei.",
     category: "Industrii",
     date: "2026-08-16",
     readTime: "6 min",
@@ -172,20 +172,18 @@ Prețul unui site web depinde de mai mulți factori:
 - **Site complex / custom**: preț la cerere — aplicații web, platforme, integrări speciale
 
 **2. Funcționalități extra**
-- Rezervări / programări online: +120-180€
-- Plăți cu cardul: +200€
-- Blog: +80-120€
-- Galerie / portofoliu: +80-120€
-- Multilimbă: +120-180€
-- Formular avansat: +120-180€
+- Programări automate în calendar + reamintire pe email: +399 lei
+- Comenzi online simple (restaurante, livrări): +599 lei
+- Blog / noutăți: +199 lei
+- Pagină în plus: +99 lei / pagină
+- A doua limbă: +499 lei
 
 **3. Logo și branding**
-- Dacă nu ai logo, îl facem noi: +150-250€
-- Identitate vizuală completă: preț la cerere
+- Logo nou: +199 lei
+- Identitate vizuală (logo, culori, fonturi): +399 lei
 
-**4. Urgență**
-- Termen standard (2-4 săptămâni): inclus în preț
-- Urgență "cât mai repede": +100€
+**4. Termen**
+- Site de prezentare: gata în maximum 14 zile de la primirea textelor și pozelor
 
 ## Ce include un site de la Imperial Media?
 
@@ -194,7 +192,7 @@ Toate site-urile noastre pentru clienți din ${loc.name} includ:
 - ✅ Responsive pe toate dispozitivele
 - ✅ Domeniu + hosting gratuit primul an
 - ✅ Optimizare SEO de bază
-- ✅ **BONUS: campanie de promovare în 50 ziare online** (valoare 200€)
+- ✅ **BONUS: campanie de promovare în 50 ziare online** 
 
 ## De ce Imperial Media pentru ${loc.name}?
 
@@ -226,7 +224,7 @@ Primul lucru pe care trebuie să-l faci — e **gratuit** și durează 15 minute
 ## 2. Site web profesional
 
 87% din consumatori caută online înainte să cumpere. Fără site, ești **invizibil** pentru ei.
-- Un site de prezentare pornește de la **699€**
+- Un site de prezentare pornește de la **1.500 lei**
 - Returnarea investiției: primii 2-3 clienți noi plătesc site-ul
 - Include: design custom, SEO, domeniu, hosting
 
@@ -256,9 +254,9 @@ Dacă vrei rezultate IMEDIATE:
 
 ## Plan de acțiune pentru afaceri din ${loc.name}
 
-**Luna 1:** Google Business + Site profesional (699€ + gratuit)
+**Luna 1:** Google Business + Site profesional (de la 1.500 lei)
 **Luna 2:** Campanie 50 ziare + Facebook activ (gratuit la site + 0€)
-**Luna 3+:** SEO + conținut lunar (50€/lună administrare)
+**Luna 3+:** SEO + conținut lunar (administrare de la 100 lei/lună)
 
 **Rezultat estimat:** +30-50% vizibilitate locală în 3 luni.
 
@@ -290,7 +288,7 @@ Cu Google Business Profile + un site optimizat, apari pe Maps ȘI în căutări.
 Știi exact câți vizitatori ai, de unde vin, ce fac pe site. Marketing-ul tradițional nu-ți dă asta.
 
 ## 7. Costul e mai mic ca niciodată
-Un site profesional pornește de la **699€**. Un angajat costă mai mult pe lună.
+Un site profesional pornește de la **1.500 lei**. Un angajat costă mai mult pe lună.
 
 ## 8. Mobile first — 70% din trafic vine de pe telefon
 Un site responsive captează toți acești vizitatori. Fără site, îi pierzi pe toți.
@@ -303,8 +301,8 @@ Vrei Facebook Ads? Ai nevoie de landing page. Vrei Google Ads? Ai nevoie de site
 
 ## Cât costă?
 
-- Site prezentare: de la **699€**
-- Magazin online: de la **1200€**
+- Site prezentare: de la **1.500 lei**
+- Magazin online: de la **3.000 lei**
 - BONUS: campanie promovare în 50 ziare **gratuit** la orice site nou
 
 [Primește estimare gratuită →](/brief)`,
@@ -337,7 +335,7 @@ Pentru că „magazin online" înseamnă orice, de la un șablon de 300€ insta
 
 ## Cât costă la Imperial Media
 
-Magazinele noastre pornesc de la **1.800€** — design 100% custom (nu șablon), plăți integrate, curieri cu AWB automat, SEO din structură, domeniu + hosting primul an, iar **campania de promovare în 50 de ziare online e inclusă**. Vezi și [cât costă un site de prezentare](/blog/de-ce-ai-nevoie-de-site-web) dacă nu vinzi încă produse fizice.
+Magazinele noastre pornesc de la **3.000 lei** — design 100% custom (nu șablon), plăți integrate, curieri cu AWB automat, SEO din structură, domeniu + hosting primul an, iar **campania de promovare în 50 de ziare online e inclusă**. Vezi și [cât costă un site de prezentare](/blog/de-ce-ai-nevoie-de-site-web) dacă nu vinzi încă produse fizice.
 
 Vrei cifra exactă pentru cazul tău? [Estimarea cu consultantul AI durează 2 minute](/consultanta) — spui ce vinzi, primești bugetul defalcat, fără obligații.`,
 
@@ -363,8 +361,8 @@ Dacă ai deja livrare prin aplicații (Glovo, Tazz), un modul propriu de comenzi
 
 ## Cât costă site-ul unui restaurant
 
-- **Site de prezentare cu meniu + rezervări: de la 699€** — acoperă 90% din restaurante.
-- **Cu modul de comenzi online: 1.400-2.500€.**
+- **Site de prezentare cu meniu + rezervări: de la 1.500 lei.**
+- **Cu modul de comenzi online: de la 2.099 lei** (1.500 lei + 599 lei).
 - La Imperial Media, orice site nou include **campania de promovare în 50 de ziare online** — exact genul de mențiuni care urcă restaurantul în căutările locale și în recomandările AI.
 
 Vrei să vezi pe cifrele tale? [Radiografia Afacerii](/service) îți scanează restaurantul (Google, recenzii, site, competiție locală) și îți spune exact unde pierzi clienți. Sau [cere o estimare în 2 minute](/brief).`,
@@ -390,8 +388,8 @@ O pagină pe FIECARE serviciu important („implant dentar", „detartraj", „e
 
 ## Cât costă
 
-- **Site cabinet (prezentare + servicii + programare prin formular): 699-1.000€**
-- **Cu programări online în calendar + notificări: 1.400-1.500€**
+- **Site cabinet (prezentare + servicii + programare prin formular): de la 1.500 lei**
+- **Cu programări online în calendar + notificări: de la 1.899 lei** (1.500 lei + 399 lei)
 - Include la noi: design custom, GDPR configurat corect, SEO pe paginile de servicii, domeniu + hosting primul an, plus **promovarea în 50 de ziare online** — mențiunile în presă contează și pentru pacienți, și pentru Google.
 
 Ai deja site sau profil Google? [Radiografia Afacerii](/service) îți arată în 5 minute cum stă cabinetul tău față de celelalte din oraș — recenzii, vizibilitate, ce văd pacienții când te caută. Sau [cere direct o estimare](/brief).`,
@@ -413,8 +411,8 @@ Ai deja site sau profil Google? [Radiografia Afacerii](/service) îți arată î
 
 ## Cât costă site-ul unui salon
 
-- **Site de prezentare cu servicii, prețuri, portofoliu și formular de programare: de la 699€**
-- **Cu sistem de programări online (calendar pe angajate, confirmări automate): 1.400-1.800€**
+- **Site de prezentare cu servicii, prețuri, portofoliu și formular de programare: de la 1.500 lei**
+- **Cu sistem de programări online (calendar, confirmări automate): de la 1.899 lei** (1.500 lei + 399 lei)
 - La Imperial Media, orice site include design custom (nu șablon roz generic), SEO local ca să apari la „salon + orașul tău", domeniu + hosting primul an și **campania de promovare în 50 de ziare online**.
 
 Curioasă cum stă salonul tău acum? [Radiografia Afacerii](/service) îți scanează prezența online (Google, recenzii, competiția din oraș) și îți spune exact ce te costă fiecare lipsă. Sau [cere o estimare în 2 minute](/brief).`,
@@ -531,7 +529,7 @@ Nu ai timp de toate astea? La orice site făcut de noi, **setarea Google Busines
 ## Prețul REAL, pe 3 ani
 
 - **WordPress cu temă**: 300-800€ la instalare. Dar: plugin-uri premium 100-300€/an, mentenanță obligatorie (actualizări la temă, plugin-uri, PHP — se strică LUNAR câte ceva) 30-80€/lună, curățare după un hack 200-500€. Total realist pe 3 ani: **1.500-3.500€**.
-- **Site custom**: 699-1.500€ la construire. Fără licențe, fără plugin-uri de actualizat, mentenanță minimă (50€/lună opțional, include modificări). Total pe 3 ani: **700-2.300€**.
+- **Site custom la noi**: de la 1.500 lei la construire. Fără licențe, fără plugin-uri de actualizat; administrare de la 100 lei/lună (găzduire, backup, modificări mici).
 Ieftin la intrare nu înseamnă ieftin.
 
 ## Viteza — factorul pe care Google îl măsoară
@@ -558,7 +556,7 @@ Sinceritate completă:
 
 ## Concluzia noastră (evident subiectivă, dar argumentată)
 
-Noi construim custom pentru că vindem rezultatul, nu instalarea: site-uri cu PageSpeed 90+, care nu se sparg și nu cer taxă lunară de „să nu moară". De la **699€**, cu domeniu, hosting primul an și [promovarea în 50 de ziare online inclusă](/blog/seo-local-ghid-romania). [Cere estimarea pentru cazul tău](/brief) — 2 minute, cifră concretă.`,
+Noi construim custom pentru că vindem rezultatul, nu instalarea: site-uri cu PageSpeed 90+, care nu se sparg și nu cer taxă lunară de „să nu moară". De la **1.500 lei**, cu domeniu, hosting primul an și [promovarea în 50 de ziare online inclusă](/blog/seo-local-ghid-romania). [Cere estimarea pentru cazul tău](/brief) — 2 minute, cifră concretă.`,
 
     "greseli-site-web-firme": `Multe firme au site — dar un site prost e mai rău decât niciunul. Iată cele mai frecvente greșeli:
 
