@@ -22,6 +22,7 @@ import { siteConfig } from "@/lib/site";
 import { packages } from "@/lib/packages";
 import { getLocalOffer } from "@/lib/local-offer";
 import { LocalOfferSection } from "@/components/LocalOfferSection";
+import { getCityContent } from "@/lib/city-content";
 
 // Pre-render toate locațiile la build
 export function generateStaticParams() {
@@ -103,7 +104,8 @@ export default async function LocationPage(
     },
   ];
 
-  const faqs = [
+  const cityContent = getCityContent(loc.slug);
+  const baseFaqs = [
     {
       q: `Cât costă un site web în ${loc.name}?`,
       a: offer
@@ -147,6 +149,7 @@ export default async function LocationPage(
       a: `Totul este 100% custom — cod scris de la zero cu limbaje de programare moderne și rapide. NU folosim WordPress sau template-uri gata făcute. Rezultat: site-uri ultra-rapide cu scor Google PageSpeed peste 90.`,
     },
   ];
+  const faqs = [...(cityContent?.faqs ?? []), ...baseFaqs];
 
   const benefits = [
     { icon: Zap, text: "Site-uri ultra-rapide, scor PageSpeed 90+" },
@@ -321,6 +324,33 @@ export default async function LocationPage(
       </section>
 
         </>
+      )}
+
+      {/* ─── TEXT SCRIS PENTRU ORAȘ (unde există) ─── */}
+      {cityContent && (
+        <section className="section border-t border-bg-border/40">
+          <div className="container-app max-w-3xl">
+            <h2 className="section-title">
+              Site-uri pentru afaceri din <span className="text-gradient">{loc.name}</span>
+            </h2>
+            <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-text-muted">
+              {cityContent.intro.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+            <h3 className="mt-10 font-display text-lg font-extrabold text-text">
+              Ce site le trebuie afacerilor din {loc.name}
+            </h3>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {cityContent.businesses.map((b) => (
+                <li key={b.name} className="rounded-2xl border border-bg-border bg-white/5 p-4">
+                  <p className="font-semibold text-text">{b.name}</p>
+                  <p className="mt-1 text-sm text-text-muted">{b.need}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       )}
 
       {/* ─── FAQ LOCAL ─── */}
