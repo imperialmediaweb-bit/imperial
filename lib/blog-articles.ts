@@ -16,7 +16,7 @@ function generateCostArticles(): BlogArticle[] {
   return LOCATIONS.map((loc) => ({
     slug: `cat-costa-site-web-${loc.slug}`,
     title: `Cât costă un site web în ${loc.name} în 2026?`,
-    description: `Ghid complet de prețuri pentru creare site web în ${loc.name}, ${loc.county}. Pachete de la 699€, factori care influențează prețul, și cum să alegi.`,
+    description: `Ghid complet de prețuri pentru creare site web în ${loc.name}, ${loc.county}. Site de prezentare de la 1.500 lei, factori care influențează prețul, și cum să alegi.`,
     category: "Prețuri",
     date: "2026-04-15",
     readTime: "5 min",
@@ -151,26 +151,24 @@ export function getArticleBySlug(slug: string): BlogArticle | undefined {
 // (Google devalorizează șabloanele identice; cifrele locale sunt diferențiatorul)
 function localStats(loc: Location) {
   const popK = Math.round(loc.population / 1000);
-  const firms = Math.round(loc.population / 38); // ~1 firmă activă la 38 de locuitori (media urbană RO)
-  const searches = Math.round(loc.population * 0.6); // căutări locale lunare estimate pe servicii
-  return { popK, firms, searches };
+  return { popK };
 }
 
 export function generateCostContent(loc: Location): string {
-  const { popK, firms } = localStats(loc);
-  return `Un site web profesional în ${loc.name} pornește de la **699€** pentru un site de prezentare cu 5 pagini și de la **1200€** pentru un magazin online.
+  const { popK } = localStats(loc);
+  return `Un site web profesional în ${loc.name} pornește de la **1.500 lei** pentru un site de prezentare cu 5 pagini și de la **3.000 lei** pentru un magazin online.
 
 ## Piața din ${loc.name}, în cifre
 
-${loc.name} are aproximativ **${popK}.000 de locuitori** și, la media urbană din România, în jur de **${firms.toLocaleString("ro-RO")} de firme active** în oraș și împrejurimi. Concret: indiferent de domeniu, ai zeci sau sute de concurenți locali — iar clientul care caută pe Google „${loc.name}" + serviciul tău alege aproape întotdeauna dintre primele rezultate. În ${loc.county}, firmele cu site profesional și profil Google îngrijit domină sistematic aceste căutări, indiferent de mărimea lor reală.
+${loc.name} are aproximativ **${popK}.000 de locuitori**. Concret: indiferent de domeniu, ai zeci sau sute de concurenți locali — iar clientul care caută pe Google „${loc.name}" + serviciul tău alege aproape întotdeauna dintre primele rezultate. În ${loc.county}, firmele cu site profesional și profil Google îngrijit domină sistematic aceste căutări, indiferent de mărimea lor reală.
 
 ## Ce influențează prețul unui site în ${loc.name}?
 
 Prețul unui site web depinde de mai mulți factori:
 
 **1. Tipul de site**
-- **Site prezentare** (5 pagini): de la 699€ — ideal pentru firme mici, cabinete, saloane din ${loc.name}
-- **Magazin online** (20+ produse): de la 1200€ — pentru comerț online din ${loc.county}
+- **Site prezentare** (5 pagini): de la 1.500 lei — ideal pentru firme mici, cabinete, saloane din ${loc.name}
+- **Magazin online** (20+ produse): de la 3.000 lei — pentru comerț online din ${loc.county}
 - **Site complex / custom**: preț la cerere — aplicații web, platforme, integrări speciale
 
 **2. Funcționalități extra**
@@ -204,7 +202,7 @@ Cu peste **10 ani de experiență** și **200+ clienți** din toată România, I
 - Cod modern, rapid — site-uri cu scor Google PageSpeed peste 90
 - Suport 30 zile gratuit post-lansare
 - Plată în 2 rate: 50% avans + 50% la livrare
-- Administrare opțională de la 50€/lună
+- Administrare opțională de la 100 lei/lună
 
 ## Primește estimare gratuită
 
@@ -212,10 +210,10 @@ Folosește [consultantul nostru digital AI](/consultanta) pentru a afla exact c�
 }
 
 export function generatePromoContent(loc: Location): string {
-  const { popK, searches } = localStats(loc);
+  const { popK } = localStats(loc);
   return `Vrei mai mulți clienți pentru afacerea ta din ${loc.name}? Iată strategiile concrete care funcționează în ${loc.county} în 2026.
 
-La o populație de circa **${popK}.000 de locuitori**, în ${loc.name} se fac lunar zeci de mii de căutări locale pe Google (estimativ **${searches.toLocaleString("ro-RO")}+** pe servicii și produse). Fiecare strategie de mai jos țintește exact aceste căutări — ale oamenilor din orașul tău, aflați deja în căutarea a ceea ce vinzi.
+La o populație de circa **${popK}.000 de locuitori**, în ${loc.name} oamenii caută zilnic pe Google servicii și produse din oraș. Fiecare strategie de mai jos țintește exact aceste căutări — ale oamenilor din orașul tău, aflați deja în căutarea a ceea ce vinzi.
 
 ## 1. Google Business Profile (GRATUIT)
 

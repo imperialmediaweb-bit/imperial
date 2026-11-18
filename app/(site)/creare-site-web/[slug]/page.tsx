@@ -39,11 +39,11 @@ export async function generateMetadata(
   const offer = getLocalOffer(loc.slug);
   return {
     title: offer
-      ? `Site pentru afacerea ta din ${loc.name} — 1.500 lei, gata în 14 zile | Imperial Media`
-      : `Creare Site Web ${loc.name} — Web Design, Magazine Online, Promovare | Imperial Media`,
+      ? `Site pentru afacerea ta din ${loc.name} — 1.500 lei, gata în 14 zile`
+      : `Creare site web ${loc.name} — de la 1.500 lei, custom, nu șablon`,
     description: offer
       ? `Site de prezentare pentru afaceri din ${loc.name}: 1.500 lei, gata în maximum 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook 5 zile, pagina de Facebook și profilul Google. Estimare în 2 minute.`
-      : `Creare site web în ${loc.name} de la 699€, magazine online de la 1.200€, promovare în 50 de ziare. Web design custom pentru afaceri din ${loc.name}, ${loc.county} — estimare gratuită în 2 minute.`,
+      : `Site-uri pentru afaceri din ${loc.name}: site de prezentare de la 1.500 lei, magazin online de la 3.000 lei, construite de la zero, plus promovare în 50 de ziare. Estimare gratuită în 2 minute.`,
     alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
       title: `Creare Site Web ${loc.name} | Imperial Media`,
@@ -70,8 +70,6 @@ export default async function LocationPage(
 
   // Cifre locale derivate din populația reală — fiecare pagină de oraș devine unică
   const popK = Math.round(loc.population / 1000);
-  const firmsEst = Math.round(loc.population / 38);
-  const searchesEst = Math.round(loc.population * 0.6);
   // Profilul economic scris de mână + proiectele reale livrate în zonă — conținut de necopiat
   const economy = cityEconomyProfile(loc.slug, loc.region);
   const localProjects = importedProjects
@@ -83,7 +81,7 @@ export default async function LocationPage(
       icon: Code2,
       title: `Website prezentare ${loc.name}`,
       text: `Site-uri de prezentare custom pentru firme din ${loc.name} — design modern, responsive, optimizat SEO.`,
-      price: offer ? "1.500 lei" : "de la 699€",
+      price: offer ? "1.500 lei" : "de la 1.500 lei",
     },
     {
       icon: ShoppingBag,
@@ -110,7 +108,7 @@ export default async function LocationPage(
       q: `Cât costă un site web în ${loc.name}?`,
       a: offer
         ? `Pentru afacerile din ${loc.name}, un site de prezentare cu 5 pagini costă 1.500 lei și e gata în maximum 14 zile. Primești cadou articol în ${offer.newspaper.name}, campanie pe Facebook de 5 zile și pagina de Facebook plus profilul Google făcute de noi. Opțiunile (logo, programări, blog) au preț fix, de la 99 lei.`
-        : `Un site de prezentare custom pornește de la 699€, iar un magazin online de la 1200€. Prețul final depinde de funcționalități, pagini și complexitate. Folosește estimatorul nostru AI gratuit pentru un preț orientativ în 2 minute.`,
+        : `Un site de prezentare custom pornește de la 1.500 lei, iar un magazin online de la 3.000 lei. Prețul final depinde de funcționalități, pagini și complexitate. Folosește estimatorul nostru AI gratuit pentru un preț orientativ în 2 minute.`,
     },
     {
       q: `Cât durează să faceți un site pentru firma mea din ${loc.name}?`,
@@ -120,7 +118,7 @@ export default async function LocationPage(
     },
     {
       q: `Faceți și mentenanță după livrare?`,
-      a: `Da — primele 30 de zile sunt gratuite. După, oferim pachetul de Administrare (de la 50€/lună) care include backup, update-uri, articole SEO și suport.`,
+      a: `Da — primele 30 de zile sunt gratuite. După, oferim pachetul de Administrare (de la 100 lei/lună) care include backup, update-uri, articole SEO și suport.`,
     },
     {
       q: `Lucrați doar cu firme din ${loc.name}?`,
@@ -130,7 +128,7 @@ export default async function LocationPage(
       q: `Cât costă un magazin online în ${loc.name}?`,
       a: offer
         ? `Pentru afacerile din ${loc.name}, un magazin online pornește de la 3.499 lei, cu plăți cu cardul, design pe brand și SEO din structură. Prețul exact îl afli în 2 minute din estimarea de pe pagină.`
-        : `Un magazin online complet pornește de la 1.200€ și poate ajunge la 4.500€+ în funcție de numărul de produse, integrarea cu curieri și facturare. Include plăți cu cardul, design custom și SEO din structură. Cere estimarea exactă gratuit, în 2 minute.`,
+        : `Un magazin online complet pornește de la 3.000 lei, iar prețul final depinde de numărul de produse, integrarea cu curieri și facturare. Include plăți cu cardul, design custom și SEO din structură. Cere estimarea exactă gratuit, în 2 minute.`,
     },
     {
       q: `Faceți SEO și promovare online pentru firme din ${loc.name}?`,
@@ -142,7 +140,7 @@ export default async function LocationPage(
       q: `Sunteți o agenție de web design potrivită pentru firme mici din ${loc.name}?`,
       a: offer
         ? `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. În ${loc.name} site-ul de prezentare costă 1.500 lei, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`
-        : `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. Pachetele pornesc de la 699€ cu plata în 2 rate, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`,
+        : `Da — majoritatea clienților noștri sunt firme mici și mijlocii: cabinete, saloane, service-uri, magazine, pensiuni. Site-ul de prezentare pornește de la 1.500 lei, cu plata în 2 rate, iar site-ul se amortizează de obicei din primii 2-3 clienți noi aduși din online.`,
     },
     {
       q: `Ce tehnologii folosiți?`,
@@ -388,18 +386,10 @@ export default async function LocationPage(
           <h2 className="text-center font-display text-xl font-extrabold text-text sm:text-2xl">
             Piața din {loc.name}, în cifre
           </h2>
-          <div className="mx-auto mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="mx-auto mt-6 grid max-w-xs grid-cols-1 gap-3">
             <div className="rounded-2xl border border-bg-border bg-white/5 p-5 text-center">
               <p className="font-display text-3xl font-extrabold text-brand-orange">~{popK}.000</p>
               <p className="mt-1 text-xs text-text-muted">locuitori în {loc.name}</p>
-            </div>
-            <div className="rounded-2xl border border-bg-border bg-white/5 p-5 text-center">
-              <p className="font-display text-3xl font-extrabold text-brand-orange">~{firmsEst.toLocaleString("ro-RO")}</p>
-              <p className="mt-1 text-xs text-text-muted">firme active estimate în zonă</p>
-            </div>
-            <div className="rounded-2xl border border-bg-border bg-white/5 p-5 text-center">
-              <p className="font-display text-3xl font-extrabold text-brand-orange">{searchesEst.toLocaleString("ro-RO")}+</p>
-              <p className="mt-1 text-xs text-text-muted">căutări locale estimate pe lună</p>
             </div>
           </div>
           {/* Potențialul orașului — profil economic scris de mână, unic per oraș */}
@@ -409,9 +399,8 @@ export default async function LocationPage(
             </p>
             <p className="mt-2 text-sm leading-relaxed text-text-muted">{economy}</p>
             <p className="mt-3 border-t border-bg-border/50 pt-3 text-sm leading-relaxed text-text-muted">
-              <strong className="text-text">Cum te ajută concret un site aici:</strong> cele{" "}
-              {searchesEst.toLocaleString("ro-RO")}+ căutări lunare din zonă sunt oameni care VOR ceva acum
-              — iar Google le arată primele 3-5 firme. Un site rapid, cu profil Google îngrijit, te mută în
+              <strong className="text-text">Cum te ajută concret un site aici:</strong> cine caută pe Google un
+              serviciu în {loc.name} vrea ceva acum — iar Google îi arată primele 3-5 firme. Un site rapid, cu profil Google îngrijit, te mută în
               fața lor: pentru multe firme din {loc.name}, asta înseamnă primii clienți noi din altă sursă
               decât „din auzite" — măsurabili, lună de lună.
             </p>
@@ -513,7 +502,7 @@ export default async function LocationPage(
                   { "@type": "City", name: loc.name },
                   { "@type": "AdministrativeArea", name: loc.county },
                 ],
-                priceRange: offer ? "1500 - 15000 RON" : "699€ - 5000€",
+                priceRange: "1500 - 15000 RON",
                 aggregateRating: {
                   "@type": "AggregateRating",
                   ratingValue: siteConfig.reviews.ratingValue,
