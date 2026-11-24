@@ -9,7 +9,7 @@ import {
   generatePromoContent,
   generateGeneralContent,
 } from "@/lib/blog-articles";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, fitText, TITLE_MAX, DESCRIPTION_MAX } from "@/lib/site";
 import { getStockPhoto } from "@/lib/stock-photo";
 
 // Interogarea de poză per tip de articol — generic business, mereu relevant
@@ -31,8 +31,8 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const article = getArticleBySlug(params.slug);
   if (!article) return {};
   return {
-    title: article.title,
-    description: article.description,
+    title: fitText(article.title, TITLE_MAX),
+    description: fitText(article.description, DESCRIPTION_MAX),
     alternates: { canonical: `${siteConfig.url}/blog/${article.slug}` },
     openGraph: {
       title: article.title,

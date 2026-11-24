@@ -7,9 +7,9 @@ import { ServiceLanding } from "@/components/ServiceLanding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Creare Site Web — de la zero, fără șabloane, de la 1.500 lei | Imperial Media",
+  title: "Creare site web de la 1.500 lei, de la zero",
   description:
-    "Creare site web profesional în România: construit 100% de la zero, fără șabloane, de la 1.500 lei. Domeniu + găzduire incluse în administrare (de la 100 lei/lună), SEO inclus, livrare rapidă. 10+ ani, 200+ clienți.",
+    "Creare site web construit de la zero, fără șabloane, de la 1.500 lei. SEO inclus, livrare rapidă, 10+ ani experiență și 200+ clienți. Estimare gratuită.",
   alternates: { canonical: `${siteConfig.url}/creare-site-web` },
 };
 

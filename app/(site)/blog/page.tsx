@@ -4,7 +4,7 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { getAllArticles } from "@/lib/blog-articles";
 
 export const metadata: Metadata = {
-  title: "Blog — Articole despre web design, SEO și marketing digital",
+  title: "Blog: web design, SEO și marketing digital",
   description:
     "Articole, ghiduri și sfaturi despre creare site web, SEO local, promovare online, și marketing digital pentru afaceri din România.",
 };

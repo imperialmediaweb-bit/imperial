@@ -7,9 +7,9 @@ import { ServiceLanding } from "@/components/ServiceLanding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Optimizare SEO + vizibilitate în AI (ChatGPT, Gemini) | Imperial Media",
+  title: "Optimizare SEO și vizibilitate în ChatGPT",
   description:
-    "Optimizare SEO pentru site-uri și afaceri locale din România: tehnic, conținut, autoritate prin presă (rețeaua parteneră Media Expres, 50 de ziare) și GEO — vizibilitate în ChatGPT, Gemini, Perplexity.",
+    "Optimizare SEO pentru afaceri locale: tehnic, conținut, autoritate prin 50 de ziare online și vizibilitate în ChatGPT, Gemini și Perplexity.",
   alternates: { canonical: `${siteConfig.url}/optimizare-seo` },
 };
 

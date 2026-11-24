@@ -3,7 +3,7 @@ import { Sparkles, Mic, Zap, ShieldCheck } from "lucide-react";
 import { BriefChat } from "@/components/BriefChat";
 
 export const metadata: Metadata = {
-  title: "Primește estimare — Imperial AI | Imperial Media",
+  title: "Primește estimare gratuită cu Imperial AI",
   description:
     "Discută cu Imperial AI: scris sau prin voce. În ~2 minute primești o estimare orientativă pentru proiectul tău web.",
 };

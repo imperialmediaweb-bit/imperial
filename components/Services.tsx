@@ -53,15 +53,16 @@ const small = [
   },
 ];
 
-export function Services() {
+export function Services({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" } = {}) {
+  const Heading = headingLevel;
   return (
     <section id="servicii" className="section relative overflow-hidden">
       <div className="container-app relative z-10">
         <div className="max-w-2xl">
           <span className="chip">Serviciile noastre</span>
-          <h2 className="section-title mt-4">
+          <Heading className="section-title mt-4">
             Tot ce îți trebuie, <span className="text-gradient">sub un singur acoperiș</span>
-          </h2>
+          </Heading>
         </div>
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

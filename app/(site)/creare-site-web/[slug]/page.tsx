@@ -18,7 +18,7 @@ import {
 import { LOCATIONS, getLocationBySlug, getNearbyLocations } from "@/lib/locations";
 import { cityEconomyProfile } from "@/lib/city-economy";
 import { importedProjects } from "@/lib/projects-data";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, fitText, TITLE_MAX, DESCRIPTION_MAX } from "@/lib/site";
 import { packages } from "@/lib/packages";
 import { getLocalOffer } from "@/lib/local-offer";
 import { LocalOfferSection } from "@/components/LocalOfferSection";
@@ -39,15 +39,19 @@ export async function generateMetadata(
   if (!loc) return {};
   const offer = getLocalOffer(loc.slug);
   return {
-    title: offer
-      ? `Site pentru afacerea ta din ${loc.name} — 1.500 lei, gata în 14 zile`
-      : `Creare site web ${loc.name} — de la 1.500 lei, custom, nu șablon`,
-    description: offer
-      ? `Site de prezentare pentru afaceri din ${loc.name}: 1.500 lei, gata în maximum 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook 5 zile, pagina de Facebook și profilul Google. Estimare în 2 minute.`
-      : `Site-uri pentru afaceri din ${loc.name}: site de prezentare de la 1.500 lei, magazin online de la 3.000 lei, construite de la zero, plus promovare în 50 de ziare. Estimare gratuită în 2 minute.`,
+    title: fitText(
+      offer ? `Site pentru firma ta din ${loc.name}, 1.500 lei` : `Creare site web ${loc.name} de la 1.500 lei`,
+      TITLE_MAX
+    ),
+    description: fitText(
+      offer
+        ? `Site de prezentare pentru firme din ${loc.name}: 1.500 lei, gata în 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook și profil Google.`
+        : `Site-uri pentru firme din ${loc.name}: prezentare de la 1.500 lei, magazin online de la 3.000 lei, construite de la zero. Estimare gratuită în 2 minute.`,
+      DESCRIPTION_MAX
+    ),
     alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
-      title: `Creare Site Web ${loc.name} | Imperial Media`,
+      title: `Creare site web ${loc.name} · Imperial Media`,
       description: `Site-uri custom și magazine online pentru afaceri din ${loc.name}. 10+ ani experiență, 200+ clienți. Estimare gratuită.`,
       url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
       locale: "ro_RO",
