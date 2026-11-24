@@ -61,7 +61,13 @@ export function Mark({ className }: { className?: string }) {
 export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   // logo-ul LINIAR oficial (coroană + IMPERIAL MEDIA) — lizibil la orice mărime
   const mark =
-    size === "lg" ? "h-11 sm:h-12" : size === "sm" ? "h-8" : "h-9 sm:h-10";
+    // pe telefon logo-ul e mai mic, ca butonul de meniu să încapă lângă el
+    // (la h-11 logo-ul avea 240px și împingea meniul în afara ecranului)
+    size === "lg"
+      ? "h-7 min-[380px]:h-8 sm:h-11 md:h-12"
+      : size === "sm"
+        ? "h-8"
+        : "h-9 sm:h-10";
 
   return (
     <Link

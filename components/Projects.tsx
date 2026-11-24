@@ -17,7 +17,7 @@ import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-ov
 const NEXT_WIDTHS = [640, 750, 828, 1080, 1200, 1920];
 function optimizedLocal(src: string, w: number): string {
   const width = NEXT_WIDTHS.find((x) => x >= w) ?? 1200;
-  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=72`;
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
 }
 
 function buildImageChain(p: ImportedProject, w = 1200, h = 750): string[] {
