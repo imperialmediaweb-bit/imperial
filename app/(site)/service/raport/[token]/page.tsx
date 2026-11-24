@@ -14,7 +14,7 @@ import type { ServiceReport } from "@/app/api/service-report/route";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Raportul tău de consultanță — Imperial Media",
+  title: "Raportul tău de consultanță",
   robots: { index: false, follow: false },
 };
 

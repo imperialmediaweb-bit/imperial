@@ -7,9 +7,9 @@ import { ServiceLanding } from "@/components/ServiceLanding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Creare Magazin Online — de la 3.000 lei, opțiuni la alegere | Imperial Media",
+  title: "Creare magazin online de la 3.000 lei",
   description:
-    "Creare magazin online în România: plăți cu cardul, integrare curieri cu AWB automat, facturare automată. Prețuri transparente de la 1.200€, custom pe tehnologii de ultimă generație. Promovare în 50 de ziare inclusă.",
+    "Magazin online de la 3.000 lei: plată ramburs sau cu cardul, AWB automat la curieri și facturare automată. Construit de la zero, cu promovare în presă.",
   alternates: { canonical: `${siteConfig.url}/creare-magazin-online` },
 };
 

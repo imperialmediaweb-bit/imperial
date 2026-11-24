@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import { siteConfig } from "@/lib/site";
 import { Aurora } from "./effects/Aurora";
 
-export function ContactSection() {
+export function ContactSection({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" } = {}) {
+  const Heading = headingLevel;
   const [data, setData] = useState({
     name: "",
     phone: "",
@@ -65,10 +66,10 @@ export function ContactSection() {
           className="flex h-full flex-col rounded-3xl border border-bg-border bg-bg-card/40 p-7 backdrop-blur sm:p-9"
         >
           <span className="chip self-start">Scrie-ne</span>
-          <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+          <Heading className="mt-4 font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
             Contactează-ne pentru{" "}
             <span className="text-gradient">soluții digitale eficiente</span>
-          </h2>
+          </Heading>
           <p className="mt-4 text-base text-text-muted">
             Consultanță, oferte personalizate și suport rapid. Echipa noastră
             te ajută în maximum 24 de ore.

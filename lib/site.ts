@@ -42,3 +42,17 @@ export function publicOrigin(req: Request): string {
     return siteConfig.url;
   }
 }
+
+// Google afișează ~60 de caractere din titlu și ~160 din descriere. Șablonul din
+// layout adaugă „ · Imperial Media” (17 caractere) la fiecare titlu, deci partea
+// paginii are voie la cel mult 43. Tăiem la cuvânt întreg, fără să rupem sensul.
+export const TITLE_MAX = 43;
+export const DESCRIPTION_MAX = 158;
+
+export function fitText(text: string, max: number): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1);
+  const atWord = cut.slice(0, Math.max(cut.lastIndexOf(" "), Math.floor(max * 0.6)));
+  return atWord.replace(/[\s,;:—–-]+$/, "") + "…";
+}

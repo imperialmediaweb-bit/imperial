@@ -7,7 +7,7 @@ import { importedProjects } from "@/lib/projects-data";
 import { siteConfig } from "@/lib/site";
 
 export const metadata = {
-  title: "Proiecte — Portofoliu Imperial Media",
+  title: "Portofoliu: proiecte livrate pentru clienți",
   description:
     "Portofoliu Imperial Media: peste 384 de proiecte livrate pentru clienți reali — site-uri de prezentare, magazine online, branding și promovare.",
 };

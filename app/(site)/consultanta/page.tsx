@@ -3,9 +3,9 @@ import { Sparkles, TrendingUp, Target, Users } from "lucide-react";
 import { BriefChat } from "@/components/BriefChat";
 
 export const metadata: Metadata = {
-  title: "Consultanță digitală gratuită — Imperial Media",
+  title: "Consultanță digitală gratuită",
   description:
-    "Află GRATUIT unde greșești cu prezența online. Imperial AI îți analizează afacerea și-ți spune exact ce ai nevoie: site, social media, SEO, branding. Fără obligații.",
+    "Află gratuit unde pierzi clienți online. Imperial AI îți analizează afacerea și îți spune ce îți trebuie: site, social media, SEO sau branding.",
 };
 
 export default function ConsultantaPage() {

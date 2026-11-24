@@ -4,7 +4,7 @@ import { Estimator } from "@/components/experience/Estimator";
 import { MessageCircle, Zap, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Estimare de preț pe loc — cât costă site-ul tău | Imperial Media",
+  title: "Cât costă un site? Estimare de preț pe loc",
   description:
     "Alege tipul de site și opțiunile de care ai nevoie și vezi instant estimarea de preț. Oferta exactă, personalizată, o primești gratuit în aceeași zi.",
   alternates: { canonical: "/estimare" },
