@@ -75,10 +75,10 @@ export function HowItWorks() {
               <motion.div
                 key={step.title}
                 className="h-full"
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.35, delay: Math.min(idx * 0.05, 0.15) }}
               >
                 <StepCard step={step} idx={idx} />
               </motion.div>

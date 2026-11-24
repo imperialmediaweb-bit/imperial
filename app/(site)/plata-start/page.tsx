@@ -9,7 +9,7 @@ import { CheckCircle2 } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Pachet Start Online — plată | Imperial Media",
+  title: "Plată pachet Start Online",
   robots: { index: false, follow: false },
 };
 

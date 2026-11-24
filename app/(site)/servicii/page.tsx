@@ -4,7 +4,7 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { FAQ } from "@/components/FAQ";
 
 export const metadata = {
-  title: "Servicii — Imperial Media",
+  title: "Servicii: site-uri, magazine online și SEO",
   description:
     "Site-uri de prezentare, magazine online, branding, promovare și administrare. Pachete complete cu preț fix sau ofertă personalizată.",
 };
@@ -12,7 +12,7 @@ export const metadata = {
 export default function ServiciiPage() {
   return (
     <main>
-      <Services />
+      <Services headingLevel="h1" />
       <HowItWorks />
       <PricingCards />
       <FAQ />

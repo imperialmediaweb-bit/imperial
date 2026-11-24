@@ -15,7 +15,8 @@ import { gsap, registerGsap, useGSAP } from "./ids/lib/gsap";
 import { useAfterInteraction, useReducedMotion } from "./ids/hooks";
 import { MagneticButton } from "./ids/effects/MagneticButton";
 import { NumberTicker } from "./effects/NumberTicker";
-import { Zap } from "lucide-react";
+import { ScanSearch, Star, Zap } from "lucide-react";
+import { siteConfig } from "@/lib/site";
 
 // Motorul 3D vine într-un fișier separat: pe telefon nu se descarcă deloc
 const HeroCrystalScene = dynamic(() => import("./HeroCrystalScene"), { ssr: false });
@@ -64,21 +65,25 @@ export function HeroCrystal() {
 
       {/* conținutul */}
       <div className="container-app relative z-10 flex h-full flex-col items-center justify-center lg:items-start">
-        {/* LOGO-ul ca vedetă: sigla + wordmark ca în identitate, slogan mic */}
-        <LineReveal className="flex flex-col items-center lg:items-start">
-          <span data-line className="text-chrome mt-6 block font-brand text-[clamp(1.7rem,3.4vw,3rem)] tracking-[0.14em]">
-            IMPERIAL
-          </span>
-          <span data-line className="mt-2 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.55em] text-white/60">
-            <span className="h-px w-10 bg-gradient-to-r from-transparent via-brand-orange to-brand-magenta" />
-            MEDIA
-            <span className="h-px w-10 bg-gradient-to-r from-brand-magenta via-brand-purple to-transparent" />
-          </span>
-          <span data-line className="mt-6 block max-w-md text-center text-[15px] leading-relaxed text-white/65 sm:text-[17px] lg:text-left">
-            Site-uri pe care oamenii <span className="text-gradient font-semibold">nu le uită</span> —
-            construite de la zero, cu 3D, mișcare și cod rapid.
+        {/* Numele firmei e semnătura mică de deasupra; titlul spune ce câștigă clientul */}
+        <p className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.45em] text-white/55">
+          <span className="h-px w-8 bg-gradient-to-r from-transparent via-brand-orange to-brand-magenta" />
+          <span className="text-chrome font-brand tracking-[0.3em]">Imperial</span> Media
+          <span className="h-px w-8 bg-gradient-to-r from-brand-magenta via-brand-purple to-transparent" />
+        </p>
+        <LineReveal className="mt-5 max-w-[15ch] text-center font-display text-[clamp(2.3rem,5.4vw,4.4rem)] font-extrabold leading-[1.02] tracking-tight text-text lg:text-left">
+          <span data-line className="block">Site-uri care îți</span>
+          <span data-line className="block">
+            aduc <span className="text-gradient">clienți</span>
           </span>
         </LineReveal>
+        <p className="mt-5 max-w-md text-center text-[15px] leading-relaxed text-white/70 sm:text-[17px] lg:text-left">
+          Construite de la zero, rapide și gândite pentru Google —{" "}
+          <Link href="/site-start" className="font-semibold text-text underline decoration-brand-orange/60 underline-offset-4 transition hover:decoration-brand-orange">
+            de la {"1.500"} lei
+          </Link>
+          , gata în câteva zile.
+        </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
           <MagneticButton strength={0.4}>
@@ -92,18 +97,35 @@ export function HeroCrystal() {
             </Link>
           </MagneticButton>
           <Link
-            href="/site-start"
+            href="/audit"
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-medium text-text backdrop-blur transition hover:border-brand-orange/70 hover:bg-white/[0.08]"
           >
-            Site Start — 1.500 lei
+            <ScanSearch className="h-4 w-4 text-brand-orange" />
+            Audit gratuit al site-ului tău
           </Link>
         </div>
 
-        <div className="mt-10 flex items-start justify-center gap-8 sm:gap-12 lg:justify-start">
+        {/* dovada socială, imediat sub butoane */}
+        <a
+          href="#recenzii"
+          className="mt-6 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
+        >
+          <span className="flex text-amber-400" aria-hidden="true">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} className="h-4 w-4 fill-current" />
+            ))}
+          </span>
+          <span>
+            <b className="font-semibold text-text">{siteConfig.reviews.ratingValue.toLocaleString("ro-RO")}</b> din{" "}
+            {siteConfig.reviews.reviewCount} de recenzii
+          </span>
+        </a>
+
+        <div className="mt-8 flex items-start justify-center gap-8 sm:gap-12 lg:justify-start">
           {[
-            { value: 384, suffix: "+", label: "proiecte" },
-            { value: 200, suffix: "+", label: "clienți" },
-            { value: 50, suffix: "", label: "ziare în rețea" },
+            { value: siteConfig.stats.projects, suffix: "+", label: "proiecte" },
+            { value: siteConfig.stats.clients, suffix: "+", label: "clienți" },
+            { value: siteConfig.stats.newspapers, suffix: "", label: "ziare în rețea" },
           ].map((s) => (
             <div key={s.label}>
               <NumberTicker

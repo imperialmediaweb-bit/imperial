@@ -16,7 +16,7 @@ import { siteStartPriceRon } from "@/lib/stripe";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Contul tău — Imperial Media",
+  title: "Contul tău",
   robots: { index: false, follow: false },
 };
 

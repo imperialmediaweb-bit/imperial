@@ -42,17 +42,23 @@ export async function POST(req: Request) {
   const phoneRaw = String(body?.phone ?? "").trim();
   const email = String(body?.email ?? "").trim();
 
-  if (name.length < 2 || !isEmail(email)) {
-    return NextResponse.json(
-      { error: "Nume și email valid obligatorii." },
-      { status: 400 }
-    );
-  }
-
   const phone = phoneRaw ? (isPhone(phoneRaw) ? phoneRaw : "") : "";
   if (phoneRaw && !phone) {
     return NextResponse.json(
       { error: "Telefonul dat nu pare valid. Lasă gol sau corectează-l." },
+      { status: 400 }
+    );
+  }
+  if (email && !isEmail(email)) {
+    return NextResponse.json(
+      { error: "Adresa de email nu pare validă. Lasă gol sau corecteaz-o." },
+      { status: 400 }
+    );
+  }
+  // Ne trebuie numele și cel puțin o cale de a reveni la om: telefon SAU email.
+  if (name.length < 2 || (!email && !phone)) {
+    return NextResponse.json(
+      { error: "Scrie-ne numele și un telefon sau un email, ca să te putem contacta." },
       { status: 400 }
     );
   }
