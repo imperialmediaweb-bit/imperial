@@ -92,7 +92,7 @@ export default async function LocationPage(
       icon: ShoppingBag,
       title: `Magazin online ${loc.name}`,
       text: `Magazine online performante pentru afaceri din ${loc.county} — plăți sigure, administrare ușoară.`,
-      price: offer ? "de la 3.499 lei" : "de la 1200€",
+      price: offer ? "de la 3.499 lei" : "de la 3.000 lei",
     },
     {
       icon: Palette,
@@ -104,7 +104,7 @@ export default async function LocationPage(
       icon: Megaphone,
       title: `Promovare online ${loc.name}`,
       text: `Campanii de promovare în 50+ ziare online — vizibilitate și SEO pentru afaceri locale din ${loc.county}.`,
-      price: "de la 200€",
+      price: "de la 1.500 lei",
     },
   ];
 

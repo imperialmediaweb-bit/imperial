@@ -171,16 +171,17 @@ Prețul unui site web depinde de mai mulți factori:
 - **Magazin online** (20+ produse): de la 3.000 lei — pentru comerț online din ${loc.county}
 - **Site complex / custom**: preț la cerere — aplicații web, platforme, integrări speciale
 
-**2. Funcționalități extra**
-- Programări automate în calendar + reamintire pe email: +399 lei
-- Comenzi online simple (restaurante, livrări): +599 lei
-- Blog / noutăți: +199 lei
-- Pagină în plus: +99 lei / pagină
-- A doua limbă: +499 lei
+**2. Opțiuni la alegere, cu preț fix** (blogul e inclus în pachet)
+- Programări / rezervări online: +500 lei
+- Galerie foto / portofoliu: +400 lei
+- Pagină în plus: +200 lei / pagină
+- A doua limbă: +700 lei
+- Asistent AI pe site: +600 lei
+- Vizibilitate în ChatGPT, Gemini și Claude: +500 lei
 
-**3. Logo și branding**
-- Logo nou: +199 lei
-- Identitate vizuală (logo, culori, fonturi): +399 lei
+**3. Logo și prezență pe Facebook / Google**
+- Logo: +300 lei
+- Configurare Facebook + Google Business: +500 lei (sau doar profilul Google: +200 lei)
 
 **4. Termen**
 - Site de prezentare: gata în maximum 14 zile de la primirea textelor și pozelor
@@ -235,7 +236,7 @@ Cea mai rapidă metodă de vizibilitate în ${loc.county}:
 - **50+ linkuri dofollow** → boost SEO masiv
 - Distribuire pe Facebook-ul fiecărei publicații
 - Raport complet în 24h
-- Preț: **200€** per campanie (sau **GRATUIT** la orice site nou)
+- Preț: **1.500 lei** per campanie (inclusă cadou la Site Custom și la magazinele online)
 - Includ și ziar local din ${loc.county}: ${loc.name} Expres
 
 ## 4. Social media activ
@@ -389,7 +390,7 @@ O pagină pe FIECARE serviciu important („implant dentar", „detartraj", „e
 ## Cât costă
 
 - **Site cabinet (prezentare + servicii + programare prin formular): de la 1.500 lei**
-- **Cu programări online în calendar + notificări: de la 1.899 lei** (1.500 lei + 399 lei)
+- **Cu programări online în calendar + notificări: de la 2.000 lei** (1.500 lei + 500 lei)
 - Include la noi: design custom, GDPR configurat corect, SEO pe paginile de servicii, domeniu + hosting primul an, plus **promovarea în 50 de ziare online** — mențiunile în presă contează și pentru pacienți, și pentru Google.
 
 Ai deja site sau profil Google? [Radiografia Afacerii](/service) îți arată în 5 minute cum stă cabinetul tău față de celelalte din oraș — recenzii, vizibilitate, ce văd pacienții când te caută. Sau [cere direct o estimare](/brief).`,
@@ -412,7 +413,7 @@ Ai deja site sau profil Google? [Radiografia Afacerii](/service) îți arată î
 ## Cât costă site-ul unui salon
 
 - **Site de prezentare cu servicii, prețuri, portofoliu și formular de programare: de la 1.500 lei**
-- **Cu sistem de programări online (calendar, confirmări automate): de la 1.899 lei** (1.500 lei + 399 lei)
+- **Cu sistem de programări online (calendar, confirmări automate): de la 2.000 lei** (1.500 lei + 500 lei)
 - La Imperial Media, orice site include design custom (nu șablon roz generic), SEO local ca să apari la „salon + orașul tău", domeniu + hosting primul an și **campania de promovare în 50 de ziare online**.
 
 Curioasă cum stă salonul tău acum? [Radiografia Afacerii](/service) îți scanează prezența online (Google, recenzii, competiția din oraș) și îți spune exact ce te costă fiecare lipsă. Sau [cere o estimare în 2 minute](/brief).`,

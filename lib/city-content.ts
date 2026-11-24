@@ -59,7 +59,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Faceți site-uri pentru clinici din Iași?", a: "Da. Pentru o clinică facem câte o pagină pe fiecare specialitate, profilul medicilor, programare online și setările GDPR corecte, ca să apară la căutările de tipul „specialitate + Iași”." },
-      { q: "Puteți face site-ul în română și engleză?", a: "Da. A doua limbă e o opțiune de 499 lei, utilă pentru firmele IT, clinicile cu pacienți străini și cazări." },
+      { q: "Puteți face site-ul în română și engleză?", a: "Da. A doua limbă e o opțiune de 700 lei, utilă pentru firmele IT, clinicile cu pacienți străini și cazări." },
       { q: "Lucrați și cu firme din Pașcani sau din zona metropolitană?", a: "Da, cu firme din tot județul Iași, inclusiv din comunele din jurul orașului, unde se mută tot mai multe afaceri." },
     ],
   },
@@ -77,7 +77,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Merită un site custom în Cluj, unde concurența online e mare?", a: "Da, tocmai de aceea. Un site rapid, cu pagini separate pe fiecare serviciu și date structurate pentru Google, are mai multe șanse decât un șablon care arată la fel ca al concurenței." },
-      { q: "Faceți site-uri în engleză pentru firme IT?", a: "Da. Varianta în a doua limbă costă 499 lei și o recomandăm pentru firmele care au clienți sau angajați din afara țării." },
+      { q: "Faceți site-uri în engleză pentru firme IT?", a: "Da. Varianta în a doua limbă costă 700 lei și o recomandăm pentru firmele care au clienți sau angajați din afara țării." },
       { q: "Lucrați cu firme din Florești sau Apahida?", a: "Da. Lucrăm cu firme din tot județul Cluj, inclusiv din localitățile din jurul orașului." },
     ],
   },
@@ -112,7 +112,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       { name: "Imobiliare și construcții", need: "proiecte, filtre și formular de vizionare" },
     ],
     faqs: [
-      { q: "Faceți site-uri în două limbi pentru firmele din Timișoara?", a: "Da. A doua limbă costă 499 lei; e utilă pentru furnizorii din industrie, firmele IT și afacerile cu clienți din străinătate." },
+      { q: "Faceți site-uri în două limbi pentru firmele din Timișoara?", a: "Da. A doua limbă costă 700 lei; e utilă pentru furnizorii din industrie, firmele IT și afacerile cu clienți din străinătate." },
       { q: "Lucrați cu firme din Dumbrăvița sau Giroc?", a: "Da, cu firme din tot județul Timiș, inclusiv din localitățile din jurul orașului." },
       { q: "Cât durează un site de prezentare?", a: "Un site de prezentare e gata în aproximativ două săptămâni de la primirea textelor și pozelor." },
     ],
@@ -131,7 +131,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Faceți site-uri pentru cazări din Mamaia și de pe litoral?", a: "Da. Un site de cazare cu rezervare directă te scapă de comisionul platformelor; îl recomandăm gata cu cel puțin două luni înainte de sezon." },
-      { q: "Puteți face site în engleză pentru firme de logistică?", a: "Da, a doua limbă costă 499 lei." },
+      { q: "Puteți face site în engleză pentru firme de logistică?", a: "Da, a doua limbă costă 700 lei." },
       { q: "Lucrați cu firme din Mangalia sau Medgidia?", a: "Da, cu firme din tot județul Constanța." },
     ],
   },
@@ -185,7 +185,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Lucrați cu firme din Tecuci sau din județul Galați?", a: "Da, cu firme din tot județul." },
-      { q: "Faceți site-uri în engleză pentru firme din zona portului?", a: "Da, a doua limbă costă 499 lei." },
+      { q: "Faceți site-uri în engleză pentru firme din zona portului?", a: "Da, a doua limbă costă 700 lei." },
       { q: "Cât durează un site?", a: "Un site de prezentare e gata în aproximativ două săptămâni de la primirea textelor și pozelor." },
     ],
   },
@@ -221,8 +221,8 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Lucrați cu firme din Mioveni, Câmpulung sau Curtea de Argeș?", a: "Da, cu firme din tot județul Argeș." },
-      { q: "Faceți site în engleză pentru furnizori auto?", a: "Da, a doua limbă costă 499 lei." },
-      { q: "Pot programa clienții online?", a: "Da. Programările automate în calendar, cu reamintire pe email, costă 399 lei." },
+      { q: "Faceți site în engleză pentru furnizori auto?", a: "Da, a doua limbă costă 700 lei." },
+      { q: "Pot programa clienții online?", a: "Da. Programările online, cu notificare la fiecare rezervare, costă 500 lei." },
     ],
   },
   sibiu: {
@@ -238,7 +238,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       { name: "Clinici și cabinete", need: "programare online, pagini pe specialități" },
     ],
     faqs: [
-      { q: "Faceți site-uri în engleză sau germană pentru firme din Sibiu?", a: "Da. Fiecare limbă în plus costă 499 lei; e utilă pentru turism și pentru furnizorii cu clienți din străinătate." },
+      { q: "Faceți site-uri în engleză sau germană pentru firme din Sibiu?", a: "Da. Fiecare limbă în plus costă 700 lei; e utilă pentru turism și pentru furnizorii cu clienți din străinătate." },
       { q: "Lucrați cu firme din Mediaș, Cisnădie sau Avrig?", a: "Da, cu firme din tot județul Sibiu." },
       { q: "Faceți site-uri pentru pensiuni din Mărginimea Sibiului?", a: "Da, cu rezervare directă și galerie mare." },
     ],
@@ -256,7 +256,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       { name: "Firme de servicii pentru casă", need: "servicii, zone acoperite și buton de apel" },
     ],
     faqs: [
-      { q: "Faceți site-uri în maghiară sau engleză?", a: "Da. Fiecare limbă în plus costă 499 lei." },
+      { q: "Faceți site-uri în maghiară sau engleză?", a: "Da. Fiecare limbă în plus costă 700 lei." },
       { q: "Lucrați cu cazări de la Băile Felix?", a: "Da, cu rezervare directă, galerie și prețuri pe sezon." },
       { q: "Lucrați cu firme din Salonta, Beiuș sau Marghita?", a: "Da, cu firme din tot județul Bihor." },
     ],
@@ -275,7 +275,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Lucrați cu firme din Băilești, Calafat sau Filiași?", a: "Da, cu firme din tot județul Dolj." },
-      { q: "Cât costă un site de prezentare în Craiova?", a: "Pornește de la 1.500 lei, cu opțiuni la preț fix, de exemplu programări online 399 lei sau logo 199 lei." },
+      { q: "Cât costă un site de prezentare în Craiova?", a: "Pornește de la 1.500 lei, cu opțiuni la preț fix, de exemplu programări online 500 lei sau logo 300 lei." },
       { q: "Faceți și magazine online?", a: "Da, de la 3.000 lei, cu plăți cu cardul și curier." },
     ],
   },
