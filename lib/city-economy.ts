@@ -44,6 +44,26 @@ const PROFILES: Record<string, string> = {
   deva: "Deva combină administrația cu turismul cetății și industria din jur — piața de servicii locale se mută vizibil online, cu poziții de top încă accesibile.",
   zalau: "Zalăul, cu industrie de componente și comerț activ, deservește un județ întreg — firmele vizibile online culeg clienți din tot Sălajul, nu doar din oraș.",
   "alba-iulia": "Alba Iulia trăiește din turismul Cetății și din antreprenoriatul în creștere al zonei — plus vecinătatea podgoriilor. Turiștii și localnicii deopotrivă aleg pe Google: cine nu apare acolo nu există.",
+  // orașele adăugate pe 24 nov 2026, ca fiecare pagină de oraș să aibă profil propriu
+  roman: "Romanul e un centru industrial al Moldovei, cu fabrica de țevi și rol de nod feroviar — piața de servicii e activă, iar concurența online e încă mică.",
+  barlad: "Bârladul e centrul comercial al sudului județului Vaslui, cu tradiție culturală și industrie — firmele vizibile online culeg clienții unei zone întregi.",
+  dorohoi: "Dorohoiul trăiește din comerț, servicii și agricultura din jur — o piață în care un site serios și profilul Google te pun primul fără concurență mare.",
+  radauti: "Rădăuțiul combină prelucrarea lemnului, meșteșugurile (ceramica de Marginea) și turismul spre Putna și Sucevița — clienți locali și turiști care caută online.",
+  "campulung-moldovenesc": "Câmpulung Moldovenesc trăiește din turismul montan (Rarău, Giumalău) și din prelucrarea lemnului — sezonalitatea face din vizibilitatea online un must.",
+  campina: "Câmpina, pe Valea Prahovei, are tradiție petrolieră și e la intrarea spre stațiunile montane — clienți locali și turiști care caută totul pe telefon.",
+  hunedoara: "Hunedoara se mută dinspre siderurgie spre servicii și turismul Castelului Corvinilor — un flux constant de vizitatori care caută online.",
+  sighisoara: "Sighișoara trăiește din turismul cetății UNESCO — rezervările se fac online, iar poziția pe Google decide cine se umple.",
+  medias: "Mediașul e centrul industriei gazelor naturale, cu centru istoric săsesc — furnizori care au nevoie de site profesionist și servicii locale care au nevoie de vizibilitate.",
+  dej: "Dejul, cu tradiție în exploatarea sării și industrie, deservește nordul județului Cluj — firmele locale trebuie să țină pasul cu oferta Clujului.",
+  turda: "Turda trăiește din turismul Salinei Turda și al Cheilor Turzii, plus industrie — un flux de turiști care caută cazare și masă online tot anul.",
+  fagaras: "Făgărașul combină industria cu turismul montan spre Munții Făgăraș și Transfăgărășan — cazările și ghizii care se văd online câștigă sezonul.",
+  lugoj: "Lugojul, aproape de Timișoara, are industrie ușoară și o piață de servicii locală care trebuie să țină pasul cu standardele vestului.",
+  "sighetul-marmatiei": "Sighetu Marmației e capitala istorică a Maramureșului — turism cultural, pensiuni tradiționale și comerț de graniță, toate dependente de vizibilitatea online.",
+  mangalia: "Mangalia trăiește din turismul de litoral și din șantierul naval — sezonul se câștigă online, cu luni înainte de vară.",
+  medgidia: "Medgidia, pe Canalul Dunăre–Marea Neagră, stă pe industria cimentului și pe agricultură — o piață de servicii locală cu concurență online redusă.",
+  voluntari: "Voluntari (Pipera) e piață bucureșteană: birouri, rezidențial nou, clienți digitali — câștigă cine are site rapid și poziționare clară.",
+  "popesti-leordeni": "Popești-Leordeni a crescut rapid prin rezidențial nou lângă București — familii tinere care caută toate serviciile pe telefon.",
+  bragadiru: "Bragadiru, cu cartiere noi lângă București, are cerere mare pentru servicii locale — iar clienții noi aleg exclusiv după ce găsesc online.",
 };
 
 const REGION_FALLBACK: Record<string, string> = {
