@@ -13,13 +13,22 @@ import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-ov
 // 3. mShots cu `after` — așteaptă render-ul înainte să întoarcă
 // 4. mShots clasic fallback
 // 5. Gradient + inițiale dacă nimic nu merge
+// Lățimile pe care optimizatorul Next le acceptă implicit (deviceSizes)
+const NEXT_WIDTHS = [640, 750, 828, 1080, 1200, 1920];
+function optimizedLocal(src: string, w: number): string {
+  const width = NEXT_WIDTHS.find((x) => x >= w) ?? 1200;
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=72`;
+}
+
 function buildImageChain(p: ImportedProject, w = 1200, h = 750): string[] {
   const chain: string[] = [];
-  // 0. captura reală a site-ului live, salvată local (public/proiecte/<key>/cover.jpg)
-  if (p.externalUrl) chain.push(`/proiecte/${p.key}/cover.jpg`);
+  // 0. captura reală a site-ului live, salvată local (public/proiecte/<key>/cover.jpg),
+  //    trecută prin optimizatorul Next (AVIF/WebP, lățimea potrivită cardului) —
+  //    JPG-urile brute aveau 80–150 KB fiecare
+  if (p.externalUrl) chain.push(optimizedLocal(`/proiecte/${p.key}/cover.jpg`, w));
   // 1. WP images (funcționează din browser, nu din server)
   if (p.wpImages?.length) {
-    chain.push(...p.wpImages);
+    chain.push(...p.wpImages.map((src) => (src.startsWith("/") ? optimizedLocal(src, w) : src)));
   }
   if (p.externalUrl) {
     // thum.io free tier = max 1200px width. Clamp.
@@ -63,6 +72,7 @@ function ProjectImage({
       src={src}
       alt={p.title}
       loading="lazy"
+      decoding="async"
       onError={() => setIdx((i) => i + 1)}
       className="absolute inset-0 h-full w-full object-cover object-top transition-all duration-700 group-hover:scale-[1.04]"
     />

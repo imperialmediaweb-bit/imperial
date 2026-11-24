@@ -47,7 +47,8 @@ function Slide({ p, i }: { p: (typeof featured)[number]; i: number }) {
           <div className="relative aspect-[16/10] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`/proiecte/${p.key}/cover.jpg`}
+              src={`/_next/image?url=${encodeURIComponent(`/proiecte/${p.key}/cover.jpg`)}&w=1200&q=72`}
+              decoding="async"
               alt={p.title}
               loading={i < 2 ? "eager" : "lazy"}
               onError={(e) => {
