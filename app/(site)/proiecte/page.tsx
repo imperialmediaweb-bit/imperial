@@ -4,11 +4,12 @@ import { ArrowUpRight, Zap } from "lucide-react";
 import { ProjectsListClient } from "@/components/ProjectsList";
 import { FeaturedShowcase } from "@/components/proiecte/FeaturedShowcase";
 import { importedProjects } from "@/lib/projects-data";
+import { siteConfig } from "@/lib/site";
 
 export const metadata = {
   title: "Proiecte — Portofoliu Imperial Media",
   description:
-    "Portofoliu Imperial Media: peste 200 de proiecte realizate pentru clienți reali — site-uri de prezentare, magazine online, branding și promovare.",
+    "Portofoliu Imperial Media: peste 384 de proiecte livrate pentru clienți reali — site-uri de prezentare, magazine online, branding și promovare.",
 };
 
 const mono = "font-jmono text-[10px] uppercase tracking-[0.3em] text-white/60";
@@ -44,7 +45,7 @@ export default function ProiectePage() {
           </p>
           <div className="mt-10 flex flex-wrap items-start gap-x-12 gap-y-6">
             {[
-              { n: "200+", label: "proiecte" },
+              { n: `${siteConfig.stats.projects}+`, label: "proiecte" },
               { n: `${allCats.length}`, label: "categorii" },
               { n: `${liveCount}+`, label: "site-uri live" },
             ].map((s) => (

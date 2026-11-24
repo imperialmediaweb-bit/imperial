@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Send, Loader2 } from "lucide-react";
+import { Phone, Mail, MessageCircle, Send, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { siteConfig } from "@/lib/site";
@@ -64,7 +64,7 @@ export function ContactSection() {
           transition={{ duration: 0.6 }}
           className="flex h-full flex-col rounded-3xl border border-bg-border bg-bg-card/40 p-7 backdrop-blur sm:p-9"
         >
-          <span className="chip self-start">Get In Touch</span>
+          <span className="chip self-start">Scrie-ne</span>
           <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
             Contactează-ne pentru{" "}
             <span className="text-gradient">soluții digitale eficiente</span>
@@ -108,6 +108,24 @@ export function ContactSection() {
                 </p>
               </div>
             </a>
+            <a
+              href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent("Bună! Am văzut site-ul Imperial Media și aș vrea să discutăm despre un site.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 rounded-2xl border border-[#25D366]/40 bg-[#25D366]/[0.07] p-4 transition hover:border-[#25D366] hover:bg-[#25D366]/[0.12]"
+            >
+              <span className="grid h-12 w-12 flex-shrink-0 place-items-center rounded-xl bg-[#25D366] text-white transition group-hover:scale-110">
+                <MessageCircle className="h-5 w-5" />
+              </span>
+              <div className="flex-1">
+                <p className="text-[10px] uppercase tracking-wider text-text-subtle">
+                  WhatsApp — cel mai rapid
+                </p>
+                <p className="text-base font-semibold text-text">
+                  Scrie-ne direct, poți trimite și poze
+                </p>
+              </div>
+            </a>
 
           </div>
 
@@ -132,7 +150,7 @@ export function ContactSection() {
           className="relative flex h-full flex-col rounded-3xl border border-bg-border bg-bg-card bg-card-gradient p-7 shadow-card sm:p-9"
         >
           <div className="mb-6">
-            <span className="chip">Quick Contact</span>
+            <span className="chip">Contact rapid</span>
             <h3 className="mt-3 font-display text-2xl font-extrabold text-text sm:text-3xl">
               Suntem aici pentru orice întrebare
             </h3>
@@ -152,9 +170,11 @@ export function ContactSection() {
 
           <div className="grid gap-4">
             <div>
-              <label className="label">Nume *</label>
+              <label className="label" htmlFor="contact-nume">Nume *</label>
               <input
+                id="contact-nume"
                 required
+                autoComplete="name"
                 className="input"
                 placeholder="Numele tău"
                 value={data.name}
@@ -163,10 +183,12 @@ export function ContactSection() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="label">Telefon *</label>
+                <label className="label" htmlFor="contact-telefon">Telefon *</label>
                 <input
+                  id="contact-telefon"
                   required
                   type="tel"
+                  autoComplete="tel"
                   className="input"
                   placeholder="0712 345 678"
                   value={data.phone}
@@ -174,9 +196,11 @@ export function ContactSection() {
                 />
               </div>
               <div>
-                <label className="label">Email *</label>
+                <label className="label" htmlFor="contact-email">
+                  Email <span className="font-normal text-text-subtle">(opțional)</span>
+                </label>
                 <input
-                  required
+                  id="contact-email"
                   type="email"
                   className="input"
                   placeholder="email@exemplu.ro"
@@ -186,7 +210,9 @@ export function ContactSection() {
               </div>
             </div>
             <div>
-              <label className="label" htmlFor="contact-tip-site">Tip site</label>
+              <label className="label" htmlFor="contact-tip-site">
+                Tip site <span className="font-normal text-text-subtle">(opțional)</span>
+              </label>
               <select
                 id="contact-tip-site"
                 className="input"
@@ -202,8 +228,9 @@ export function ContactSection() {
               </select>
             </div>
             <div>
-              <label className="label">Mesaj (opțional)</label>
+              <label className="label" htmlFor="contact-mesaj">Mesaj (opțional)</label>
               <textarea
+                id="contact-mesaj"
                 className="input min-h-[80px] resize-y"
                 placeholder="Spune-ne despre proiectul tău..."
                 value={data.message}

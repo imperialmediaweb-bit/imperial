@@ -15,7 +15,8 @@ type Testimonial = {
 
 // Pentru a adăuga pozele reale: urcă fișierele în public/testimonials/<nume>.jpg
 // și setează câmpul `photo` de mai jos. Fallback automat la inițiale colorate.
-// Poze + nume + roluri + texte REALE, extrase din HTML-ul homepage WP.
+// Nume + roluri + texte REALE, extrase din vechiul homepage WP (pozele de acolo nu mai
+// există — 404; urcă-le în public/testimonials/ și pune `photo` când le ai).
 const items: Testimonial[] = [
   {
     name: "Ionela Ivan Tudose",
@@ -23,7 +24,6 @@ const items: Testimonial[] = [
     initials: "IT",
     grad: "from-brand-orange to-pink-500",
     text: "Mulțumim Imperial Media pentru toate lucrurile grozave pe care le-ați făcut pe partea de IT a Asociației Happy și Casa Nicolae! Programul de rezervare și plata online a meselor calde, website, harta online!",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_32.webp",
   },
   {
     name: "Ionuț-Bogdan Cărăușu",
@@ -31,7 +31,6 @@ const items: Testimonial[] = [
     initials: "IC",
     grad: "from-brand-purple to-indigo-600",
     text: "Constructor de site-uri profesionist, caracterizat prin seriozitate și profesionalism. Răspunde cu promptitudine la solicitări și efectuează lucrări de calitate. Recomand!",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/b.webp",
   },
   {
     name: "Botosaneanul.ro",
@@ -39,7 +38,6 @@ const items: Testimonial[] = [
     initials: "BO",
     grad: "from-pink-500 to-brand-purple",
     text: "Pentru ziarul Botosaneanul și pentru postul Botoșăneanul TV, Imperial Media a rezolvat în timp record o problemă cu care ne confruntam de multă vreme. Astfel ne-a ajutat să creștem consistent eficiența întregii noastre activități. Calde și sincere mulțumiri.",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_6-150x150-1.webp",
   },
   {
     name: "Hascu Liviu",
@@ -47,7 +45,6 @@ const items: Testimonial[] = [
     initials: "HL",
     grad: "from-brand-orange to-amber-500",
     text: "Îi recomand. Cei de la Imperial Media au înțeles ce vreau și mi-au creat un site foarte frumos. M-au ajutat cu marketingul, Google Business, pagină Facebook. Acum datorită metodelor de promovare am foarte mulți clienți.",
-    photo: "https://www.imperial-media.ro/wp-content/uploads/2024/10/Screenshot_31.webp",
   },
 ];
 
@@ -77,9 +74,9 @@ function TestimonialAvatar({ t }: { t: Testimonial }) {
   );
 }
 
-export function Testimonials() {
+export function Testimonials({ id }: { id?: string } = {}) {
   return (
-    <section className="section relative">
+    <section id={id} className="section relative scroll-mt-28">
       <div className="container-app">
         <div className="text-center">
           <span className="chip">Testimoniale</span>

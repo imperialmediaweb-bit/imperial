@@ -6,6 +6,7 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { PricingCards } from "@/components/PricingCards";
 import { ContactSection } from "@/components/ContactSection";
 import { FAQ } from "@/components/FAQ";
+import { Testimonials } from "@/components/Testimonials";
 
 export default function HomePage() {
   return (
@@ -13,6 +14,7 @@ export default function HomePage() {
       <HeroCrystal />
       <Services />
       <Projects />
+      <Testimonials id="recenzii" />
       <HowItWorks />
       <PricingCards />
       <section className="section">

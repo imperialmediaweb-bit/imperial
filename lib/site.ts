@@ -14,6 +14,14 @@ export const siteConfig = {
     facebook: "https://facebook.com/imperialmedia",
     instagram: "https://instagram.com/imperialmedia",
   },
+  // Cifrele firmei — O SINGURĂ sursă pentru hero, portofoliu și paginile de servicii.
+  // Actualizează aici și se schimbă peste tot unde sunt folosite.
+  stats: {
+    projects: 384, // proiecte livrate în total
+    clients: 200, // clienți
+    years: 10, // ani de experiență
+    newspapers: 50, // ziare în rețeaua Media Expres
+  },
   // Recenzii agregate (Google + Facebook) — actualizează numerele când cresc.
   // Folosite în Schema.org AggregateRating (SEO + citare de către LLM-uri).
   reviews: {

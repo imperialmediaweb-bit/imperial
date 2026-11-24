@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { siteConfig } from "@/lib/site";
 import { importedProjects, type ImportedProject } from "@/lib/projects-data";
 import { sortProjectsNewestFirst, extractYearFromImages } from "@/lib/project-overrides";
 
@@ -276,7 +277,7 @@ export function Projects() {
               Ultimele <span className="text-gradient">proiecte</span>
             </h2>
             <p className="section-subtitle">
-              Câteva dintre cele <span className="text-brand-orange font-semibold">peste 200 de site-uri</span> lansate pentru clienți reali.
+              Câteva dintre cele <span className="text-brand-orange font-semibold">{siteConfig.stats.projects}+ proiecte</span> livrate pentru clienți reali.
             </p>
           </div>
           <a href="/proiecte" className="btn-primary">
