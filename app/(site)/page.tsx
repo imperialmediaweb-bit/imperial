@@ -7,11 +7,13 @@ import { PricingCards } from "@/components/PricingCards";
 import { ContactSection } from "@/components/ContactSection";
 import { FAQ } from "@/components/FAQ";
 import { Testimonials } from "@/components/Testimonials";
+import { ScrollShowcase } from "@/components/ScrollShowcase";
 
 export default function HomePage() {
   return (
     <main>
       <HeroCrystal />
+      <ScrollShowcase />
       <Services />
       <Projects />
       <Testimonials id="recenzii" />
