@@ -59,7 +59,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Faceți site-uri pentru clinici din Iași?", a: "Da. Pentru o clinică facem câte o pagină pe fiecare specialitate, profilul medicilor, programare online și setările GDPR corecte, ca să apară la căutările de tipul „specialitate + Iași”." },
-      { q: "Puteți face site-ul în română și engleză?", a: "Da. A doua limbă e o opțiune de 499 lei, utilă pentru firmele IT, clinicile cu pacienți străini și cazări." },
+      { q: "Puteți face site-ul în română și engleză?", a: "Da. A doua limbă e o opțiune de 700 lei, utilă pentru firmele IT, clinicile cu pacienți străini și cazări." },
       { q: "Lucrați și cu firme din Pașcani sau din zona metropolitană?", a: "Da, cu firme din tot județul Iași, inclusiv din comunele din jurul orașului, unde se mută tot mai multe afaceri." },
     ],
   },
@@ -77,7 +77,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Merită un site custom în Cluj, unde concurența online e mare?", a: "Da, tocmai de aceea. Un site rapid, cu pagini separate pe fiecare serviciu și date structurate pentru Google, are mai multe șanse decât un șablon care arată la fel ca al concurenței." },
-      { q: "Faceți site-uri în engleză pentru firme IT?", a: "Da. Varianta în a doua limbă costă 499 lei și o recomandăm pentru firmele care au clienți sau angajați din afara țării." },
+      { q: "Faceți site-uri în engleză pentru firme IT?", a: "Da. Varianta în a doua limbă costă 700 lei și o recomandăm pentru firmele care au clienți sau angajați din afara țării." },
       { q: "Lucrați cu firme din Florești sau Apahida?", a: "Da. Lucrăm cu firme din tot județul Cluj, inclusiv din localitățile din jurul orașului." },
     ],
   },
@@ -112,7 +112,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       { name: "Imobiliare și construcții", need: "proiecte, filtre și formular de vizionare" },
     ],
     faqs: [
-      { q: "Faceți site-uri în două limbi pentru firmele din Timișoara?", a: "Da. A doua limbă costă 499 lei; e utilă pentru furnizorii din industrie, firmele IT și afacerile cu clienți din străinătate." },
+      { q: "Faceți site-uri în două limbi pentru firmele din Timișoara?", a: "Da. A doua limbă costă 700 lei; e utilă pentru furnizorii din industrie, firmele IT și afacerile cu clienți din străinătate." },
       { q: "Lucrați cu firme din Dumbrăvița sau Giroc?", a: "Da, cu firme din tot județul Timiș, inclusiv din localitățile din jurul orașului." },
       { q: "Cât durează un site de prezentare?", a: "Un site de prezentare e gata în aproximativ două săptămâni de la primirea textelor și pozelor." },
     ],
@@ -131,7 +131,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Faceți site-uri pentru cazări din Mamaia și de pe litoral?", a: "Da. Un site de cazare cu rezervare directă te scapă de comisionul platformelor; îl recomandăm gata cu cel puțin două luni înainte de sezon." },
-      { q: "Puteți face site în engleză pentru firme de logistică?", a: "Da, a doua limbă costă 499 lei." },
+      { q: "Puteți face site în engleză pentru firme de logistică?", a: "Da, a doua limbă costă 700 lei." },
       { q: "Lucrați cu firme din Mangalia sau Medgidia?", a: "Da, cu firme din tot județul Constanța." },
     ],
   },
@@ -185,7 +185,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Lucrați cu firme din Tecuci sau din județul Galați?", a: "Da, cu firme din tot județul." },
-      { q: "Faceți site-uri în engleză pentru firme din zona portului?", a: "Da, a doua limbă costă 499 lei." },
+      { q: "Faceți site-uri în engleză pentru firme din zona portului?", a: "Da, a doua limbă costă 700 lei." },
       { q: "Cât durează un site?", a: "Un site de prezentare e gata în aproximativ două săptămâni de la primirea textelor și pozelor." },
     ],
   },
@@ -221,8 +221,8 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Lucrați cu firme din Mioveni, Câmpulung sau Curtea de Argeș?", a: "Da, cu firme din tot județul Argeș." },
-      { q: "Faceți site în engleză pentru furnizori auto?", a: "Da, a doua limbă costă 499 lei." },
-      { q: "Pot programa clienții online?", a: "Da. Programările automate în calendar, cu reamintire pe email, costă 399 lei." },
+      { q: "Faceți site în engleză pentru furnizori auto?", a: "Da, a doua limbă costă 700 lei." },
+      { q: "Pot programa clienții online?", a: "Da. Programările online, cu notificare la fiecare rezervare, costă 500 lei." },
     ],
   },
   sibiu: {
@@ -238,7 +238,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       { name: "Clinici și cabinete", need: "programare online, pagini pe specialități" },
     ],
     faqs: [
-      { q: "Faceți site-uri în engleză sau germană pentru firme din Sibiu?", a: "Da. Fiecare limbă în plus costă 499 lei; e utilă pentru turism și pentru furnizorii cu clienți din străinătate." },
+      { q: "Faceți site-uri în engleză sau germană pentru firme din Sibiu?", a: "Da. Fiecare limbă în plus costă 700 lei; e utilă pentru turism și pentru furnizorii cu clienți din străinătate." },
       { q: "Lucrați cu firme din Mediaș, Cisnădie sau Avrig?", a: "Da, cu firme din tot județul Sibiu." },
       { q: "Faceți site-uri pentru pensiuni din Mărginimea Sibiului?", a: "Da, cu rezervare directă și galerie mare." },
     ],
@@ -256,7 +256,7 @@ export const CITY_CONTENT: Record<string, CityContent> = {
       { name: "Firme de servicii pentru casă", need: "servicii, zone acoperite și buton de apel" },
     ],
     faqs: [
-      { q: "Faceți site-uri în maghiară sau engleză?", a: "Da. Fiecare limbă în plus costă 499 lei." },
+      { q: "Faceți site-uri în maghiară sau engleză?", a: "Da. Fiecare limbă în plus costă 700 lei." },
       { q: "Lucrați cu cazări de la Băile Felix?", a: "Da, cu rezervare directă, galerie și prețuri pe sezon." },
       { q: "Lucrați cu firme din Salonta, Beiuș sau Marghita?", a: "Da, cu firme din tot județul Bihor." },
     ],
@@ -275,8 +275,742 @@ export const CITY_CONTENT: Record<string, CityContent> = {
     ],
     faqs: [
       { q: "Lucrați cu firme din Băilești, Calafat sau Filiași?", a: "Da, cu firme din tot județul Dolj." },
-      { q: "Cât costă un site de prezentare în Craiova?", a: "Pornește de la 1.500 lei, cu opțiuni la preț fix, de exemplu programări online 399 lei sau logo 199 lei." },
+      { q: "Cât costă un site de prezentare în Craiova?", a: "Pornește de la 1.500 lei, cu opțiuni la preț fix, de exemplu programări online 500 lei sau logo 300 lei." },
       { q: "Faceți și magazine online?", a: "Da, de la 3.000 lei, cu plăți cu cardul și curier." },
+    ],
+  },
+  // ── Restul orașelor cu pagină proprie (adăugate 24 nov 2026): același standard —
+  //    fapte generale, verificabile; fără prețuri de opțiuni (lista se poate schimba).
+  "piatra-neamt": {
+    intro: [
+      "Piatra Neamț e un oraș de munte, între Cozla și Cetățuia, cu telegondolă, centru istoric în jurul Curții Domnești și acces rapid spre Ceahlău, Lacul Bicaz și Cheile Bicazului. Turismul, comerțul și serviciile țin economia orașului.",
+      "Turiștii își aleg cazarea și restaurantul de pe telefon, cu zile înainte, iar localnicii caută la fel serviciile de zi cu zi. Firmele din Piatra Neamț care apar primele pe Google prind clienții din tot județul Neamț.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cazări spre Ceahlău și Bicaz", need: "galerie mare, prețuri pe sezon și rezervare directă, fără comisionul platformelor" },
+      { name: "Restaurante și terase", need: "meniu actualizat, rezervări și program vizibil pe Google" },
+      { name: "Agenții de turism și ghizi locali", need: "pagini pe trasee și excursii, cu formular de rezervare" },
+      { name: "Cabinete medicale și stomatologice", need: "pagini pe servicii și programare online" },
+      { name: "Meșteri și firme de construcții", need: "lucrări făcute, zonele acoperite din județ și buton de sunat" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din zona Ceahlău și Bicaz?", a: "Da. Un site de pensiune are nevoie de poze mari, prețuri pe sezon și rezervare directă. Rezervările directe te scapă de comisionul platformelor." },
+      { q: "Lucrați și cu firme din Roman sau Târgu Neamț?", a: "Da, cu firme din tot județul Neamț. Totul se face online, iar pagina se optimizează pe orașul în care vrei clienți." },
+      { q: "Cât costă un site de prezentare în Piatra Neamț?", a: "Site Start pornește de la 1.500 lei: 5 pagini și blog, construit de la zero, gata în câteva zile. Prețul exact îl vezi pe loc în calculatorul de pe site." },
+    ],
+  },
+  roman: {
+    intro: [
+      "Romanul e al doilea oraș al județului Neamț și un centru industrial al Moldovei, cunoscut pentru fabrica de țevi și pentru rolul de nod feroviar și rutier între Bacău, Piatra Neamț și Iași. Economia combină industria, comerțul și serviciile.",
+      "Pentru firmele din Roman, concurența online e încă mică: un site clar și un profil Google îngrijit ajung repede în primele rezultate pentru căutările din oraș și din comunele din jur.",
+    ],
+    businesses: [
+      { name: "Furnizori industriali și ateliere", need: "site de prezentare cu capacități, certificări și cerere de ofertă" },
+      { name: "Magazine și firme de comerț", need: "produse principale, program, hartă și comandă telefonică" },
+      { name: "Cabinete medicale și stomatologice", need: "programare online și prețuri orientative" },
+      { name: "Service-uri auto", need: "listă de servicii, programare și buton de apel direct" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Roman, deși sunteți din Botoșani?", a: "Da. Tot proiectul merge online: discuția, oferta, contractul și livrarea. Lucrăm cu firme din toată Moldova." },
+      { q: "Pot apărea în presa locală din județul Neamț?", a: "Da. Rețeaua Media Expres include ziarul local al județului Neamț, iar la lansarea site-ului poți primi un articol de prezentare." },
+      { q: "Cât durează să fac un site pentru firma mea din Roman?", a: "Un Site Start e gata în câteva zile după ce ne trimiți textele și pozele. Proiectele mai mari primesc un termen clar în ofertă." },
+    ],
+  },
+  vaslui: {
+    intro: [
+      "Vasluiul e reședința unui județ agricol din estul Moldovei, cu orașul centrat pe administrație, comerț și servicii, și cu industrie ușoară, în special confecții. Mulți clienți vin din comunele din jur și din Bârlad, Huși sau Negrești.",
+      "Prezența online profesionistă e încă rară printre firmele locale, așa că cine își face acum site și profil Google apare primul la căutările din tot județul.",
+    ],
+    businesses: [
+      { name: "Firme agricole și distribuitori", need: "prezentarea produselor, zone de livrare și cerere de ofertă" },
+      { name: "Fabrici de confecții", need: "site în română și engleză, pentru clienți din străinătate" },
+      { name: "Cabinete medicale", need: "pagini pe servicii și programare online" },
+      { name: "Magazine de materiale și bricolaj", need: "produse, stoc orientativ, program și comandă telefonică" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri și pentru firme din Bârlad sau Huși?", a: "Da, lucrăm cu firme din tot județul Vaslui. Pagina se poate optimiza pe orașul în care vrei să te găsească clienții." },
+      { q: "Merită un site dacă firma mea trăiește din recomandări?", a: "Da. Și cei care te află din recomandare te caută pe Google înainte să sune. Un site clar le confirmă că ești serios." },
+      { q: "Cât costă un site în Vaslui?", a: "Site Start pornește de la 1.500 lei, cu 5 pagini și blog, gata în câteva zile." },
+    ],
+  },
+  focsani: {
+    intro: [
+      "Focșaniul e capitala Vrancei, cea mai mare zonă viticolă a țării, cu podgoriile Panciu, Odobești și Cotești în apropiere. Economia orașului combină vinul, agricultura, comerțul și serviciile.",
+      "Cramele și producătorii care s-au mutat online vând în toată țara, nu doar local. Pentru firmele de servicii din oraș, un site bun și un profil Google îngrijit aduc clienți din tot județul.",
+    ],
+    businesses: [
+      { name: "Crame și producători de vin", need: "magazin online sau comenzi, povestea cramei și degustări cu rezervare" },
+      { name: "Firme agricole", need: "prezentarea produselor și cerere de ofertă pentru distribuitori" },
+      { name: "Restaurante și săli de evenimente", need: "meniu, galerie și cerere de ofertă pentru nunți și botezuri" },
+      { name: "Cabinete medicale și clinici", need: "programare online și pagini pe specialități" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru crame din Vrancea?", a: "Da. O cramă are nevoie de prezentarea vinurilor, a cramei și a degustărilor, iar pentru vânzarea online de magazin cu verificarea vârstei." },
+      { q: "Lucrați și cu firme din Adjud sau Mărășești?", a: "Da, cu firme din tot județul Vrancea, totul online." },
+      { q: "Pot vinde vin online prin site?", a: "Da, printr-un magazin online. Discutăm întâi regulile pentru vânzarea de alcool, ca site-ul să fie conform." },
+    ],
+  },
+  barlad: {
+    intro: [
+      "Bârladul e al doilea oraș al județului Vaslui, cu tradiție culturală, industrie și un rol de centru comercial pentru sudul județului. Mulți clienți vin din comunele din jur.",
+      "Concurența online e mică, deci o firmă din Bârlad cu site clar și profil Google îngrijit poate domina căutările locale cu un efort mic.",
+    ],
+    businesses: [
+      { name: "Firme de producție și ateliere", need: "prezentare, capacități și cerere de ofertă" },
+      { name: "Magazine locale", need: "produse, program, hartă și comandă telefonică" },
+      { name: "Cabinete medicale și stomatologice", need: "servicii, programare online" },
+      { name: "Firme de construcții și instalații", need: "lucrări realizate, servicii și zonele acoperite" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru firme mici din Bârlad?", a: "Da. Site Start e gândit exact pentru firme mici: 5 pagini și blog, de la 1.500 lei, gata în câteva zile." },
+      { q: "Trebuie să vin la birou?", a: "Nu. Discuția, oferta, contractul și livrarea se fac online, iar pe WhatsApp ne poți trimite și poze." },
+      { q: "Mă ajutați și cu profilul Google?", a: "Da. Profilul Google Business e adesea primul lucru pe care îl vede clientul, așa că îl putem configura odată cu site-ul." },
+    ],
+  },
+  dorohoi: {
+    intro: [
+      "Dorohoiul e al doilea oraș al județului Botoșani, în nordul Moldovei, aproape de granița cu Ucraina. Economia locală stă pe comerț, servicii și agricultura din zona din jur.",
+      "Fiind din Botoșani, cunoaștem bine piața de aici. Clienții din Dorohoi și din comunele vecine caută tot mai mult pe telefon, iar concurența online serioasă aproape lipsește.",
+    ],
+    businesses: [
+      { name: "Magazine și firme de comerț", need: "produse, program, hartă și comandă telefonică" },
+      { name: "Firme agricole", need: "prezentarea produselor și zone de livrare" },
+      { name: "Cabinete medicale", need: "servicii și programare online" },
+      { name: "Meșteri și firme de servicii", need: "servicii, lucrări și buton de sunat" },
+    ],
+    faqs: [
+      { q: "Sunteți aproape de Dorohoi?", a: "Da, Imperial Media e din Botoșani. Ne putem vedea pentru discuția de început, iar restul proiectului merge online." },
+      { q: "Pot apărea în Botoșani Expres?", a: "Da. La lansarea site-ului primești un articol în Botoșani Expres, ziarul local din rețeaua noastră, cu link spre site-ul tău." },
+      { q: "Cât costă un site în Dorohoi?", a: "Site Start pornește de la 1.500 lei, cu 5 pagini și blog, gata în câteva zile." },
+    ],
+  },
+  radauti: {
+    intro: [
+      "Rădăuțiul e un oraș bucovinean cu tradiție meșteșugărească, cunoscut pentru ceramica neagră de Marginea din apropiere și pentru Mănăstirea Putna, la mică distanță. Economia combină prelucrarea lemnului, agricultura, comerțul și turismul.",
+      "Turiștii care vin spre Putna și Sucevița își caută cazarea și masa online, iar firmele locale de lemn și mobilă au clienți și în străinătate. Pentru amândouă, site-ul e prima impresie.",
+    ],
+    businesses: [
+      { name: "Pensiuni din zona Putna, Sucevița, Marginea", need: "galerie, prețuri pe sezon, rezervare directă, variantă în engleză" },
+      { name: "Fabrici de mobilă și prelucrare a lemnului", need: "catalog de produse și cerere de ofertă, în română și engleză" },
+      { name: "Meșteri populari și ateliere", need: "povestea atelierului și magazin online simplu" },
+      { name: "Firme de servicii locale", need: "servicii, program și buton de sunat" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din Bucovina?", a: "Da. Un site de pensiune are nevoie de poze mari, prețuri pe sezon, rezervare directă și variantă în engleză." },
+      { q: "Pot vinde produse meșteșugărești online?", a: "Da, printr-un magazin online simplu, cu livrare prin curier în toată țara." },
+      { q: "Lucrați cu firme din tot județul Suceava?", a: "Da: Rădăuți, Suceava, Fălticeni, Câmpulung Moldovenesc și comunele din jur, totul online." },
+    ],
+  },
+  "campulung-moldovenesc": {
+    intro: [
+      "Câmpulung Moldovenesc e un oraș de munte în Obcinile Bucovinei, la poalele Rarăului și Giumalăului, cu tradiție în prelucrarea lemnului și un turism activ de iarnă și de vară.",
+      "Turiștii își rezervă cazarea și activitățile de pe telefon, iar cine apare primul pe Google prinde clienții întregii zone, de la Vatra Dornei la Gura Humorului.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cabane", need: "galerie, prețuri pe sezon, rezervare directă, engleză" },
+      { name: "Închirieri echipament și activități montane", need: "oferte, prețuri, rezervare online" },
+      { name: "Firme de prelucrare a lemnului", need: "catalog și cerere de ofertă" },
+      { name: "Restaurante cu specific bucovinean", need: "meniu, galerie și rezervări" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru cabane și pensiuni de munte?", a: "Da. Punem accent pe poze, disponibilitate și rezervare directă, ca să nu plătești comision platformelor." },
+      { q: "Poate fi site-ul în română și engleză?", a: "Da, a doua limbă e o opțiune la preț fix, utilă pentru turiștii străini." },
+      { q: "Lucrați și cu firme din Vatra Dornei sau Gura Humorului?", a: "Da, cu firme din tot județul Suceava." },
+    ],
+  },
+  targoviste: {
+    intro: [
+      "Târgoviștea a fost capitala Țării Românești, iar Curtea Domnească și Turnul Chindiei sunt și azi reperele orașului. Astăzi e reședința Dâmboviței, cu universitate, industrie și comerț, la aproximativ o oră de București.",
+      "Clienții de aici compară natural cu oferta din capitală, deci firmele locale au nevoie de o prezentare online pe măsură ca să nu piardă clienți în fața celor din București.",
+    ],
+    businesses: [
+      { name: "Firme industriale și furnizori", need: "capacități, certificări, cerere de ofertă" },
+      { name: "Clinici și cabinete", need: "programare online, pagini pe specialități" },
+      { name: "Restaurante și săli de evenimente", need: "meniu, galerie, cerere de ofertă" },
+      { name: "Firme de construcții și amenajări", need: "portofoliu de lucrări și zone acoperite" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din tot județul Dâmbovița?", a: "Da: Târgoviște, Moreni, Pucioasa, Găești și restul județului, totul online." },
+      { q: "Pot apărea în presa locală din Dâmbovița?", a: "Da. Rețeaua Media Expres include ziarul local al județului Dâmbovița." },
+      { q: "Cât costă un site în Târgoviște?", a: "Site Start pornește de la 1.500 lei, cu 5 pagini și blog, gata în câteva zile." },
+    ],
+  },
+  buzau: {
+    intro: [
+      "Buzăul e un nod comercial și feroviar între Muntenia și Moldova, cu industrie, agricultură și comerț. Județul e cunoscut pentru Vulcanii Noroioși și Muzeul Chihlimbarului din Colți, care aduc turiști în zonă.",
+      "Clientela caută tot mai mult online, iar oferta locală de prezență digitală profesionistă e încă subțire. Pentru firmele din Buzău, asta e o fereastră bună de poziționare.",
+    ],
+    businesses: [
+      { name: "Distribuitori și firme de comerț", need: "produse, zone de livrare, cerere de ofertă" },
+      { name: "Pensiuni și cazări spre zona Vulcanilor Noroioși", need: "galerie, prețuri și rezervare directă" },
+      { name: "Cabinete medicale", need: "servicii și programare online" },
+      { name: "Service-uri auto și transportatori", need: "servicii, programare, buton de apel" },
+    ],
+    faqs: [
+      { q: "Lucrați și cu firme din Râmnicu Sărat?", a: "Da, cu firme din tot județul Buzău, online." },
+      { q: "Mă ajutați să apar pe Google Maps?", a: "Da. Configurăm profilul Google Business odată cu site-ul, ca să apari la căutările de tip „serviciu + Buzău”." },
+      { q: "Cât durează un site?", a: "Un Site Start e gata în câteva zile după ce primim textele și pozele." },
+    ],
+  },
+  braila: {
+    intro: [
+      "Brăila e un oraș-port la Dunăre, cu un centru istoric mare și tradiție comercială. Economia combină industria navală și metalurgică, comerțul și agricultura din Câmpia Brăilei, iar podul peste Dunăre a apropiat orașul de Tulcea și Delta Dunării.",
+      "Piața de servicii e compactă, cu concurență online moderată. Firmele care își fac acum o prezență serioasă prind pozițiile bune înainte să se aglomereze.",
+    ],
+    businesses: [
+      { name: "Firme din industria navală și metalurgie", need: "prezentare în română și engleză, capacități" },
+      { name: "Firme agricole și de cereale", need: "produse, capacitate, cerere de ofertă" },
+      { name: "Restaurante și terase pe faleză", need: "meniu, rezervări, galerie" },
+      { name: "Clinici și cabinete", need: "programare online și pagini pe servicii" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri în engleză pentru firme din port?", a: "Da, a doua limbă e o opțiune la preț fix în calculator." },
+      { q: "Pot apărea în presa locală din Brăila?", a: "Da. Rețeaua Media Expres include ziarul local al județului Brăila." },
+      { q: "Cât costă un site în Brăila?", a: "Site Start pornește de la 1.500 lei, cu 5 pagini și blog, gata în câteva zile." },
+    ],
+  },
+  slobozia: {
+    intro: [
+      "Slobozia e reședința Ialomiței, în inima Bărăganului, una dintre cele mai importante zone agricole ale țării. Economia orașului stă pe agricultură, procesarea produselor agricole, comerț și servicii.",
+      "Firmele agricole și de servicii care se văd online deservesc un județ întreg, cu concurență digitală mică. Un site clar și profilul Google ajung rapid în primele rezultate.",
+    ],
+    businesses: [
+      { name: "Ferme și firme agricole", need: "producție, capacitate, contact pentru cumpărători" },
+      { name: "Furnizori de inputuri și utilaje agricole", need: "catalog, cerere de ofertă, zone acoperite" },
+      { name: "Cabinete medicale", need: "servicii, programare online" },
+      { name: "Magazine și firme de servicii", need: "program, hartă, buton de apel" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru ferme?", a: "Da. O fermă are nevoie de prezentarea producției, a capacității și a unui contact clar pentru cumpărători și parteneri." },
+      { q: "Lucrați și cu firme din Urziceni sau Fetești?", a: "Da, cu firme din tot județul Ialomița, online." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei, cu 5 pagini și blog." },
+    ],
+  },
+  calarasi: {
+    intro: [
+      "Călărașiul e un oraș dunărean din sud-estul Munteniei, cu agricultură puternică în tot județul și industrie în jurul orașului. Clienții vin din oraș, din Oltenița și din comunele din Bărăgan.",
+      "Piața de servicii locale abia se digitalizează, așa că primele firme cu prezență serioasă ajung sus în căutări fără luptă mare.",
+    ],
+    businesses: [
+      { name: "Firme agricole", need: "producție, capacitate, contact pentru cumpărători" },
+      { name: "Pescării și restaurante cu specific pescăresc", need: "meniu, rezervări, galerie" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții și instalații", need: "lucrări, servicii, zone acoperite" },
+    ],
+    faqs: [
+      { q: "Lucrați și cu firme din Oltenița?", a: "Da, cu firme din tot județul Călărași." },
+      { q: "Pot apărea în presa locală?", a: "Da. Rețeaua Media Expres include ziarul local al județului Călărași." },
+      { q: "Cât durează să am site?", a: "Un Site Start e gata în câteva zile după ce primim textele și pozele." },
+    ],
+  },
+  giurgiu: {
+    intro: [
+      "Giurgiul e oraș-port la Dunăre și punct de trecere spre Bulgaria, prin Podul Prieteniei spre Ruse. Logistica, transportul și comerțul țin economia, iar Bucureștiul e la aproximativ 60 de kilometri.",
+      "Mulți clienți din zonă compară cu oferta din capitală, iar firmele de logistică lucrează cu parteneri din străinătate. Un site profesionist, eventual în două limbi, face diferența.",
+    ],
+    businesses: [
+      { name: "Firme de transport și logistică", need: "servicii, flotă, cerere de ofertă, română și engleză" },
+      { name: "Case de schimb și firme de servicii pentru tranzit", need: "program, servicii, hartă" },
+      { name: "Restaurante și cazări pentru tranzit", need: "meniu, rezervări, poziție pe hartă" },
+      { name: "Cabinete medicale", need: "programare online" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri în engleză sau bulgară?", a: "Da. A doua limbă e o opțiune la preț fix în calculator." },
+      { q: "Lucrați cu firme din tot județul Giurgiu?", a: "Da, online." },
+      { q: "Cât costă un site?", a: "Site Start pornește de la 1.500 lei, cu 5 pagini și blog." },
+    ],
+  },
+  alexandria: {
+    intro: [
+      "Alexandria e reședința Teleormanului, un județ predominant agricol din sudul țării. Orașul e centru administrativ și comercial pentru zona din jur, inclusiv pentru Roșiori de Vede, Turnu Măgurele și Zimnicea.",
+      "Prezența online profesionistă e încă excepția, nu regula, în piața locală. O firmă cu site bun și profil Google îngrijit iese ușor în evidență.",
+    ],
+    businesses: [
+      { name: "Firme agricole și de procesare", need: "producție, capacitate, contact pentru cumpărători" },
+      { name: "Magazine și distribuitori", need: "produse, program, comandă telefonică" },
+      { name: "Cabinete medicale", need: "servicii, programare online" },
+      { name: "Firme de servicii locale", need: "servicii, zone acoperite, buton de apel" },
+    ],
+    faqs: [
+      { q: "Lucrați și cu firme din Roșiori de Vede sau Turnu Măgurele?", a: "Da, cu firme din tot județul Teleorman." },
+      { q: "Pot apărea în presa locală din Teleorman?", a: "Da. Rețeaua Media Expres include ziarul local al județului Teleorman." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  slatina: {
+    intro: [
+      "Slatina e reședința județului Olt, cunoscută pentru industria aluminiului, cu cel mai mare producător de aluminiu din țară, și pentru industria de componente din jurul ei. Asta aduce venituri stabile și o piață de servicii activă.",
+      "Concurența online între firmele locale e încă mică. Un site rapid și un profil Google îngrijit aduc clienți din tot județul Olt.",
+    ],
+    businesses: [
+      { name: "Furnizori și firme din industrie", need: "capacități, certificări, cerere de ofertă" },
+      { name: "Clinici și cabinete", need: "programare online, pagini pe specialități" },
+      { name: "Restaurante și săli de evenimente", need: "meniu, galerie, cerere de ofertă" },
+      { name: "Firme de construcții", need: "lucrări realizate, servicii" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Caracal sau Balș?", a: "Da, cu firme din tot județul Olt." },
+      { q: "Faceți site-uri pentru furnizori industriali?", a: "Da, cu pagini de capabilități, certificări și variantă în engleză." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "ramnicu-valcea": {
+    intro: [
+      "Râmnicu Vâlcea e reședința unui județ cu stațiuni balneare cunoscute, Călimănești-Căciulata, Băile Olănești și Băile Govora, și cu mănăstiri ca Horezu și Cozia. Economia combină industria chimică, turismul și comerțul.",
+      "Turismul balnear și cel spre mănăstiri aduc valuri de căutări online. Firmele pregătite cu site și profil Google le transformă în clienți.",
+    ],
+    businesses: [
+      { name: "Pensiuni și hoteluri în stațiunile balneare", need: "galerie, tratamente, prețuri, rezervare directă" },
+      { name: "Restaurante și terase", need: "meniu, rezervări" },
+      { name: "Clinici și centre de recuperare", need: "servicii, programare online" },
+      { name: "Firme industriale", need: "capacități, cerere de ofertă" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din Călimănești sau Olănești?", a: "Da, cu rezervare directă și prezentarea tratamentelor din zonă." },
+      { q: "Lucrați cu firme din tot județul Vâlcea?", a: "Da, inclusiv Horezu, Drăgășani și Brezoi." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  campina: {
+    intro: [
+      "Câmpina e un oraș din Prahova, pe Valea Prahovei, cu tradiție în industria petrolieră și repere precum Castelul Iulia Hasdeu și Muzeul Nicolae Grigorescu. E la intrarea spre stațiunile montane din Valea Prahovei.",
+      "Mulți clienți vin din Ploiești, Breaza și stațiunile din apropiere și caută totul online. Firmele locale cu prezență serioasă câștigă zona întreagă.",
+    ],
+    businesses: [
+      { name: "Firme din industria petrolieră și furnizori", need: "capacități, certificări, cerere de ofertă" },
+      { name: "Pensiuni și cazări spre Valea Prahovei", need: "galerie, prețuri, rezervare directă" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții și amenajări", need: "portofoliu, servicii" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Breaza, Comarnic sau Ploiești?", a: "Da, cu firme din tot județul Prahova." },
+      { q: "Faceți site-uri pentru pensiuni?", a: "Da, cu galerie mare și rezervare directă." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "drobeta-turnu-severin": {
+    intro: [
+      "Drobeta-Turnu Severin e un oraș-port la Dunăre, la intrarea în zona Porților de Fier, cu ruinele podului lui Traian și cu Cazanele Dunării la mică distanță. Economia combină industria, comerțul și un turism în creștere.",
+      "Piața de servicii e compactă și concurența online redusă, un avantaj clar pentru firmele care se poziționează acum, mai ales cele din turism.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cazări spre Cazanele Dunării", need: "galerie, prețuri, rezervare directă, engleză" },
+      { name: "Firme de croaziere și excursii pe Dunăre", need: "oferte, prețuri, rezervare online" },
+      { name: "Restaurante cu specific pescăresc", need: "meniu, rezervări" },
+      { name: "Firme de servicii locale", need: "servicii, program, buton de apel" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru turismul de pe Dunăre?", a: "Da: pensiuni, excursii cu barca, restaurante, cu rezervare directă și variantă în engleză." },
+      { q: "Lucrați cu firme din tot județul Mehedinți?", a: "Da, inclusiv Orșova, online." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "targu-jiu": {
+    intro: [
+      "Târgu Jiu e orașul lui Brâncuși: Coloana Infinitului, Poarta Sărutului și Masa Tăcerii atrag turiști tot anul. Economia vine din energie și minerit, în tranziție, plus comerț și servicii, iar Rânca și Transalpina sunt aproape.",
+      "Piața de servicii locale se mută spre online și încă are poziții bune libere, mai ales pentru turism și HoReCa.",
+    ],
+    businesses: [
+      { name: "Pensiuni spre Rânca și Transalpina", need: "galerie, prețuri pe sezon, rezervare directă" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări" },
+      { name: "Firme din energie și furnizori", need: "capacități, cerere de ofertă" },
+      { name: "Cabinete medicale", need: "programare online" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din Rânca?", a: "Da, cu rezervare directă și prețuri pe sezon." },
+      { q: "Lucrați cu firme din Motru sau Târgu Cărbunești?", a: "Da, cu firme din tot județul Gorj." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "targu-mures": {
+    intro: [
+      "Târgu Mureș e un important centru universitar și medical, cu Universitatea de Medicină, Farmacie, Științe și Tehnologie, și un oraș bilingv, cu reperul Palatului Culturii. Economia combină industria, serviciile medicale private și comerțul.",
+      "Cabinetele, clinicile și serviciile private concurează intens pe căutările pacienților, unde recenziile și site-ul cântăresc decisiv. Mulți clienți caută și în maghiară.",
+    ],
+    businesses: [
+      { name: "Clinici și cabinete medicale", need: "pagini pe specialități, medici, programare online" },
+      { name: "Farmacii și laboratoare", need: "servicii, program, hartă" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări, română și maghiară" },
+      { name: "Firme industriale și furnizori", need: "capacități, cerere de ofertă" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri în română și maghiară?", a: "Da. A doua limbă e o opțiune la preț fix în calculator." },
+      { q: "Faceți site-uri pentru clinici?", a: "Da, cu pagini pe specialități, profil de medic și programare online." },
+      { q: "Lucrați cu firme din Reghin sau Sighișoara?", a: "Da, cu firme din tot județul Mureș." },
+    ],
+  },
+  "alba-iulia": {
+    intro: [
+      "Alba Iulia e orașul Marii Uniri și al Cetății Alba Carolina, una dintre cele mai mari cetăți bastionare din țară. Turismul istoric, industria și podgoriile din zonă susțin economia.",
+      "Turiștii și localnicii aleg deopotrivă pe Google. Pensiunile, restaurantele și firmele de servicii care apar primele câștigă clienții orașului și ai județului.",
+    ],
+    businesses: [
+      { name: "Pensiuni și hoteluri lângă Cetate", need: "galerie, prețuri, rezervare directă, engleză" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări, hartă" },
+      { name: "Crame din zona Alba", need: "prezentare, degustări, comenzi" },
+      { name: "Firme industriale", need: "capacități, cerere de ofertă" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru turismul din Alba Iulia?", a: "Da: pensiuni, restaurante, ghizi, cu rezervare directă și variantă în engleză." },
+      { q: "Lucrați cu firme din Sebeș, Aiud sau Blaj?", a: "Da, cu firme din tot județul Alba." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  bistrita: {
+    intro: [
+      "Bistrița e reședința județului Bistrița-Năsăud, cu un centru medieval săsesc și industrie electrotehnică și de prelucrare. E și oraș de tranzit spre Bucovina și Maramureș, prin Pasul Tihuța.",
+      "Firmele locale primesc tot mai mulți clienți din căutările online, inclusiv turiști în tranzit care caută cazare și masă pe drum.",
+    ],
+    businesses: [
+      { name: "Firme industriale și furnizori", need: "capacități, certificări, engleză" },
+      { name: "Pensiuni spre Pasul Tihuța", need: "galerie, prețuri, rezervare directă" },
+      { name: "Restaurante pe traseul turistic", need: "meniu, hartă, program" },
+      { name: "Cabinete medicale", need: "programare online" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Năsăud sau Beclean?", a: "Da, cu firme din tot județul." },
+      { q: "Faceți site-uri în engleză sau germană?", a: "Da, fiecare limbă în plus e o opțiune la preț fix." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  deva: {
+    intro: [
+      "Deva e reședința Hunedoarei, cu Cetatea Devei deasupra orașului și Castelul Corvinilor la câțiva kilometri. Administrația, comerțul și serviciile țin economia, într-un județ cu tradiție industrială.",
+      "Piața de servicii locale se mută vizibil online, cu poziții de top încă accesibile pentru firmele care se mișcă acum.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cazări spre Cetate și Castelul Corvinilor", need: "galerie, prețuri, rezervare directă" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții", need: "lucrări, servicii, zone acoperite" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Hunedoara, Orăștie sau Brad?", a: "Da, cu firme din tot județul Hunedoara." },
+      { q: "Mă ajutați și cu profilul Google?", a: "Da, îl configurăm odată cu site-ul." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  hunedoara: {
+    intro: [
+      "Hunedoara e orașul Castelului Corvinilor, unul dintre cele mai vizitate monumente din țară, și un fost centru siderurgic care își caută drumul spre servicii și turism.",
+      "Turiștii care vin la castel caută online unde să mănânce și să doarmă. Firmele locale care apar primele pe Google prind acest flux.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cazări lângă castel", need: "galerie, prețuri, rezervare directă, engleză" },
+      { name: "Restaurante și cafenele", need: "meniu, hartă, program" },
+      { name: "Firme industriale și ateliere", need: "capacități, cerere de ofertă" },
+      { name: "Firme de servicii locale", need: "servicii, buton de apel" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru turismul din jurul Castelului Corvinilor?", a: "Da, cu rezervare directă și variantă în engleză." },
+      { q: "Lucrați și cu firme din Deva sau Simeria?", a: "Da, cu firme din tot județul Hunedoara." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  sighisoara: {
+    intro: [
+      "Sighișoara are una dintre puținele cetăți medievale locuite din Europa, inclusă în patrimoniul UNESCO, cu Turnul cu Ceas și Casa Vlad Dracul. Turismul domină economia, alături de industria locală.",
+      "Turiștii, mulți străini, rezervă totul online. Pensiunile și restaurantele din cetate și din jurul ei câștigă pe poze, recenzii și site în engleză.",
+    ],
+    businesses: [
+      { name: "Pensiuni și hoteluri din cetate", need: "galerie, prețuri, rezervare directă, engleză și germană" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări, engleză" },
+      { name: "Ghizi și agenții de tururi", need: "tururi, prețuri, rezervare online" },
+      { name: "Magazine de suveniruri și meșteri", need: "magazin online, povestea atelierului" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri în engleză și germană pentru turiști?", a: "Da, fiecare limbă în plus e o opțiune la preț fix." },
+      { q: "Pot primi rezervări direct pe site?", a: "Da, fără comisionul platformelor de rezervări." },
+      { q: "Lucrați cu firme din tot județul Mureș?", a: "Da, online." },
+    ],
+  },
+  medias: {
+    intro: [
+      "Mediașul e un oraș săsesc din județul Sibiu, cu centru istoric și biserică fortificată, și e centrul industriei gazelor naturale din România. Industria și serviciile conexe susțin economia.",
+      "Furnizorii industriali au nevoie de site profesionist pentru parteneri, iar serviciile locale de vizibilitate pe Google pentru oraș și zona Târnavelor.",
+    ],
+    businesses: [
+      { name: "Furnizori din industria gazelor", need: "capacități, certificări, cerere de ofertă, engleză" },
+      { name: "Firme de inginerie și service industrial", need: "servicii, proiecte, contact" },
+      { name: "Pensiuni și crame din zona Târnavelor", need: "galerie, rezervare, degustări" },
+      { name: "Cabinete medicale", need: "programare online" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru furnizori industriali?", a: "Da, cu capabilități, certificări și variantă în engleză." },
+      { q: "Lucrați cu firme din Sibiu sau Copșa Mică?", a: "Da, cu firme din tot județul Sibiu." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  dej: {
+    intro: [
+      "Dejul e un oraș din nordul județului Cluj, la confluența Someșurilor, cu tradiție în exploatarea sării, iar salina de la Ocna Dej e în apropiere, și cu industrie de prelucrare. Comerțul și serviciile deservesc și zona din jur.",
+      "Mulți clienți compară cu oferta din Cluj-Napoca, deci o prezentare online serioasă ajută firmele locale să rămână alegerea firească pentru zona Dejului.",
+    ],
+    businesses: [
+      { name: "Firme industriale", need: "capacități, cerere de ofertă" },
+      { name: "Magazine și firme de comerț", need: "produse, program, hartă" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții", need: "lucrări, servicii" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din tot județul Cluj?", a: "Da, inclusiv Gherla și Cluj-Napoca." },
+      { q: "Merită un site pentru o firmă mică din Dej?", a: "Da. Clienții te caută pe Google înainte să sune, iar un site clar le confirmă că ești serios." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  turda: {
+    intro: [
+      "Turda e cunoscută pentru Salina Turda, una dintre cele mai vizitate atracții din țară, și pentru Cheile Turzii din apropiere. Turismul, industria și comerțul țin economia orașului.",
+      "Turiștii care vin la salină caută online cazare și restaurante. Firmele locale care apar primele pe Google prind acest flux tot anul.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cazări lângă salină", need: "galerie, prețuri, rezervare directă, engleză" },
+      { name: "Restaurante și cafenele", need: "meniu, hartă, rezervări" },
+      { name: "Agenții de turism și ghizi", need: "tururi, prețuri, rezervare" },
+      { name: "Firme industriale", need: "capacități, cerere de ofertă" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru turismul din jurul Salinei Turda?", a: "Da, cu rezervare directă și variantă în engleză." },
+      { q: "Lucrați și cu firme din Câmpia Turzii sau Cluj-Napoca?", a: "Da, cu firme din tot județul Cluj." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  fagaras: {
+    intro: [
+      "Făgărașul e orașul cetății, la poalele Munților Făgăraș, între Brașov și Sibiu. Industria și comerțul țin economia, iar turismul montan, cu Transfăgărășanul la mică distanță, aduce vizitatori.",
+      "Turiștii care merg spre munte își caută cazarea și ghizii online. Firmele locale cu site și profil Google câștigă clienți din tot Țara Făgărașului.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cabane spre Munții Făgăraș", need: "galerie, prețuri, rezervare directă" },
+      { name: "Ghizi montani și activități outdoor", need: "trasee, prețuri, rezervare online" },
+      { name: "Firme industriale", need: "capacități, cerere de ofertă" },
+      { name: "Restaurante", need: "meniu, hartă, program" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din Țara Făgărașului?", a: "Da, cu galerie mare și rezervare directă." },
+      { q: "Lucrați cu firme din tot județul Brașov?", a: "Da, online." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  arad: {
+    intro: [
+      "Aradul e un oraș de graniță din vest, cu industrie puternică, mai ales componente auto și logistică, și cu un centru cu clădiri istorice și Cetatea Aradului. Mulți clienți vin din diaspora sau din Ungaria vecină.",
+      "Clienții de aici sunt obișnuiți cu standarde vestice și compară online. Firmele locale au nevoie de site rapid și bine prezentat ca să câștige.",
+    ],
+    businesses: [
+      { name: "Furnizori auto și firme de logistică", need: "capacități, certificări, română și engleză" },
+      { name: "Clinici și cabinete", need: "programare online, specialități" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări" },
+      { name: "Firme de construcții și amenajări", need: "portofoliu, servicii" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri în engleză, maghiară sau germană?", a: "Da, fiecare limbă în plus e o opțiune la preț fix." },
+      { q: "Lucrați cu firme din tot județul Arad?", a: "Da, inclusiv Lipova, Ineu și Pecica." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  resita: {
+    intro: [
+      "Reșița are o lungă tradiție metalurgică și își mută economia spre servicii și turism montan, cu Semenicul și lacurile din zonă aproape. E reședința județului Caraș-Severin.",
+      "Piața e în tranziție, iar spațiul online e încă liber pentru firmele care se mișcă primele, mai ales în turism și servicii.",
+    ],
+    businesses: [
+      { name: "Pensiuni spre Semenic și lacurile din zonă", need: "galerie, prețuri, rezervare directă" },
+      { name: "Firme industriale și ateliere", need: "capacități, cerere de ofertă" },
+      { name: "Restaurante", need: "meniu, hartă" },
+      { name: "Cabinete medicale", need: "programare online" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Caransebeș sau Oravița?", a: "Da, cu firme din tot județul Caraș-Severin." },
+      { q: "Faceți site-uri pentru pensiuni montane?", a: "Da, cu rezervare directă." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  lugoj: {
+    intro: [
+      "Lugojul e al doilea oraș al județului Timiș, pe Timiș, cu tradiție culturală și industrie ușoară. E aproape de Timișoara și pe axa autostrăzii spre vestul țării.",
+      "Clienții compară natural cu oferta din Timișoara. Firmele locale cu site profesionist și profil Google îngrijit rămân alegerea firească pentru zona Lugojului.",
+    ],
+    businesses: [
+      { name: "Firme industriale", need: "capacități, cerere de ofertă, engleză" },
+      { name: "Magazine și firme de comerț", need: "produse, program, hartă" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții", need: "lucrări, servicii" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din tot județul Timiș?", a: "Da, inclusiv Timișoara și Făget." },
+      { q: "Faceți site-uri în engleză sau germană?", a: "Da, fiecare limbă în plus e o opțiune la preț fix." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "satu-mare": {
+    intro: [
+      "Satu Mare e un oraș de graniță din nord-vest, cu industrie ușoară, comerț activ și o comunitate bilingvă. Mulți clienți vin din diaspora sau din Ungaria vecină și caută firmele locale online.",
+      "Căutările se fac în română și maghiară, deci un site în ambele limbi și profilul Google aduc clienți din tot județul.",
+    ],
+    businesses: [
+      { name: "Firme de producție și furnizori", need: "capacități, cerere de ofertă, mai multe limbi" },
+      { name: "Magazine și distribuitori", need: "produse, program, comandă" },
+      { name: "Cabinete medicale și stomatologice", need: "programare online" },
+      { name: "Restaurante și săli de evenimente", need: "meniu, galerie, cerere de ofertă" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri în română și maghiară?", a: "Da, a doua limbă e o opțiune la preț fix." },
+      { q: "Lucrați cu firme din Carei sau Negrești-Oaș?", a: "Da, cu firme din tot județul Satu Mare." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "baia-mare": {
+    intro: [
+      "Baia Mare are tradiție minieră și își reinventează economia spre servicii, comerț și turism, fiind poarta spre Maramureșul istoric. Centrul vechi cu Turnul lui Ștefan e reperul orașului.",
+      "Piața online locală e în formare. Primii care investesc serios în prezență digitală prind pozițiile de top, inclusiv pe căutările turiștilor.",
+    ],
+    businesses: [
+      { name: "Pensiuni și cazări spre Maramureș", need: "galerie, prețuri, rezervare directă, engleză" },
+      { name: "Firme de comerț și servicii", need: "program, hartă, buton de apel" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții", need: "lucrări, servicii" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Sighetu Marmației sau Borșa?", a: "Da, cu firme din tot județul Maramureș." },
+      { q: "Faceți site-uri pentru pensiuni din Maramureș?", a: "Da, cu rezervare directă și variantă în engleză." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  zalau: {
+    intro: [
+      "Zalăul e reședința Sălajului, cu industrie de componente, inclusiv anvelope și țevi, și comerț activ. Orașul deservește un județ întreg, iar situl roman Porolissum e în apropiere.",
+      "Firmele vizibile online culeg clienți din tot Sălajul, nu doar din oraș. Concurența digitală e încă moderată.",
+    ],
+    businesses: [
+      { name: "Furnizori industriali", need: "capacități, certificări, engleză" },
+      { name: "Magazine și firme de comerț", need: "produse, program, comandă" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții și instalații", need: "lucrări, servicii" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Șimleu Silvaniei sau Jibou?", a: "Da, cu firme din tot județul Sălaj." },
+      { q: "Mă ajutați cu profilul Google?", a: "Da, îl configurăm odată cu site-ul." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  "sighetul-marmatiei": {
+    intro: [
+      "Sighetu Marmației e capitala istorică a Maramureșului, cu Memorialul Victimelor Comunismului și al Rezistenței, iar Cimitirul Vesel de la Săpânța și bisericile de lemn UNESCO sunt aproape. Turismul și comerțul de graniță țin economia.",
+      "Turiștii, mulți din străinătate, planifică totul online. Pensiunile și restaurantele care apar primele câștigă sezonul.",
+    ],
+    businesses: [
+      { name: "Pensiuni tradiționale maramureșene", need: "galerie, prețuri, rezervare directă, engleză" },
+      { name: "Ghizi și tururi în Maramureș", need: "trasee, prețuri, rezervare online" },
+      { name: "Meșteri și ateliere tradiționale", need: "poveste, magazin online" },
+      { name: "Restaurante cu specific local", need: "meniu, hartă" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din Maramureș?", a: "Da, cu rezervare directă și variantă în engleză." },
+      { q: "Pot vinde produse tradiționale online?", a: "Da, printr-un magazin online simplu, cu livrare prin curier." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  tulcea: {
+    intro: [
+      "Tulcea e poarta Deltei Dunării, rezervație a biosferei UNESCO. Turismul, pescuitul și transportul pe Dunăre țin economia, iar sezonul aduce turiști din toată țara și din străinătate.",
+      "Rezervările se decid online cu luni înainte, iar vizibilitatea pe Google face diferența dintre un sezon plin și unul gol.",
+    ],
+    businesses: [
+      { name: "Pensiuni și hoteluri în Deltă", need: "galerie, prețuri pe sezon, rezervare directă, engleză" },
+      { name: "Excursii cu barca și ghizi", need: "trasee, prețuri, rezervare online" },
+      { name: "Restaurante cu pește", need: "meniu, rezervări" },
+      { name: "Firme de transport pe apă", need: "curse, program, contact" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru pensiuni din Deltă?", a: "Da, cu rezervare directă, prețuri pe sezon și variantă în engleză." },
+      { q: "Pot primi rezervări pentru excursii pe site?", a: "Da. Rezervările online sunt o opțiune la preț fix." },
+      { q: "Lucrați cu firme din Sulina, Măcin sau Babadag?", a: "Da, cu firme din tot județul Tulcea." },
+    ],
+  },
+  mangalia: {
+    intro: [
+      "Mangalia e cel mai sudic oraș al litoralului, cu stațiunile Saturn, Venus, Neptun, Olimp, Jupiter, Cap Aurora și 2 Mai–Vama Veche în jur. Turismul domină economia, alături de șantierul naval.",
+      "Bătălia pentru turiști se dă online, cu luni înainte de sezon. Hotelurile, vilele și restaurantele cu site și recenzii bune își umplu locurile primele.",
+    ],
+    businesses: [
+      { name: "Hoteluri și vile pe litoral", need: "galerie, prețuri pe sezon, rezervare directă" },
+      { name: "Restaurante și beach baruri", need: "meniu, rezervări, evenimente" },
+      { name: "Închirieri și activități pe plajă", need: "oferte, prețuri, rezervare" },
+      { name: "Firme din zona portului", need: "servicii, contact, engleză" },
+    ],
+    faqs: [
+      { q: "Faceți site-uri pentru hoteluri de pe litoral?", a: "Da, cu rezervare directă, fără comisionul platformelor." },
+      { q: "Când e bine să-mi fac site-ul pentru sezon?", a: "Cu cel puțin 2–3 luni înainte de vară, ca Google să apuce să-l indexeze și să prinzi rezervările timpurii." },
+      { q: "Lucrați cu firme din tot județul Constanța?", a: "Da, online." },
+    ],
+  },
+  medgidia: {
+    intro: [
+      "Medgidia e un oraș din Dobrogea, pe Canalul Dunăre–Marea Neagră, cu industrie, în special ciment și materiale de construcții, și agricultură în jur. E aproape de Constanța și de litoral.",
+      "Mulți clienți compară cu oferta din Constanța. O firmă locală cu site serios și profil Google rămâne alegerea firească pentru zonă.",
+    ],
+    businesses: [
+      { name: "Firme de materiale de construcții", need: "produse, cerere de ofertă, livrare" },
+      { name: "Firme agricole", need: "producție, capacitate, contact" },
+      { name: "Magazine și firme de servicii", need: "program, hartă, buton de apel" },
+      { name: "Cabinete medicale", need: "programare online" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din tot județul Constanța?", a: "Da, inclusiv Cernavodă și Constanța." },
+      { q: "Mă ajutați cu profilul Google?", a: "Da, îl configurăm odată cu site-ul." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  voluntari: {
+    intro: [
+      "Voluntari e lipit de nordul Bucureștiului, cu zona de birouri Pipera, cartiere rezidențiale noi și multe firme de servicii. Clienții sunt urbani, digitali și compară totul online.",
+      "Concurența e cea a pieței bucureștene. Câștigă firmele cu site rapid, poziționare clară și recenzii bune.",
+    ],
+    businesses: [
+      { name: "Firme de servicii pentru companii", need: "servicii, studii de caz, cerere de ofertă, engleză" },
+      { name: "Clinici și cabinete", need: "programare online, specialități" },
+      { name: "Restaurante și cafenele", need: "meniu, rezervări, livrare" },
+      { name: "Firme de amenajări și imobiliare", need: "portofoliu, proiecte, contact" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Pipera și nordul Bucureștiului?", a: "Da, totul online, cu întâlniri video când e nevoie." },
+      { q: "Faceți site-uri în engleză pentru firme cu clienți străini?", a: "Da, a doua limbă e o opțiune la preț fix." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei. Pentru proiecte complexe primești ofertă personalizată în aceeași zi." },
+    ],
+  },
+  "popesti-leordeni": {
+    intro: [
+      "Popești-Leordeni e un oraș din sudul Ilfovului, lipit de București, care a crescut rapid prin ansambluri rezidențiale noi. Serviciile pentru familii și pentru casă au cerere mare.",
+      "Locuitorii noi caută totul pe telefon: grădiniță, dentist, instalator. Firmele care apar primele pe Google prind acest flux constant.",
+    ],
+    businesses: [
+      { name: "Grădinițe și after-school-uri", need: "programe, poze, înscriere online" },
+      { name: "Cabinete medicale și stomatologice", need: "programare online" },
+      { name: "Firme de amenajări și instalații", need: "lucrări, servicii, buton de apel" },
+      { name: "Restaurante și livrări", need: "meniu, comandă" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Ilfov?", a: "Da, cu firme din tot Ilfovul și din București." },
+      { q: "Pot primi înscrieri sau programări online?", a: "Da, programările online sunt o opțiune la preț fix." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
+    ],
+  },
+  bragadiru: {
+    intro: [
+      "Bragadiru e un oraș din sud-vestul Ilfovului, lângă București, cu cartiere rezidențiale noi și o populație în creștere rapidă. Serviciile locale au cerere mare și clienți digitali.",
+      "Clienții noi din zonă caută serviciile pe telefon. Un site clar și profilul Google bine făcut aduc firmele locale în fața lor.",
+    ],
+    businesses: [
+      { name: "Grădinițe și after-school-uri", need: "programe, poze, înscriere online" },
+      { name: "Cabinete medicale", need: "programare online" },
+      { name: "Firme de construcții și amenajări", need: "lucrări, servicii" },
+      { name: "Magazine și servicii de proximitate", need: "program, hartă, buton de apel" },
+    ],
+    faqs: [
+      { q: "Lucrați cu firme din Bragadiru și Ilfov?", a: "Da, online, cu întâlniri video când e nevoie." },
+      { q: "Mă ajutați să apar pe Google Maps?", a: "Da, configurăm profilul Google Business odată cu site-ul." },
+      { q: "Cât costă?", a: "Site Start pornește de la 1.500 lei." },
     ],
   },
 };

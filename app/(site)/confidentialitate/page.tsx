@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Politica de confidențialitate — Imperial Media",
-  description: "Cum colectăm, folosim și protejăm datele tale pe imperial-media.ro.",
+  title: "Politica de confidențialitate",
+  description: "Cum colectăm, folosim și protejăm datele tale pe imperial-media.ro: ce date strângem, de ce, cât le păstrăm și ce drepturi ai conform GDPR.",
 };
 
 const S = ({ title, children }: { title: string; children: React.ReactNode }) => (

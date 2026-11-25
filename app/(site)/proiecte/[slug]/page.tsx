@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { fitText, TITLE_MAX, DESCRIPTION_MAX } from "@/lib/site";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -44,14 +45,14 @@ export function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const p = importedProjects.find((x) => x.slug === params.slug);
-  if (!p) return { title: "Proiect · Imperial Media" };
+  if (!p) return { title: "Proiect" };
   const override = projectOverrides[p.slug];
   return {
-    title: `${p.title} — Portofoliu Imperial Media`,
-    description:
-      override?.tagline ??
-      p.excerpt ??
-      `Proiect realizat de Imperial Media: ${p.title}`,
+    title: fitText(p.title, TITLE_MAX),
+    description: fitText(
+      override?.tagline ?? p.excerpt ?? `Proiect realizat de Imperial Media: ${p.title}`,
+      DESCRIPTION_MAX
+    ),
     openGraph: {
       title: p.title,
       description: override?.tagline ?? p.excerpt ?? "",

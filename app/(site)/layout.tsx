@@ -28,6 +28,7 @@ const archivo = Archivo({
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { MotionProvider } from "@/components/MotionProvider";
 import { MetaPixel } from "@/components/MetaPixel";
 import { DeferredEffects } from "@/components/effects/DeferredEffects";
 import { siteConfig } from "@/lib/site";
@@ -169,9 +170,11 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg text-text antialiased">
         <MetaPixel />
         <DeferredEffects />
-        <Header />
-        <div>{children}</div>
-        <Footer />
+        <MotionProvider>
+          <Header />
+          <div>{children}</div>
+          <Footer />
+        </MotionProvider>
         <WhatsAppButton />
       </body>
     </html>

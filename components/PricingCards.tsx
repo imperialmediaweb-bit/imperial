@@ -26,10 +26,10 @@ export function PricingCards() {
           {packages.map((pkg, idx) => (
             <motion.div
               key={pkg.key}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.35, delay: Math.min(idx * 0.04, 0.16) }}
               className={`group relative flex flex-col rounded-2xl border glass-card bg-card-gradient p-7 shadow-card transition-all duration-300 hover:-translate-y-1 ${
                 pkg.popular
                   ? "border-brand-orange/60 shadow-glow-orange"

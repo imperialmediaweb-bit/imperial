@@ -41,9 +41,8 @@ export async function GET() {
 
 ## Acoperire — pagină dedicată pentru fiecare oraș
 
-Servim clienți din toată România și diaspora. Pagină locală dedicată pentru fiecare oraș, formatul: ${siteConfig.url}/creare-site-web/{oras}. Exemple:
-${LOCATIONS.filter((l) => l.isCountySeat).slice(0, 15).map((l) => `- Creare site web ${l.name} (${l.county}): ${siteConfig.url}/creare-site-web/${l.slug}`).join("\n")}
-…și toate celelalte reședințe de județ + orașe mari (${LOCATIONS.length} pagini locale în total, listate în sitemap).
+Servim clienți din toată România și diaspora, complet online, din Botoșani. Fiecare oraș de mai jos are pagină proprie, cu text scris pentru piața locală (economie, tipuri de firme, întrebări frecvente). Site de prezentare de la 1.500 lei peste tot.
+${LOCATIONS.map((l) => `- Creare site web ${l.name} (județul ${l.county}): ${siteConfig.url}/creare-site-web/${l.slug}`).join("\n")}
 
 ## Contact
 

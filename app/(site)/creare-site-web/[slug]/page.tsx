@@ -18,7 +18,7 @@ import {
 import { LOCATIONS, getLocationBySlug, getNearbyLocations } from "@/lib/locations";
 import { cityEconomyProfile } from "@/lib/city-economy";
 import { importedProjects } from "@/lib/projects-data";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, fitText, TITLE_MAX, DESCRIPTION_MAX } from "@/lib/site";
 import { packages } from "@/lib/packages";
 import { getLocalOffer } from "@/lib/local-offer";
 import { LocalOfferSection } from "@/components/LocalOfferSection";
@@ -39,15 +39,19 @@ export async function generateMetadata(
   if (!loc) return {};
   const offer = getLocalOffer(loc.slug);
   return {
-    title: offer
-      ? `Site pentru afacerea ta din ${loc.name} — 1.500 lei, gata în 14 zile`
-      : `Creare site web ${loc.name} — de la 1.500 lei, custom, nu șablon`,
-    description: offer
-      ? `Site de prezentare pentru afaceri din ${loc.name}: 1.500 lei, gata în maximum 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook 5 zile, pagina de Facebook și profilul Google. Estimare în 2 minute.`
-      : `Site-uri pentru afaceri din ${loc.name}: site de prezentare de la 1.500 lei, magazin online de la 3.000 lei, construite de la zero, plus promovare în 50 de ziare. Estimare gratuită în 2 minute.`,
+    title: fitText(
+      offer ? `Site pentru firma ta din ${loc.name}, 1.500 lei` : `Creare site web ${loc.name} de la 1.500 lei`,
+      TITLE_MAX
+    ),
+    description: fitText(
+      offer
+        ? `Site de prezentare pentru firme din ${loc.name}: 1.500 lei, gata în 14 zile. Cadou: articol în ${offer.newspaper.name}, campanie Facebook și profil Google.`
+        : `Site-uri pentru firme din ${loc.name}: prezentare de la 1.500 lei, magazin online de la 3.000 lei, construite de la zero. Estimare gratuită în 2 minute.`,
+      DESCRIPTION_MAX
+    ),
     alternates: { canonical: `${siteConfig.url}/creare-site-web/${loc.slug}` },
     openGraph: {
-      title: `Creare Site Web ${loc.name} | Imperial Media`,
+      title: `Creare site web ${loc.name} · Imperial Media`,
       description: `Site-uri custom și magazine online pentru afaceri din ${loc.name}. 10+ ani experiență, 200+ clienți. Estimare gratuită.`,
       url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
       locale: "ro_RO",
@@ -88,7 +92,7 @@ export default async function LocationPage(
       icon: ShoppingBag,
       title: `Magazin online ${loc.name}`,
       text: `Magazine online performante pentru afaceri din ${loc.county} — plăți sigure, administrare ușoară.`,
-      price: offer ? "de la 3.499 lei" : "de la 1200€",
+      price: offer ? "de la 3.499 lei" : "de la 3.000 lei",
     },
     {
       icon: Palette,
@@ -100,7 +104,7 @@ export default async function LocationPage(
       icon: Megaphone,
       title: `Promovare online ${loc.name}`,
       text: `Campanii de promovare în 50+ ziare online — vizibilitate și SEO pentru afaceri locale din ${loc.county}.`,
-      price: "de la 200€",
+      price: "de la 1.500 lei",
     },
   ];
 
@@ -206,6 +210,51 @@ export default async function LocationPage(
         </div>
       </section>
       )}
+
+      {/* ─── PE SCURT — răspunsul direct, citabil de Google și de asistenții AI
+           (ChatGPT, Perplexity, Gemini). Doar fapte valabile pe tot site-ul. ─── */}
+      <section aria-labelledby="pe-scurt" className="border-t border-bg-border/40 py-12">
+        <div className="container-app">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-brand-orange/25 bg-bg-card/60 p-6 sm:p-8">
+            <h2 id="pe-scurt" className="font-display text-lg font-extrabold text-text sm:text-xl">
+              Pe scurt: site web pentru firma ta din {loc.name}
+            </h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-text-muted">
+              <strong className="text-text">Imperial Media</strong> face site-uri pentru firme din {loc.name} și
+              din tot județul {loc.county}: site de prezentare <strong className="text-text">de la 1.500 lei</strong>{" "}
+              (Site Start, 5 pagini și blog), magazine online și platforme la comandă, toate construite de la zero,
+              fără șabloane. Suntem o firmă din Botoșani, cu peste {siteConfig.stats.years} ani de experiență și{" "}
+              {siteConfig.stats.projects}+ proiecte livrate, și lucrăm cu clienți din toată țara, complet online.
+            </p>
+            <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+              <div className="rounded-xl bg-white/[0.03] p-3">
+                <dt className="text-[11px] uppercase tracking-wider text-text-subtle">Preț de pornire</dt>
+                <dd className="mt-0.5 font-semibold text-text">1.500 lei — site de prezentare</dd>
+              </div>
+              <div className="rounded-xl bg-white/[0.03] p-3">
+                <dt className="text-[11px] uppercase tracking-wider text-text-subtle">Cum se lucrează</dt>
+                <dd className="mt-0.5 font-semibold text-text">Online: estimare, contract, plată, livrare</dd>
+              </div>
+              <div className="rounded-xl bg-white/[0.03] p-3">
+                <dt className="text-[11px] uppercase tracking-wider text-text-subtle">Estimare de preț</dt>
+                <dd className="mt-0.5 font-semibold text-text">
+                  <Link href="/estimare" className="underline decoration-brand-orange/50 underline-offset-4 hover:decoration-brand-orange">
+                    Pe loc, în calculator
+                  </Link>
+                </dd>
+              </div>
+              <div className="rounded-xl bg-white/[0.03] p-3">
+                <dt className="text-[11px] uppercase tracking-wider text-text-subtle">Contact</dt>
+                <dd className="mt-0.5 font-semibold text-text">
+                  <a href={`tel:${siteConfig.phoneRaw}`} className="hover:text-brand-orange">{siteConfig.phone}</a>
+                  {" · "}
+                  <a href={`mailto:${siteConfig.email}`} className="hover:text-brand-orange">{siteConfig.email}</a>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
 
       {/* ─── BENEFITS ─── */}
       <section className="section border-t border-bg-border/40">
@@ -518,36 +567,36 @@ export default async function LocationPage(
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": "ProfessionalService",
-                "@id": `${siteConfig.url}/creare-site-web/${loc.slug}#business`,
-                name: `Imperial Media — Web Design ${loc.name}`,
-                description: `Creare site web custom, magazine online și promovare în presă pentru afaceri din ${loc.name}, ${loc.county}. 10+ ani experiență, 200+ clienți.`,
+                // Serviciul oferit ÎN orașul ăsta de firma din Botoșani — fără adrese locale
+                // inventate (Google penalizează sediile false). Firma e definită o singură
+                // dată, în layout (#organization / #localbusiness), și o referim aici.
+                "@type": "Service",
+                "@id": `${siteConfig.url}/creare-site-web/${loc.slug}#service`,
+                name: `Creare site web în ${loc.name}`,
+                serviceType: "Creare site web",
+                description: `Site-uri de prezentare, magazine online și promovare în presă pentru firme din ${loc.name}, județul ${loc.county}, făcute de Imperial Media (Botoșani). Site de prezentare de la 1.500 lei, construit de la zero.`,
                 url: `${siteConfig.url}/creare-site-web/${loc.slug}`,
-                image: `${siteConfig.url}/logo.png`,
-                logo: `${siteConfig.url}/logo.png`,
-                telephone: siteConfig.phone,
-                email: siteConfig.email,
-                address: { "@type": "PostalAddress", addressCountry: "RO", addressRegion: loc.county },
+                provider: { "@id": `${siteConfig.url}/#localbusiness` },
                 areaServed: [
                   { "@type": "City", name: loc.name },
-                  { "@type": "AdministrativeArea", name: loc.county },
+                  { "@type": "AdministrativeArea", name: `Județul ${loc.county}` },
                 ],
-                priceRange: "1500 - 15000 RON",
-                aggregateRating: {
-                  "@type": "AggregateRating",
-                  ratingValue: siteConfig.reviews.ratingValue,
-                  reviewCount: siteConfig.reviews.reviewCount,
+                availableChannel: {
+                  "@type": "ServiceChannel",
+                  serviceUrl: `${siteConfig.url}/estimare`,
+                  servicePhone: siteConfig.phone,
                 },
-                hasOfferCatalog: {
-                  "@type": "OfferCatalog",
-                  name: `Servicii web design ${loc.name}`,
-                  itemListElement: services.map((s) => ({
-                    "@type": "Offer",
-                    itemOffered: { "@type": "Service", name: s.title, description: s.text },
-                    priceSpecification: { "@type": "PriceSpecification", price: s.price, priceCurrency: offer ? "RON" : "EUR" },
-                  })),
+                offers: {
+                  "@type": "Offer",
+                  name: "Site Start — site de prezentare (5 pagini + blog)",
+                  url: `${siteConfig.url}/site-start`,
+                  priceCurrency: "RON",
+                  priceSpecification: {
+                    "@type": "PriceSpecification",
+                    minPrice: 1500,
+                    priceCurrency: "RON",
+                  },
                 },
-                sameAs: [siteConfig.social.facebook, siteConfig.social.instagram],
               },
               {
                 "@type": "FAQPage",

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Termeni și condiții — Imperial Media",
+  title: "Termeni și condiții",
   description: "Termenii și condițiile serviciilor Imperial Media: audit de afaceri, abonament de monitorizare, servicii web.",
 };
 

@@ -3,7 +3,7 @@ import { CheckCircle2, Mail, Home, Gift } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 export const metadata = {
-  title: "Mulțumim! · Imperial Media",
+  title: "Mulțumim!",
   description: "Am primit briefingul tău. Revenim cu oferta în maximum 24h.",
 };
 

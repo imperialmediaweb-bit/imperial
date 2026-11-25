@@ -7,7 +7,7 @@ import { ServiceReportView } from "@/components/ServiceReportView";
 import type { ServiceReport } from "@/app/api/service-report/route";
 
 export const metadata = {
-  title: "Exemplu de raport — Radiografia Afacerii | Imperial Media",
+  title: "Exemplu de raport: Radiografia Afacerii",
   description:
     "Vezi exact cum arată Radiografia Afacerii: raport complet pe date reale (Google, ANAF, competiție, AI) — exemplu pe o firmă demonstrativă.",
 };

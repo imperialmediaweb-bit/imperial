@@ -7,9 +7,9 @@ import { Testimonials } from "@/components/Testimonials";
 import { IconBadge } from "@/components/IconBadge";
 
 export const metadata = {
-  title: "Despre noi — Imperial Media",
+  title: "Despre noi",
   description:
-    "Cu peste 10 ani experiență, 384+ proiecte livrate și parteneriatul cu rețeaua Media Expres, de 50 de ziare online, Imperial Media construiește site-uri, magazine online și campanii care aduc clienți reali.",
+    "Peste 10 ani de web design în Botoșani, 384+ proiecte livrate și o rețea de 50 de ziare online. Află cine suntem și cum lucrăm cu fiecare client.",
 };
 
 /* povestea, pe firul de lumină */

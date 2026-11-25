@@ -131,7 +131,11 @@ export async function sendLeadEmails(p: LeadPayload) {
               ? `<a href="tel:${p.phone}" style="background:#FF6B1A;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">📞 Sună acum</a>`
               : ""
           }
-          <a href="mailto:${p.email}" style="background:#7B2FF7;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">✉ Trimite ofertă</a>
+          ${
+            p.email
+              ? `<a href="mailto:${p.email}" style="background:#7B2FF7;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">✉ Trimite ofertă</a>`
+              : `<a href="https://wa.me/${(p.phone || "").replace(/\D/g, "").replace(/^0/, "40")}" style="background:#25D366;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">💬 WhatsApp</a>`
+          }
         </div>
       </div>
     </div>
@@ -175,14 +179,18 @@ export async function sendLeadEmails(p: LeadPayload) {
         ? `[Ofertă ${p.offerNo}] ${p.name} · ${p.phone} — ${configSummary(p.config)} — ${p.config.once.toLocaleString("ro-RO")} lei`
         : `[Lead] ${p.selectedPackage} — ${p.name}`,
       html: ownerHtml,
-      replyTo: p.email,
+      ...(p.email ? { replyTo: p.email } : {}),
     }),
-    send({
-      from: fromEmail,
-      to: p.email,
-      subject: p.config ? `Oferta ta ${p.offerNo}: ${p.config.typeName} — Imperial Media` : "Am primit cererea ta — Imperial Media",
-      html: clientHtml,
-    }),
+    // confirmarea către client pleacă doar dacă ne-a lăsat un email
+    // (formularul rapid de contact acceptă și doar telefonul)
+    p.email
+      ? send({
+          from: fromEmail,
+          to: p.email,
+          subject: p.config ? `Oferta ta ${p.offerNo}: ${p.config.typeName} — Imperial Media` : "Am primit cererea ta — Imperial Media",
+          html: clientHtml,
+        })
+      : Promise.resolve(),
   ]);
 }
 

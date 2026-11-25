@@ -7,9 +7,9 @@ import { ServiceLanding } from "@/components/ServiceLanding";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Creare Magazin Online — de la 3.000 lei, opțiuni la alegere | Imperial Media",
+  title: "Creare magazin online de la 3.000 lei",
   description:
-    "Creare magazin online în România: plăți cu cardul, integrare curieri cu AWB automat, facturare automată. Prețuri transparente de la 1.200€, custom pe tehnologii de ultimă generație. Promovare în 50 de ziare inclusă.",
+    "Magazin online de la 3.000 lei: plată ramburs sau cu cardul, AWB automat la curieri și facturare automată. Construit de la zero, cu promovare în presă.",
   alternates: { canonical: `${siteConfig.url}/creare-magazin-online` },
 };
 
@@ -62,7 +62,7 @@ export default function CreareMagazinOnlinePage() {
         },
       ]}
       faqs={[
-        { q: "Cât costă un magazin online?", a: "Între 1.200€ și 4.500€ ca investiție inițială, în funcție de numărul de produse și integrările necesare (curieri, facturare, gestiune). Magazinul standard care vinde serios costă de regulă 1.800-3.000€. Estimarea exactă pentru produsele tale e gratuită, în 2 minute." },
+        { q: "Cât costă un magazin online?", a: "Magazinul Start pornește de la 3.000 lei, cu plată ramburs. Plățile cu cardul, AWB-ul automat la curieri și facturarea automată se adaugă la alegere, iar prețul final depinde de numărul de produse și de integrări. Estimarea exactă e gratuită, în 2 minute." },
         { q: "Pot încasa cu cardul și ramburs?", a: "Da — integrăm Stripe, Netopia sau PayU pentru plăți cu cardul (comision 1-2% al procesatorului), iar rambursul prin curier rămâne activ (încă ~40% din comenzile din România). Facturile se emit automat la fiecare comandă." },
         { q: "Cât durează până e gata?", a: "4-8 săptămâni de la primirea conținutului (produse, poze, texte). Magazinele mici, spre 4; cele cu integrări multiple, spre 8." },
         { q: "Ce acte îmi trebuie ca să vând online?", a: "SRL sau PFA, plus paginile legale obligatorii pe site: termeni și condiții, politica de retur (14 zile drept de retragere), GDPR și linkurile ANPC/SOL. Toate sunt incluse — le configurăm noi corect." },

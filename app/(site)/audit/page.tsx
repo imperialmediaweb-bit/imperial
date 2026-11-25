@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -26,9 +26,27 @@ export default function AuditPage() {
   const [emailSent, setEmailSent] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
+  // adresa poate veni din footer (/audit?url=...): o precompletăm și pornim scanarea
+  const [autoUrl, setAutoUrl] = useState<string | null>(null);
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("url")?.trim();
+    if (q) {
+      setUrl(q);
+      setAutoUrl(q);
+    }
+  }, []);
+  useEffect(() => {
+    if (autoUrl) void scan(autoUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoUrl]);
+
   async function runAudit(e: React.FormEvent) {
     e.preventDefault();
-    if (!url.trim() || loading) return;
+    await scan(url);
+  }
+
+  async function scan(target: string) {
+    if (!target.trim() || loading) return;
     setError(null);
     setResult(null);
     setLoading(true);
@@ -36,7 +54,7 @@ export default function AuditPage() {
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: url.trim() }),
+        body: JSON.stringify({ url: target.trim() }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Eroare.");

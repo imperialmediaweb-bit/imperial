@@ -9,6 +9,8 @@ export const dynamic = "force-dynamic";
 // lastmod STABIL — Google ignoră sitemap-urile care mint că totul s-a schimbat „acum".
 // Actualizează data la release-uri mari de conținut.
 const CONTENT_UPDATED = "2026-08-09";
+// paginile de oraș au primit conținut propriu pentru toate cele 58 de orașe
+const CITY_PAGES_UPDATED = "2026-11-24";
 
 export async function GET() {
   const base = siteConfig.url;
@@ -39,6 +41,7 @@ export async function GET() {
     url: `${base}/creare-site-web/${loc.slug}`,
     priority: loc.isCountySeat ? "0.8" : "0.6",
     freq: "monthly",
+    lastmod: CITY_PAGES_UPDATED,
   }));
 
   const blogPages = getAllArticles().map((a) => ({

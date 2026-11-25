@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Phone,
   Mail,
@@ -15,12 +16,11 @@ import { Logo } from "./Logo";
 import { siteConfig } from "@/lib/site";
 
 export function Footer() {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
+  const [site, setSite] = useState("");
+  const router = useRouter();
 
   return (
     <footer
-      id="contact"
       className="relative overflow-hidden border-t border-bg-border/60 bg-bg-soft/40"
     >
       {/* Beam de lumină sus — linia brandului */}
@@ -33,53 +33,52 @@ export function Footer() {
 
       <div className="container-app relative z-10 py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-          {/* Newsletter */}
+          {/* Audit gratuit — magnetul de clienți (pagina /audit face scanarea reală) */}
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wider text-text">
-              Newsletter
+              Audit gratuit
             </h2>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <p className="mt-4 text-sm leading-relaxed text-text-muted">
-              Abonează-te la newsletter și primește cele mai noi știri,
-              actualizări și oferte speciale direct pe email.
+              Află în 30 de secunde ce îl încetinește pe site-ul tău: viteză,
+              mobil, SEO și securitate.
             </p>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (!email) return;
-                setDone(true);
-                setEmail("");
-                setTimeout(() => setDone(false), 3000);
+                const v = site.trim();
+                if (!v) return;
+                router.push(`/audit?url=${encodeURIComponent(v)}`);
               }}
               className="relative mt-5"
             >
+              <label htmlFor="footer-audit-url" className="sr-only">
+                Adresa site-ului tău
+              </label>
               <input
-                type="email"
+                id="footer-audit-url"
+                type="text"
+                inputMode="url"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Introdu adresa ta de email"
+                value={site}
+                onChange={(e) => setSite(e.target.value)}
+                placeholder="site-ul-tau.ro"
                 className="w-full rounded-full border border-bg-border bg-bg-soft/80 py-3 pl-5 pr-14 text-sm text-text placeholder:text-text-subtle outline-none transition focus:border-brand-orange focus:bg-bg-soft"
               />
               <button
                 type="submit"
-                aria-label="Abonează-te"
+                aria-label="Scanează site-ul gratuit"
                 className="absolute right-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-orange-gradient text-white shadow-glow-orange transition hover:scale-110"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
-              {done && (
-                <p className="mt-2 text-xs text-brand-orange">
-                  Mulțumim! Te-am abonat cu succes.
-                </p>
-              )}
             </form>
           </div>
 
           {/* Services */}
           <div>
             <h2 className="text-sm font-semibold uppercase tracking-wider text-text">
-              Services
+              Servicii
             </h2>
             <span className="mt-2 block h-1 w-10 rounded-full bg-orange-gradient" />
             <ul className="mt-4 space-y-2.5">

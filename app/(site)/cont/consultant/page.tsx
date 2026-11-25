@@ -15,7 +15,7 @@ import { BriefChat } from "@/components/BriefChat";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Consultantul tău — Imperial Media",
+  title: "Consultantul tău",
   robots: { index: false, follow: false },
 };
 
