@@ -33,8 +33,8 @@ const config: Config = {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
         display: ["var(--font-archivo)", "Archivo", "Inter", "system-ui", "sans-serif"],
         serifd: ["var(--font-instrument)", "Georgia", "serif"],
-        jmono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
-        brand: ["var(--font-archivo)", "Archivo", "sans-serif"],
+        jmono: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
+        brand: ["var(--font-michroma)", "Archivo", "sans-serif"],
       },
       backgroundImage: {
         "hero-gradient":

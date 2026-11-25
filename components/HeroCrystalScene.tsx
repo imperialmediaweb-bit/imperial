@@ -41,13 +41,14 @@ function CrystalCore() {
       <pointLight position={[0, 0, 0]} intensity={24} color="#FF2E9A" distance={8} />
       </group>
       {/* pulbere de scântei aurii + violete prin toată scena */}
-      <Sparkles count={40} scale={14} size={2.4} speed={0.5} color="#FFB020" opacity={0.75} />
-      <Sparkles count={24} scale={16} size={2} speed={0.35} color="#B06CFF" opacity={0.55} />
+      <Sparkles count={120} scale={14} size={2.4} speed={0.5} color="#FFB020" opacity={0.75} />
+      <Sparkles count={70} scale={16} size={2} speed={0.35} color="#B06CFF" opacity={0.55} />
       {/* gridul wireframe de sub scenă — basement vibe */}
       <gridHelper args={[60, 48, "#3a1430", "#160a1c"]} position={[0, -4.2, 0]} />
       {/* lumini suplimentare în culorile brandului */}
       <pointLight position={[4, 2, 4]} intensity={30} color="#FF2E9A" distance={16} />
       <pointLight position={[-5, -1, 3]} intensity={22} color="#FF6B1A" distance={16} />
+      <pointLight position={[0, 4, -3]} intensity={18} color="#8B2FF7" distance={18} />
     </>
   );
 }
@@ -55,7 +56,7 @@ function CrystalCore() {
 export default function HeroCrystalScene() {
   return (
     <FloatingRocks
-      count={22}
+      count={36}
       spread={8}
       size={0.7}
       speed={1.25}
